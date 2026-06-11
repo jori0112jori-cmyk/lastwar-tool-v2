@@ -127,11 +127,12 @@
 
 /* === Impact badge (no emoji; uses same masks) === */
 .impact-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:2px 6px; border-radius:8px;
-  font-size:0.7rem; font-weight:900; color:#334155; line-height:1;
+  display:inline-flex; align-items:center; gap:3px;
+  padding:3px 7px; border-radius:20px;
+  font-size:0.68rem; font-weight:700; color:#334155; line-height:1;
   border:1px solid #cbd5e1;
-  box-shadow: inset 0 -1px 0 rgba(255,255,255,.45);
+  letter-spacing:0.01em;
+  white-space:nowrap;
 }
 .impact-ico {
   width:var(--ui-ico); height:var(--ui-ico); display:inline-block;
@@ -143,11 +144,15 @@
 .impact-ico.wall { -webkit-mask-image:url('data:image/svg+xml;utf8,%3Csvg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%2024%2024"%3E%3Cpath%20fill="white"%20d="M12%202l7%204v6c0%205-3.4%209.7-7%2010-3.6-.3-7-5-7-10V6l7-4z"/%3E%3C/svg%3E'); mask-image:url('data:image/svg+xml;utf8,%3Csvg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%2024%2024"%3E%3Cpath%20fill="white"%20d="M12%202l7%204v6c0%205-3.4%209.7-7%2010-3.6-.3-7-5-7-10V6l7-4z"/%3E%3C/svg%3E'); }
 .impact-ico.bal { -webkit-mask-image:url('data:image/svg+xml;utf8,%3Csvg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%2024%2024"%3E%3Cpath%20fill="white"%20d="M12%203l3%204h-2v10h4v2H7v-2h4V7H9l3-4zm-6%206h4l-2%205H4l2-5zm10%200h4l-2%205h-4l2-5z"/%3E%3C/svg%3E'); mask-image:url('data:image/svg+xml;utf8,%3Csvg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%2024%2024"%3E%3Cpath%20fill="white"%20d="M12%203l3%204h-2v10h4v2H7v-2h4V7H9l3-4zm-6%206h4l-2%205H4l2-5zm10%200h4l-2%205h-4l2-5z"/%3E%3C/svg%3E'); }
 
-.impact-badge.atk { background:#ffedd5; color:#9a3412; border-color:#fdba74; }
-.impact-badge.atk.strong { background:#fecaca; color:#991b1b; border-color:#f87171; }
-.impact-badge.wall { background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
-.impact-badge.wall.strong { background:#bfdbfe; color:#1e40af; border-color:#60a5fa; }
-.impact-badge.bal { background:#e5e7eb; color:#374151; border-color:#cbd5e1; }
+.impact-badge.atk         { background:#fff7ed; color:#c2410c; border-color:#fed7aa; }
+.impact-badge.atk.strong  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; font-weight:900; }
+.impact-badge.wall        { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+.impact-badge.wall.strong { background:#dbeafe; color:#1e40af; border-color:#93c5fd; font-weight:900; }
+.impact-badge.bal         { background:#f1f5f9; color:#475569; border-color:#cbd5e1; }
+.impact-badge.green       { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
+.impact-badge.green.strong{ background:#dcfce7; color:#166534; border-color:#86efac; font-weight:900; }
+.impact-badge.purple      { background:#faf5ff; color:#7c3aed; border-color:#ddd6fe; }
+.impact-badge.purple.strong{ background:#ede9fe; color:#6d28d9; border-color:#c4b5fd; font-weight:900; }
 
 
     /* === 統合編成スロット（タップで編集） === */
@@ -1506,8 +1511,8 @@ const HERO_WEAPON_TAGS = {
 // ===============================
 const REASON_LABELS = {
   policy: {
-    build_main: "主力維持",
-    hold: "主力維持",
+    build_main: "現状維持OK",
+    hold: "現状維持OK",
     seed: "次兵種準備",
     seed_air: "航空種まき",
     seed_mis: "ロケラン種まき",
@@ -1517,14 +1522,14 @@ const REASON_LABELS = {
     full_shift: "兵種移行"
   },
   efficiency: {
-    low_cost: "低コスト",
+    low_cost: "省コスト",
     mid_cost: "中コスト",
-    high_cost: "高コスト",
-    ew_milestone: "節目強化",
-    lv30: "30投資"
+    high_cost: "大型投資",
+    ew_milestone: "Lv節目",
+    lv30: "MAX育成"
   },
   timing: {
-    immediate: "即戦力",
+    immediate: "即戦力UP",
     future: "長期向き",
     promoted_ur: "昇格UR"
   }
@@ -1532,12 +1537,12 @@ const REASON_LABELS = {
 
 const IMPACT_LABELS = {
   tankiness: "耐久補強",
-  stability: "編成安定",
+  stability: "編成強化",
   carry: "火力強化",
   subdps: "後衛火力",
   support: "支援強化",
   burst: "爆発力",
-  efficiency: "コスパ良"
+  efficiency: "コスパ◎"
 };
 
 const REASON_BADGE_STYLE = {
@@ -1553,8 +1558,8 @@ const REASON_BADGE_STYLE = {
   low_cost: "good",
   mid_cost: "neutral",
   high_cost: "warn",
-  ew_milestone: "neutral",
-  lv30: "warn",
+  ew_milestone: "accent",
+  lv30: "future",   // MAX育成 → 紫（将来への大投資）
   immediate: "good",
   future: "future",
   promoted_ur: "neutral"
@@ -1683,7 +1688,7 @@ const SUMMARY_TEMPLATES = {
 //   ★0合計130・★1〜4追加200/350/400/500、総計1,580個
 
 // ★ごとのティアあたりシャードコスト（★0-1のみ特殊）
-const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100 };
+const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMAX
 // ★0-1だけ専用かけら50（named:true で区別）
 
 // 覚醒対象英雄（S6）
@@ -2499,13 +2504,13 @@ function effTitleLine(rank, item){
       .reinf-card + .reinf-card::before{ content:''; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.42) 12%, rgba(244,114,182,.42) 88%, rgba(244,114,182,0)); }
       .reason-badge{ display:inline-flex; align-items:center; border-radius:999px; padding:3px 8px; font-size:.70rem; font-weight:900; line-height:1.2; border:1px solid transparent; white-space:nowrap; }
       .reason-badge--neutral{ background:#f1f5f9; color:#475569; border-color:#cbd5e1; }
-      .reason-badge--accent{ background:#eef2ff; color:#4338ca; border-color:#c7d2fe; }
+      .reason-badge--accent{ background:#e0e7ff; color:#3730a3; border-color:#a5b4fc; }
       .reason-badge--good{ background:#ecfdf5; color:#047857; border-color:#a7f3d0; }
       .reason-badge--warn{ background:#fff7ed; color:#c2410c; border-color:#fdba74; }
       .reason-badge--attack{ background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
       .reason-badge--defense{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
       .reason-badge--support{ background:#faf5ff; color:#7e22ce; border-color:#e9d5ff; }
-      .reason-badge--future{ background:#f5f3ff; color:#6d28d9; border-color:#ddd6fe; }
+      .reason-badge--future{ background:#ede9fe; color:#5b21b6; border-color:#c4b5fd; font-weight:900; }
       .rankhero-summary{ margin-top:6px; font-size:12px; line-height:1.45; color:#6b7280; }
     `;
     document.head.appendChild(st);
@@ -2988,7 +2993,7 @@ function evaluateSquadRealCombat(squadMembers) {
             // DVAのEW Lv依存：低Lvでは出張ペナルティが大きく混成ボーナスが薄い
             const dvaMember = squadMembers.find(m => m.id === 'dva');
             const dvaWp = dvaMember ? (dvaMember.wp || 0) : 0;
-            const dvaWpMult = dvaWp >= 20 ? 1.06 : dvaWp >= 10 ? 1.02 : 0.98;
+            const dvaWpMult = dvaWp >= 20 ? 1.06 : dvaWp >= 10 ? 1.02 : 1.0; // 下限1.0（DVA未育成でペナルティにしない）
             // 航空機英雄数でDVAのスタック効率が変わる
             const airCount = squadMembers.filter(m => m.t === 'air').length;
             const dvaAirMult = airCount >= 2 ? 1.04 : 1.0;
@@ -3168,22 +3173,34 @@ function getGrowthType(atkGain, defGain, targetLv){
 
 
 function growthBadge(g){
-    // g: {level, axis, label, strong}
-    if(!g || !g.label) g = { level: 1, axis: "bal", label: "バランス", strong:false };
-
-    let axis = g.axis || "bal";
+    if(!g || !g.label) g = { level: 1, axis: 'bal', label: 'バランス', strong:false };
+    let axis = g.axis || 'bal';
     const strong = !!g.strong;
+    const label = g.label || '';
 
-    // 弱点補強の派生ラベルも既存の impact-badge 系へ寄せて統一表示する
-    if(g.label === '攻撃補強') axis = 'atk';
-    else if(g.label === '耐久補強') axis = 'wall';
+    // ラベル→色クラス（5色体系）
+    // atk=オレンジ(火力), wall=青(防御), bal=グレー(安定),
+    // green=緑(即効・コスパ), purple=紫(将来・覚醒)
+    const labelColorMap = {
+        '火力補強':   'atk',   '主力強化':  'atk',   '弱点補強':  'atk',
+        '防御補強':   'wall',  '耐久補強':  'wall',  '編成強化':  'wall',
+        '安定強化':   'bal',   '現状維持OK':'bal',
+        '即戦力UP':   'green', 'コスパ◎':  'green',
+        '効果★★★':  'green strong', '効果★★': 'green',
+        '将来有望':   'purple',
+        '👑 覚醒':   'purple strong',
+    };
 
-    let cls = "bal";
-    if(axis === "atk") cls = "atk" + (strong ? " strong" : "");
-    else if(axis === "wall") cls = "wall" + (strong ? " strong" : "");
+    if(label === '火力補強') axis = 'atk';
+    else if(label === '防御補強' || label === '耐久補強') axis = 'wall';
 
-    const icoCls = (axis === "atk") ? "atk" : (axis === "wall") ? "wall" : "bal";
-    return `<span class="impact-badge ${cls}"><span class="impact-ico ${icoCls}"></span>${g.label}</span>`;
+    let cls = labelColorMap[label] || (
+        axis === 'atk'  ? ('atk'  + (strong ? ' strong' : '')) :
+        axis === 'wall' ? ('wall' + (strong ? ' strong' : '')) : 'bal'
+    );
+
+    const icoCls = (axis === 'atk') ? 'atk' : (axis === 'wall') ? 'wall' : 'bal';
+    return `<span class="impact-badge ${cls}"><span class="impact-ico ${icoCls}"></span>${label}</span>`;
 }
 
 
@@ -3274,12 +3291,14 @@ function __summaryImpactKey(item){
   const axis = item.growthType && item.growthType.axis;
   const label = item.growthType && item.growthType.label;
   const role = item.roleKey || '';
-  if(label === '編成安定') return 'stability';
+  if(label === '編成強化' || label === '安定強化') return 'stability';
   if(label === '支援強化') return 'support';
   if(label === '後衛火力') return 'subdps';
   if(label === '爆発力') return 'burst';
-  if(label === '火力強化' || axis === 'atk') return (role === 'sup') ? 'support' : (role === 'atk' ? 'carry' : 'subdps');
-  if(label === '耐久補強' || axis === 'wall') return (role === 'wall') ? 'tankiness' : 'stability';
+  if(label === '火力補強' || label === '主力強化' || label === '火力強化' || axis === 'atk') return (role === 'sup') ? 'support' : (role === 'atk' ? 'carry' : 'subdps');
+  if(label === '防御補強' || label === '耐久補強' || axis === 'wall') return (role === 'wall') ? 'tankiness' : 'stability';
+  if(label === '即戦力UP' || label === 'コスパ◎') return 'immediate';
+  if(label === '将来有望') return 'future';
   if(role === 'wall') return 'tankiness';
   if(role === 'sup') return 'support';
   if(role === 'atk') return 'carry';
@@ -3347,14 +3366,14 @@ function checkAwakeningResourceWarning() {
 
     // キムに全投入してDVA/テスラが未着手
     if (kimTier.star >= 1 && dvaP === 0 && teslaP === 0) {
-        warns.push('⚠️ <b>覚醒かけら集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備え覚醒かけらを分散確保することを推奨します。');
+        warns.push('⚠️ <b>シャード集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備えシャードを分散確保することを推奨します。');
     } else if (kimTier.star >= 1 && dvaP === 0) {
-        warns.push('💡 DVAの覚醒（Week3解放）に覚醒かけら130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
+        warns.push('💡 DVAの覚醒（Week3解放）にシャード130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
     }
 
     // DVA済みでテスラ未着手
     if (dvaTier.star >= 1 && teslaP === 0) {
-        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるなら覚醒かけらを確保しておきましょう。');
+        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるならシャードを確保しておきましょう。');
     }
 
     if (!warns.length) return '';
@@ -3477,8 +3496,8 @@ function __aiCostTierLabel(from, to){
 }
 function __aiSafeHint(hero, to, context){
   const p = __aiGetProfile(hero.id);
-  if(to === 20 && (p.role === 'front_tank' || p.role === 'support')) return '安定';
-  if(to === 20 && hero.t === context.currentCombatType) return '安定';
+  if(to === 20 && (p.role === 'front_tank' || p.role === 'support')) return '安定強化';
+  if(to === 20 && hero.t === context.currentCombatType) return '安定強化';
   return '';
 }
 function __aiNormalizeShiftType(type){
@@ -3830,11 +3849,11 @@ function __aiReasonBadgeFromScores(meta){
 
   function weaknessLabelFor(axisKey, role){
     if(axisKey === 'wall' || role === 'wall') return '耐久補強';
-    if(axisKey === 'atk' || role === 'atk') return '攻撃補強';
+    if(axisKey === 'atk' || role === 'atk') return '火力補強';
     return '弱点補強';
   }
 
-  let label = '安定';
+  let label = '安定強化';
   let axis = 'bal';
   let strong = false;
 
@@ -3850,15 +3869,15 @@ function __aiReasonBadgeFromScores(meta){
   } else if(top.key === 'future'){
     const futureQualified = (ms && ms.target >= 30) || sameInvest || longterm >= 0.72;
     if(futureQualified && top.value >= second.value * 1.03){
-      label = '将来性';
+      label = '将来有望';
       axis = 'atk';
       strong = !!(ms && ms.target >= 30);
     }else if(futureQualified && !close && (ms && ms.target >= 20)){
-      label = '将来性';
+      label = '将来有望';
       axis = 'atk';
     }
   } else if(top.key === 'cost'){
-    const effectLabel = (ms && ms.target >= 30) ? '育成効果:大' : '育成効果:中';
+    const effectLabel = (ms && ms.target >= 30) ? '効果★★★' : '効果★★';
     if(top.value >= second.value * 1.05){
       label = effectLabel;
     }else if(safeQualified || close){
@@ -3874,15 +3893,15 @@ function __aiReasonBadgeFromScores(meta){
 
 function __aiDisplaySafeLabel(hero, ms, context, reasonBadge, scoreCost, scoreCoverage, scoreFuture){
   if(!hero || !ms || !context || !reasonBadge) return '';
-  if(reasonBadge.label !== '育成効率' && reasonBadge.label !== '育成効果:中') return '';
+  if(reasonBadge.label !== '効果★★' && reasonBadge.label !== '効果★★') return '';
   if(ms.target > 20) return '';
   const sameMain = hero.t === context.currentCombatType;
   const inMainArmy = context.mainArmyIds && context.mainArmyIds.has(hero.id);
   const top = Math.max(Number(scoreCost)||0, Number(scoreCoverage)||0, Number(scoreFuture)||0, 0);
   if(top <= 0) return '';
   if((Number(scoreCost)||0) < top * 0.97) return '';
-  if(hero.t === context.currentCombatType) return '安定';
-  if((inMainArmy || hero.r === 'wall' || hero.r === 'sup') && ms.target === 20) return '安定';
+  if(hero.t === context.currentCombatType) return '安定強化';
+  if((inMainArmy || hero.r === 'wall' || hero.r === 'sup') && ms.target === 20) return '安定強化';
   return '';
 }
 
@@ -3921,7 +3940,7 @@ function calculateUpgradeEfficiencyFull(roster){
             if(gain <= 0) gain = Math.max(1, Math.round(__aiGetLongterm(hero.id) * 18 - 6));
             gain = Math.round(gain * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiSynergyBias(hero, roster, ewTarget));
             if(gain > 0){
-              unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'将来性', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
+              unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'将来有望', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
             }
             return;
         }
@@ -4035,7 +4054,7 @@ function calculateUpgradeEfficiencyFull(roster){
                 nextShardCost: next.cost,
                 nextShardNamed: next.named,
                 isAwakeningItem: true,
-                growthType: { level: 3, axis: 'atk', label: '覚醒強化', strong: true },
+                growthType: { level: 3, axis: 'atk', label: '👑 覚醒', strong: true },
                 reasonCodes: ['awakening', at.star >= 1 ? 'future' : 'immediate'],
                 costTierLabel: costEquiv >= 800 ? '高コスト' : '低コスト',
                 safeHintLabel: ''
@@ -4060,7 +4079,7 @@ function calculateUpgradeEfficiencyFull(roster){
     const reinforceList = [];
     const mainPick = pickTop('reinforceMain', '主力強化', 'bal');
     const coveragePick = pickTop('reinforceCoverage', '弱点補強', 'wall');
-    const futurePick = pickTop('reinforceFuture', '将来性', 'atk');
+    const futurePick = pickTop('reinforceFuture', '将来有望', 'atk');
     if(mainPick) reinforceList.push(mainPick);
     if(coveragePick) reinforceList.push(coveragePick);
     if(futurePick) reinforceList.push(futurePick);
@@ -4418,7 +4437,7 @@ function renderAwakenRanking(awakenResults) {
         const nxtTier = '★' + item.nextTierStr;
         const shardLabel = item.nextShardNamed
             ? `🔑 専用かけら×${item.nextShardCost}`
-            : `<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;margin-right:2px;">覚醒かけら×${item.nextShardCost}`;
+            : `<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;margin-right:2px;">汎用かけら×${item.nextShardCost}`;
 
         // ボーナステキスト
         const bonusTxt = aw ? ((aw.tierBonuses || {})[item.nextTierStr.replace('★','')] || '') : '';
@@ -4933,7 +4952,8 @@ function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
     }
 
     // EW強化のコストあたりスコア上昇
-    const EW_COST = { 10:280, 20:800, 30:1600 }; // 強化石概算
+    // getPreciseCost の実値に合わせる（Lv0→10: 330, Lv10→20: 800, Lv20→30: 1750）
+    const EW_COST = { 10:330, 20:800, 30:1750 };
     let ewGain = 0, ewCost = 0, ewLabel = '';
     if (nextEwLv) {
         ewGain = ewPts(nextEwLv) - ewPts(ewLv);
@@ -5067,12 +5087,31 @@ function closeSlotModal(){
 function slotModalStep(d){
     __slotModalState.lv = Math.min(30, Math.max(0, (__slotModalState.lv||0) + d));
     document.getElementById('slot-modal-lv').innerText = __slotModalState.lv;
-    try { const id = (document.getElementById('slot-modal-hero')||{}).value; if(id) openAwakeningSection(id, __slotModalState.lv); } catch(e){}
+    try {
+        const id = (document.getElementById('slot-modal-hero')||{}).value;
+        if(id) {
+            openAwakeningSection(id, __slotModalState.lv);
+            // EW Lv低下で前提外れた場合は覚醒状態をUIからもリセット
+            const aw = AWAKENING_HEROES && AWAKENING_HEROES[id];
+            if (aw && __slotModalState.lv < (aw.ewMinRequired||20)) {
+                __slotModalState.awTier = 'none';
+            }
+        }
+    } catch(e){}
 }
 function slotModalSet(v){
     __slotModalState.lv = Math.min(30, Math.max(0, v));
     document.getElementById('slot-modal-lv').innerText = __slotModalState.lv;
-    try { const id = (document.getElementById('slot-modal-hero')||{}).value; if(id) openAwakeningSection(id, __slotModalState.lv); } catch(e){}
+    try {
+        const id = (document.getElementById('slot-modal-hero')||{}).value;
+        if(id) {
+            openAwakeningSection(id, __slotModalState.lv);
+            const aw = AWAKENING_HEROES && AWAKENING_HEROES[id];
+            if (aw && __slotModalState.lv < (aw.ewMinRequired||20)) {
+                __slotModalState.awTier = 'none';
+            }
+        }
+    } catch(e){}
 }
 function slotModalClear(){
     document.getElementById('slot-modal-hero').value = 'empty';
@@ -5091,9 +5130,17 @@ function slotModalApply(){
     if(hEl) hEl.value = id;
     if(wEl) wEl.value = (id==='empty') ? 0 : lv;
 
-    // 覚醒ティアを保存
+    // 覚醒ティアを保存（前提条件チェック：EW Lv不足なら覚醒データをリセット）
     if (id !== 'empty' && typeof AWAKENING_HEROES !== 'undefined' && AWAKENING_HEROES[id]) {
-        saveAwTier(id, awTier);
+        const awCheck = (typeof checkAwakeningEligible !== 'undefined')
+            ? checkAwakeningEligible(id, lv, 5)
+            : { eligible: lv >= (AWAKENING_HEROES[id].ewMinRequired || 20) };
+        if (awCheck.eligible) {
+            saveAwTier(id, awTier);
+        } else {
+            // 前提未達 → 覚醒データをリセット
+            saveAwTier(id, 'none');
+        }
     }
 
     // 再評価
