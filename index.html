@@ -4418,7 +4418,7 @@ function renderAwakenRanking(awakenResults) {
         const nxtTier = '★' + item.nextTierStr;
         const shardLabel = item.nextShardNamed
             ? `🔑 専用かけら×${item.nextShardCost}`
-            : `<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;margin-right:2px;">汎用かけら×${item.nextShardCost}`;
+            : `<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;margin-right:2px;">覚醒かけら×${item.nextShardCost}`;
 
         // ボーナステキスト
         const bonusTxt = aw ? ((aw.tierBonuses || {})[item.nextTierStr.replace('★','')] || '') : '';
