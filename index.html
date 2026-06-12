@@ -1448,11 +1448,16 @@ const FORMATION_SYNERGY = {
   carryPlusSubDps: 1.04,
   carryPlusSupport: 1.03,
   controlPlusCarry: 1.03,
-  tankCarryCore: 1.08,    // Kim + front2 + Marshall
-  airBurstCore: 1.10,     // Lucius + DVA + Morrison
-  airControlCore: 1.06,   // Lucius + Schuyler
-  missileCore: 1.09,      // Adam + 2 missile attackers
-  promotedUrBridge: 1.02  // 手持ち事情でのつなぎ採用
+  tankCarryCore: 1.08,          // Kim + front2 + Marshall
+  airBurstCore: 1.10,           // Lucius + DVA + Morrison
+  airControlCore: 1.06,         // Lucius + Schuyler
+  missileCore: 1.09,            // Adam + 2 missile attackers
+  promotedUrBridge: 1.02,       // 手持ち事情でのつなぎ採用
+  // S6覚醒シナジー
+  awakenKimCore: 1.08,          // 覚醒キム（★0以上）+ 前衛2枚: 決意状態が開幕即発動
+  awakenKimDvaCombo: 1.10,      // 覚醒キム + 覚醒DVA: 4+1混成の黄金コンビ
+  awakenDvaMono: 1.05,          // 覚醒DVA単独 + 航空軸: エースの矜持スタック効率UP
+  awakenTeslaFiona: 1.08,       // 覚醒テスラ + フィオナ: 誘導電流×DoTコンボ
 };
 
 const MATCHUP_MODIFIER = {
@@ -1462,14 +1467,14 @@ const MATCHUP_MODIFIER = {
 };
 
 const HERO_AI_PROFILE = {
-  kimberly:{ immediate:1.08, longterm:1.00, cost10:1.03, cost20:1.06, cost30:1.04, coverage:1.04, future:1.08, mainTypeBonus:1.04, promotedUrPenalty:1.00 },
-  dva:{ immediate:1.08, longterm:1.00, cost10:1.03, cost20:1.06, cost30:0.95, coverage:1.03, future:1.08, mainTypeBonus:1.04, promotedUrPenalty:1.00 },
+  kimberly:{ immediate:1.10, longterm:1.08, cost10:1.03, cost20:1.06, cost30:1.06, coverage:1.05, future:1.12, mainTypeBonus:1.06, promotedUrPenalty:1.00 }, // S6: 覚醒「燃ゆる決意」で長期評価大幅UP
+  dva:{ immediate:1.08, longterm:1.06, cost10:1.03, cost20:1.08, cost30:1.02, coverage:1.04, future:1.10, mainTypeBonus:1.05, promotedUrPenalty:1.00 }, // S6: 覚醒「エーススター」でEW20が主要節目に
   fiona:{ immediate:1.06, longterm:0.96, cost10:1.03, cost20:1.05, cost30:1.03, coverage:1.02, future:1.07, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
   lucius:{ immediate:1.07, longterm:0.88, cost10:1.05, cost20:1.08, cost30:0.98, coverage:1.07, future:1.05, mainTypeBonus:1.05, promotedUrPenalty:1.00 },
   williams:{ immediate:1.05, longterm:0.80, cost10:1.04, cost20:1.06, cost30:0.96, coverage:1.06, future:1.00, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
   stetmann:{ immediate:1.04, longterm:0.86, cost10:1.02, cost20:1.05, cost30:0.97, coverage:1.03, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
   morrison:{ immediate:1.03, longterm:0.85, cost10:1.01, cost20:1.04, cost30:0.97, coverage:1.02, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
-  tesla:{ immediate:1.03, longterm:0.84, cost10:1.03, cost20:1.05, cost30:0.98, coverage:1.02, future:1.03, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
+  tesla:{ immediate:1.03, longterm:0.92, cost10:1.03, cost20:1.05, cost30:1.00, coverage:1.03, future:1.06, mainTypeBonus:1.03, promotedUrPenalty:1.00 }, // S6: 覚醒「電磁共鳴」DoTがロケラン軸で強力
   mcgregor:{ immediate:1.03, longterm:0.83, cost10:1.03, cost20:1.05, cost30:0.98, coverage:1.04, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
   schuyler:{ immediate:1.02, longterm:0.79, cost10:1.04, cost20:1.03, cost30:0.96, coverage:1.03, future:1.00, mainTypeBonus:1.02, promotedUrPenalty:1.00 },
   adam:{ immediate:1.03, longterm:0.76, cost10:1.03, cost20:1.04, cost30:0.96, coverage:1.05, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
@@ -1616,62 +1621,62 @@ const REASON_EXCLUDE_BY_IMPACT = {
 
 const SUMMARY_TEMPLATES = {
   build_main: {
-    tankiness: "主力部隊の安定化を進めやすい",
-    stability: "今の編成を崩さず戦力を底上げしやすい",
-    carry: "主力部隊の完成度を高めやすい",
-    subdps: "主力部隊の火力補強を進めやすい",
-    support: "主力部隊の回りを良くしやすい",
-    burst: "主力部隊の突破力を高めやすい",
-    default: "主力部隊の強化を進めやすい"
+    tankiness: "前衛を強化して編成の耐久力を上げよう",
+    stability: "今の編成バランスを維持しながら底上げできる",
+    carry: "主力エースをさらに強くして火力を引き上げよう",
+    subdps: "サブ火力を強化して攻撃の厚みを増やそう",
+    support: "サポートを育てて全体のスキル回転を上げよう",
+    burst: "開幕バーストの威力を高めて先手を取りやすくしよう",
+    default: "1軍の戦力を直接引き上げられる"
   },
   hold: {
-    tankiness: "主力部隊の安定化を進めやすい",
-    stability: "今の編成を崩さず戦力を底上げしやすい",
-    carry: "主力部隊の完成度を高めやすい",
-    support: "主力部隊の回りを良くしやすい",
-    default: "主力部隊の強化を進めやすい"
+    tankiness: "前衛を補強して1軍の安定感を上げよう",
+    stability: "現在の編成を崩さず底上げできる",
+    carry: "主力エースをさらに育てて火力を上げよう",
+    support: "サポートを強化してチーム全体を底上げしよう",
+    default: "1軍の強化を安定して進められる"
   },
   seed: {
-    tankiness: "次兵種への移行準備を進めやすい",
-    stability: "将来の編成転換に向けた土台を作りやすい",
-    carry: "次の主力軸を先行して育てやすい",
-    subdps: "次兵種の火力補強を進めやすい",
-    support: "将来の編成転換に向けた土台を作りやすい",
-    burst: "次兵種の勝ち筋を作りやすい",
-    default: "次兵種への移行準備を進めやすい"
+    tankiness: "次兵種の前衛候補を先に育てておこう",
+    stability: "兵種移行の下準備として育てておくと後が楽になる",
+    carry: "次の主力候補を今から育て始めると移行がスムーズ",
+    subdps: "次兵種の火力候補を先行育成しておこう",
+    support: "次兵種向けサポートの準備を進めよう",
+    burst: "次兵種の開幕火力候補として先行育成しておこう",
+    default: "次の兵種移行に向けた先行投資として有効"
   },
   shift: {
-    tankiness: "次の主力兵種への移行を進めやすい",
-    stability: "編成の主軸を切り替える段階で効果が大きい",
-    carry: "主力兵種の切り替えに直結しやすい",
-    subdps: "新しい主軸の火力を補いやすい",
-    support: "兵種移行後の編成を支えやすい",
-    default: "次の主力兵種への移行を進めやすい"
+    tankiness: "兵種移行中の前衛不足を補える",
+    stability: "移行期の編成を安定させるために育てよう",
+    carry: "新しい主力エースとして移行をリードできる",
+    subdps: "新しい主軸の火力を補完できる",
+    support: "移行後の編成を支えるサポートとして有効",
+    default: "兵種移行を加速できるタイミング"
   },
   full_shift: {
-    tankiness: "兵種移行を本格化させやすい",
-    stability: "新しい主軸の安定化を進めやすい",
-    carry: "新しい主軸の完成度を高めやすい",
-    support: "兵種移行後の編成を支えやすい",
-    default: "兵種移行を本格化させやすい"
+    tankiness: "新兵種の前衛を固めて編成を完成に近づけよう",
+    stability: "新しい主軸編成の完成度を高めよう",
+    carry: "新しい主力エースをMAXに近づけよう",
+    support: "移行完了後の編成に必要なサポートを育てよう",
+    default: "新兵種の編成をさらに強化できる"
   },
   low_cost: {
-    default: "低コストで戦力の底上げを狙いやすい"
+    default: "少ないコストで着実に戦力を底上げできる"
   },
   high_cost: {
-    default: "高コストだが伸び幅が大きい"
+    default: "コストは重いが強化後の伸びが大きい"
   },
   lv30: {
-    carry: "高コストだが主力火力の伸びが大きい",
-    subdps: "高コストだが火力面の伸びが期待しやすい",
-    support: "高コストだが中長期の戦力強化につながりやすい",
-    default: "高コストだが伸び幅が大きい"
+    carry: "Lv30でエースの火力が大きく跳ね上がる",
+    subdps: "Lv30でサブ火力の伸びが期待できる",
+    support: "Lv30でサポート効果が本格的になる",
+    default: "Lv30投資で戦力の伸びが大きい"
   },
   future: {
-    default: "中長期の戦力強化につながりやすい"
+    default: "今は地味でも中長期で大きく戦力に貢献する"
   },
   immediate: {
-    default: "比較的早く戦力化しやすい"
+    default: "育てるとすぐ1軍で活躍できる"
   }
 };
 
@@ -2078,13 +2083,13 @@ function updateSlotEvalsFromCurrentInputs(){
 }
 
 const TRANSITION_TEXT_TABLE = [
-  { min: 85, label: "今すぐ乗り換え推奨", cls: "advice-now",  color: "#ef4444" },
-  { min: 70, label: "乗り換えおすすめ",   cls: "advice-good", color: "#f59e0b" },
-  { min: 55, label: "検討圏",           cls: "advice-soon", color: "#eab308" },
+  { min: 85, label: "移行のチャンス", cls: "advice-now",  color: "#ef4444" },
+  { min: 70, label: "移行を検討しよう",   cls: "advice-good", color: "#f59e0b" },
+  { min: 55, label: "移行を視野に",           cls: "advice-soon", color: "#eab308" },
   // ここから下は「様子見」系（CSS既存クラスに寄せる）
-  { min: 40, label: "様子見（中）",     cls: "advice-wait", color: "#64748b" },
-  { min: 25, label: "様子見",           cls: "advice-wait", color: "#94a3b8" },
-  { min: 0,  label: "まだ早い",         cls: "advice-wait", color: "#cbd5e1" }
+  { min: 40, label: "まだ様子見",     cls: "advice-wait", color: "#64748b" },
+  { min: 25, label: "現状維持でOK",           cls: "advice-wait", color: "#94a3b8" },
+  { min: 0,  label: "移行は時期尚早",         cls: "advice-wait", color: "#cbd5e1" }
 ];
 
 function getTransitionAdvice(score){
@@ -2317,13 +2322,13 @@ function updateTransitionRecommendationUI(){
       .sort((a,b)=>(b.gain-a.gain)||(a.wp-b.wp))
       .slice(0,3);
 
-    const topTxt = tops.length ? tops.map(x=>`${x.name} Lv${x.wp}→${x.nxt} (+${x.gain}pt)`).join('<br>') : '—';
+    const topTxt = tops.length ? tops.map(x=>`${x.name} EW Lv${x.wp}→${x.nxt}`).join('<br>') : '—';
 
     return `
       <div class="trans-row trans-row-top">
         <div class="trans-left">
           <div class="trans-title">${labels[base]} → ${labels[row.t]} <span class="trans-badge ${adv.cls}">${adv.txt}</span></div>
-          <div class="trans-meta">不足：+${shortage}pt（${shortagePct}%）</div>
+          <div class="trans-meta">あと${shortagePct}%（強化石${shortage}個分相当）</div>
           <div class="trans-meta">推奨：${topTxt}</div>
         </div>
         <div class="trans-right trans-right-fixed">
@@ -2357,7 +2362,7 @@ function updateTransitionRecommendationUI(){
     ${transitionNote}
     ${shardWarning}
     <div class="footnote-muted">
-      ※ %は「移行先(上位5人+5バフ) / 主力(上位5人+5バフ)」の目安。メタ一致は+10%（目安）。不足pt/推奨は「次の節目(Lv10/20/30)」基準。
+      ※ 達成率は「移行先編成の推定戦力 ÷ 現在の主力編成の戦力」の目安です。100%超えで移行検討圏。推奨EWは次の節目（Lv10/20/30）が目標です。
     </div>
   `;
 }
@@ -2562,14 +2567,14 @@ function effCardHtml(rank, item, opts){
   let sub = '';
   if(mode === 'unlock'){
     const unlockLv = (safeItem.to !== undefined) ? ` <span class="eff-lv">(Lv${safeItem.from||0}→${safeItem.to})</span>` : '';
-    sub = `<div class="eff-sub"><span class="eff-subline">解放時${unlockLv} <span class="eff-plus">+${safeItem.gain}</span></span></div>`;
+    sub = `<div class="eff-sub"><span class="eff-subline">解放時${unlockLv}</span></div>`;
   }else{
     const costPart = safeItem.isAwakeningItem
       ? `<span class="gear-cost"><span class="sep">あと</span>${safeItem.nextShardNamed ? '🔑専用' : '<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;">'} <span class="gear-num">×${safeItem.nextShardCost}</span></span>`
       : (safeItem.cost !== undefined && safeItem.cost !== null)
         ? `<span class="gear-cost"><span class="sep">あと</span><img src="${SHARD_ICON_SRC}" alt="gear"> <span class="gear-num">${safeItem.cost}</span></span>`
         : '';
-    sub = `<div class="eff-sub"><span class="eff-subline"><span class="eff-plus">+${safeItem.gain}</span>${costPart ? ' ' + costPart : ''}</span></div>`;
+    sub = `<div class="eff-sub"><span class="eff-subline">${costPart || ''}</span></div>`;
   }
 
   return `
@@ -2663,7 +2668,7 @@ function topRankCardHtml(rank, item, opts){
           })()}
           <div class="rankhero-bottomline">
             <div class="rankhero-leftline">
-              <div class="rankhero-gain">+${safeItem.gain}</div>
+              <!-- gain数値は非表示（効果バッジで表現） -->
             </div>
             <div class="rankhero-costwrap">${costPart}</div>
           </div>
@@ -3617,7 +3622,25 @@ function __aiBuildContext(roster, base){
   const main = progress[mainArmyType] || progress[currentCombatType];
   const mainTeamMaturity = (mainSquadProgress >= 0.78 || main.avgWp >= 20 || main.count20 >= 4 || main.count30 >= 1) ? 'high' : ((mainSquadProgress >= 0.55 || main.avgWp >= 12 || main.count10 >= 3) ? 'mid' : 'low');
   const mainArmyIds = new Set(army1.map(h=>h.id));
-  return { progress, currentCombatType, investmentType, transitionState, mainTeamMaturity, mainArmyIds, mainArmyType, mainSquadProgress, shiftTargetType, shiftTargetProgress:targetProgress, shiftStage, coreProgress:mainCoreProgress };
+  // S6覚醒状況をコンテキストに追加
+  const awakeningCtx = (() => {
+    if (typeof loadAwTier === 'undefined' || typeof parseAwTier === 'undefined') return {};
+    const kimAt  = parseAwTier(loadAwTier('kimberly'));
+    const dvaAt  = parseAwTier(loadAwTier('dva'));
+    const teslaAt= parseAwTier(loadAwTier('tesla'));
+    const kimHas  = roster.some(h=>h.id==='kimberly') && kimAt.star >= 0;
+    const dvaHas  = roster.some(h=>h.id==='dva')      && dvaAt.star >= 0;
+    const teslaHas= roster.some(h=>h.id==='tesla')    && teslaAt.star >= 0;
+    return {
+      kim:   { awakened: kimHas,   star: kimAt.star,   tier: kimAt.tier   },
+      dva:   { awakened: dvaHas,   star: dvaAt.star,   tier: dvaAt.tier   },
+      tesla: { awakened: teslaHas, star: teslaAt.star, tier: teslaAt.tier },
+      hasAwakened:   kimHas || dvaHas || teslaHas,
+      kimDvaCombo:   kimHas && dvaHas,
+      teslaFiona:    teslaHas && roster.some(h=>h.id==='fiona'),
+    };
+  })();
+  return { progress, currentCombatType, investmentType, transitionState, mainTeamMaturity, mainArmyIds, mainArmyType, mainSquadProgress, shiftTargetType, shiftTargetProgress:targetProgress, shiftStage, coreProgress:mainCoreProgress, awakeningCtx };
 }
 function __aiTypePolicyMult(type, context, route='overall'){
   let mult = ((typeof META_SHIFT==='object' && META_SHIFT.weightBase && META_SHIFT.weightBase[type]) || 1.0);
@@ -3779,8 +3802,24 @@ function __aiFormationSynergyBias(hero, roster, targetLv, context){
   if(context && hero.t === context.currentCombatType){
     mult *= (__aiGetAiProfile(hero.id).mainTypeBonus || 1.0);
   }
+  // S6覚醒シナジー
+  if(context && context.awakeningCtx) {
+    const aw = context.awakeningCtx;
+    // 覚醒キム+前衛2枚の相乗効果
+    if(hero.id === 'kimberly' && aw.kim.awakened && frontCount >= 2 && table.awakenKimCore)
+      mult *= table.awakenKimCore;
+    // 覚醒キム+覚醒DVA 4+1コンボ
+    if((hero.id === 'kimberly' || hero.id === 'dva') && aw.kimDvaCombo && table.awakenKimDvaCombo)
+      mult *= table.awakenKimDvaCombo;
+    // 覚醒DVA単独+航空軸
+    if(hero.id === 'dva' && aw.dva.awakened && !aw.kimDvaCombo && hero.t === 'air' && table.awakenDvaMono)
+      mult *= table.awakenDvaMono;
+    // 覚醒テスラ+フィオナ
+    if(hero.id === 'tesla' && aw.teslaFiona && table.awakenTeslaFiona)
+      mult *= table.awakenTeslaFiona;
+  }
   if(targetLv === 30) mult = 1 + (mult - 1) * 0.65;
-  return Math.min(mult, 1.16);
+  return Math.min(mult, 1.22); // 覚醒シナジー分上限を1.16→1.22に拡張
 }
 
 function __aiMatchupBias(hero, roster, context){
@@ -4010,7 +4049,14 @@ function calculateUpgradeEfficiencyFull(roster){
 
         const reinforceMain = 30 * (sameMain ? 1 : 0) + 20 * (inMainArmy ? 1 : 0.4) + 20 * (((weakness1 === 'defense' || weakness2 === 'defense') && roleKey === 'wall') || ((weakness1 === 'attack' || weakness2 === 'attack') && roleKey === 'atk') ? 1 : 0.45) + 15 * (ms.target === 20 ? 1 : (ms.target === 10 ? 0.8 : 0.55)) + 10 * ((sameMain && context.mainTeamMaturity !== 'high') ? 1 : 0.5) + 5 * (sameMain ? 1 : 0.2);
         const reinforceCoverage = 30 * ((__aiCounterMap(context.currentCombatType)[hero.t]) || 0.5) + 25 * (profile.core ? 1 : 0.25) + 20 * Math.min(1.12, synergy * formationSynergy) + 15 * (!sameMain ? 1 : 0.45) + 10 * (ms.target <= 20 ? 1 : 0.55);
-        const reinforceFuture = 30 * (sameInvest ? 1 : 0.2) + 25 * (profile.core ? 1 : 0.3) + 20 * __aiGetLongterm(hero.id) + 15 * (context.mainTeamMaturity === 'high' ? 1 : (context.mainTeamMaturity === 'mid' ? 0.7 : 0.35)) + 10 * (ms.target === 30 ? 1 : (ms.target === 20 ? 0.8 : 0.5));
+        // S6: reinforceFuture に覚醒状況を反映
+        const awCtx = context.awakeningCtx || {};
+        const heroAwInfo = awCtx[hero.id] || {};
+        const awakenFutureBoost = heroAwInfo.awakened
+          ? (1.0 + Math.min(0.12, (heroAwInfo.star||0) * 0.03))  // 覚醒済み★数に応じたブースト
+          : (typeof AWAKENING_HEROES !== 'undefined' && AWAKENING_HEROES[hero.id] ? 1.04 : 1.0); // 未覚醒だが覚醒対象
+        const kimDvaComboBoost = awCtx.kimDvaCombo && (hero.id==='kimberly'||hero.id==='dva') ? 1.06 : 1.0;
+        const reinforceFuture = (30 * (sameInvest ? 1 : 0.2) + 25 * (profile.core ? 1 : 0.3) + 20 * __aiGetLongterm(hero.id) + 15 * (context.mainTeamMaturity === 'high' ? 1 : (context.mainTeamMaturity === 'mid' ? 0.7 : 0.35)) + 10 * (ms.target === 30 ? 1 : (ms.target === 20 ? 0.8 : 0.5))) * awakenFutureBoost * kimDvaComboBoost;
 
         normalResults.push({
             id: hero.id, name: hero.name, type: hero.t,
@@ -4151,19 +4197,19 @@ function updateSummaryBar(result, effData){
 
     // バッジ文言（数値は見せない）
     let badge = "効果あり";
-    if(top.strength === "mega") badge = "超効果大";
-    else if(top.strength === "high") badge = "効果大";
-    else if(top.strength === "mid") badge = "効果中";
-    else if(top.strength === "low") badge = "効果小";
+    if(top.strength === "mega") badge = "効果★★★";
+    else if(top.strength === "high") badge = "効果★★";
+    else if(top.strength === "mid") badge = "効果★";
+    else if(top.strength === "low") badge = "まず様子見";
 
-    const roleLabel = (top.roleKey === "atk") ? "攻撃" : (top.roleKey === "wall") ? "防御" : "支援";
+    const roleLabel = (top.roleKey === "atk") ? "火力" : (top.roleKey === "wall") ? "耐久" : "サポート";
 
     el.innerHTML = `
         <div class="summary-grid">
             <div style="flex:1; min-width:220px;">
                 <div class="summary-title">⭐ 今のおすすめ育成</div>
                 <div class="summary-main">${top.name}：${roleLabel}を優先強化（${badge}）</div>
-                <div class="summary-sub">おすすめ強化：Lv${top.from} → Lv${top.to}（次の到達目標） / 1軍傾向：${needText(weak1)}</div>
+                <div class="summary-sub">次の目標：EW Lv${top.to}を目指そう　1軍：${needText(weak1)}</div>
                 <div class="summary-sub" style="margin-top:6px;">${powerLine}</div>
             </div>
         </div>`;
@@ -4411,21 +4457,8 @@ if(effData.normal.length > 0){
         effOut += `</div>`;
     }
 
-    if(effData.unlock.length > 0){
-        effOut += `
-        <div style="margin-top:12px; background:#eff6ff; border:1px solid #bfdbfe; padding:12px; border-radius:10px;">
-            <div style="font-weight:900; color:#1e3a8a; margin-bottom:8px; font-size:0.9rem;">
-                🔓 専用武装育成候補
-            </div>`;
-
-        effData.unlock.slice(0,3).forEach((item,i)=>{
-            effOut += `
-            <div style="font-size:0.8rem; margin-bottom:4px;">
-                ${i+1}. <b>${item.name}</b> ${item.roleBadge} <span style="color:#64748b; margin-left:4px;">解放時 +${item.gain}</span>
-            </div>`;
-        });
-        effOut += "</div>";
-    }
+    // 専用武装育成候補セクション削除（S6以降は育成ランキングに統合済み）
+    // unlock英雄はnormalResultsに自動混在して評価される
 
     $id('eff-result').innerHTML = effOut || "<div style='color:#64748b; font-size:0.85rem;'>強化可能なキャラがいません。</div>";
 
@@ -4496,7 +4529,7 @@ function renderAwakenRanking(awakenResults) {
                 <div style="flex:1;background:#f1f5f9;border-radius:4px;height:4px;">
                   <div style="background:linear-gradient(90deg,#ef4444,#b91c1c);width:${effNorm}%;height:100%;border-radius:4px;"></div>
                 </div>
-                <span style="font-size:0.72rem;font-weight:900;color:#64748b;white-space:nowrap;">+${item.gain}pt</span>
+                <span style="font-size:0.68rem;font-weight:700;color:#94a3b8;white-space:nowrap;">優先度 ${item.gain >= 15 ? '★★★' : item.gain >= 8 ? '★★' : '★'}</span>
               </div>
             </div>
           </div>
