@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <title>ラストウォー育成シミュレーター</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 /* === ベース設定 === */
     :root{ --ui-ico:14px; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f4f6f8; color: #2c3e50; padding: 12px 10px 120px; margin: 0; font-size: 14px; line-height: 1.5; }
+    body { font-family: "Noto Sans JP","Helvetica Neue",Arial,sans-serif; background-color: #f4f6f8; color: #2c3e50; padding: 12px 10px 80px; margin: 0; font-size: 14px; line-height: 1.5; }
     h1 { font-size: 1.25rem; text-align: left; color: #1a252f; margin: 0 0 15px 0; font-weight: 900; }
     .version-badge { font-size: 0.65rem; color: #fff; background: linear-gradient(135deg, #f43f5e, #b91c1c); font-weight: bold; padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 4px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
     .container { max-width: 900px; margin: 0 auto; animation: appStart 0.4s ease-out forwards; }
@@ -16,18 +18,18 @@
 
     /* === タブUI === */
     .tabs { display: flex; background: #e2e8f0; border-radius: 10px; padding: 4px; margin-bottom: 12px; }
-    .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 0.95rem; font-weight: bold; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+    .tab-btn { flex: 1; padding: 14px 0; text-align: center; font-size: 0.9rem; font-weight: bold; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; min-height: 48px; display: flex; align-items: center; justify-content: center; }
     .tab-btn.active { background: #fff; color: #2563eb; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .tab-content { display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     /* === パネル共通 === */
-    .panel { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 15px; border: 1px solid #edf2f7; }
-    .ai-panel { background: linear-gradient(135deg, #ffffff, #f8fafc); border-left: 5px solid #3b82f6; }
-    .route-panel { background: linear-gradient(135deg, #ffffff, #fdf4ff); border-left: 5px solid #c026d3; }
+    .panel { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #edf2f7; }
+    .ai-panel { background: linear-gradient(135deg, #ffffff, #f8fafc); border-left: 3px solid #3b82f6; }
+    .route-panel { background: linear-gradient(135deg, #ffffff, #fdf4ff); border-left: 3px solid #c026d3; }
     .panel-title { font-weight: 900; font-size: 1.05rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .suggestion-box { background: #fff; border-radius: 8px; padding: 12px; font-size: 0.85rem; border: 1px solid #e2e8f0; line-height: 1.6; color: #334155; }
+    .suggestion-box { background: #fff; border-radius: 8px; padding: 12px; font-size: 0.83rem; border: 1px solid #e2e8f0; line-height: 1.6; color: #334155; }
     .apply-btn { background: linear-gradient(to right, #2563eb, #1d4ed8); color: #fff; border: none; padding: 10px; border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); }
 
     /* === 編成カード構造 === */
@@ -65,7 +67,7 @@
     .card-mis { border-bottom-color: #ef4444; }
     .card-awakened { border-color: #fbbf24 !important; border-bottom: 4px solid #f59e0b !important; box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important; }
 
-    .advice { font-size: 0.8rem; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; line-height: 1.5; border-left: 5px solid #cbd5e1; }
+    .advice { font-size: 0.8rem; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; line-height: 1.5; border-left: 3px solid #cbd5e1; }
     .adv-perfect { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
     .adv-ok { background: #f0fdf4; border-color: #22c55e; color: #166534; }
     .adv-ng { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
@@ -91,7 +93,7 @@
     #toast { visibility:hidden; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(30,41,59,0.95); color:#fff; padding:12px 20px; border-radius:30px; z-index:9999; font-weight:bold; transition:0.3s; }
 
     /* === 要約バー & ジャンプ === */
-    .summary-panel { background: linear-gradient(135deg, #ffffff, #eff6ff); border-left: 5px solid #0ea5e9; }
+    .summary-panel { background: linear-gradient(135deg, #ffffff, #eff6ff); border-left: 3px solid #0ea5e9; }
     .summary-grid { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .summary-title { font-weight:900; color:#0f172a; font-size:0.9rem; }
     .summary-main { font-weight:900; color:#1d4ed8; font-size:0.95rem; }
@@ -156,7 +158,7 @@
 
 
     /* === 統合編成スロット（タップで編集） === */
-    .slot-panel { border-left: 5px solid #22c55e; background: linear-gradient(135deg, #ffffff, #f0fdf4); }
+    .slot-panel { border-left: 3px solid #22c55e; background: linear-gradient(135deg, #ffffff, #f0fdf4); }
     .slot-army { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-top: 10px; background:#fff; }
     .slot-army-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:nowrap; }
 
@@ -168,28 +170,48 @@
     .slot-avatar img { width:100%; height:100%; object-fit:cover; }
     .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-weight:900; font-size:0.78rem; }
     .slot-lv { position:relative; margin-top:-9px; display:inline-block; background:#334155; color:#fff; font-weight:900; font-size:0.68rem; border-radius:10px; padding:2px 7px; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.2); }
-    .slot-name { margin-top:3px; font-size:0.70rem; line-height:1.05; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
+    .slot-name { margin-top:3px; font-size:clamp(0.58rem,1.9vw,0.70rem); line-height:1.05; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
     .slot-empty .slot-avatar { background: rgba(15, 23, 42, 0.06); border: 2px dashed #94a3b8; box-shadow:none; }
     .slot-empty .slot-fallback { color:#64748b; font-size:1.45rem; }
     .slot-empty .slot-lv, .slot-empty .slot-name { opacity:0.65; }
 
     /* モーダル */
-    .modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.55); display:none; align-items:center; justify-content:center; z-index:9999; padding:16px; }
+    /* モーダル基本 */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(2,6,23,0.55); display:none; align-items:flex-end; justify-content:center; z-index:9999; padding:0; }
     .modal-backdrop.open { display:flex; }
-    .modal-card { width:min(560px, 96vw); background:#fff; border-radius:16px; box-shadow:0 25px 60px rgba(0,0,0,0.35); overflow:hidden; }
-    .modal-head { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e2e8f0; }
+
+    /* スマホ：全画面ボトムシート */
+    .modal-card {
+      width:100vw;
+      background:#fff;
+      border-radius:16px 16px 0 0;
+      box-shadow:0 -4px 40px rgba(0,0,0,0.25);
+      display:flex; flex-direction:column;
+      height:100dvh; height:100vh;
+      max-height:100dvh; max-height:100vh;
+      overflow:hidden;
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    /* PC：中央カード */
+    @media (min-width:520px){
+      .modal-backdrop { align-items:center; padding:16px; }
+      .modal-card { width:min(560px,96vw); height:auto; max-height:88vh; border-radius:16px; box-shadow:0 25px 60px rgba(0,0,0,0.35); }
+    }
+
+    .modal-head { padding:12px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e2e8f0; flex-shrink:0; }
     .modal-head .t { font-weight:900; font-size:1.0rem; color:#0f172a; }
-    .modal-close { width:38px; height:38px; border-radius:12px; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:1.2rem; }
-    .modal-body { padding:14px 16px; }
-    .modal-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .modal-close { width:38px; height:38px; border-radius:12px; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; }
+    .modal-body { padding:12px 16px; overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+    .modal-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
     .modal-row label { font-weight:900; color:#334155; font-size:0.9rem; white-space:nowrap; }
     .modal-select { flex:1; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-weight:900; background:#f8fafc; }
-    .modal-step { display:flex; gap:10px; align-items:center; justify-content:flex-end; }
-    .modal-step button { width:56px; height:56px; border:none; border-radius:14px; font-size:1.6rem; font-weight:900; color:#fff; cursor:pointer; box-shadow:0 10px 18px rgba(37,99,235,0.25); background:linear-gradient(135deg,#2563eb,#1d4ed8); }
-    .modal-step .val { width:84px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#0f172a; color:#fff; font-weight:900; font-size:1.3rem; }
-    .modal-quick { display:flex; gap:10px; flex-wrap:wrap; }
-    .modal-quick button { flex:1; min-width:76px; padding:10px 0; border-radius:14px; border:1px solid #e2e8f0; background:#fff; font-weight:900; cursor:pointer; }
-    .modal-foot { padding:14px 16px; border-top:1px solid #e2e8f0; display:flex; gap:10px; }
+    .modal-step { display:flex; gap:8px; align-items:center; justify-content:flex-end; }
+    .modal-step button { width:52px; height:52px; border:none; border-radius:14px; font-size:1.5rem; font-weight:900; color:#fff; cursor:pointer; box-shadow:0 6px 14px rgba(37,99,235,0.25); background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+    .modal-step .val { width:78px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#0f172a; color:#fff; font-weight:900; font-size:1.3rem; }
+    .modal-quick { display:flex; gap:8px; flex-wrap:wrap; }
+    .modal-quick button { flex:1; min-width:64px; padding:8px 0; border-radius:12px; border:1px solid #e2e8f0; background:#fff; font-weight:900; cursor:pointer; font-size:0.9rem; }
+    .modal-foot { padding:12px 16px; padding-bottom:max(12px, env(safe-area-inset-bottom, 12px)); border-top:1px solid #e2e8f0; display:flex; gap:10px; flex-shrink:0; background:#fff; }
     .btn-danger { flex:1; background:#fff; border:1px solid #fecaca; color:#b91c1c; font-weight:900; padding:12px 10px; border-radius:14px; cursor:pointer; }
     .btn-primary { flex:1.6; background:linear-gradient(135deg,#2563eb,#1d4ed8); border:none; color:#fff; font-weight:900; padding:12px 10px; border-radius:14px; cursor:pointer; }
 
@@ -255,7 +277,7 @@
   #slot-tiles-2,
   #slot-tiles-3{
     display:grid !important;
-    grid-template-columns: repeat(3, 64px);
+    grid-template-columns: repeat(3, minmax(0, 70px));
     justify-content:center;
     gap:8px 58px;              /* ← 横の間隔を少し広げる（ここ重要） */
   }
@@ -771,14 +793,14 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
 
 /* === 育成優先ランキング / 編成補強おすすめ 2段レイアウト === */
-#eff-result .rankhero-card{padding:12px 0;}
+#eff-result .rankhero-card{padding:12px 4px;}
 #eff-result .rankhero-card + .rankhero-card{position:relative;margin-top:10px;padding-top:14px;}
 #eff-result .rankhero-card + .rankhero-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.55) 18%, rgba(244,114,182,.55) 82%, rgba(244,114,182,0));}
 #eff-result .rankhero-card--split{border-top:none;margin-top:0;}
 #eff-result #eff-more-list[data-open="1"]{position:relative;margin-top:14px !important;padding-top:16px;}
 #eff-result #eff-more-list[data-open="1"]::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.55) 18%, rgba(244,114,182,.55) 82%, rgba(244,114,182,0));}
 
-#eff-result .rankhero-card--best{background:#fff7ed;border:1px solid #fdba74;box-shadow:0 2px 8px rgba(0,0,0,.06);border-radius:12px;padding:10px 8px;}
+#eff-result .rankhero-card--best{background:#fff7ed;border:1px solid #fdba74;box-shadow:0 2px 8px rgba(0,0,0,.06);border-radius:12px;padding:12px 10px;}
 #eff-result .rankhero-row{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:12px;}
 #eff-result .rankhero-visual{width:96px;text-align:center;}
 #eff-result .rankhero-chip-row{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;}
@@ -878,9 +900,9 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   align-items: flex-start;
   gap: 6px;
   margin-top: 12px;
-  padding: 10px 10px;
+  padding: 8px 8px;
   background: linear-gradient(135deg, #1a0000, #2d0a0a);
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid #7f1d1d;
   overflow: hidden;
 }
@@ -1083,7 +1105,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         </div>
 
         <!-- 🎯 兵種シフト目安（最下部へ移動 + 折りたたみ） -->
-        <div id="power-transition" class="panel" style="border-left:5px solid #f59e0b; margin-top: 14px;">
+        <div id="power-transition" class="panel" style="border-left:3px solid #f59e0b; margin-top: 14px;">
           <div class="power-transition-head">
             <div class="power-transition-title">🎯 兵種の育成目安</div>
             <button id="power-transition-toggle" class="slot-toggle-btn" type="button" onclick="toggleTransitionPanel()" aria-label="兵種シフト目安を折りたたむ">▲</button>
@@ -1138,7 +1160,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
     </div>
 
     <div id="tab-guide" class="tab-content">
-    <div class="panel" style="border-left:5px solid #0ea5e9;">
+    <div class="panel" style="border-left:3px solid #0ea5e9;">
         <div class="panel-title" style="color:#0ea5e9;">📘 このツールの使い方</div>
         <div class="suggestion-box" style="font-size:0.86rem;">
       <div style="font-weight:900; margin-bottom:8px; color:#0f172a;">1) 🧩 編成（タップで編集）</div>
@@ -1172,7 +1194,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         </div>
     </div>
 
-    <div id="ref-panel" class="panel" style="border-left:5px solid #22c55e; display:block;">
+    <div id="ref-panel" class="panel" style="border-left:3px solid #22c55e; display:block;">
         <div class="panel-title" style="color:#16a34a;">🔗 情報収集・参考サイト</div>
         <div class="suggestion-box" style="font-size:0.86rem;">
             <div style="margin-bottom:8px;">
@@ -4446,29 +4468,35 @@ function renderAwakenRanking(awakenResults) {
         const effNorm = Math.min(100, Math.round(item.efficiency * 8));
 
         html += `
-        <div style="padding:12px 0; border-bottom:1px solid #f1f5f9; ${isBest?'background:linear-gradient(90deg,rgba(239,68,68,0.04),transparent);border-radius:10px;padding:12px 8px;':''}">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <!-- アバター -->
-            <div style="flex-shrink:0;text-align:center;width:52px;">
-              ${isBest ? '<div style="font-size:0.65rem;font-weight:900;color:#ef4444;margin-bottom:2px;">👑 最優先</div>' : `<div style="font-size:0.65rem;font-weight:900;color:#94a3b8;margin-bottom:2px;">${rank}位</div>`}
-              <div style="width:44px;height:44px;margin:0 auto;border-radius:12px;overflow:hidden;background:#0b1220;border:2px solid ${isBest?'#ef4444':'#e2e8f0'};">
-                <img src="${heroImg}" style="width:100%;height:100%;object-fit:cover;"
-                     onerror="this.style.display='none'">
+        <div style="padding:10px 8px; border-bottom:1px solid #f1f5f9; ${isBest?'background:linear-gradient(90deg,rgba(239,68,68,0.04),transparent);border-radius:10px;':''}">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <!-- アバター（アイコンのみ、名前は右に） -->
+            <div style="flex-shrink:0;position:relative;">
+              ${isBest
+                ? '<div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:#ef4444;white-space:nowrap;background:#fff;padding:0 2px;">👑最優先</div>'
+                : `<div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:#94a3b8;white-space:nowrap;background:#fff;padding:0 2px;">${rank}位</div>`}
+              <div style="width:40px;height:40px;margin-top:4px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid ${isBest?'#ef4444':'#e2e8f0'};">
+                <img src="${heroImg}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
               </div>
-              <div style="margin-top:4px;font-size:0.78rem;font-weight:900;color:#1f2937;">${name}</div>
             </div>
-            <!-- 情報 -->
+            <!-- 情報エリア -->
             <div style="flex:1;min-width:0;">
-              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
-                <span style="font-size:0.82rem;font-weight:900;color:#ef4444;">${curTier} → ${nxtTier}</span>
-                <span style="font-size:0.72rem;background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:6px;padding:1px 6px;font-weight:900;">${shardLabel}</span>
+              <!-- 名前 + ティア表示 -->
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:3px;flex-wrap:nowrap;">
+                <span style="font-size:0.82rem;font-weight:900;color:#1f2937;white-space:nowrap;">${name}</span>
+                <span style="font-size:0.78rem;font-weight:900;color:#ef4444;white-space:nowrap;">${curTier}→${nxtTier}</span>
               </div>
-              ${bonusTxt ? `<div style="font-size:0.72rem;color:#065f46;background:#ecfdf5;border-left:2px solid #10b981;padding:3px 6px;border-radius:4px;margin-bottom:4px;">${bonusTxt}</div>` : ''}
+              <!-- かけらバッジ -->
+              <div style="margin-bottom:3px;">
+                <span style="font-size:0.7rem;background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:6px;padding:2px 6px;font-weight:900;display:inline-flex;align-items:center;gap:3px;">${shardLabel}</span>
+              </div>
+              ${bonusTxt ? `<div style="font-size:0.7rem;color:#065f46;background:#ecfdf5;border-left:2px solid #10b981;padding:2px 6px;border-radius:4px;margin-bottom:3px;white-space:normal;">${bonusTxt}</div>` : ''}
+              <!-- コスパバー -->
               <div style="display:flex;align-items:center;gap:6px;">
-                <div style="flex:1;background:#f1f5f9;border-radius:4px;height:5px;">
+                <div style="flex:1;background:#f1f5f9;border-radius:4px;height:4px;">
                   <div style="background:linear-gradient(90deg,#ef4444,#b91c1c);width:${effNorm}%;height:100%;border-radius:4px;"></div>
                 </div>
-                <span style="font-size:0.75rem;font-weight:900;color:#64748b;">+${item.gain}pt</span>
+                <span style="font-size:0.72rem;font-weight:900;color:#64748b;white-space:nowrap;">+${item.gain}pt</span>
               </div>
             </div>
           </div>
@@ -4987,6 +5015,9 @@ function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
     }
 
     panel.style.display = 'block';
+    // details要素も表示
+    const det = document.getElementById('ew-vs-awaken-details');
+    if (det) det.style.display = 'block';
 
     // 判定
     let html = '<div style="font-weight:900;color:#334155;margin-bottom:6px;">⚖️ EW強化 vs 覚醒 優先度</div>';
@@ -6024,7 +6055,7 @@ try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getA
         <button onclick="slotModalSet(20)">20</button>
         <button onclick="slotModalSet(30)">30</button>
       </div>
-      <div style="margin-top:10px; font-size:0.8rem; color:#64748b; font-weight:bold; background:#f8fafc; border:1px solid #e2e8f0; padding:10px; border-radius:12px; line-height:1.5;">
+      <div style="margin-top:8px; font-size:0.78rem; color:#64748b; font-weight:bold; background:#f8fafc; border:1px solid #e2e8f0; padding:8px 10px; border-radius:10px; line-height:1.4;">
         武装Lvは 0〜30。10→20は現実的、20→30は効果大ですがコスト重めです。
       </div>
 
@@ -6044,7 +6075,12 @@ try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getA
         <div id="awaken-bonus-hint" class="awaken-bonus-hint" style="display:none;"></div>
         <div id="awaken-community-hint" class="awaken-community-hint" style="display:none;"></div>
         <!-- EW vs 覚醒 優先度判定 -->
-        <div id="ew-vs-awaken-panel" style="display:none; margin-top:10px; padding:8px 10px; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; font-size:0.75rem; line-height:1.6;"></div>
+        <details id="ew-vs-awaken-details" style="margin-top:10px; display:none;">
+          <summary style="cursor:pointer; font-size:0.78rem; font-weight:900; color:#334155; padding:6px 10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+            ⚖️ EW強化 vs 覚醒 優先度 <span style="color:#94a3b8;font-size:0.7rem;">▼ タップで展開</span>
+          </summary>
+          <div id="ew-vs-awaken-panel" style="padding:8px 10px; border:1px solid #e2e8f0; border-top:none; border-radius:0 0 10px 10px; background:#f8fafc; font-size:0.75rem; line-height:1.6;"></div>
+        </details>
       </div>
     </div>
     <div class="modal-foot">
