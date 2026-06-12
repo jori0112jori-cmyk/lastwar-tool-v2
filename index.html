@@ -990,6 +990,327 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
     margin:0;
     line-height:1.2;
   }
+
+/* ========================================
+   統一カードシステム（全ランキング共通）
+   スマホ最適化・文字サイズ・色を統一
+   ======================================== */
+
+/* カード共通 */
+.ucard {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e8edf5;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  position: relative;
+}
+.ucard--best {
+  background: linear-gradient(135deg, #fffbeb, #fff);
+  border-color: #fcd34d;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.12);
+}
+.ucard--awaken {
+  background: linear-gradient(135deg, #fef2f2, #fff);
+  border-color: #fecaca;
+}
+.ucard--swap {
+  background: linear-gradient(135deg, #f5f3ff, #fff);
+  border-color: #ddd6fe;
+}
+
+/* カード内レイアウト */
+.ucard-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* アバター */
+.ucard-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  text-align: center;
+}
+.ucard-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0b1220;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ucard-avatar-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ucard--best .ucard-avatar-img  { border-color: #f59e0b; }
+.ucard--awaken .ucard-avatar-img { border-color: #ef4444; }
+.ucard--swap .ucard-avatar-img   { border-color: #8b5cf6; }
+
+/* ランクバッジ */
+.ucard-rank {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+.ucard--best .ucard-rank  { color: #d97706; }
+.ucard--awaken .ucard-rank { color: #ef4444; }
+.ucard--swap .ucard-rank   { color: #7c3aed; }
+
+/* テキストエリア */
+.ucard-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ヘッダー行（名前＋右端バッジ） */
+.ucard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.ucard-name {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ucard-tier {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #ef4444;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ucard-level {
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #475569;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ucard-priority {
+  font-size: 0.7rem;
+  font-weight: 900;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* サマリテキスト */
+.ucard-summary {
+  font-size: 0.75rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* バッジ行 */
+.ucard-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* コスト行 */
+.ucard-cost {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: #475569;
+}
+.ucard-cost-label {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+/* ヒントボックス */
+.ucard-hint {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  padding: 4px 7px;
+  border-radius: 6px;
+}
+.ucard-hint--green {
+  color: #065f46;
+  background: #ecfdf5;
+  border-left: 2px solid #10b981;
+}
+.ucard-hint--blue {
+  color: #1e3a8a;
+  background: #eff6ff;
+  border-left: 2px solid #60a5fa;
+}
+
+/* 3軸バー（覚醒ランキング） */
+.ucard-bars {
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 5px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ucard-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ucard-bar-label {
+  font-size: 0.65rem;
+  color: #374151;
+  width: 52px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.ucard-bar-track {
+  flex: 1;
+  background: #e2e8f0;
+  border-radius: 3px;
+  height: 5px;
+  overflow: hidden;
+}
+.ucard-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.ucard-bar-val {
+  font-size: 0.65rem;
+  font-weight: 900;
+  width: 28px;
+  text-align: right;
+}
+
+/* 入れ替え診断 OUT→IN */
+.ucard-swap-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ucard-swap-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 8px;
+  padding: 4px 8px;
+  border: 1px solid;
+}
+.ucard-swap-chip--out {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.ucard-swap-chip--in {
+  background: #f5f3ff;
+  border-color: #c4b5fd;
+}
+.ucard-swap-chip-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #0b1220;
+  flex-shrink: 0;
+}
+.ucard-swap-chip-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ucard-swap-chip-name {
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+.ucard-swap-chip--out .ucard-swap-chip-name { color: #b91c1c; }
+.ucard-swap-chip--in  .ucard-swap-chip-name { color: #7c3aed; }
+.ucard-swap-chip-sub {
+  font-size: 0.65rem;
+  color: #475569;
+  font-weight: 700;
+}
+.ucard-swap-arrow {
+  font-size: 1rem;
+  color: #7c3aed;
+  font-weight: 900;
+}
+.ucard-swap-pct {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #7c3aed;
+  margin-left: auto;
+}
+
+/* セクションラベル */
+.ucard-squad-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #7c3aed;
+  background: #f5f3ff;
+  border-radius: 5px;
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+/* コミュニティ折りたたみ */
+.ucard-details summary {
+  font-size: 0.68rem;
+  color: #6366f1;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+  padding: 2px 0;
+}
+.ucard-details-body {
+  font-size: 0.68rem;
+  color: #475569;
+  margin-top: 3px;
+  padding: 4px 7px;
+  background: #f5f3ff;
+  border-radius: 5px;
+  border-left: 2px solid #8b5cf6;
+  line-height: 1.5;
+}
+
+/* コスト枠（あと🔑1750形式） */
+.ucard-gear-cost {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #475569;
+}
+.ucard-gear-cost img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* スマホ追加調整 */
+@media (max-width: 480px) {
+  .ucard { padding: 10px; }
+  .ucard-name { font-size: 0.85rem; }
+  .ucard-summary { font-size: 0.73rem; }
+  .ucard-hint  { font-size: 0.7rem; }
+}
 </style>
 </head>
 <body>
@@ -1828,6 +2149,7 @@ function parseAwTier(val) {
 // {star, tier} → 表示文字列（例: "★1-3"）
 function formatAwTier(at) {
   if (!at || at.star < 0) return '未覚醒';
+  if (at.tier === 5) return '★' + (at.star + 1);
   return '★' + at.star + '-' + at.tier;
 }
 
@@ -4608,31 +4930,29 @@ function runSwapDiagnosis(assignment) {
             ? '<span style="font-size:0.68rem;color:#ef4444;font-weight:900;margin-left:4px;">👑覚醒効果あり</span>' : '';
 
         html += `
-        <div style="padding:10px 8px;border-bottom:1px solid #f1f5f9;${i===0?'background:linear-gradient(90deg,rgba(139,92,246,0.04),transparent);border-radius:8px;':''}">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <span style="font-size:0.78rem;font-weight:900;color:#1f2937;">${sg.squad}軍</span>
-            <span style="font-size:0.8rem;font-weight:900;color:#7c3aed;">+${sg.pct}%</span>
+        <div class="ucard ucard--swap">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span class="ucard-squad-label">${sg.squad}軍</span>
+            <span class="ucard-swap-pct">+${sg.pct}%</span>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <!-- OUT -->
-            <div style="display:flex;align-items:center;gap:4px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:4px 8px;">
-              <div style="width:28px;height:28px;border-radius:6px;overflow:hidden;background:#0b1220;flex-shrink:0;">
-                <img src="img/${sg.out.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+          <div class="ucard-swap-row">
+            <div class="ucard-swap-chip ucard-swap-chip--out">
+              <div class="ucard-swap-chip-img">
+                <img src="img/${sg.out.id}.webp" onerror="this.style.display='none'">
               </div>
               <div>
-                <div style="font-size:0.72rem;font-weight:900;color:#b91c1c;">${heroName(sg.out.id)}</div>
-                <div style="font-size:0.62rem;color:#94a3b8;">EW${sg.out.wp} ${typeLabel[sg.out.t]||''}</div>
+                <div class="ucard-swap-chip-name">${heroName(sg.out.id)}</div>
+                <div class="ucard-swap-chip-sub">EW${sg.out.wp} ${typeLabel[sg.out.t]||''}</div>
               </div>
             </div>
-            <span style="font-size:1rem;color:#7c3aed;font-weight:900;">→</span>
-            <!-- IN -->
-            <div style="display:flex;align-items:center;gap:4px;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:8px;padding:4px 8px;">
-              <div style="width:28px;height:28px;border-radius:6px;overflow:hidden;background:#0b1220;flex-shrink:0;">
-                <img src="img/${sg.in.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+            <span class="ucard-swap-arrow">→</span>
+            <div class="ucard-swap-chip ucard-swap-chip--in">
+              <div class="ucard-swap-chip-img">
+                <img src="img/${sg.in.id}.webp" onerror="this.style.display='none'">
               </div>
               <div>
-                <div style="font-size:0.72rem;font-weight:900;color:#7c3aed;">${heroName(sg.in.id)}</div>
-                <div style="font-size:0.62rem;color:#94a3b8;">EW${sg.in.wp} ${typeLabel[sg.in.t]||''}</div>
+                <div class="ucard-swap-chip-name">${heroName(sg.in.id)}</div>
+                <div class="ucard-swap-chip-sub">EW${sg.in.wp} ${typeLabel[sg.in.t]||''}</div>
               </div>
             </div>
           </div>
@@ -4792,62 +5112,71 @@ function renderAwakenRanking(awakenResults) {
         const aw     = AWAKENING_HEROES[item.id];
         const name   = heroNames[item.id] || item.name;
         const heroImg = `img/${item.id}.webp`;
-        const curTier = item.awTierStr === 'none' ? '未覚醒' : '★' + item.awTierStr;
-        const nxtTier = '★' + sc.nextKey;
+        function rankTierLabel(tierStr){
+    if (!tierStr || tierStr === 'none') return '未覚醒';
 
+    const [star, tier] = tierStr.split('-').map(Number);
+
+    if (tier === 5) {
+        return '★' + (star + 1);
+    }
+
+    return `★${star}-${tier}`;
+}
+
+const curTier = rankTierLabel(item.awTierStr);
+const nxtTier = rankTierLabel(sc.nextKey);
         // コスト表示
         const shardLabel = sc.named
-            ? `🔑 専用かけら×${sc.shardCost}`
-            : `💎 汎用かけら×${sc.shardCost}`;
+            ? `🔑 専用覚醒かけら×${sc.shardCost}`
+            : `💎 汎用覚醒かけら×${sc.shardCost}`;
 
-        // 3軸バー
-        const bar = (val, color, label) =>
-            `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">
-              <span style="font-size:0.62rem;color:#64748b;width:36px;flex-shrink:0;">${label}</span>
-              <div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;">
-                <div style="background:${color};width:${Math.round(val*10)}%;height:100%;border-radius:3px;"></div>
-              </div>
-              <span style="font-size:0.62rem;font-weight:900;color:${color};width:14px;text-align:right;">${val}</span>
+        // 3軸バー（直感的な絵文字+ドット形式）
+        const bar = (val, color, label, icon) => {
+            const dots = [1,2,3,4,5].map(d =>
+                `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;
+                 background:${d <= Math.round(val/2) ? color : '#e2e8f0'};
+                 flex-shrink:0;"></span>`
+            ).join('');
+            const levelLabel = val >= 9 ? '最高' : val >= 7 ? '高い' : val >= 5 ? '普通' : '低め';
+            return `<div class="ucard-bar-row">
+              <span class="ucard-bar-label">${icon} ${label}</span>
+              <div style="display:flex;gap:3px;align-items:center;">${dots}</div>
+              <span class="ucard-bar-val" style="color:${color};font-size:0.65rem;">${levelLabel}</span>
             </div>`;
+        };
 
         // 総合優先度ラベル
         const priorityLabel = sc.total >= 7.5 ? '🔥 最優先' : sc.total >= 6 ? '⚡ 優先' : '📌 後回しOK';
         const priorityColor = sc.total >= 7.5 ? '#ef4444' : sc.total >= 6 ? '#f97316' : '#94a3b8';
 
         html += `
-        <div style="padding:12px 8px;border-bottom:1px solid #f1f5f9;${isBest?'background:linear-gradient(90deg,rgba(239,68,68,0.04),transparent);border-radius:10px;':''}">
-          <div style="display:flex;gap:10px;">
-            <!-- アバター -->
-            <div style="flex-shrink:0;position:relative;">
-              <div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:${priorityColor};white-space:nowrap;background:#fff;padding:0 2px;">${rank}位</div>
-              <div style="width:42px;height:42px;margin-top:6px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid ${isBest?'#ef4444':'#e2e8f0'};">
-                <img src="${heroImg}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+        <div class="ucard ${isBest?'ucard--best':'ucard--awaken'}">
+          <div class="ucard-row">
+            <div class="ucard-avatar">
+              <div class="ucard-rank">${rank}位</div>
+              <div class="ucard-avatar-img">
+                <img src="${heroImg}" onerror="this.style.display='none'">
               </div>
             </div>
-            <!-- 情報 -->
-            <div style="flex:1;min-width:0;">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
-                <div style="display:flex;align-items:baseline;gap:6px;">
-                  <span style="font-size:0.85rem;font-weight:900;color:#1f2937;">${name}</span>
-                  <span style="font-size:0.75rem;font-weight:900;color:#ef4444;">${curTier} → ${nxtTier}</span>
-                </div>
-                <span style="font-size:0.7rem;font-weight:900;color:${priorityColor};white-space:nowrap;">${priorityLabel}</span>
+            <div class="ucard-body">
+              <div class="ucard-header">
+                <span class="ucard-name">${name}</span>
+                <span class="ucard-tier">${curTier}→${nxtTier}</span>
+                <span class="ucard-priority" style="color:${priorityColor};">${priorityLabel}</span>
               </div>
-              <!-- かけら + 効果テキスト -->
-              <div style="font-size:0.72rem;color:#475569;margin-bottom:4px;">
-                <span style="background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:5px;padding:1px 5px;font-weight:900;margin-right:4px;">${shardLabel}</span>
-                ${sc.note}
+              <div class="ucard-badges">
+                <span style="background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:5px;padding:2px 6px;font-size:0.7rem;font-weight:900;">${shardLabel}</span>
               </div>
-              <!-- 3軸バー -->
-              <div style="background:#fafafa;border-radius:6px;padding:5px 6px;margin-top:3px;">
-                ${bar(sc.immediacy, '#3b82f6', '即効性')}
-                ${bar(sc.costpa,    '#10b981', 'コスパ')}
-                ${bar(sc.synergy,   '#8b5cf6', 'シナジー')}
+              <div class="ucard-summary">${sc.note}</div>
+              <div class="ucard-bars">
+                ${bar(sc.immediacy,'#3b82f6','即効性','⚡')}
+                ${bar(sc.costpa,   '#10b981','コスパ','💎')}
+                ${bar(sc.synergy,  '#8b5cf6','相性','🤝')}
               </div>
-              <!-- コミュニティコメント（折りたたみ） -->
-              <details style="margin-top:4px;">
-                <summary style="font-size:0.68rem;color:#6366f1;cursor:pointer;list-style:none;font-weight:700;">💬 海外ガチ勢の評価 ▼</summary>
-                <div style="font-size:0.68rem;color:#475569;margin-top:3px;padding:4px 6px;background:#f5f3ff;border-radius:5px;border-left:2px solid #8b5cf6;line-height:1.5;">${sc.verdict}</div>
+              <details class="ucard-details">
+                <summary>💬 海外ガチ勢の評価 ▼</summary>
+                <div class="ucard-details-body">${sc.verdict}</div>
               </details>
             </div>
           </div>
