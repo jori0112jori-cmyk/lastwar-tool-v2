@@ -1049,6 +1049,13 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
             <div id="awaken-rank-result" class="suggestion-box">覚醒対象英雄（キンバリー・DVA・テスラ）の次の強化ティアと優先度を表示します。</div>
         </div>
 
+        <!-- 編成入れ替え診断パネル -->
+        <div id="swap-diag-panel" class="panel" style="display:none;border-left:3px solid #8b5cf6;">
+            <div class="panel-title" style="color:#7c3aed;">🔀 編成入れ替え診断</div>
+            <div style="font-size:0.78rem;color:#64748b;margin-bottom:8px;">兵種バフは下がっても、入れ替えた方が強くなる組み合わせを提案します</div>
+            <div id="swap-diag-result" class="suggestion-box">編成を10人以上設定すると診断が始まります。</div>
+        </div>
+
         
         <div class="panel slot-panel">
             <div class="panel-title" style="color:#16a34a;">🧩 編成（タップで編集）</div>
@@ -4466,13 +4473,290 @@ if(effData.normal.length > 0){
     // 覚醒ランキングパネルを描画
     // -------------------------------------------------------
     renderAwakenRanking(effData.awaken || []);
+    // 編成入れ替え診断
+    try { runSwapDiagnosis(); } catch(e) { console.warn('swap diag error', e); }
+}
+
+// ===============================================================
+// 編成入れ替え診断
+// 各軍の各スロットに「控えの英雄」を仮挿入して
+// スコアが改善するかをチェック
+// ===============================================================
+function runSwapDiagnosis(assignment) {
+    const panel  = document.getElementById('swap-diag-panel');
+    const result = document.getElementById('swap-diag-result');
+    if (!panel || !result) return;
+
+    const getSquad = (s) => {
+        const members = [];
+        for (let p = 1; p <= 5; p++) {
+            const id = ($id(`h-${s}-${p}`)||{}).value;
+            const wp = parseInt(($id(`w-${s}-${p}`)||{}).value)||0;
+            if (id && id !== 'empty' && HEROES[id]) {
+                members.push({ id, wp, t:HEROES[id].t, r:HEROES[id].r,
+                    squadMisCount:0, simulating:false });
+            }
+        }
+        return members;
+    };
+
+    const suggestions = [];
+
+    for (let s = 1; s <= 3; s++) {
+        const squad = getSquad(s);
+        if (squad.length < 3) continue;
+
+        // 現在スコア
+        const misC = squad.filter(m=>m.t==='mis').length;
+        squad.forEach(m=>m.squadMisCount=misC);
+        const baseResult = evaluateSquadRealCombat(squad);
+        const baseScore  = baseResult.score;
+        const baseBuffRate = baseResult.buffRate;
+
+        // 控え・他軍の英雄を候補に
+        const benchIds = new Set();
+        // 控えから
+        for (let p = 1; p <= 10; p++) {
+            const id = ($id(`h-bench-${p}`)||{}).value;
+            const wp = parseInt(($id(`w-bench-${p}`)||{}).value)||0;
+            if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
+                benchIds.set ? benchIds.add(id) : benchIds.add(id);
+        }
+        // 他軍から
+        for (let os = 1; os <= 3; os++) {
+            if (os === s) continue;
+            for (let p = 1; p <= 5; p++) {
+                const id = ($id(`h-${os}-${p}`)||{}).value;
+                if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
+                    benchIds.add(id);
+            }
+        }
+
+        benchIds.forEach(candidateId => {
+            const candidateWp = (() => {
+                for (let os=1;os<=3;os++) for (let p=1;p<=5;p++) {
+                    if (($id(`h-${os}-${p}`)||{}).value===candidateId)
+                        return parseInt(($id(`w-${os}-${p}`)||{}).value)||0;
+                }
+                for (let p=1;p<=10;p++) {
+                    if (($id(`h-bench-${p}`)||{}).value===candidateId)
+                        return parseInt(($id(`w-bench-${p}`)||{}).value)||0;
+                }
+                return 0;
+            })();
+
+            const candidate = { id:candidateId, wp:candidateWp,
+                t:HEROES[candidateId].t, r:HEROES[candidateId].r,
+                squadMisCount:0, simulating:false };
+
+            // 各スロットと入れ替えてスコア計算
+            squad.forEach((target, idx) => {
+                const newSquad = [...squad];
+                newSquad[idx] = candidate;
+                const misC2 = newSquad.filter(m=>m.t==='mis').length;
+                newSquad.forEach(m=>m.squadMisCount=misC2);
+                const newResult = evaluateSquadRealCombat(newSquad);
+                const newScore  = newResult.score;
+                const scoreDiff = newScore - baseScore;
+                const pct = Math.round((scoreDiff / baseScore) * 100);
+
+                // 兵種バフが下がるが全体スコアが上がるケース or 覚醒で上がるケース
+                const buffDown = newResult.buffRate < baseBuffRate;
+                const awakeningGain = (typeof AWAKENING_HEROES !== 'undefined') &&
+                    AWAKENING_HEROES[candidateId] &&
+                    parseAwTier(loadAwTier(candidateId)).star >= 0;
+
+                if (scoreDiff > 0 && pct >= 3) {
+                    suggestions.push({
+                        squad: s,
+                        out: target,
+                        in: candidate,
+                        baseScore,
+                        newScore,
+                        scoreDiff,
+                        pct,
+                        buffDown,
+                        awakeningGain,
+                        newBuffRate: newResult.buffRate,
+                        baseBuffRate,
+                    });
+                }
+            });
+        });
+    }
+
+    if (suggestions.length === 0) {
+        panel.style.display = 'none';
+        return;
+    }
+
+    // スコア差分でソート、上位5件
+    suggestions.sort((a,b) => b.pct - a.pct);
+    const topSuggestions = suggestions.slice(0, 5);
+
+    panel.style.display = 'block';
+
+    const heroName = (id) => (HEROES[id]||{}).n || id;
+    const typeLabel = { tank:'戦車', air:'航空', mis:'ロケラン' };
+
+    let html = '';
+    topSuggestions.forEach((sg, i) => {
+        const buffNote = sg.buffDown
+            ? `<span style="font-size:0.68rem;color:#f97316;font-weight:700;">兵種バフ ${Math.round(sg.baseBuffRate*100)}%→${Math.round(sg.newBuffRate*100)}% ↓</span>`
+            : `<span style="font-size:0.68rem;color:#10b981;font-weight:700;">兵種バフ維持</span>`;
+        const awNote = sg.awakeningGain
+            ? '<span style="font-size:0.68rem;color:#ef4444;font-weight:900;margin-left:4px;">👑覚醒効果あり</span>' : '';
+
+        html += `
+        <div style="padding:10px 8px;border-bottom:1px solid #f1f5f9;${i===0?'background:linear-gradient(90deg,rgba(139,92,246,0.04),transparent);border-radius:8px;':''}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:0.78rem;font-weight:900;color:#1f2937;">${sg.squad}軍</span>
+            <span style="font-size:0.8rem;font-weight:900;color:#7c3aed;">+${sg.pct}%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <!-- OUT -->
+            <div style="display:flex;align-items:center;gap:4px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:4px 8px;">
+              <div style="width:28px;height:28px;border-radius:6px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+                <img src="img/${sg.out.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+              </div>
+              <div>
+                <div style="font-size:0.72rem;font-weight:900;color:#b91c1c;">${heroName(sg.out.id)}</div>
+                <div style="font-size:0.62rem;color:#94a3b8;">EW${sg.out.wp} ${typeLabel[sg.out.t]||''}</div>
+              </div>
+            </div>
+            <span style="font-size:1rem;color:#7c3aed;font-weight:900;">→</span>
+            <!-- IN -->
+            <div style="display:flex;align-items:center;gap:4px;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:8px;padding:4px 8px;">
+              <div style="width:28px;height:28px;border-radius:6px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+                <img src="img/${sg.in.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+              </div>
+              <div>
+                <div style="font-size:0.72rem;font-weight:900;color:#7c3aed;">${heroName(sg.in.id)}</div>
+                <div style="font-size:0.62rem;color:#94a3b8;">EW${sg.in.wp} ${typeLabel[sg.in.t]||''}</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            ${buffNote}${awNote}
+          </div>
+        </div>`;
+    });
+
+    result.innerHTML = html;
+}
+
+// ===============================================================
+// 覚醒ランキング 3軸評価（コミュニティメタ反映版）
+// 軸1: 即効性 - 今すぐ戦力になるか
+// 軸2: コスパ - シャード1個あたりの戦力上昇
+// 軸3: シナジー - 現在の編成との相乗効果
+// ===============================================================
+
+// コミュニティ検証ベースの覚醒優先度データ
+const AWAKEN_COMMUNITY_SCORES = {
+  kimberly: {
+    // 各ティアの即効性・コスパ・シナジー評価（0〜10）
+    // 出典: packsify.com, cpt-hedge.com, ldshop.gg 検証
+    tierScores: {
+      '0-1': { immediacy:9, costpa:8, synergy:9, note:'覚醒スキル解放+基礎ステ+20%。最高コスパの1手' },
+      '0-2': { immediacy:7, costpa:8, synergy:8, note:'汎用かけら×20。引き続き高コスパ' },
+      '0-3': { immediacy:7, costpa:7, synergy:8, note:'威力+10%。着実な強化' },
+      '0-4': { immediacy:7, costpa:7, synergy:8, note:'継続強化' },
+      '0-5': { immediacy:8, costpa:7, synergy:9, note:'決意状態の自動発動→★1到達。開幕即発動で大幅UP' },
+      '1-0': { immediacy:8, costpa:6, synergy:9, note:'★1到達。決意状態が開幕から適用' },
+      '1-1': { immediacy:7, costpa:6, synergy:8, note:'★1ティア強化中' },
+      '1-5': { immediacy:8, costpa:6, synergy:8, note:'追加ダメージ+20%→★2到達' },
+      '2-0': { immediacy:8, costpa:5, synergy:9, note:'★2到達。追加ダメージ+20%適用' },
+      '2-5': { immediacy:9, costpa:5, synergy:10, note:'エネルギー増幅2スタック先行獲得→★3到達。最大発数化の鍵' },
+      '3-0': { immediacy:9, costpa:4, synergy:10, note:'★3到達。最重要マイルストーン' },
+      '3-5': { immediacy:8, costpa:3, synergy:9, note:'追加ダメージ+60%（合計）→★4到達' },
+      '4-5': { immediacy:8, costpa:3, synergy:9, note:'増幅スタックごとに追加1発→★5MAX' },
+    },
+    priorityOrder: ['0-1','0-5','2-5','3-0'], // コスパ重視の推奨順
+    communityVerdict: 'キムの覚醒はS6最優先。★0-1解放だけで即戦力級。★3が最大効果のマイルストーン（packsify/cpt-hedge）'
+  },
+  dva: {
+    tierScores: {
+      '0-1': { immediacy:8, costpa:8, synergy:8, note:'覚醒スキル解放+基礎ステ+20%。キムに次ぐコスパ' },
+      '0-5': { immediacy:7, costpa:7, synergy:8, note:'エースの矜持パッシブ強化→★1到達' },
+      '1-0': { immediacy:7, costpa:6, synergy:8, note:'★1到達。攻撃速度スタック効率UP' },
+      '1-5': { immediacy:7, costpa:5, synergy:8, note:'追撃+20%→★2到達' },
+      '2-5': { immediacy:7, costpa:4, synergy:8, note:'攻撃力+5%/スタック→★3到達' },
+      '3-5': { immediacy:7, costpa:3, synergy:8, note:'追撃+40%→★4到達' },
+      '4-5': { immediacy:7, costpa:3, synergy:8, note:'滞空+1秒→★5MAX' },
+    },
+    priorityOrder: ['0-1','0-5','1-0'],
+    communityVerdict: 'キム覚醒後の第2優先。EW20到達後に覚醒解放でAoE+シングルの黄金コンビ完成（packsify）'
+  },
+  tesla: {
+    tierScores: {
+      '0-1': { immediacy:5, costpa:6, synergy:7, note:'覚醒スキル解放。フィオナがいると即シナジー発動' },
+      '0-5': { immediacy:5, costpa:5, synergy:7, note:'誘導電流DoTパッシブ→★1到達' },
+      '1-0': { immediacy:6, costpa:5, synergy:8, note:'★1到達。誘導電流スタックが本格化' },
+      '1-5': { immediacy:6, costpa:4, synergy:7, note:'追加+20%→★2到達' },
+      '2-5': { immediacy:6, costpa:3, synergy:8, note:'反射回数+1（8回）→★3到達' },
+      '3-5': { immediacy:6, costpa:3, synergy:8, note:'追加+40%→★4到達' },
+      '4-5': { immediacy:7, costpa:2, synergy:9, note:'反射+1（9回）→★5MAX' },
+    },
+    priorityOrder: ['0-1','1-0'],
+    communityVerdict: 'ロケラン軸+フィオナがいる場合のみ高優先。そうでなければキム→DVA後に検討（allclash/cpt-hedge）'
+  }
+};
+
+function calcAwakenScore(heroId, awTierStr, roster) {
+  const data = AWAKEN_COMMUNITY_SCORES[heroId];
+  if (!data) return { total:0, immediacy:0, costpa:0, synergy:0, note:'', verdict:'' };
+
+  const at = parseAwTier(awTierStr);
+  const nextCost = awNextTierCost(awTierStr);
+  if (!nextCost) return null; // MAX
+
+  // 次ティアのキーで評価を取得
+  const nextKey = nextCost.nextStar + '-' + nextCost.nextTier;
+  const tierScore = data.tierScores[nextKey] || { immediacy:5, costpa:5, synergy:5, note:'' };
+
+  // シナジー補正：現在の編成から加算
+  let synergyBonus = 0;
+  if (heroId === 'kimberly') {
+    const hasFront2 = roster && roster.filter(h=>h.t==='tank'&&h.r==='wall').length >= 2;
+    const hasMarshall = roster && roster.some(h=>h.id==='marshall');
+    if (hasFront2) synergyBonus += 1;
+    if (hasMarshall) synergyBonus += 0.5;
+  }
+  if (heroId === 'dva') {
+    const kimAw = parseAwTier(loadAwTier('kimberly'));
+    if (kimAw.star >= 0) synergyBonus += 1.5; // キム覚醒済みとのコンボ
+    const airCount = roster ? roster.filter(h=>h.t==='air').length : 0;
+    if (airCount >= 2) synergyBonus += 1;
+  }
+  if (heroId === 'tesla') {
+    const hasFiona = roster && roster.some(h=>h.id==='fiona');
+    const misCount = roster ? roster.filter(h=>h.t==='mis').length : 0;
+    if (hasFiona) synergyBonus += 2;
+    if (misCount >= 3) synergyBonus += 1;
+  }
+
+  const synergyFinal = Math.min(10, tierScore.synergy + synergyBonus);
+  // 重み：コスパ40%・即効性30%・シナジー30%
+  const total = tierScore.costpa * 0.40 + tierScore.immediacy * 0.30 + synergyFinal * 0.30;
+
+  return {
+    total,
+    immediacy: tierScore.immediacy,
+    costpa: tierScore.costpa,
+    synergy: synergyFinal,
+    note: tierScore.note,
+    verdict: data.communityVerdict,
+    nextKey,
+    shardCost: nextCost.cost,
+    named: nextCost.named
+  };
 }
 
 function renderAwakenRanking(awakenResults) {
     const panel  = document.getElementById('awaken-rank-panel');
     const result = document.getElementById('awaken-rank-result');
     if (!panel || !result) return;
-
     if (!awakenResults || awakenResults.length === 0) {
         panel.style.display = 'none';
         return;
@@ -4481,56 +4765,90 @@ function renderAwakenRanking(awakenResults) {
 
     const heroNames = { kimberly:'キンバリー', dva:'DVA', tesla:'テスラ' };
 
+    // 全ロースターを取得（シナジー計算用）
+    const rosterForSynergy = (() => {
+        try {
+            const r = [];
+            for (let s=1;s<=3;s++) for (let p=1;p<=5;p++) {
+                const id = ($id(`h-${s}-${p}`)||{}).value;
+                const wp = parseInt(($id(`w-${s}-${p}`)||{}).value)||0;
+                if (id && id !== 'empty' && HEROES[id]) r.push({ id, wp, t:HEROES[id].t, r:HEROES[id].r });
+            }
+            return r;
+        } catch(e) { return []; }
+    })();
+
+    // 3軸スコアを計算してソート
+    const scored = awakenResults.map(item => {
+        const sc = calcAwakenScore(item.id, item.awTierStr, rosterForSynergy);
+        return { ...item, sc };
+    }).filter(x => x.sc).sort((a,b) => b.sc.total - a.sc.total);
+
     let html = '';
-    awakenResults.forEach((item, i) => {
-        const rank    = i + 1;
-        const isBest  = rank === 1;
-        const aw      = (typeof AWAKENING_HEROES !== 'undefined') ? AWAKENING_HEROES[item.id] : null;
+    scored.forEach((item, i) => {
+        const rank   = i + 1;
+        const isBest = rank === 1;
+        const sc     = item.sc;
+        const aw     = AWAKENING_HEROES[item.id];
+        const name   = heroNames[item.id] || item.name;
         const heroImg = `img/${item.id}.webp`;
-        const name    = heroNames[item.id] || item.name;
         const curTier = item.awTierStr === 'none' ? '未覚醒' : '★' + item.awTierStr;
-        const nxtTier = '★' + item.nextTierStr;
-        const shardLabel = item.nextShardNamed
-            ? `🔑 専用かけら×${item.nextShardCost}`
-            : `<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;margin-right:2px;">汎用かけら×${item.nextShardCost}`;
+        const nxtTier = '★' + sc.nextKey;
 
-        // ボーナステキスト
-        const bonusTxt = aw ? ((aw.tierBonuses || {})[item.nextTierStr.replace('★','')] || '') : '';
+        // コスト表示
+        const shardLabel = sc.named
+            ? `🔑 専用かけら×${sc.shardCost}`
+            : `💎 汎用かけら×${sc.shardCost}`;
 
-        // EW vs 覚醒コスパバー
-        const effNorm = Math.min(100, Math.round(item.efficiency * 8));
+        // 3軸バー
+        const bar = (val, color, label) =>
+            `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">
+              <span style="font-size:0.62rem;color:#64748b;width:36px;flex-shrink:0;">${label}</span>
+              <div style="flex:1;background:#f1f5f9;border-radius:3px;height:5px;">
+                <div style="background:${color};width:${Math.round(val*10)}%;height:100%;border-radius:3px;"></div>
+              </div>
+              <span style="font-size:0.62rem;font-weight:900;color:${color};width:14px;text-align:right;">${val}</span>
+            </div>`;
+
+        // 総合優先度ラベル
+        const priorityLabel = sc.total >= 7.5 ? '🔥 最優先' : sc.total >= 6 ? '⚡ 優先' : '📌 後回しOK';
+        const priorityColor = sc.total >= 7.5 ? '#ef4444' : sc.total >= 6 ? '#f97316' : '#94a3b8';
 
         html += `
-        <div style="padding:10px 8px; border-bottom:1px solid #f1f5f9; ${isBest?'background:linear-gradient(90deg,rgba(239,68,68,0.04),transparent);border-radius:10px;':''}">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <!-- アバター（アイコンのみ、名前は右に） -->
+        <div style="padding:12px 8px;border-bottom:1px solid #f1f5f9;${isBest?'background:linear-gradient(90deg,rgba(239,68,68,0.04),transparent);border-radius:10px;':''}">
+          <div style="display:flex;gap:10px;">
+            <!-- アバター -->
             <div style="flex-shrink:0;position:relative;">
-              ${isBest
-                ? '<div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:#ef4444;white-space:nowrap;background:#fff;padding:0 2px;">👑最優先</div>'
-                : `<div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:#94a3b8;white-space:nowrap;background:#fff;padding:0 2px;">${rank}位</div>`}
-              <div style="width:40px;height:40px;margin-top:4px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid ${isBest?'#ef4444':'#e2e8f0'};">
+              <div style="position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:900;color:${priorityColor};white-space:nowrap;background:#fff;padding:0 2px;">${rank}位</div>
+              <div style="width:42px;height:42px;margin-top:6px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid ${isBest?'#ef4444':'#e2e8f0'};">
                 <img src="${heroImg}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
               </div>
             </div>
-            <!-- 情報エリア -->
+            <!-- 情報 -->
             <div style="flex:1;min-width:0;">
-              <!-- 名前 + ティア表示 -->
-              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:3px;flex-wrap:nowrap;">
-                <span style="font-size:0.82rem;font-weight:900;color:#1f2937;white-space:nowrap;">${name}</span>
-                <span style="font-size:0.78rem;font-weight:900;color:#ef4444;white-space:nowrap;">${curTier}→${nxtTier}</span>
-              </div>
-              <!-- かけらバッジ -->
-              <div style="margin-bottom:3px;">
-                <span style="font-size:0.7rem;background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:6px;padding:2px 6px;font-weight:900;display:inline-flex;align-items:center;gap:3px;">${shardLabel}</span>
-              </div>
-              ${bonusTxt ? `<div style="font-size:0.7rem;color:#065f46;background:#ecfdf5;border-left:2px solid #10b981;padding:2px 6px;border-radius:4px;margin-bottom:3px;white-space:normal;">${bonusTxt}</div>` : ''}
-              <!-- コスパバー -->
-              <div style="display:flex;align-items:center;gap:6px;">
-                <div style="flex:1;background:#f1f5f9;border-radius:4px;height:4px;">
-                  <div style="background:linear-gradient(90deg,#ef4444,#b91c1c);width:${effNorm}%;height:100%;border-radius:4px;"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+                <div style="display:flex;align-items:baseline;gap:6px;">
+                  <span style="font-size:0.85rem;font-weight:900;color:#1f2937;">${name}</span>
+                  <span style="font-size:0.75rem;font-weight:900;color:#ef4444;">${curTier} → ${nxtTier}</span>
                 </div>
-                <span style="font-size:0.68rem;font-weight:700;color:#94a3b8;white-space:nowrap;">優先度 ${item.gain >= 15 ? '★★★' : item.gain >= 8 ? '★★' : '★'}</span>
+                <span style="font-size:0.7rem;font-weight:900;color:${priorityColor};white-space:nowrap;">${priorityLabel}</span>
               </div>
+              <!-- かけら + 効果テキスト -->
+              <div style="font-size:0.72rem;color:#475569;margin-bottom:4px;">
+                <span style="background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:5px;padding:1px 5px;font-weight:900;margin-right:4px;">${shardLabel}</span>
+                ${sc.note}
+              </div>
+              <!-- 3軸バー -->
+              <div style="background:#fafafa;border-radius:6px;padding:5px 6px;margin-top:3px;">
+                ${bar(sc.immediacy, '#3b82f6', '即効性')}
+                ${bar(sc.costpa,    '#10b981', 'コスパ')}
+                ${bar(sc.synergy,   '#8b5cf6', 'シナジー')}
+              </div>
+              <!-- コミュニティコメント（折りたたみ） -->
+              <details style="margin-top:4px;">
+                <summary style="font-size:0.68rem;color:#6366f1;cursor:pointer;list-style:none;font-weight:700;">💬 海外ガチ勢の評価 ▼</summary>
+                <div style="font-size:0.68rem;color:#475569;margin-top:3px;padding:4px 6px;background:#f5f3ff;border-radius:5px;border-left:2px solid #8b5cf6;line-height:1.5;">${sc.verdict}</div>
+              </details>
             </div>
           </div>
         </div>`;
