@@ -10,9 +10,30 @@
 <style>
 /* === ベース設定 === */
     :root{ --ui-ico:14px; }
-    body { font-family: "Noto Sans JP","Helvetica Neue",Arial,sans-serif; background-color: #f4f6f8; color: #2c3e50; padding: 12px 10px 80px; margin: 0; font-size: 14px; line-height: 1.5; }
+    body {
+  font-family: "Noto Sans JP","Helvetica Neue",Arial,sans-serif;
+  background-color: #f4f6f8;
+  color: #1f2937;
+  padding: 12px 10px 80px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* フォントスケール定数 */
+  --fs-xs:   0.68rem;   /* 極小ラベル・バッジ */
+  --fs-sm:   0.75rem;   /* 小テキスト・ヒント */
+  --fs-md:   0.83rem;   /* 本文・説明 */
+  --fs-base: 0.9rem;    /* 標準・小見出し */
+  --fs-lg:   1.0rem;    /* 見出し */
+  --fs-xl:   1.1rem;    /* 大見出し */
+  /* カラー定数 */
+  --c-text:    #1f2937;
+  --c-sub:     #475569;
+  --c-muted:   #94a3b8;
+  --c-border:  #e8edf5;
+}
     h1 { font-size: 1.25rem; text-align: left; color: #1a252f; margin: 0 0 15px 0; font-weight: 900; }
-    .version-badge { font-size: 0.65rem; color: #fff; background: linear-gradient(135deg, #f43f5e, #b91c1c); font-weight: bold; padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 4px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .version-badge { font-size:0.68rem; color: #fff; background: linear-gradient(135deg, #f43f5e, #b91c1c); font-weight: bold; padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 4px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
     .container { max-width: 900px; margin: 0 auto; animation: appStart 0.4s ease-out forwards; }
     @keyframes appStart { 0%, 30% { opacity: 0; } 100% { opacity: 1; } }
 
@@ -29,7 +50,7 @@
     .ai-panel { background: linear-gradient(135deg, #ffffff, #f8fafc); border-left: 3px solid #3b82f6; }
     .route-panel { background: linear-gradient(135deg, #ffffff, #fdf4ff); border-left: 3px solid #c026d3; }
     .panel-title { font-weight: 900; font-size: 1.05rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .suggestion-box { background: #fff; border-radius: 8px; padding: 12px; font-size: 0.83rem; border: 1px solid #e2e8f0; line-height: 1.6; color: #334155; }
+    .suggestion-box { background: #fff; border-radius: 8px; padding: 12px; font-size: var(--fs-md,0.83rem); border: 1px solid #e2e8f0; line-height: 1.6; color: var(--c-sub,#475569); }
     .apply-btn { background: linear-gradient(to right, #2563eb, #1d4ed8); color: #fff; border: none; padding: 10px; border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); }
 
     /* === 編成カード構造 === */
@@ -59,7 +80,7 @@
     
     .shard-info { color: #fbbf24; height: 22px; display: flex; align-items: center; justify-content: center; letter-spacing: -0.5px; white-space: nowrap; font-weight: 900; margin-top: 2px; }
     .shard-icon { width: var(--ui-ico); height: var(--ui-ico); margin: 0 2px; vertical-align: -2px; }
-    .awaken-badge { background: linear-gradient(135deg, #b45309, #f59e0b); color: #fff; font-size: 0.75rem; font-weight: 900; padding: 1px 6px; border-radius: 12px; border: 1px solid #fde68a; }
+    .awaken-badge { background: linear-gradient(135deg, #b45309, #f59e0b); color: #fff; font-size:0.75rem; font-weight: 900; padding: 1px 6px; border-radius: 12px; border: 1px solid #fde68a; }
     .card-empty { opacity: 0.6; border: 2px dashed #475569 !important; background: rgba(0,0,0,0.2) !important; border-bottom: 2px dashed #475569 !important; }
     .card-ur { border-bottom-color: #a855f7; }
     .card-tank { border-bottom-color: #f59e0b; }
@@ -84,7 +105,7 @@
     .g-label { font-weight: bold; font-size: 0.8rem; color: #475569; white-space: nowrap; flex-shrink: 0; }
     .g-input-group { display: flex; gap: 6px; flex-shrink: 0; justify-content: flex-end; }
     .stepper-lv { width: 85px; } .stepper-star { width: 115px; } .stepper-star input { font-size: 11px; letter-spacing: -1px; }
-    .buff-info { font-size: 0.75rem; color: #d97706; background: #fffbeb; padding: 8px; border-radius: 6px; margin-top: 12px; text-align: center; display: none; font-weight: bold; }
+    .buff-info { font-size:0.75rem; color: #d97706; background: #fffbeb; padding: 8px; border-radius: 6px; margin-top: 12px; text-align: center; display: none; font-weight: bold; }
     .buff-info.active { display: block; }
     .cost-panel { margin-top: 15px; background: #fff; padding: 15px; border-radius: 10px; border-top: 4px solid #f59e0b; }
     .cost-row { display: flex; justify-content: space-between; font-size: 0.9rem; border-bottom: 1px dashed #e2e8f0; padding: 6px 0; font-weight: bold; color: #475569; }
@@ -97,7 +118,7 @@
     .summary-grid { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .summary-title { font-weight:900; color:#0f172a; font-size:0.9rem; }
     .summary-main { font-weight:900; color:#1d4ed8; font-size:0.95rem; }
-    .summary-sub { font-size:0.78rem; color:#64748b; font-weight:bold; }
+    .summary-sub { font-size:0.75rem; color:#64748b; font-weight:bold; }
     .jump-row { display:flex; gap:8px; margin: 10px 0 14px; flex-wrap:wrap; }
     .jump-btn { flex:1; min-width: 98px; border:none; border-radius: 12px; padding: 10px 10px; font-weight: 900; cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .jump-btn.j1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; }
@@ -168,7 +189,7 @@
     .slot-tile { width:68px; flex:0 0 68px; cursor:pointer; user-select:none; -webkit-tap-highlight-color: transparent; text-align:center; scroll-snap-align:start; }
     .slot-avatar { width:64px; height:64px; border-radius:16px; background:#0f172a; border:2px solid #cbd5e1; position:relative; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
     .slot-avatar img { width:100%; height:100%; object-fit:cover; }
-    .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-weight:900; font-size:0.78rem; }
+    .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-weight:900; font-size:0.75rem; }
     .slot-lv { position:relative; margin-top:-9px; display:inline-block; background:#334155; color:#fff; font-weight:900; font-size:0.68rem; border-radius:10px; padding:2px 7px; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.2); }
     .slot-name { margin-top:3px; font-size:clamp(0.58rem,1.9vw,0.70rem); line-height:1.05; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
     .slot-empty .slot-avatar { background: rgba(15, 23, 42, 0.06); border: 2px dashed #94a3b8; box-shadow:none; }
@@ -221,8 +242,8 @@
     .slot-eval .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
     .slot-eval .row.sub{ justify-content:flex-end; margin-top:4px; gap:6px; }
     .slot-eval .tag{ font-size:0.72rem; font-weight:900; color:#475569; display:flex; align-items:center; gap:6px; }
-    .slot-eval .pct{ font-size:0.82rem; font-weight:1000; color:#0f172a; white-space:nowrap; }
-    .slot-eval .buff-badge{ font-size:0.65rem; color:#475569; background:#fff; border:1px solid #e2e8f0; padding:2px 6px; border-radius:8px; font-weight:900; white-space:nowrap; }
+    .slot-eval .pct{ font-size:0.83rem; font-weight:1000; color:#0f172a; white-space:nowrap; }
+    .slot-eval .buff-badge{ font-size:0.68rem; color:#475569; background:#fff; border:1px solid #e2e8f0; padding:2px 6px; border-radius:8px; font-weight:900; white-space:nowrap; }
     .slot-eval .bar{ width:100%; height:8px; border-radius:6px; overflow:hidden; background:#e5e7eb; margin-top:6px; }
     .slot-eval .bar > div{ height:100%; }
 
@@ -250,7 +271,7 @@
 }
 
 .slot-tile .name{
-  font-size:0.65rem !important;
+  font-size:0.68rem !important;
   line-height:1.05 !important;
 }
 
@@ -360,7 +381,7 @@
 
 /* transition row */
 .trans-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #e2e8f0;}
-.trans-left{font-weight:900;color:#334155;font-size:0.85rem;display:flex;gap:6px;align-items:center;}
+.trans-left{font-weight:900;color:#334155;font-size:0.83rem;display:flex;gap:6px;align-items:center;}
 .trans-right{font-weight:900;font-size:0.95rem;}
 .trans-badge{font-size:0.7rem;padding:2px 8px;border-radius:999px;font-weight:900;}
 .advice-wait{background:#e5e7eb;color:#475569;}
@@ -505,7 +526,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   align-items:center;
   gap:6px;
   white-space:nowrap;
-  font-size:0.78rem;
+  font-size:0.75rem;
   font-weight:900;
   color:#64748b;
 }
@@ -580,7 +601,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    font-size: 0.74rem !important;
+    font-size:0.72rem !important;
     padding: 3px 8px !important;
     border-radius: 999px !important;
     white-space: nowrap;
@@ -588,7 +609,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
   #power-transition .trans-meta{
     display: block !important;
-    font-size: 0.92rem !important;
+    font-size:0.9rem !important;
     line-height: 1.55 !important;
     margin-top: 4px;
     word-break: break-word;
@@ -630,13 +651,13 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   }
 
   #power-transition-body > div:nth-child(2){
-    font-size: 0.82rem !important;
+    font-size:0.83rem !important;
     line-height: 1.5 !important;
     margin-bottom: 10px !important;
   }
 
   #power-transition-body > div:last-child{
-    font-size: 0.74rem !important;
+    font-size:0.72rem !important;
     line-height: 1.55 !important;
     margin-top: 10px !important;
   }
@@ -927,14 +948,14 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   overflow: hidden;
 }
 .awaken-req-hint {
-  font-size: 0.74rem;
+  font-size:0.72rem;
   color: #f87171;
   margin-top: 5px;
   text-align: center;
   font-weight: 900;
 }
 .awaken-bonus-hint {
-  font-size: 0.73rem;
+  font-size:0.72rem;
   color: #065f46;
   margin-top: 4px;
   padding: 6px 8px;
@@ -945,7 +966,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   font-weight: 600;
 }
 .awaken-community-hint {
-  font-size: 0.72rem;
+  font-size:0.72rem;
   color: #1e3a8a;
   margin-top: 4px;
   padding: 6px 8px;
@@ -960,7 +981,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .awaken-badge-star {
   background: linear-gradient(135deg, #7f1d1d, #ef4444);
   color: #fff;
-  font-size: 0.68rem;
+  font-size:0.68rem;
   font-weight: 900;
   padding: 1px 5px;
   border-radius: 10px;
@@ -1084,9 +1105,9 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   gap: 6px;
 }
 .ucard-name {
-  font-size: 0.88rem;
+  font-size: var(--fs-base, 0.9rem);
   font-weight: 900;
-  color: #111827;
+  color: var(--c-text, #1f2937);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1114,9 +1135,9 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
 /* サマリテキスト */
 .ucard-summary {
-  font-size: 0.75rem;
-  color: #374151;
-  line-height: 1.5;
+  font-size: var(--fs-sm, 0.75rem);
+  color: var(--c-text, #1f2937);
+  line-height: 1.6;
 }
 
 /* バッジ行 */
@@ -4834,31 +4855,16 @@ function runSwapDiagnosis(assignment) {
         const baseScore    = baseResult.score;
         const baseBuffRate = baseResult.buffRate;
 
-        // 候補：控え＋他軍（他軍からは閾値を高くして慎重に提案）
+        // 候補：控えのみ（他軍からの引き抜きは現実的でないため除外）
         const candidateIds = new Set();
         for (let p = 1; p <= 10; p++) {
             const id = ($id(`h-bench-${p}`)||{}).value;
             if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
                 candidateIds.add(id);
         }
-        for (let os = 1; os <= 3; os++) {
-            if (os === s) continue;
-            for (let p = 1; p <= 5; p++) {
-                const id = ($id(`h-${os}-${p}`)||{}).value;
-                if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
-                    candidateIds.add(id);
-            }
-        }
 
         candidateIds.forEach(candidateId => {
             let candidateWp = 0;
-            let candidateFrom = '控え';
-            for (let os=1;os<=3;os++) for (let p=1;p<=5;p++) {
-                if (($id(`h-${os}-${p}`)||{}).value===candidateId) {
-                    candidateWp = parseInt(($id(`w-${os}-${p}`)||{}).value)||0;
-                    candidateFrom = os+'軍';
-                }
-            }
             for (let p=1;p<=10;p++) {
                 if (($id(`h-bench-${p}`)||{}).value===candidateId)
                     candidateWp = parseInt(($id(`w-bench-${p}`)||{}).value)||0;
@@ -4868,7 +4874,7 @@ function runSwapDiagnosis(assignment) {
                 id: candidateId, wp: candidateWp,
                 t: HEROES[candidateId].t, r: HEROES[candidateId].r,
                 squadMisCount:0, simulating:true,
-                fromSquad: candidateFrom
+                fromSquad: '控え'
             };
 
             // 各スロットと入れ替えてスコア計算
@@ -4895,8 +4901,8 @@ function runSwapDiagnosis(assignment) {
                 if (!buffDown && !buffUp) reasons.push('兵種バフ維持');
                 const reasonTxt = reasons.join('・');
 
-                // 他軍からの引き抜きは閾値を高く設定
-                const threshold = candidate.fromSquad === '控え' ? 3 : 10;
+                // 控えからの入れ替え：スコア+5%以上を提案
+                const threshold = 5;
                 if (scoreDiff > 0 && pct >= threshold) {
                     suggestions.push({
                         squad: s,
@@ -4970,7 +4976,7 @@ function runSwapDiagnosis(assignment) {
           </div>
           <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             ${buffNote}${awNote}
-            ${sg.fromSquad && sg.fromSquad !== '控え' ? `<span style="font-size:0.68rem;color:#94a3b8;font-weight:700;">(${sg.fromSquad}から)</span>` : ''}
+
           </div>
           <div style="margin-top:3px;font-size:0.68rem;color:#94a3b8;">
             根拠: ${sg.reasonTxt || 'スコア計算値'} / ${sg.baseScore}→${sg.newScore}pt
