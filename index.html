@@ -1176,9 +1176,10 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .ucard-bar-label {
   font-size: 0.65rem;
   color: #374151;
-  width: 52px;
+  width: 78px;
   flex-shrink: 0;
   font-weight: 700;
+  white-space: nowrap;
 }
 .ucard-bar-track {
   flex: 1;
@@ -2149,7 +2150,6 @@ function parseAwTier(val) {
 // {star, tier} → 表示文字列（例: "★1-3"）
 function formatAwTier(at) {
   if (!at || at.star < 0) return '未覚醒';
-  if (at.tier === 5) return '★' + (at.star + 1);
   return '★' + at.star + '-' + at.tier;
 }
 
@@ -4972,104 +4972,215 @@ function runSwapDiagnosis(assignment) {
 // 軸3: シナジー - 現在の編成との相乗効果
 // ===============================================================
 
-// コミュニティ検証ベースの覚醒優先度データ
-const AWAKEN_COMMUNITY_SCORES = {
-  kimberly: {
-    // 各ティアの即効性・コスパ・シナジー評価（0〜10）
-    // 出典: packsify.com, cpt-hedge.com, ldshop.gg 検証
-    tierScores: {
-      '0-1': { immediacy:9, costpa:8, synergy:9, note:'覚醒スキル解放+基礎ステ+20%。最高コスパの1手' },
-      '0-2': { immediacy:7, costpa:8, synergy:8, note:'汎用かけら×20。引き続き高コスパ' },
-      '0-3': { immediacy:7, costpa:7, synergy:8, note:'威力+10%。着実な強化' },
-      '0-4': { immediacy:7, costpa:7, synergy:8, note:'継続強化' },
-      '0-5': { immediacy:8, costpa:7, synergy:9, note:'決意状態の自動発動→★1到達。開幕即発動で大幅UP' },
-      '1-0': { immediacy:8, costpa:6, synergy:9, note:'★1到達。決意状態が開幕から適用' },
-      '1-1': { immediacy:7, costpa:6, synergy:8, note:'★1ティア強化中' },
-      '1-5': { immediacy:8, costpa:6, synergy:8, note:'追加ダメージ+20%→★2到達' },
-      '2-0': { immediacy:8, costpa:5, synergy:9, note:'★2到達。追加ダメージ+20%適用' },
-      '2-5': { immediacy:9, costpa:5, synergy:10, note:'エネルギー増幅2スタック先行獲得→★3到達。最大発数化の鍵' },
-      '3-0': { immediacy:9, costpa:4, synergy:10, note:'★3到達。最重要マイルストーン' },
-      '3-5': { immediacy:8, costpa:3, synergy:9, note:'追加ダメージ+60%（合計）→★4到達' },
-      '4-5': { immediacy:8, costpa:3, synergy:9, note:'増幅スタックごとに追加1発→★5MAX' },
-    },
-    priorityOrder: ['0-1','0-5','2-5','3-0'], // コスパ重視の推奨順
-    communityVerdict: 'キムの覚醒はS6最優先。★0-1解放だけで即戦力級。★3が最大効果のマイルストーン（packsify/cpt-hedge）'
-  },
-  dva: {
-    tierScores: {
-      '0-1': { immediacy:8, costpa:8, synergy:8, note:'覚醒スキル解放+基礎ステ+20%。キムに次ぐコスパ' },
-      '0-5': { immediacy:7, costpa:7, synergy:8, note:'エースの矜持パッシブ強化→★1到達' },
-      '1-0': { immediacy:7, costpa:6, synergy:8, note:'★1到達。攻撃速度スタック効率UP' },
-      '1-5': { immediacy:7, costpa:5, synergy:8, note:'追撃+20%→★2到達' },
-      '2-5': { immediacy:7, costpa:4, synergy:8, note:'攻撃力+5%/スタック→★3到達' },
-      '3-5': { immediacy:7, costpa:3, synergy:8, note:'追撃+40%→★4到達' },
-      '4-5': { immediacy:7, costpa:3, synergy:8, note:'滞空+1秒→★5MAX' },
-    },
-    priorityOrder: ['0-1','0-5','1-0'],
-    communityVerdict: 'キム覚醒後の第2優先。EW20到達後に覚醒解放でAoE+シングルの黄金コンビ完成（packsify）'
-  },
-  tesla: {
-    tierScores: {
-      '0-1': { immediacy:5, costpa:6, synergy:7, note:'覚醒スキル解放。フィオナがいると即シナジー発動' },
-      '0-5': { immediacy:5, costpa:5, synergy:7, note:'誘導電流DoTパッシブ→★1到達' },
-      '1-0': { immediacy:6, costpa:5, synergy:8, note:'★1到達。誘導電流スタックが本格化' },
-      '1-5': { immediacy:6, costpa:4, synergy:7, note:'追加+20%→★2到達' },
-      '2-5': { immediacy:6, costpa:3, synergy:8, note:'反射回数+1（8回）→★3到達' },
-      '3-5': { immediacy:6, costpa:3, synergy:8, note:'追加+40%→★4到達' },
-      '4-5': { immediacy:7, costpa:2, synergy:9, note:'反射+1（9回）→★5MAX' },
-    },
-    priorityOrder: ['0-1','1-0'],
-    communityVerdict: 'ロケラン軸+フィオナがいる場合のみ高優先。そうでなければキム→DVA後に検討（allclash/cpt-hedge）'
-  }
+// ===============================================================
+// 覚醒マイルストーン定義
+// 「未覚醒→★0-1解放」「★0-5→★1到達」のような
+// 実際にプレイヤーが意識する節目単位で評価
+// コスト・戦力増加・優先度をコミュニティ検証値で設定
+// 出典: packsify.com, cpt-hedge.com, ldshop.gg, Reddit r/LastWarSurvival
+// ===============================================================
+// ===============================================================
+// マイルストーン定義
+// starMin/starMax: この範囲の★にいるプレイヤーが対象
+// to: 目標の内部キー（star-tier形式）
+// toLabel: 表示用目標名
+// ===============================================================
+const AWAKEN_MILESTONES = {
+  kimberly: [
+    { id:'unlock', toLabel:'★0-1（解放）', starMin:-1, starMax:-1,
+      to:'0-1', shardCost:50, named:true, powerGain:'large', costpa:9, immediacy:9,
+      note:'基礎ステ+20%・覚醒スキル「燃ゆる決意」習得。F2Pでも最優先の1手',
+      verdict:'S6最優先。専用かけら50個でキムが別次元の強さになる。EW Lv20あれば即取り（packsify）' },
+    { id:'star1', toLabel:'★1', starMin:0, starMax:0,
+      to:'1-0', shardCost:80, named:false, powerGain:'large', costpa:7, immediacy:8,
+      note:'戦闘開始時に自動で「決意」状態発動（会心率+10%）。開幕から全力モードに',
+      verdict:'★1の自動決意発動は対人戦で体感しやすい。解放後の次目標として最優先（cpt-hedge）' },
+    { id:'star3', toLabel:'★3', starMin:1, starMax:2,
+      to:'3-0', shardCost:550, named:false, powerGain:'xlarge', costpa:5, immediacy:9,
+      note:'覚醒スキル前にエネルギー増幅2スタック先行獲得→最大30発発射が現実的に。最重要マイルストーン',
+      verdict:'★3がキム覚醒の本番。追加ダメージ+20%と増幅先行取得で火力が2倍近くなる実感あり（packsify/Reddit）' },
+    { id:'star5', toLabel:'★5（MAX）', starMin:3, starMax:4,
+      to:'5-0', shardCost:900, named:false, powerGain:'mid', costpa:3, immediacy:7,
+      note:'増幅スタックごとに追加1発。追加ダメージ合計+60%。長期目標向け',
+      verdict:'★5は費用対効果が下がるが最終的な天井。急がず★3後に余裕があれば（cpt-hedge）' },
+  ],
+  dva: [
+    { id:'unlock', toLabel:'★0-1（解放）', starMin:-1, starMax:-1,
+      to:'0-1', shardCost:50, named:true, powerGain:'large', costpa:8, immediacy:8,
+      note:'基礎ステ+20%・「エーススター」習得。キム覚醒後の第2優先',
+      verdict:'キム覚醒後すぐに取るべき。AoE（キム）＋単体削除（DVA）の黄金コンビが完成（packsify）' },
+    { id:'star1', toLabel:'★1', starMin:0, starMax:0,
+      to:'1-0', shardCost:80, named:false, powerGain:'mid', costpa:6, immediacy:7,
+      note:'エースの矜持スタック効率UP（攻撃速度+10%/スタック追加）',
+      verdict:'航空機英雄が多い編成ほど効果大。スタックが積みやすくなる（allclash）' },
+    { id:'star3', toLabel:'★3', starMin:1, starMax:2,
+      to:'3-0', shardCost:550, named:false, powerGain:'mid', costpa:4, immediacy:7,
+      note:'追撃+20%＋攻撃力+5%/スタック。総合的な火力底上げ',
+      verdict:'DVAはキムほど急がなくていい。★3はキム★3達成後に取り組む目安（cpt-hedge）' },
+    { id:'star5', toLabel:'★5（MAX）', starMin:3, starMax:4,
+      to:'5-0', shardCost:900, named:false, powerGain:'mid', costpa:3, immediacy:6,
+      note:'滞空+1秒・追撃+40%。長期的な航空火力の最終強化',
+      verdict:'★5は余裕ができたら。キム★5より先にDVA★5を取る必要はない（allclash）' },
+  ],
+  tesla: [
+    { id:'unlock', toLabel:'★0-1（解放）', starMin:-1, starMax:-1,
+      to:'0-1', shardCost:50, named:true, powerGain:'mid', costpa:6, immediacy:5,
+      note:'基礎ステ+20%・「電磁共鳴」習得。ロケラン軸＋フィオナがいると即シナジー',
+      verdict:'ロケラン軸が整っていない場合はキム→DVA後でOK。フィオナ持ちなら早めに（Reddit）' },
+    { id:'star1', toLabel:'★1', starMin:0, starMax:0,
+      to:'1-0', shardCost:80, named:false, powerGain:'mid', costpa:5, immediacy:6,
+      note:'誘導電流DoT発動（攻撃力×3%/秒×30秒）。ロケラン数×3がスタック上限',
+      verdict:'フィオナ+テスラのDoTコンボが本格化。ロケラン3体以上なら★1で大きく変わる（cpt-hedge）' },
+    { id:'star3', toLabel:'★3', starMin:1, starMax:2,
+      to:'3-0', shardCost:550, named:false, powerGain:'mid', costpa:4, immediacy:6,
+      note:'反射回数+1（8回）・追加ダメージ+20%。ロケラン軸の火力が本格化',
+      verdict:'テスラ★3はフィオナDoTとの組み合わせで効果が倍増する（cpt-hedge）' },
+    { id:'star5', toLabel:'★5（MAX）', starMin:3, starMax:4,
+      to:'5-0', shardCost:900, named:false, powerGain:'mid', costpa:3, immediacy:6,
+      note:'反射+1（9回）・追加ダメージ+40%。最終強化',
+      verdict:'長期目標として余裕があれば（allclash）' },
+  ],
 };
 
-function calcAwakenScore(heroId, awTierStr, roster) {
-  const data = AWAKEN_COMMUNITY_SCORES[heroId];
-  if (!data) return { total:0, immediacy:0, costpa:0, synergy:0, note:'', verdict:'' };
-
+// 現在の覚醒状態から「次のマイルストーン」を取得
+// starMin/starMax: 現在の★がこの範囲にあるプレイヤーが対象
+function getNextMilestone_aw(heroId, awTierStr) {
+  const milestones = AWAKEN_MILESTONES[heroId];
+  if (!milestones) return null;
   const at = parseAwTier(awTierStr);
-  const nextCost = awNextTierCost(awTierStr);
-  if (!nextCost) return null; // MAX
+  const currentStar = at.star; // -1=未覚醒, 0〜4=★0〜4
 
-  // 次ティアのキーで評価を取得
-  const nextKey = nextCost.nextStar + '-' + nextCost.nextTier;
-  const tierScore = data.tierScores[nextKey] || { immediacy:5, costpa:5, synergy:5, note:'' };
+  for (const ms of milestones) {
+    if (currentStar >= ms.starMin && currentStar <= ms.starMax) {
+      // 目標に既に到達しているか確認
+      const toAt = parseAwTier(ms.to);
+      if (currentStar > toAt.star) continue;          // 既に超えている
+      if (currentStar === toAt.star && at.tier >= toAt.tier) continue; // 同★で到達済み
+      return ms;
+    }
+  }
+  return null; // MAX
+}
 
-  // シナジー補正：現在の編成から加算
+// 現在の★数から次のマイルストーンまでの残りシャード数を計算
+// 例: キンバリーが★1-3にいて★3到達を目指す場合
+//   ★1-3→★1-5: 40×2=80
+//   ★2-1→★2-5: 70×5=350
+//   合計: 430枚
+function calcRemainingShards(awTierStr, targetTierStr) {
+  const at  = parseAwTier(awTierStr);
+  const to  = parseAwTier(targetTierStr);
+  if (at.star < 0) return null; // 未覚醒は専用かけら固定なのでここでは計算しない
+  if (to.star < 0) return 0;
+
+  let total = 0;
+
+  // 同じ★内の残りティア
+  if (at.star === to.star) {
+    const remaining = to.tier - at.tier;
+    if (remaining <= 0) return 0;
+    total += remaining * (AW_SHARD_PER_TIER[at.star] || 20);
+    return total;
+  }
+
+  // 現在★の残りティア
+  const tierInCurrentStar = 5 - at.tier;
+  total += tierInCurrentStar * (AW_SHARD_PER_TIER[at.star] || 20);
+
+  // 中間★を全部通過
+  for (let s = at.star + 1; s < to.star; s++) {
+    total += 5 * (AW_SHARD_PER_TIER[s] || 20);
+  }
+
+  // 目標★のティア分
+  if (to.tier > 0) {
+    total += to.tier * (AW_SHARD_PER_TIER[to.star] || 20);
+  }
+
+  return total;
+}
+
+function calcAwakenScore(heroId, awTierStr, roster) {
+  const ms = getNextMilestone_aw(heroId, awTierStr);
+  if (!ms) return null; // MAX or 未対応
+
+  // 編成シナジー補正（1軍メンバーのみで計算）
+  const squad1 = roster ? roster.filter(h => {
+    // 1軍のIDを取得して絞り込み
+    try {
+      for (let p=1;p<=5;p++) {
+        const el = document.getElementById('h-1-'+p);
+        if (el && el.value === h.id) return true;
+      }
+    } catch(e) {}
+    return false;
+  }) : [];
+  const main = squad1.length >= 3 ? squad1 : (roster || []);
+
   let synergyBonus = 0;
+  let synergyNote  = '';
   if (heroId === 'kimberly') {
-    const hasFront2 = roster && roster.filter(h=>h.t==='tank'&&h.r==='wall').length >= 2;
-    const hasMarshall = roster && roster.some(h=>h.id==='marshall');
-    if (hasFront2) synergyBonus += 1;
-    if (hasMarshall) synergyBonus += 0.5;
+    const hasFront2  = main.filter(h=>h.t==='tank'&&h.r==='wall').length >= 2;
+    const hasMarshall= main.some(h=>h.id==='marshall');
+    if (hasFront2)   { synergyBonus += 2; synergyNote += '前衛2枚あり'; }
+    if (hasMarshall) { synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'マーシャルあり'; }
   }
   if (heroId === 'dva') {
     const kimAw = parseAwTier(loadAwTier('kimberly'));
-    if (kimAw.star >= 0) synergyBonus += 1.5; // キム覚醒済みとのコンボ
-    const airCount = roster ? roster.filter(h=>h.t==='air').length : 0;
-    if (airCount >= 2) synergyBonus += 1;
+    if (kimAw.star >= 0) { synergyBonus += 3; synergyNote += 'キム覚醒済み'; }
+    const airCount = main.filter(h=>h.t==='air').length;
+    if (airCount >= 2)   { synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'航空'+airCount+'体(1軍)'; }
   }
   if (heroId === 'tesla') {
-    const hasFiona = roster && roster.some(h=>h.id==='fiona');
-    const misCount = roster ? roster.filter(h=>h.t==='mis').length : 0;
-    if (hasFiona) synergyBonus += 2;
-    if (misCount >= 3) synergyBonus += 1;
+    const hasFiona = main.some(h=>h.id==='fiona');
+    const misCount = main.filter(h=>h.t==='mis').length;
+    if (hasFiona)          { synergyBonus += 3; synergyNote += 'フィオナあり'; }
+    if (misCount >= 3)     { synergyBonus += 2; synergyNote += (synergyNote?'・':'')+'ロケラン'+misCount+'体(1軍)'; }
+    else if (misCount >= 2){ synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'ロケラン'+misCount+'体(1軍)'; }
   }
+  const synergy = Math.min(10, 5 + synergyBonus);
 
-  const synergyFinal = Math.min(10, tierScore.synergy + synergyBonus);
-  // 重み：コスパ40%・即効性30%・シナジー30%
-  const total = tierScore.costpa * 0.40 + tierScore.immediacy * 0.30 + synergyFinal * 0.30;
+  // 戦力増加の大きさを数値に変換
+  const powerMap = { xlarge:10, large:8, mid:6, small:4 };
+  const powerVal = powerMap[ms.powerGain] || 6;
+
+  // 総合スコア（コスパ40%・即効性30%・戦力増加20%・シナジー10%）
+  const total = ms.costpa*0.40 + ms.immediacy*0.30 + powerVal*0.20 + synergy*0.10;
+
+  // 現在位置から次マイルストーンまでの残りシャードを計算
+  let remainingShards = ms.shardCost; // デフォルトはマイルストーン固定値
+  let remainingNamed  = ms.named;
+  if (!ms.named && ms.to && awTierStr !== 'none' && awTierStr !== ms.from) {
+    // 解放後で、現在位置がマイルストーム開始点と異なる場合は差分計算
+    const toAt = parseAwTier(ms.to.replace('★',''));
+    const calc = calcRemainingShards(awTierStr, ms.to.replace('★',''));
+    if (calc !== null && calc > 0) remainingShards = calc;
+  }
+  // 「現在★X-Y → 目標★N まであとN枚」の表示用文字列
+  const atNow = parseAwTier(awTierStr);
+  const nowLabel = atNow.star < 0 ? '未覚醒' : '★' + atNow.star + '-' + atNow.tier;
+  const goalLabel = ms.toLabel || (ms.to === '1-0' ? '★1' : ms.to === '3-0' ? '★3' : ms.to === '5-0' ? '★5MAX' : '★'+ms.to);
+  const shardDisp = remainingNamed
+    ? `${nowLabel} → ${goalLabel}（専用かけら×${remainingShards}）`
+    : `${nowLabel} → ${goalLabel}（あと${remainingShards}枚）`;
 
   return {
     total,
-    immediacy: tierScore.immediacy,
-    costpa: tierScore.costpa,
-    synergy: synergyFinal,
-    note: tierScore.note,
-    verdict: data.communityVerdict,
-    nextKey,
-    shardCost: nextCost.cost,
-    named: nextCost.named
+    costpa:    ms.costpa,
+    immediacy: ms.immediacy,
+    powerGain: powerVal,
+    synergy,
+    synergyNote: synergyNote.trim() || '',
+    note:    ms.note,
+    verdict: ms.verdict,
+    msLabel: ms.label,
+    fromStr: ms.from,
+    toStr:   ms.to,
+    shardCost:  remainingShards,
+    shardDisp,
+    nowLabel,       // 現在の★表示（例：★1-3）
+    goalLabel,      // 目標の★表示（例：★3）
+    named:      remainingNamed,
   };
 }
 
@@ -5112,24 +5223,16 @@ function renderAwakenRanking(awakenResults) {
         const aw     = AWAKENING_HEROES[item.id];
         const name   = heroNames[item.id] || item.name;
         const heroImg = `img/${item.id}.webp`;
-        function rankTierLabel(tierStr){
-    if (!tierStr || tierStr === 'none') return '未覚醒';
+        // マイルストーン表示（curTier/nxtTierは不使用になったが互換のため残す）
+        const curTier = item.awTierStr === 'none' ? '未覚醒' : '★' + item.awTierStr;
+        const nxtTier = sc.toStr ? ('★' + sc.toStr) : '';
 
-    const [star, tier] = tierStr.split('-').map(Number);
-
-    if (tier === 5) {
-        return '★' + (star + 1);
-    }
-
-    return `★${star}-${tier}`;
-}
-
-const curTier = rankTierLabel(item.awTierStr);
-const nxtTier = rankTierLabel(sc.nextKey);
         // コスト表示
         const shardLabel = sc.named
-            ? `🔑 専用覚醒かけら×${sc.shardCost}`
-            : `💎 汎用覚醒かけら×${sc.shardCost}`;
+            ? `🔑 専用かけら×${sc.shardCost}`
+            :  `<img src="img/kakusei.webp"
+            style="width:34px;height:34px;vertical-align:-2px;margin-right:3px;"
+            alt=""> ×${sc.shardCost}`;
 
         // 3軸バー（直感的な絵文字+ドット形式）
         const bar = (val, color, label, icon) => {
@@ -5162,17 +5265,20 @@ const nxtTier = rankTierLabel(sc.nextKey);
             <div class="ucard-body">
               <div class="ucard-header">
                 <span class="ucard-name">${name}</span>
-                <span class="ucard-tier">${curTier}→${nxtTier}</span>
+                <span style="font-size:0.7rem;font-weight:900;color:#ef4444;background:#fff1f2;border:1px solid #fecaca;border-radius:5px;padding:2px 6px;flex-shrink:0;white-space:nowrap;">目標 ${sc.goalLabel}</span>
                 <span class="ucard-priority" style="color:${priorityColor};">${priorityLabel}</span>
               </div>
-              <div class="ucard-badges">
-                <span style="background:#fff1f2;color:#b91c1c;border:1px solid #fecaca;border-radius:5px;padding:2px 6px;font-size:0.7rem;font-weight:900;">${shardLabel}</span>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <!-- かけら行 -->
+                <div><span style="background:#f8fafc;color:#374151;border:1px solid #e2e8f0;border-radius:5px;padding:2px 7px;font-size:0.72rem;font-weight:700;">${shardLabel}</span></div>
+                <!-- 編成相性行 -->
+                ${sc.synergyNote ? `<div><span style="background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:5px;padding:2px 7px;font-size:0.7rem;font-weight:700;">🤝 ${sc.synergyNote}</span></div>` : ''}
               </div>
               <div class="ucard-summary">${sc.note}</div>
               <div class="ucard-bars">
                 ${bar(sc.immediacy,'#3b82f6','即効性','⚡')}
                 ${bar(sc.costpa,   '#10b981','コスパ','💎')}
-                ${bar(sc.synergy,  '#8b5cf6','相性','🤝')}
+                ${bar(sc.powerGain,'#f97316','将来性','📈')}
               </div>
               <details class="ucard-details">
                 <summary>💬 海外ガチ勢の評価 ▼</summary>
