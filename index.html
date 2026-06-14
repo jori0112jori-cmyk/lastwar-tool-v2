@@ -4816,7 +4816,7 @@ function runSwapDiagnosis(assignment) {
             const wp = parseInt(($id(`w-${s}-${p}`)||{}).value)||0;
             if (id && id !== 'empty' && HEROES[id]) {
                 members.push({ id, wp, t:HEROES[id].t, r:HEROES[id].r,
-                    squadMisCount:0, simulating:false });
+                    squadMisCount:0, simulating:true });
             }
         }
         return members;
@@ -4828,48 +4828,48 @@ function runSwapDiagnosis(assignment) {
         const squad = getSquad(s);
         if (squad.length < 3) continue;
 
-        // 現在スコア
         const misC = squad.filter(m=>m.t==='mis').length;
         squad.forEach(m=>m.squadMisCount=misC);
-        const baseResult = evaluateSquadRealCombat(squad);
-        const baseScore  = baseResult.score;
+        const baseResult   = evaluateSquadRealCombat(squad);
+        const baseScore    = baseResult.score;
         const baseBuffRate = baseResult.buffRate;
 
-        // 控え・他軍の英雄を候補に
-        const benchIds = new Set();
-        // 控えから
+        // 候補：控え＋他軍（他軍からは閾値を高くして慎重に提案）
+        const candidateIds = new Set();
         for (let p = 1; p <= 10; p++) {
             const id = ($id(`h-bench-${p}`)||{}).value;
-            const wp = parseInt(($id(`w-bench-${p}`)||{}).value)||0;
             if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
-                benchIds.set ? benchIds.add(id) : benchIds.add(id);
+                candidateIds.add(id);
         }
-        // 他軍から
         for (let os = 1; os <= 3; os++) {
             if (os === s) continue;
             for (let p = 1; p <= 5; p++) {
                 const id = ($id(`h-${os}-${p}`)||{}).value;
                 if (id && id !== 'empty' && HEROES[id] && !squad.some(m=>m.id===id))
-                    benchIds.add(id);
+                    candidateIds.add(id);
             }
         }
 
-        benchIds.forEach(candidateId => {
-            const candidateWp = (() => {
-                for (let os=1;os<=3;os++) for (let p=1;p<=5;p++) {
-                    if (($id(`h-${os}-${p}`)||{}).value===candidateId)
-                        return parseInt(($id(`w-${os}-${p}`)||{}).value)||0;
+        candidateIds.forEach(candidateId => {
+            let candidateWp = 0;
+            let candidateFrom = '控え';
+            for (let os=1;os<=3;os++) for (let p=1;p<=5;p++) {
+                if (($id(`h-${os}-${p}`)||{}).value===candidateId) {
+                    candidateWp = parseInt(($id(`w-${os}-${p}`)||{}).value)||0;
+                    candidateFrom = os+'軍';
                 }
-                for (let p=1;p<=10;p++) {
-                    if (($id(`h-bench-${p}`)||{}).value===candidateId)
-                        return parseInt(($id(`w-bench-${p}`)||{}).value)||0;
-                }
-                return 0;
-            })();
+            }
+            for (let p=1;p<=10;p++) {
+                if (($id(`h-bench-${p}`)||{}).value===candidateId)
+                    candidateWp = parseInt(($id(`w-bench-${p}`)||{}).value)||0;
+            }
 
-            const candidate = { id:candidateId, wp:candidateWp,
-                t:HEROES[candidateId].t, r:HEROES[candidateId].r,
-                squadMisCount:0, simulating:false };
+            const candidate = {
+                id: candidateId, wp: candidateWp,
+                t: HEROES[candidateId].t, r: HEROES[candidateId].r,
+                squadMisCount:0, simulating:true,
+                fromSquad: candidateFrom
+            };
 
             // 各スロットと入れ替えてスコア計算
             squad.forEach((target, idx) => {
@@ -4880,15 +4880,24 @@ function runSwapDiagnosis(assignment) {
                 const newResult = evaluateSquadRealCombat(newSquad);
                 const newScore  = newResult.score;
                 const scoreDiff = newScore - baseScore;
-                const pct = Math.round((scoreDiff / baseScore) * 100);
+                const pct = Math.round((scoreDiff / Math.max(baseScore,1)) * 100);
 
-                // 兵種バフが下がるが全体スコアが上がるケース or 覚醒で上がるケース
                 const buffDown = newResult.buffRate < baseBuffRate;
+                const buffUp   = newResult.buffRate > baseBuffRate;
                 const awakeningGain = (typeof AWAKENING_HEROES !== 'undefined') &&
                     AWAKENING_HEROES[candidateId] &&
                     parseAwTier(loadAwTier(candidateId)).star >= 0;
 
-                if (scoreDiff > 0 && pct >= 3) {
+                // スコア根拠テキスト
+                const reasons = [];
+                if (awakeningGain) reasons.push('覚醒ボーナス込み');
+                if (buffUp)   reasons.push(`兵種バフ↑${Math.round(newResult.buffRate*100)}%`);
+                if (!buffDown && !buffUp) reasons.push('兵種バフ維持');
+                const reasonTxt = reasons.join('・');
+
+                // 他軍からの引き抜きは閾値を高く設定
+                const threshold = candidate.fromSquad === '控え' ? 3 : 10;
+                if (scoreDiff > 0 && pct >= threshold) {
                     suggestions.push({
                         squad: s,
                         out: target,
@@ -4898,9 +4907,12 @@ function runSwapDiagnosis(assignment) {
                         scoreDiff,
                         pct,
                         buffDown,
+                        buffUp,
                         awakeningGain,
                         newBuffRate: newResult.buffRate,
                         baseBuffRate,
+                        reasonTxt,
+                        fromSquad: candidate.fromSquad,
                     });
                 }
             });
@@ -4958,6 +4970,10 @@ function runSwapDiagnosis(assignment) {
           </div>
           <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             ${buffNote}${awNote}
+            ${sg.fromSquad && sg.fromSquad !== '控え' ? `<span style="font-size:0.68rem;color:#94a3b8;font-weight:700;">(${sg.fromSquad}から)</span>` : ''}
+          </div>
+          <div style="margin-top:3px;font-size:0.68rem;color:#94a3b8;">
+            根拠: ${sg.reasonTxt || 'スコア計算値'} / ${sg.baseScore}→${sg.newScore}pt
           </div>
         </div>`;
     });
