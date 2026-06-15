@@ -10,7 +10,7 @@
 <style>
 /* === ベース設定 === */
     :root{ --ui-ico:14px; }
-    body { font-family: "Noto Sans JP","Helvetica Neue",Arial,sans-serif; background-color: #f4f6f8; color: #2c3e50; padding: 12px 10px 80px; margin: 0; font-size:var(--fs-md); line-height: 1.5; }
+    body { font-family: "Noto Sans JP","Helvetica Neue",Arial,sans-serif; background-color: #f0f2f5; color: #1e293b; padding: 10px 10px 80px; margin: 0; font-size:var(--fs-md); line-height: 1.6; }
 
 /* ===== フォントサイズ統一システム =====
    --fs-xl:   見出し      1.0rem
@@ -21,12 +21,12 @@
    --fs-xxs:  注釈・ラベル 0.64rem
    ===================================== */
 :root {
-  --fs-xl:  1.0rem;
-  --fs-lg:  0.88rem;
-  --fs-md:  0.82rem;
-  --fs-sm:  0.76rem;
-  --fs-xs:  0.70rem;
-  --fs-xxs: 0.64rem;
+  --fs-xl:  1.05rem;   /* パネルタイトル */
+  --fs-lg:  0.92rem;   /* 英雄名・カード見出し */
+  --fs-md:  0.86rem;   /* 本文・説明 */
+  --fs-sm:  0.80rem;   /* サブテキスト */
+  --fs-xs:  0.73rem;   /* バッジ・ラベル */
+  --fs-xxs: 0.67rem;   /* 注釈・極小ラベル */
 }
     h1 { font-size: 1.25rem; text-align: left; color: #1a252f; margin: 0 0 15px 0; font-weight: 900; }
     .version-badge { font-size:var(--fs-xxs); color: #fff; background: linear-gradient(135deg, #f43f5e, #b91c1c); font-weight: bold; padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 4px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
@@ -35,18 +35,18 @@
 
     /* === タブUI === */
     .tabs { display: flex; background: #e2e8f0; border-radius: 10px; padding: 4px; margin-bottom: 12px; }
-    .tab-btn { flex: 1; padding: 14px 0; text-align: center; font-size:var(--fs-lg); font-weight: bold; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; min-height: 48px; display: flex; align-items: center; justify-content: center; }
-    .tab-btn.active { background: #fff; color: #2563eb; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .tab-btn { flex: 1; padding: 14px 0; text-align: center; font-size:var(--fs-md); font-weight: 900; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; min-height: 52px; display: flex; align-items: center; justify-content: center; }
+    .tab-btn.active { background: #fff; color: #2563eb; box-shadow: 0 2px 8px rgba(37,99,235,0.12); font-weight: 900; }
     .tab-content { display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     /* === パネル共通 === */
-    .panel { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #edf2f7; }
+    .panel { background: #fff; padding: 14px 14px 16px; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; border: 1px solid #e8edf5; }
     .ai-panel { background: linear-gradient(135deg, #ffffff, #f8fafc); border-left: 3px solid #3b82f6; }
     .route-panel { background: linear-gradient(135deg, #ffffff, #fdf4ff); border-left: 3px solid #c026d3; }
-    .panel-title { font-weight: 900; font-size: 1.05rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .suggestion-box { background: #fff; border-radius: 8px; padding: 12px; font-size: 0.83rem; border: 1px solid #e2e8f0; line-height: 1.6; color: #334155; }
+    .panel-title { font-weight: 900; font-size: 1.08rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; letter-spacing: 0.01em; }
+    .suggestion-box { background: #fafbfc; border-radius: 10px; padding: 12px 13px; font-size: var(--fs-sm); border: 1px solid #e2e8f0; line-height: 1.7; color: #334155; }
     .apply-btn { background: linear-gradient(to right, #2563eb, #1d4ed8); color: #fff; border: none; padding: 10px; border-radius: 30px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); }
 
     /* === 編成カード構造 === */
@@ -187,7 +187,7 @@
     .slot-avatar img { width:100%; height:100%; object-fit:cover; }
     .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-weight:900; font-size:var(--fs-md); }
     .slot-lv { position:relative; margin-top:-9px; display:inline-block; background:#334155; color:#fff; font-weight:900; font-size:var(--fs-xxs); border-radius:10px; padding:2px 7px; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.2); }
-    .slot-name { margin-top:3px; font-size:clamp(0.58rem,1.9vw,0.70rem); line-height:1.05; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
+    .slot-name { margin-top:3px; font-size:clamp(0.60rem,2.0vw,0.72rem); line-height:1.1; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
     .slot-empty .slot-avatar { background: rgba(15, 23, 42, 0.06); border: 2px dashed #94a3b8; box-shadow:none; }
     .slot-empty .slot-fallback { color:#64748b; font-size:1.45rem; }
     .slot-empty .slot-lv, .slot-empty .slot-name { opacity:0.65; }
@@ -222,7 +222,7 @@
     .modal-body { padding:12px 16px; overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
     .modal-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
     .modal-row label { font-weight:900; color:#334155; font-size:var(--fs-lg); white-space:nowrap; }
-    .modal-select { flex:1; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-weight:900; background:#f8fafc; }
+    .modal-select { flex:1; padding:11px 12px; border-radius:12px; border:1px solid #cbd5e1; font-weight:900; background:#f8fafc; font-size:var(--fs-md); }
     .modal-step { display:flex; gap:8px; align-items:center; justify-content:flex-end; }
     .modal-step button { width:52px; height:52px; border:none; border-radius:14px; font-size:1.5rem; font-weight:900; color:#fff; cursor:pointer; box-shadow:0 6px 14px rgba(37,99,235,0.25); background:linear-gradient(135deg,#2563eb,#1d4ed8); }
     .modal-step .val { width:78px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#0f172a; color:#fff; font-weight:900; font-size:1.3rem; }
@@ -810,7 +810,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
 
 /* === 育成優先ランキング / 編成補強おすすめ 2段レイアウト === */
-#eff-result .rankhero-card{padding:12px 4px;}
+#eff-result .rankhero-card{padding:12px 6px;}
 #eff-result .rankhero-card + .rankhero-card{position:relative;margin-top:10px;padding-top:14px;}
 #eff-result .rankhero-card + .rankhero-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.55) 18%, rgba(244,114,182,.55) 82%, rgba(244,114,182,0));}
 #eff-result .rankhero-card--split{border-top:none;margin-top:0;}
@@ -822,7 +822,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 #eff-result .rankhero-visual{width:96px;text-align:center;}
 #eff-result .rankhero-chip-row{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;}
 #eff-result .rankhero-chip-row .ui-ico{width:14px !important;height:14px !important;}
-#eff-result .rankhero-avatar-wrap{width:44px;height:44px;margin:0 auto;border-radius:12px;overflow:hidden;background:#0b1220;box-shadow:0 6px 16px rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;}
+#eff-result .rankhero-avatar-wrap{width:48px;height:48px;margin:0 auto;border-radius:12px;overflow:hidden;background:#0b1220;box-shadow:0 4px 12px rgba(0,0,0,.15);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;}
 #eff-result .rankhero-avatar-img{width:100%;height:100%;object-fit:cover;display:block;}
 #eff-result .rankhero-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1e293b;color:#fff;font-size:.72rem;font-weight:900;}
 #eff-result .rankhero-name{margin-top:6px;font-size:var(--fs-lg);font-weight:900;color:#1f2937;line-height:1.2;white-space:nowrap;overflow:visible;text-overflow:clip;}
@@ -1016,11 +1016,11 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 /* カード共通 */
 .ucard {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid #e8edf5;
-  padding: 12px;
+  padding: 13px 13px 12px;
   margin-bottom: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 3px 8px rgba(0,0,0,0.03);
   position: relative;
 }
 .ucard--best {
@@ -1580,207 +1580,207 @@ const HEROES = {
 const HERO_SLOT_ADVICE = {
   kimberly: {
     role: '主力アタッカー（戦車）',
-    s6note: '覚醒「燃ゆる決意」で別格の火力に。S6最優先育成英雄。',
+    s6note: 'S6最優先英雄。覚醒「燃ゆる決意」で最大30発の爆発火力に。EW20到達後すぐ覚醒解放を。',
     ewAdvice: {
-      0:  'EW未設定。まずLv10を目指しましょう。',
-      1:  'EW Lv1〜9は伸びが小さい。Lv10が最初の節目です。',
-      10: 'Lv10到達！次はLv20が現実的な目標です。',
-      20: 'Lv20到達！覚醒前提（EW Lv20以上）を満たしました。覚醒解放を優先しましょう。',
-      30: 'EW MAX！覚醒強化に集中しましょう。★3到達が最重要マイルストーンです。',
+      0:  'まずEW Lv10を目指しましょう。Lv1〜9の伸びは小さいため、一気にLv10まで上げるのがおすすめです。',
+      1:  'Lv1〜9は戦力の伸びが小さい段階です。早めにLv10を目指しましょう。',
+      10: 'Lv10到達！次の節目はLv20です。Lv20で覚醒の前提条件を満たすため、最優先で進めましょう。',
+      20: 'Lv20到達！覚醒前提クリア✅ 専用かけら×50で★0-1を解放すると基礎ステが+20%になります。まず覚醒解放を優先して、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でOKです。',
+      30: 'EW MAX！あとは覚醒強化のみです。★1（決意状態自動発動）→★3（エネルギー増幅2スタック先行）の順で進めると最大火力が出せます。★3が最重要マイルストーンです。',
     },
-    synergy: 'マーシャル・ウィリアムズ・マーフィと組むと最大限に活躍できます。',
+    synergy: '【必須】ウィリアムズ+マーフィの前衛2枚でキムを守る形が基本。マーシャルをサポートに入れると全体火力がさらにUP。覚醒後はDVAとのコンボで「AoE+単体バースト」の最強形に。',
     priority: 'SSS',
   },
   dva: {
     role: '主力アタッカー（航空）',
-    s6note: '覚醒「エーススター」で開幕バーストが強力に。キム覚醒後の第2優先。',
+    s6note: 'Week3に覚醒解放。キム覚醒後の第2優先。AoE（キム）＋単体バースト（DVA）の黄金コンビでラリー火力が大幅UP。',
     ewAdvice: {
-      0:  'EW未設定。Lv10を目指しましょう。',
-      10: 'Lv10到達！次はLv20（覚醒前提）が目標です。',
-      20: 'Lv20到達！覚醒解放が可能になりました。キム覚醒済みなら即取り推奨。',
-      30: 'EW MAX！覚醒★1到達を目指しましょう。航空機英雄が多いほど効果的です。',
+      0:  'まずEW Lv10を目指しましょう。DVAは航空英雄なので、戦車軸メインなら焦らずキム優先でOKです。',
+      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。キムのEW20が終わったら次はDVAのLv20を目標に。',
+      20: 'Lv20到達！覚醒解放が可能です✅ キム覚醒済みなら専用かけら×50で即解放推奨。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
+      30: 'EW MAX！覚醒★1（攻撃速度スタック強化）→★3（追撃+追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
     },
-    synergy: '覚醒キムと組む4+1型混成が黄金コンビ。航空軸なら ルシウス+モリソンとも相性良好。',
+    synergy: '【最強コンボ】覚醒キムと組む4+1混成型。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担。航空軸ならルシウス+モリソン+スカイラーと組むと航空5体バフ+20%も狙えます。',
     priority: 'SSS',
   },
   tesla: {
     role: '主力アタッカー（ロケラン）',
-    s6note: '覚醒「電磁共鳴」でDoTチェーンが本格化。フィオナとのコンボが強力。',
+    s6note: 'Week6に覚醒解放。F2Pはキム→DVA後に検討。フィオナとの「誘導電流DoTコンボ」がロケラン軸の核。',
     ewAdvice: {
-      0:  'EW未設定。まずLv10を目指しましょう。',
-      10: 'Lv10到達！次はLv20（覚醒前提）が目標です。',
-      20: 'Lv20到達！ロケラン軸が整っていれば覚醒解放を検討しましょう。',
-      30: 'EW MAX！覚醒★1でDoT本格化。ロケラン英雄を3体以上揃えると最大効果です。',
+      0:  'まずEW Lv10を目指しましょう。テスラはロケラン軸が整ってから真価を発揮します。フィオナがいない場合はキム・DVAを先に育てましょう。',
+      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。ロケラン英雄が2体以上いる場合は積極的にLv20を目指しましょう。',
+      20: 'Lv20到達！覚醒前提クリア✅ ロケラン3体+フィオナがいれば即解放推奨。DoTスタック上限は「ロケラン英雄数×3（最大15）」なので編成が重要です。',
+      30: 'EW MAX！覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化。★3で反射回数+1（8回）、★5でさらに+1（9回）になります。フィオナとのコンボが最大火力です。',
     },
-    synergy: 'フィオナとのDoTコンボが必須。マクレガー・アダムと組んでロケラン軸を完成させましょう。',
+    synergy: '【必須コンボ】フィオナとのDoTコンボ。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力に。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
     priority: 'SS',
   },
   williams: {
     role: '前衛タンク（戦車）',
-    s6note: 'S6でもキンバリー編成の必須前衛。EW Lv20で十分に機能します。',
+    s6note: 'コミュニティ評価「ゲーム最高のタンク」。チーム全体のダメージ軽減に不可欠。EW20で十分機能するため、Lv30よりキム・DVAへの投資を優先しましょう。',
     ewAdvice: {
-      0:  'EW未設定。前衛として欠かせない英雄です。まずLv10を。',
-      10: 'Lv10到達！次のLv20が最重要節目。戦力が大きく跳ね上がります。',
-      20: 'Lv20到達！前衛タンクとして十分な水準です。Lv30は余裕ができてから。',
-      30: 'EW MAX！前衛として最大限機能しています。',
+      0:  'ウィリアムズは前衛として最優先で育てましょう。まずLv10を。キムEW20と並行して上げるのが理想です。',
+      10: 'Lv10到達！Lv20が最重要節目です。ウィリアムズEW20でキムを守る前衛力が大きく向上します。キムと並行して急ぎましょう。',
+      20: 'Lv20到達！前衛タンクとして十分な強さです✅ ここから先のLv30投資は「キム・DVAの覚醒が完成してから」でOKです。余裕がある場合だけ上げましょう。',
+      30: 'EW MAX！前衛として最大限機能しています。戦車軸の盾として申し分ない強さです。',
     },
-    synergy: 'キンバリー・マーシャル・マーフィと組む戦車軸の安定役。前衛2枚体制でキムを守りましょう。',
+    synergy: '【必須前衛】キンバリーと必ずセットで。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持します。マーシャルをサポートに加えると完成形。',
     priority: 'S',
   },
   murphy: {
     role: '前衛タンク（戦車）',
-    s6note: '戦車軸の前衛2枚目。EWコスパは低めだが、前衛として安定した働きをします。',
+    s6note: '戦車軸の前衛2枚目。EWコスパはやや低めですが、ウィリアムズと組んで前衛2枚体制を維持することが重要です。',
     ewAdvice: {
-      0:  '前衛タンクとして重要。まずLv10を目指しましょう。',
-      10: 'Lv10到達！Lv20でさらに安定します。',
-      20: 'Lv20到達！前衛として十分です。他英雄の育成を優先しましょう。',
-      30: 'EW MAX！',
+      0:  '前衛2枚目として大切な役割です。まずLv10を目指しましょう。ウィリアムズの育成が優先ですが、マーフィも並行して上げると安定感が増します。',
+      10: 'Lv10到達！戦力の伸びはゆるやかですが、前衛として確実に機能しています。余裕があればLv20を目指しましょう。',
+      20: 'Lv20到達！前衛タンクとして十分な水準です✅ ここからLv30に上げるよりも、キム・DVAの覚醒やウィリアムズのLv20〜30を優先しましょう。',
+      30: 'EW MAX！前衛2枚目として最大限機能しています。',
     },
-    synergy: 'ウィリアムズと2枚前衛を組むと戦車5体バフ+20%が安定して入ります。',
+    synergy: 'ウィリアムズと2枚前衛を組むことで戦車5体バフ+20%が安定して入ります。この2枚でキムを守るのが戦車軸の基本形です。',
     priority: 'B',
   },
   marshall: {
     role: 'サポート（戦車）',
-    s6note: '攻撃増幅で全体の火力を底上げ。EW優先度は低め（Lv0でも機能）。',
+    s6note: 'EW0でも機能する優秀なサポート。スキルは攻撃力増幅でEW依存度が低いため、他英雄を優先育成してOK。',
     ewAdvice: {
-      0:  'マーシャルはEW未強化でも十分機能します。他英雄を優先しましょう。',
-      10: 'Lv10。マーシャルのEWより他のアタッカーを先に育てましょう。',
-      20: 'Lv20。十分です。',
-      30: 'EW MAX！',
+      0:  'EW0でも攻撃バフが発動します✅ キム・ウィリアムズ・DVAを先に育てましょう。マーシャルはEW投資の優先度が低い英雄です。',
+      10: 'Lv10に上げると基礎ステが向上します。ただし他のアタッカー・前衛が育っていない場合はそちらを優先しましょう。',
+      20: 'Lv20到達。サポートとして十分な水準です。Lv30への投資はキム覚醒★3完成後に余裕があれば検討しましょう。',
+      30: 'EW MAX！サポートとして最大限の効果を発揮しています。',
     },
-    synergy: 'どの兵種軸でも有効なサポート。5人目スロットに入れると兵種バフを維持したまま増幅効果が得られます。',
+    synergy: 'どの兵種軸でも使える万能サポート。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
     priority: 'A',
   },
   stetmann: {
     role: 'サブアタッカー（戦車）',
-    s6note: '戦車軸の2番手アタッカー。EW Lv20で安定した戦力になります。',
+    s6note: '戦車軸の2番手火力。キム・ウィリアムズが揃った後に育成。EW20が実用的な節目です。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10到達！次はLv20が目標です。',
-      20: 'Lv20到達！十分な水準です。キム・ウィリアムズを先に最大化しましょう。',
-      30: 'EW MAX！',
+      0:  'まずLv10を目指しましょう。キム・ウィリアムズのEW優先が終わった後に投資するのが理想です。',
+      10: 'Lv10到達！戦車軸のサブ火力として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20到達！戦車軸のサブアタッカーとして十分な水準です✅ Lv30への投資よりキム覚醒を優先しましょう。',
+      30: 'EW MAX！戦車軸の2番手として最大戦力です。',
     },
-    synergy: 'キンバリー、ウィリアムズ、マーシャルと組む戦車軸のサブ火力担当。',
+    synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力。純戦車編成で最も安定したダメージを出せます。',
     priority: 'A',
   },
   lucius: {
     role: '前衛タンク（航空）',
-    s6note: '航空軸の必須前衛。EW Lv30が目標ですが、Lv20でも十分機能します。',
+    s6note: '航空軸の必須前衛。高い耐久力で味方を守ります。EW20で前衛として十分機能します。',
     ewAdvice: {
-      0:  '航空軸の要。まずLv10を目指しましょう。',
-      10: 'Lv10到達！次はLv20が重要な節目です。',
-      20: 'Lv20到達！航空前衛として十分です。DVAやキムを先に育てましょう。',
-      30: 'EW MAX！航空軸の前衛として最強の状態です。',
+      0:  '航空軸の前衛として重要です。まずLv10を目指しましょう。DVA育成と並行して上げるのが理想です。',
+      10: 'Lv10到達！次のLv20が重要な節目です。航空前衛としての耐久力が大きく向上します。',
+      20: 'Lv20到達！航空前衛として十分な水準です✅ DVAの覚醒が終わっていない場合はDVAを優先。ルシウスLv30は余裕ができてから。',
+      30: 'EW MAX！航空軸の前衛として最強状態。DVAとの連携で航空軸の最強形を維持しています。',
     },
-    synergy: 'DVA・モリソン・スカイラーと組む航空軸の安定役。',
+    synergy: '【航空軸の必須前衛】DVA・モリソン・スカイラーと組む航空5体軸の安定役。ルシウスの高耐久がDVAの高火力を支えます。',
     priority: 'SS',
   },
   morrison: {
     role: 'サブアタッカー（航空）',
-    s6note: '航空軸のサブ火力。EW Lv20が現実的な目標です。',
+    s6note: '航空軸のサブ火力。DVA+ルシウスが育ってから投資するのがコスパ良好です。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10到達！Lv20が次の目標です。',
-      20: 'Lv20到達！航空軸のサブとして十分です。',
-      30: 'EW MAX！',
+      0:  'まずLv10を目指しましょう。DVA・ルシウスの育成が先決です。',
+      10: 'Lv10到達！航空サブ火力として機能し始めます。DVAのEW20が完了してからLv20を目指しましょう。',
+      20: 'Lv20到達！航空軸のサブアタッカーとして十分な水準です✅ Lv30よりDVAの覚醒を優先しましょう。',
+      30: 'EW MAX！航空軸のサブ火力として最大戦力です。',
     },
-    synergy: 'ルシウス・DVAと組む航空軸のサブ火力。スカイラーとのコンボも有効。',
+    synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
     priority: 'A',
   },
   schuyler: {
     role: 'コントロール（航空）',
-    s6note: '航空軸のコントロール担当。EW Lv10で十分機能します。',
+    s6note: 'CC（行動妨害）が得意な航空英雄。EW10で十分機能するため投資コスパが良好。packsify推奨のキム+DVA混成型にも採用される重要ロール。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10で十分機能します。他英雄を優先しましょう。',
-      20: 'Lv20。十分な水準です。',
-      30: 'EW MAX！',
+      0:  'まずLv10を目指しましょう。スカイラーはEW10で十分なCCが発揮できます。',
+      10: 'Lv10到達！スカイラーはこのLvで十分機能します✅ 他の主力英雄（キム・ウィリアムズ・DVA）の育成を優先しましょう。',
+      20: 'Lv20到達。十分な水準です。CC効果がさらに安定します。',
+      30: 'EW MAX！CCキャラとして最大限機能しています。',
     },
-    synergy: 'ルシウスとのコンボが強力。航空コントロール軸の要。',
+    synergy: 'ルシウスとのコンボが強力。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺しながらキムのAoEが炸裂します。',
     priority: 'B',
   },
   carlie: {
     role: '前衛タンク（航空）',
-    s6note: '航空軸の前衛候補。EW Lv10が現実的な目標。',
+    s6note: '航空軸の前衛候補。ルシウスが育つまでの代替役。EW10で十分で、ルシウスが育ったら控えに回しましょう。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10到達。他の航空英雄を優先しましょう。',
-      20: 'Lv20到達。',
+      0:  'ルシウスが育っていない場合の前衛として活躍します。まずLv10を目指しましょう。',
+      10: 'Lv10到達。カーリーはこのLvで十分です。ルシウス・DVAの育成を優先しましょう。',
+      20: 'Lv20到達。航空前衛として安定します。ルシウスEW20完成後は控えへの移行を検討しましょう。',
       30: 'EW MAX！',
     },
-    synergy: 'ルシウス不在時の前衛候補。',
+    synergy: 'ルシウス不在時の航空前衛代替。ルシウスが揃えばルシウス+DVA+モリソン+スカイラー+カーリーの5航空体制も可能です。',
     priority: 'C',
   },
   fiona: {
     role: '主力アタッカー（ロケラン）',
-    s6note: 'ロケラン軸のエース。テスラ覚醒とのDoTコンボが強力。',
+    s6note: 'ロケラン軸のエース。テスラ覚醒との「誘導電流DoTコンボ」がS6で最強クラスの継続ダメージを発揮します。',
     ewAdvice: {
-      0:  'ロケラン軸の核。まずLv10を目指しましょう。',
-      10: 'Lv10到達！次はLv20が重要です。',
-      20: 'Lv20到達！テスラ覚醒との組み合わせで本格化します。',
-      30: 'EW MAX！テスラ+マクレガーと組むロケラン軸の最強形です。',
+      0:  'ロケラン軸の核となる英雄です。まずLv10を目指しましょう。テスラと並行して育てるのが理想です。',
+      10: 'Lv10到達！次のLv20が重要な節目です。フィオナEW20でロケラン軸の火力が本格的になります。',
+      20: 'Lv20到達！テスラ覚醒との組み合わせでDoTコンボが本格化します✅ テスラ覚醒★1+フィオナEW20の組み合わせが理想形です。',
+      30: 'EW MAX！テスラ・マクレガー・アダムと組むロケラン5体軸の最強形です。継続ダメージ（DoT）でどんな相手も削れます。',
     },
-    synergy: 'テスラ覚醒との相性が抜群。マクレガー・アダムと組んでロケラン5体軸を完成させましょう。',
+    synergy: '【必須コンボ】テスラ覚醒との相性が抜群。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
     priority: 'SS',
   },
   mcgregor: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の前衛。EW Lv20が目標です。',
+    s6note: 'ロケラン軸の主力前衛。アダムと前衛2枚体制を組むことでロケラン5体軸が完成します。',
     ewAdvice: {
-      0:  'ロケラン前衛の要。まずLv10を目指しましょう。',
-      10: 'Lv10到達！Lv20が次の目標です。',
-      20: 'Lv20到達！ロケラン前衛として十分です。',
-      30: 'EW MAX！',
+      0:  'ロケラン軸の前衛として重要です。まずLv10を目指しましょう。フィオナ・テスラの育成が先決ですが並行して上げましょう。',
+      10: 'Lv10到達！ロケラン前衛として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20到達！ロケラン前衛として十分な水準です✅ Lv30よりフィオナ・テスラのEW強化を優先しましょう。',
+      30: 'EW MAX！アダムとの前衛2枚体制で最大の耐久力です。テスラDoTのスタック上限引き上げにも貢献しています。',
     },
-    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当。アダムと前衛2枚体制が理想。',
+    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。',
     priority: 'A',
   },
   swift: {
     role: 'サブアタッカー（ロケラン）',
-    s6note: 'ロケラン軸のサブ火力。EW Lv10が現実的な目標。',
+    s6note: 'ロケラン軸のサブ候補。フィオナ・テスラが育つまでの代替役。EW10で十分で、無理に育てなくてよいです。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10で十分機能します。主力英雄を優先しましょう。',
-      20: 'Lv20到達。',
+      0:  'まずLv10を目指しましょう。フィオナ・テスラの育成を優先してからスウィフトに投資するのが賢明です。',
+      10: 'Lv10到達。スウィフトはこのLvで十分機能します。主力（フィオナ・テスラ・マクレガー）を先に育てましょう。',
+      20: 'Lv20到達。ロケランサブとしての戦力が安定します。',
       30: 'EW MAX！',
     },
-    synergy: 'フィオナ・テスラ不在時のロケランサブ候補。',
+    synergy: 'フィオナ・テスラ不在時のロケランサブ候補。テスラDoTのスタック上限は「ロケラン英雄数×3」なので、スウィフトを入れるとスタック上限が上がります。',
     priority: 'B',
   },
   adam: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の前衛2枚目。EW Lv10が現実的な目標。',
+    s6note: 'ロケラン軸の前衛2枚目。マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。',
-      10: 'Lv10到達。マクレガーが育つまでの前衛候補。',
-      20: 'Lv20到達。',
-      30: 'EW MAX！',
+      0:  'ロケラン軸の前衛2枚目として重要です。まずLv10を目指しましょう。マクレガーと同時並行で育てるのが理想。',
+      10: 'Lv10到達！ロケラン前衛2枚目として機能します。テスラのDoTスタック上限は「ロケラン英雄数×3」なので、アダムがいることでスタック上限も上がります。',
+      20: 'Lv20到達！前衛2枚目として十分な水準です✅ フィオナ・テスラの育成が先なので、ここからはゆっくりでOKです。',
+      30: 'EW MAX！マクレガーとの前衛2枚体制で最大の安定感です。',
     },
-    synergy: 'マクレガーと前衛を組む形が理想。テスラDoTスタック上限にも貢献。',
+    synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
     priority: 'B',
   },
   mason: {
     role: 'UR アタッカー（戦車）',
-    s6note: 'UR英雄。覚醒英雄が充実するまでのつなぎ役として活躍。',
+    s6note: 'UR英雄。キンバリーが育つまでのつなぎアタッカー。フル育成のSSRがUR中途半端を上回れるため（packsify）、キムへの投資を優先しましょう。',
     ewAdvice: {
-      0:  'URキャラは出張時のペナルティが大きい。通常英雄を優先しましょう。',
-      10: 'Lv10。主力覚醒英雄を優先しましょう。',
-      20: 'Lv20。',
-      30: 'EW MAX！',
+      0:  'キンバリーのEW育成が最優先です。メイソンへの投資はキムEW20完成後に検討しましょう。',
+      10: 'Lv10。キンバリーが育っていない場合の暫定アタッカーとして活躍します。キムEW20が完成したらキムへ移行しましょう。',
+      20: 'Lv20。戦力としては十分ですが、キム覚醒★0以上になるとキムの方が強くなる場合が多いです。',
+      30: 'EW MAX！フル育成URとして十分な戦力です。ただしキム覚醒が進んだ場合はキムを優先しましょう。',
     },
-    synergy: 'キンバリーが育つまでの戦車アタッカー候補。',
+    synergy: 'キンバリー不在・育成前の戦車アタッカー候補。ウィリアムズ+マーフィ+マーシャルとの戦車軸編成で使いましょう。',
     priority: 'C',
   },
   scarlett: {
     role: 'UR 前衛タンク（戦車）',
-    s6note: 'UR英雄。ウィリアムズが育つまでの前衛候補。',
+    s6note: 'UR英雄。ウィリアムズが育つまでの前衛候補。ウィリアムズEW20が完成したら控えへ移行を検討しましょう。',
     ewAdvice: {
-      0:  'URキャラはEW優先度低め。通常英雄を優先しましょう。',
-      10: 'Lv10。',
-      20: 'Lv20。',
-      30: 'EW MAX！',
+      0:  'ウィリアムズの育成を最優先に。スカーレットへのEW投資はウィリアムズEW20完成後に検討しましょう。',
+      10: 'Lv10。前衛として機能します。ウィリアムズEW20が完成したらウィリアムズをメインに切り替えましょう。',
+      20: 'Lv20。UR前衛として安定した耐久力です。ウィリアムズが十分に育った場合は控えへの移行を検討しましょう。',
+      30: 'EW MAX！UR前衛として最大戦力です。ウィリアムズとの2枚前衛体制も選択肢になります。',
     },
-    synergy: '戦車前衛の代替候補。',
+    synergy: '戦車前衛の代替候補。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ+マーフィの前衛2枚体制が理想です。',
     priority: 'D',
   },
 };
@@ -3189,16 +3189,16 @@ const FORMATION_PRESETS = [
     note: 'EW Lv10でも機能する入門編成。各英雄EW20到達後に上位テンプレへ移行。',
     squad: [
       { id:'williams',  wp:10, note:'最優先でEW20へ' },
-      { id:'murphy',    wp:10, note:'前衛2枚目' },
+      { id:'murphy',    wp:10, note:'前衛2枚目・EW20へ' },
       { id:'kimberly',  wp:20, note:'EW20で覚醒前提達成' },
-      { id:'marshall',  wp:0,  note:'EW不要・サポート' },
-      { id:'stetmann',  wp:10, note:'サブ火力' },
+      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'stetmann',  wp:10, note:'サブ火力・EW20へ' },
     ]
   },
   {
     id: 'standard_tank',
     name: '【標準】戦車メタ完成形',
-    desc: 'packsify標準メタ編成。キムEW30+覚醒★0以上が前提。マーシャルはEW不要でサポート役。',
+    desc: 'packsify標準メタ編成。キムEW30+覚醒★0以上が前提。マーシャルはEW0で機能（余裕があればEW10〜20も有効）。',
     source: 'packsify標準',
     type: 'tank',
     spendLevel: 'low',
@@ -3207,8 +3207,8 @@ const FORMATION_PRESETS = [
       { id:'williams',  wp:20, note:'EW20が現実的節目' },
       { id:'murphy',    wp:10, note:'前衛安定役' },
       { id:'kimberly',  wp:30, note:'主力・覚醒優先' },
-      { id:'marshall',  wp:0,  note:'EW不要・バフ役' },
-      { id:'stetmann',  wp:10, note:'サブ火力' },
+      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'stetmann',  wp:20, note:'サブ火力・EW20が節目' },
     ]
   },
   {
@@ -3224,7 +3224,7 @@ const FORMATION_PRESETS = [
       { id:'murphy',    wp:10, note:'前衛2枚目' },
       { id:'kimberly',  wp:30, note:'覚醒★1以上推奨' },
       { id:'dva',       wp:20, note:'覚醒★0以上推奨' },
-      { id:'marshall',  wp:0,  note:'バフ役・EW不要' },
+      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
     ]
   },
   {
@@ -3297,11 +3297,11 @@ function renderPresetPanel() {
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         ${p.squad.map(m => {
           const h = HEROES[m.id]||{};
-          return '<div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:56px;">'
-            +'<div style="width:50px;height:50px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid #e2e8f0;flex-shrink:0;">'
+          return '<div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;">'
+            +'<div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:#0b1220;border:2px solid #e2e8f0;flex-shrink:0;">'
             +'<img src="img/'+m.id+'.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">'
             +'</div>'
-            +'<span style="font-size:var(--fs-xxs);font-weight:900;color:#111827;text-align:center;line-height:1.2;">'+(h.n||m.id)+'</span>'
+            +'<span style="font-size:0.62rem;font-weight:900;color:#111827;text-align:center;line-height:1.2;word-break:keep-all;width:100%;">'+(h.n||m.id)+'</span>'
             +'<span style="font-size:var(--fs-xxs);color:#2563eb;font-weight:700;text-align:center;">目標EW'+m.wp+'</span>'
             +(m.note ? '<span style="font-size:0.58rem;color:#94a3b8;text-align:center;line-height:1.2;">'+m.note+'</span>' : '')
             +'</div>';
@@ -5594,11 +5594,11 @@ function updateHeroAdvicePanel(heroId, ewLv) {
 
     // EW Lv別アドバイス
     const ewAdvice = (typeof getHeroEwAdvice !== 'undefined') ? getHeroEwAdvice(heroId, ewLv) : '';
-    ewEl.innerHTML = ewAdvice ? `💡 <b>EW Lv${ewLv}のアドバイス：</b>${ewAdvice}` : '';
+    ewEl.innerHTML = ewAdvice ? `💡 <b>EW Lv${ewLv} アドバイス：</b><br>${ewAdvice}` : '';
     ewEl.style.display = ewAdvice ? 'block' : 'none';
 
-    // シナジー
-    synEl.innerHTML = adv.synergy ? `🤝 <b>相性の良い組み合わせ：</b>${adv.synergy}` : '';
+    // 編成での役割・シナジー
+    synEl.innerHTML = adv.synergy ? `🤝 <b>編成での役割：</b><br>${adv.synergy}` : '';
     synEl.style.display = adv.synergy ? 'block' : 'none';
 }
 
