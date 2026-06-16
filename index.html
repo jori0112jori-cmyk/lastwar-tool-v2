@@ -1359,6 +1359,89 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .btn-sm-gray      { font-size:var(--fs-sm); background:#fff; border:1px solid #94a3b8; border-radius:4px; cursor:pointer; padding:3px 8px; font-weight:bold; color:#475569; }
 .meta-tag         { font-size:var(--fs-md); color:#4b5563; background:#f8fafc; padding:4px 10px; border-radius:12px; border:1px solid #e2e8f0; font-weight:bold; }
 .btn-md-gray      { font-size:var(--fs-md); background:#fff; color:#475569; border:1px solid #94a3b8; padding:8px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
+
+/* ===== オンボーディング ===== */
+#onboard-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(15,23,42,0.75);
+  display: flex; align-items: flex-end;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  animation: fadeInOverlay .3s ease;
+}
+@keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
+#onboard-card {
+  width: 100%; background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 32px;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.2);
+  animation: slideUp .3s ease;
+}
+@keyframes slideUp { from { transform:translateY(60px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+#onboard-steps { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+.onboard-step {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+}
+.onboard-step.active { background: #eff6ff; border-color: #93c5fd; }
+.onboard-step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #2563eb; color: #fff;
+  font-size: var(--fs-xs); font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.onboard-step-text { font-size: var(--fs-sm); color: #374151; line-height: 1.5; }
+.onboard-step-text b { color: #1d4ed8; }
+#onboard-btn {
+  width: 100%; padding: 14px;
+  background: #2563eb; color: #fff;
+  border: none; border-radius: 12px;
+  font-size: var(--fs-lg); font-weight: 900;
+  cursor: pointer; margin-top: 4px;
+}
+
+/* ===== 折りたたみパネル ===== */
+.panel-collapse-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; padding: 2px 0;
+}
+.panel-collapse-header:hover .panel-collapse-icon { color: #2563eb; }
+.panel-collapse-icon {
+  font-size: var(--fs-lg); color: #475569; transition: transform .2s;
+  flex-shrink: 0; margin-left: 6px;
+}
+.panel-collapse-icon.open { transform: rotate(180deg); }
+.panel-collapsible {
+  overflow: hidden;
+  transition: max-height .25s ease, opacity .2s ease;
+  max-height: 0; opacity: 0;
+}
+.panel-collapsible.open {
+  max-height: 2000px; opacity: 1;
+}
+
+/* ===== 英雄フィルターボタン ===== */
+.hero-filter-btn {
+  font-size: var(--fs-xxs);
+  font-weight: 700;
+  padding: 4px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.hero-filter-btn.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+.hero-filter-btn:active {
+  transform: scale(0.96);
+}
 </style>
 </head>
 <body>
@@ -1420,7 +1503,10 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         </div>
 
         <div id="awaken-rank-panel" class="panel route-panel" style="display:none;">
-            <div class="panel-title" style="color:#ef4444;">👑 英雄覚醒 優先ランキング</div>
+            <div class="panel-collapse-header" onclick="togglePanel('awaken-rank-body','awaken-rank-icon')">
+              <div class="panel-title" style="color:#ef4444;margin:0;">👑 英雄覚醒 優先ランキング</div>
+              <span id="awaken-rank-icon" class="panel-collapse-icon open">▼</span>
+            </div>
             <!-- F2P向け覚醒シャード情報（折りたたみ） -->
             <details style="margin-bottom:8px;">
               <summary style="cursor:pointer;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:6px 10px;font-size:var(--fs-xs);font-weight:900;color:#92400e;list-style:none;display:flex;align-items:center;justify-content:space-between;">
@@ -1433,7 +1519,9 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
                 🎯 <b>F2P原則</b>: 1シーズンに1英雄集中。キム→DVA→テスラの順
               </div>
             </details>
-            <div id="awaken-rank-result" class="suggestion-box" style="padding:10px 8px;">覚醒対象英雄（キンバリー・DVA・テスラ）の次の強化ティアと優先度を表示します。</div>
+            <div id="awaken-rank-body" class="panel-collapsible open">
+              <div id="awaken-rank-result" class="suggestion-box" style="padding:10px 8px;margin-top:8px;">覚醒対象英雄（キンバリー・DVA・テスラ）の次の強化ティアと優先度を表示します。</div>
+            </div>
         </div>
         
         <div class="panel slot-panel">
@@ -1493,16 +1581,21 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         <!-- 🎯 兵種シフト目安（最下部へ移動 + 折りたたみ） -->
         <!-- 部隊強化指針パネル -->
         <div id="army-guide-panel" class="panel" style="border-left:3px solid #6366f1;margin-top:14px;display:none;">
-          <div class="panel-title" style="color:#4f46e5;">🎯 部隊強化の指針</div>
-          <div id="army-guide-result"></div>
+          <div class="panel-collapse-header" onclick="togglePanel('army-guide-body','army-guide-icon')">
+            <div class="panel-title" style="color:#4f46e5;margin:0;">🎯 部隊強化の指針</div>
+            <span id="army-guide-icon" class="panel-collapse-icon open">▼</span>
+          </div>
+          <div id="army-guide-body" class="panel-collapsible open">
+            <div id="army-guide-result" style="margin-top:8px;"></div>
+          </div>
         </div>
 
         <div id="power-transition" class="panel" style="border-left:3px solid #f59e0b; margin-top: 14px;">
-          <div class="power-transition-head">
-            <div class="power-transition-title">🎯 兵種の育成目安</div>
-            <button id="power-transition-toggle" class="slot-toggle-btn" type="button" onclick="toggleTransitionPanel()" aria-label="兵種シフト目安を折りたたむ">▲</button>
+          <div class="panel-collapse-header" onclick="toggleTransitionPanel()">
+            <div class="panel-title" style="color:#f59e0b;margin:0;">🗺️ 次の部隊の編成方針</div>
+            <span id="trans-icon" class="panel-collapse-icon open">▼</span>
           </div>
-          <div id="power-transition-body" class="suggestion-box" style="margin-top:10px; display:block;"></div>
+          <div id="power-transition-body" class="suggestion-box panel-collapsible open" style="margin-top:10px;"></div>
         </div>
 
 <div class="panel" style="background:transparent; padding:0; border:none; box-shadow:none; display:none;">
@@ -1543,7 +1636,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
             <li>控えに育成済み英雄がいると<b>昇格候補</b>として自動検出されます。</li>
           </ul>
 
-          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🗺️ 次の部隊の兵種方針</div>
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🗺️ 次の部隊の編成方針</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>部隊強化の指針と連動して<b>次に強化すべき軍</b>を自動判定します。</li>
             <li>手持ち＋控えから各兵種の上位5体を選出してスコアを算出します。</li>
@@ -2555,15 +2648,14 @@ function normalizeWpInputFixed(wpRaw){
 
 function toggleTransitionPanel(){
   const body = $id('power-transition-body');
-  const btn = $id('power-transition-toggle');
-  if(!body || !btn) return;
-  const isOpen = window.getComputedStyle(body).display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  btn.textContent = isOpen ? '▼' : '▲';
-  btn.setAttribute('aria-label', isOpen ? '兵種の育成目安を展開' : '兵種の育成目安を折りたたむ');
-  if(!isOpen){
-    try{ updateTransitionRecommendationUI(); }catch(e){}
-  }
+  const icon = $id('trans-icon');
+  if(!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if(icon) icon.classList.toggle('open', !isOpen);
+  try { localStorage.setItem('panel_power-transition-body', isOpen ? '0' : '1'); } catch(e) {}
+  // 展開時にコンテンツを更新
+  if(!isOpen) try { updateTransitionRecommendationUI(); } catch(e) {}
 }
 
 
@@ -3022,7 +3114,34 @@ window.onload = function() {
 
     initSquadHTML();
     try { renderPresetPanel(); } catch(e) {} 
-loadAllData(); 
+loadAllData();
+
+// ===== オンボーディング =====
+function showOnboardIfNeeded() {
+  try {
+    const dismissed = localStorage.getItem('lw_onboard_dismissed');
+    const hasData   = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final');
+    if (dismissed === '1' || hasData) return; // 既存ユーザーはスキップ
+    document.getElementById('onboard-overlay').style.display = 'flex';
+  } catch(e) {}
+}
+function closeOnboard() {
+  try {
+    const noShow = document.getElementById('onboard-no-show');
+    if (noShow && noShow.checked) {
+      localStorage.setItem('lw_onboard_dismissed', '1');
+    }
+    const el = document.getElementById('onboard-overlay');
+    if (el) {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity .2s';
+      setTimeout(() => el.style.display = 'none', 200);
+    }
+  } catch(e) {}
+}
+
+    showOnboardIfNeeded();
+    try { restorePanelStates(); } catch(e) {}
     try { renderSlots(); } catch(e) {}
    
    // ★★★ これを追加（超重要）
@@ -5716,23 +5835,52 @@ function loadAllData() {
 // ================= 統合スロットUI =================
 let __slotModalState = { s:1, p:1, lv:0, awTier:'none' }; // awTier: 'star-tier' 例 '0-1'=★0-1, '2-3'=★2-3, 'none'=未覚醒
 
-function buildSlotHeroOptions(){
+// 現在のフィルター状態
+let __heroFilter = 'all';
+
+function buildSlotHeroOptions(filter) {
+    filter = filter || __heroFilter || 'all';
     const sel = document.getElementById('slot-modal-hero');
-    if(!sel || sel.options.length>0) return;
-    let opts = '';
-    // 未設定
-    opts += '<option value="empty">未設定</option>';
-    // 兵種別
-    const groups = { tank: [], air: [], mis: [] };
-    Object.keys(HEROES).forEach(k=>{
-        if(k==='empty') return;
-        const h=HEROES[k];
-        const label = h.n + (h.ur ? '(UR)' : '');
+    if (!sel) return;
+    const currentVal = sel.value; // 選択中の値を保持
+
+    const typeLabel = { tank:'⚔️ 戦車', air:'✈️ 航空', mis:'🚀 ロケラン' };
+    const awakenIds = new Set(Object.keys(AWAKENING_HEROES || {}));
+
+    let opts = '<option value="empty">未設定</option>';
+    const groups = { tank:[], air:[], mis:[] };
+
+    Object.keys(HEROES).forEach(k => {
+        if (k === 'empty') return;
+        const h = HEROES[k];
+        // フィルター適用
+        if (filter === 'tank'   && h.t !== 'tank') return;
+        if (filter === 'air'    && h.t !== 'air')  return;
+        if (filter === 'mis'    && h.t !== 'mis')  return;
+        if (filter === 'awaken' && !awakenIds.has(k)) return;
+        const label = h.n + (h.ur ? ' (UR)' : '') + (awakenIds.has(k) ? ' 👑' : '');
         groups[h.t].push(`<option value="${k}">${label}</option>`);
     });
-    const mk = (title, arr)=> `<optgroup label="${title}">${arr.join('')}</optgroup>`;
-    opts += mk('戦車', groups.tank) + mk('航空', groups.air) + mk('ロケラン', groups.mis);
+
+    const mk = (title, arr) => arr.length ? `<optgroup label="${title}">${arr.join('')}</optgroup>` : '';
+    opts += mk(typeLabel.tank, groups.tank) + mk(typeLabel.air, groups.air) + mk(typeLabel.mis, groups.mis);
     sel.innerHTML = opts;
+
+    // 以前の選択を復元（フィルターで非表示になる場合はemptyに）
+    if (currentVal && sel.querySelector(`option[value="${currentVal}"]`)) {
+        sel.value = currentVal;
+    } else {
+        sel.value = 'empty';
+    }
+}
+
+function filterHeroes(filter) {
+    __heroFilter = filter;
+    // ボタンのアクティブ状態を切り替え
+    document.querySelectorAll('.hero-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    buildSlotHeroOptions(filter);
 }
 
 function renderSlots(){
@@ -5800,7 +5948,12 @@ function renderSlots(){
 }
 
 function openSlotModal(s,p){
-    buildSlotHeroOptions();
+    __heroFilter = 'all';
+    // フィルターボタンをリセット
+    document.querySelectorAll('.hero-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === 'all');
+    });
+    buildSlotHeroOptions('all');
     __slotModalState.s = s; __slotModalState.p = p;
 
     const hEl = document.getElementById(`h-${s}-${p}`);
@@ -6484,22 +6637,40 @@ function initSlotToggles(){
 // index.html はスクリプトが末尾なので、基本は即時でOK
 try{ initSlotToggles(); }catch(e){}
 try{ initKeepEvalPref(); }catch(e){}
-
-
-
-
-function toggleTransitionPanel(){
-  var body = document.getElementById('power-transition-body') || document.getElementById('power-transition');
-  var btn = document.getElementById('power-transition-toggle');
-  if(!body) return;
-  var isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  if(btn) btn.textContent = isOpen ? '▼' : '▲';
-}
 try{ window.toggleTransitionPanel = toggleTransitionPanel; }catch(e){}
 
 try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getArmyBuffInfo; }catch(e){}
 
+
+// ===== 折りたたみパネル（グローバル） =====
+function togglePanel(bodyId, iconId) {
+  const body = document.getElementById(bodyId);
+  const icon = document.getElementById(iconId);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (icon) icon.classList.toggle('open', !isOpen);
+  try { localStorage.setItem('panel_' + bodyId, isOpen ? '0' : '1'); } catch(e) {}
+}
+function restorePanelStates() {
+  const iconMap = {
+    'army-guide-body':       'army-guide-icon',
+    'power-transition-body': 'trans-icon',
+    'awaken-rank-body':      'awaken-rank-icon',
+  };
+  Object.entries(iconMap).forEach(([id, iconId]) => {
+    try {
+      const saved = localStorage.getItem('panel_' + id);
+      if (saved === null) return;
+      const body = document.getElementById(id);
+      const icon = document.getElementById(iconId);
+      if (!body) return;
+      const shouldOpen = saved === '1';
+      body.classList.toggle('open', shouldOpen);
+      if (icon) icon.classList.toggle('open', shouldOpen);
+    } catch(e) {}
+  });
+}
 </script>
 
 <div id="slot-modal" class="modal-backdrop" onclick="if(event.target===this) closeSlotModal()">
@@ -6511,6 +6682,14 @@ try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getA
     <div class="modal-body">
       <div class="modal-row">
         <label>キャラ</label>
+        <!-- フィルターボタン -->
+        <div id="hero-filter-row" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">
+          <button class="hero-filter-btn active" onclick="filterHeroes('all')" data-filter="all">全て</button>
+          <button class="hero-filter-btn" onclick="filterHeroes('tank')" data-filter="tank"><img src="img/tank.png" class="ui-ico" style="width:14px;height:14px;vertical-align:-2px;"> 戦車</button>
+          <button class="hero-filter-btn" onclick="filterHeroes('air')" data-filter="air"><img src="img/air.png" class="ui-ico" style="width:14px;height:14px;vertical-align:-2px;"> 航空</button>
+          <button class="hero-filter-btn" onclick="filterHeroes('mis')" data-filter="mis"><img src="img/misile.png" class="ui-ico" style="width:14px;height:14px;vertical-align:-2px;"> ロケラン</button>
+          <button class="hero-filter-btn" onclick="filterHeroes('awaken')" data-filter="awaken">👑 覚醒対象</button>
+        </div>
         <select id="slot-modal-hero" class="modal-select"></select>
       </div>
       <div class="modal-row">
