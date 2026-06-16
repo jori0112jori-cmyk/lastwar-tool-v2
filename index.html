@@ -113,8 +113,8 @@
     .summary-panel { background: linear-gradient(135deg, #ffffff, #eff6ff); border-left: 3px solid #0ea5e9; }
     .summary-grid { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .summary-title { font-weight:900; color:#0f172a; font-size:var(--fs-lg); }
-    .summary-main { font-weight:900; color:#1d4ed8; font-size:var(--fs-xl); }
-    .summary-sub { font-size:var(--fs-md); color:#64748b; font-weight:bold; }
+    .summary-main { font-weight:900; color:#1d4ed8; font-size:var(--fs-lg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+    .summary-sub { font-size:var(--fs-sm); color:#64748b; font-weight:bold; line-height:1.4; }
     .jump-row { display:flex; gap:8px; margin: 10px 0 14px; flex-wrap:wrap; }
     .jump-btn { flex:1; min-width: 98px; border:none; border-radius: 12px; padding: 10px 10px; font-weight: 900; cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .jump-btn.j1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; }
@@ -1025,8 +1025,8 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 .ucard--best {
   background: linear-gradient(135deg, #fffbeb, #fff);
-  border-color: #fcd34d;
-  box-shadow: 0 2px 8px rgba(245,158,11,0.12);
+  border-color: #f59e0b;
+  box-shadow: 0 2px 10px rgba(245,158,11,0.18);
 }
 .ucard--awaken {
   background: linear-gradient(135deg, #fef2f2, #fff);
@@ -1086,7 +1086,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 /* ヘッダー行（名前＋右端バッジ） */
@@ -1175,11 +1175,12 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 /* 3軸バー（覚醒ランキング） */
 .ucard-bars {
   background: #f8fafc;
-  border-radius: 6px;
-  padding: 5px 7px;
+  border-radius: 8px;
+  padding: 7px 9px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
+  margin-top: 3px;
 }
 .ucard-bar-row {
   display: flex;
@@ -1401,6 +1402,13 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
             </div>
         </div>
 
+        <!-- 推奨編成テンプレート（育成アドバイスの直下） -->
+        <div id="preset-panel" class="panel" style="border-left:3px solid #f59e0b;display:none;">
+          <div class="panel-title" style="color:#d97706;">📋 推奨編成テンプレート</div>
+          <div style="font-size:var(--fs-sm);color:#64748b;margin-bottom:8px;">コミュニティ検証済みの編成をワンタップで反映（packsify/allclash参照）</div>
+          <div id="preset-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+
         <div id="ai-suggestion-panel" class="panel ai-panel" style="display:none;">
             <div class="panel-title" style="color:#1d4ed8;">🤖 AI編成アドバイス</div>
             <div id="ai-result" class="suggestion-box">キャラを10人以上配置すると、自動的に全軍の最適化と診断が始まります。</div>
@@ -1413,26 +1421,21 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
         <div id="awaken-rank-panel" class="panel route-panel" style="display:none;">
             <div class="panel-title" style="color:#ef4444;">👑 英雄覚醒 優先ランキング</div>
-            <!-- F2P向け覚醒シャード情報 -->
-            <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:var(--fs-xs);">
-              <div style="font-weight:900;color:#92400e;margin-bottom:3px;">📌 F2P・微課金向け覚醒かけら入手方法（2026年6月時点）</div>
-              <div style="color:#78350f;line-height:1.6;">
+            <!-- F2P向け覚醒シャード情報（折りたたみ） -->
+            <details style="margin-bottom:8px;">
+              <summary style="cursor:pointer;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:6px 10px;font-size:var(--fs-xs);font-weight:900;color:#92400e;list-style:none;display:flex;align-items:center;justify-content:space-between;">
+                📌 F2P・無課金向け かけら入手方法 <span style="color:#b45309;font-size:var(--fs-xxs);">▼ タップで展開</span>
+              </summary>
+              <div style="background:#fffbeb;border:1px solid #fde68a;border-top:none;border-radius:0 0 8px 8px;padding:8px 10px;font-size:var(--fs-xs);color:#78350f;line-height:1.7;">
                 🔑 <b>専用かけら×50</b>（解放用）: 英雄演習（最大10個）<br>
                 💎 <b>汎用かけら</b>: 世界遠征（Week2/4/6）が主要入手源<br>
                 ⚠️ <b>覚醒バトルパスは廃止</b>済み。かけらは完全F2P入手のみ<br>
                 🎯 <b>F2P原則</b>: 1シーズンに1英雄集中。キム→DVA→テスラの順
               </div>
-            </div>
-            <div id="awaken-rank-result" class="suggestion-box">覚醒対象英雄（キンバリー・DVA・テスラ）の次の強化ティアと優先度を表示します。</div>
+            </details>
+            <div id="awaken-rank-result" class="suggestion-box" style="padding:10px 8px;">覚醒対象英雄（キンバリー・DVA・テスラ）の次の強化ティアと優先度を表示します。</div>
         </div>
         
-        <!-- 推奨編成テンプレート -->
-        <div id="preset-panel" class="panel" style="border-left:3px solid #f59e0b;display:none;">
-          <div class="panel-title" style="color:#d97706;">📋 推奨編成テンプレート</div>
-          <div style="font-size:var(--fs-sm);color:#64748b;margin-bottom:8px;">コミュニティ検証済みの編成をワンタップで反映（packsify/allclash参照）</div>
-          <div id="preset-list" style="display:flex;flex-direction:column;gap:6px;"></div>
-        </div>
-
         <div class="panel slot-panel">
             <div class="panel-title" style="color:#16a34a;">🧩 編成（タップで編集）</div>
             <div class="suggestion-box" style="margin-bottom:10px;">
@@ -1488,6 +1491,12 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         </div>
 
         <!-- 🎯 兵種シフト目安（最下部へ移動 + 折りたたみ） -->
+        <!-- 部隊強化指針パネル -->
+        <div id="army-guide-panel" class="panel" style="border-left:3px solid #6366f1;margin-top:14px;display:none;">
+          <div class="panel-title" style="color:#4f46e5;">🎯 部隊強化の指針</div>
+          <div id="army-guide-result"></div>
+        </div>
+
         <div id="power-transition" class="panel" style="border-left:3px solid #f59e0b; margin-top: 14px;">
           <div class="power-transition-head">
             <div class="power-transition-title">🎯 兵種の育成目安</div>
@@ -1514,22 +1523,45 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>「部隊編成」タブを開き、第1〜第3軍（各5枠）と控え（10枠）のタイルをタップします。</li>
             <li>各スロットで <b>キャラ選択</b> と <b>専用武装Lv（0〜30）</b> を設定してください。</li>
-            <li>覚醒対象英雄（キンバリー・DVA・テスラ）は <b>覚醒★数</b> も設定できます。</li>
+            <li>覚醒対象英雄（キンバリー・DVA・テスラ）は <b>覚醒★数（★0-1〜★5-0）</b> も設定できます。</li>
             <li><b>10人以上</b>配置すると、育成アドバイスと各ランキングが自動で更新されます。</li>
+            <li>控えにも英雄を設定しておくと、昇格候補や兵種方針の精度が上がります。</li>
           </ul>
 
-          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🚀 ステップ2：ランキングを確認する</div>
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">📋 推奨編成テンプレート</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li><b>専用武装 育成優先ランキング</b>：次のLv目標（10/20/30）への効率順。バッジが強化理由の目安です。</li>
-            <li><b>補強候補ランキング</b>：現在の編成の弱点を埋める英雄の提案です。</li>
-            <li><b>英雄覚醒 優先ランキング</b>：コスパ・即効性・戦力増加の3軸でコミュニティ評価を反映しています。</li>
+            <li>F2P〜中課金向けの編成をワンタップで反映できます（1軍・2軍・3軍を選択）。</li>
+            <li>EWは<b>現在のLvを維持</b>したままキャラ配置のみ変更します。</li>
+            <li>他の軍や控えに同じキャラがいた場合は<b>移動扱い</b>（重複しない）になります。</li>
           </ul>
 
-          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">👑 S6 覚醒システム（スロット編集内）</div>
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🎯 部隊強化の指針</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>覚醒対応英雄のスロットを編集すると <b>覚醒★選択UI</b> が表示されます。</li>
-            <li><b>EW強化 vs 覚醒 優先度</b>パネルで、今どちらを優先すべきか確認できます。</li>
-            <li>専用かけら（★0-1解放）と汎用かけら（★1以降）の必要数も表示されます。</li>
+            <li><b>達成率</b>は各英雄のロール別目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度です。</li>
+            <li>達成率80%到達が<b>2軍投資を始める目安</b>です。</li>
+            <li>各軍のボトルネック英雄（最もEWが低い英雄）と次の節目を表示します。</li>
+            <li>控えに育成済み英雄がいると<b>昇格候補</b>として自動検出されます。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🗺️ 次の部隊の兵種方針</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li>部隊強化の指針と連動して<b>次に強化すべき軍</b>を自動判定します。</li>
+            <li>手持ち＋控えから各兵種の上位5体を選出してスコアを算出します。</li>
+            <li>キム+DVA両覚醒時は<b>混成型（4+1）</b>を特別推奨として表示します。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🚀 育成優先ランキング</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li><b>専用武装ランキング</b>：次のLv目標（10/20/30）への効率順。</li>
+            <li><b>補強候補ランキング</b>：現在の編成の弱点を埋める英雄の提案。</li>
+            <li><b>英雄覚醒ランキング</b>：コスパ・即効性・戦力増加の3軸＋現在★から次マイルストーンまでの必要かけら数を表示。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">👑 S6覚醒システム（スロット編集内）</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li>覚醒対象英雄のスロットを編集すると<b>覚醒★選択UI</b>が表示されます。</li>
+            <li>★0-1解放が最低条件（専用かけら×50）、★3-0が最重要マイルストーンです。</li>
+            <li><b>EW強化 vs 覚醒 優先度</b>パネルで今どちらを優先すべきか確認できます。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">💾 データ保存</div>
@@ -2401,6 +2433,30 @@ const AWAKENING_HEROES = {
 // --- ユーティリティ ---
 
 // awTier文字列 → {star, tier}
+// 覚醒★数を編成画面の表記に統一して返す
+// star=-1 → '未覚醒'
+// star=0, tier=1以上 → '★0-1解放済み'（以降 ★0-N）
+// star=1以上 → '★N-T'
+function awStarLabel(at) {
+  if (!at || at.star < 0) return '未覚醒';
+  if (at.star === 0) return at.tier >= 1 ? `★0-${at.tier}` : '★0-1解放済み';
+  return `★${at.star}-${at.tier}`;
+}
+// 推奨マイルストーンのコメント付きラベル
+// 「★0-1解放済み（最低限）」「★3-0（理想）」など
+function awStarLabelWithNote(at, heroId) {
+  const label = awStarLabel(at);
+  if (!at || at.star < 0) return label;
+  const notes = {
+    kimberly: { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（自動決意発動）', 3:'（最重要★：増幅先行獲得）', 5:'（MAX）' },
+    dva:      { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（スタック効率UP）', 3:'（追撃+20%）', 5:'（MAX）' },
+    tesla:    { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（DoT本格化）', 3:'（反射+1）', 5:'（MAX）' },
+  };
+  const heroNotes = notes[heroId] || {};
+  const note = heroNotes[at.star] || '';
+  return `${label}${note}`;
+}
+
 function parseAwTier(val) {
   if (!val || val === 'none') return { star:-1, tier:0 };
   const m = String(val).match(/^(\d+)-(\d+)$/);
@@ -2564,13 +2620,18 @@ function collectArmyMembersForProgress(armyNo){
 
 
 function getIdealMembersForType(type){
+  // F2P現実的目標（packsify/allclash準拠）
+  // キャリー(atk): EW20 = 覚醒前提クリア・実戦十分な水準
+  // タンク(wall):  EW20 = 前衛として十分な水準
+  // サポート(sup): EW10 = マーシャル等はEW不要
+  // EW30は長期目標のため基準から外す
   const idealType = ['tank','air','mis'].includes(type) ? type : 'tank';
   return [
-    { id:`${idealType}-i1`, wp:30, t:idealType, r:'wall' },
-    { id:`${idealType}-i2`, wp:30, t:idealType, r:'wall' },
-    { id:`${idealType}-i3`, wp:30, t:idealType, r:'atk'  },
-    { id:`${idealType}-i4`, wp:30, t:idealType, r:'atk'  },
-    { id:`${idealType}-i5`, wp:30, t:idealType, r:'sup'  },
+    { id:`${idealType}-i1`, wp:20, t:idealType, r:'wall' },
+    { id:`${idealType}-i2`, wp:20, t:idealType, r:'wall' },
+    { id:`${idealType}-i3`, wp:20, t:idealType, r:'atk'  },
+    { id:`${idealType}-i4`, wp:20, t:idealType, r:'atk'  },
+    { id:`${idealType}-i5`, wp:10, t:idealType, r:'sup'  },
   ];
 }
 
@@ -2581,17 +2642,33 @@ function computeDisplayedArmyProgress(armyNo){
   }
 
   const res = evaluateSquadRealCombat(members);
-  const idealMembers = getIdealMembersForType(res.mainType || members[0]?.t || 'tank');
-  const ideal = evaluateSquadRealCombat(idealMembers).score;
 
-  const pct = Math.max(0, Math.min(100, Math.round((res.score / Math.max(ideal,1)) * 100)));
+  // F2P現実目標：ロール別の目標EW Lv
+  // atk（アタッカー）: EW20、wall（タンク）: EW20、sup（サポート）: EW10
+  // 各英雄を「そのロールの目標EW」と1対1比較して平均達成率を算出
+  const roleTarget = { atk:20, wall:20, sup:10 };
+
+  let totalRate = 0;
+  let count = 0;
+  members.forEach(m => {
+    const target = roleTarget[m.r] || 20;
+    const rate = Math.min(1.0, m.wp / Math.max(target, 1));
+    totalRate += rate;
+    count++;
+  });
+
+  // 平均達成率（0〜100%、100%超えなし）
+  const pct = count > 0
+    ? Math.max(0, Math.min(100, Math.round((totalRate / count) * 100)))
+    : 0;
 
   return {
     pct: pct,
     maxCount: res.maxCount,
     buffRate: res.buffRate,
     mainType: res.mainType,
-    detail:{ attack:res.attack, defense:res.defense }
+    detail:{ attack:res.attack, defense:res.defense },
+    members: members  // ボトルネック表示用
   };
 }
 
@@ -2613,35 +2690,45 @@ function updateSlotEvalsFromCurrentInputs(){
       : 'balance';
 
     const label = weak === "defense"
-      ? "📊 耐久不足：大"
+      ? "📊 前衛が手薄"
       : (weak === "attack"
-          ? "📊 火力不足：大"
-          : `📊 バランス：${pct>=80?'高':pct>=45?'中':'低'}`);
+          ? "📊 火力が不足"
+          : pct >= 80 ? "📊 バランス良好" : pct >= 45 ? "📊 育成中" : "📊 強化が必要");
 
     let buff = "";
-    if (prog.maxCount === 5) buff = "🏆20%バフ";
-    else if (prog.maxCount === 4) buff = "🚜15%バフ";
-    else if (prog.maxCount === 3) buff = (prog.buffRate >= 0.10 ? "⚠️10%バフ" : "⚠️5%バフ");
+    if (prog.maxCount === 5) buff = "✅ 兵種バフ20%";
+    else if (prog.maxCount === 4) buff = "🔶 兵種バフ15%";
+    else if (prog.maxCount === 3) buff = (prog.buffRate >= 0.10 ? "⚠️ 兵種バフ10%" : "⚠️ 兵種バフ5%");
 
     const buffSpan = buff ? `<span class="buff-badge">${buff}</span>` : "";
+
+    // 進行度の段階別説明
+    // ロール別目標EWへの達成率段階
+    const pctNote = pct >= 100 ? '✅ 目標EW達成'
+      : pct >= 80  ? '（あと少し）'
+      : pct >= 60  ? '（育成中）'
+      : pct >= 40  ? '（基盤完成）'
+      : '（育成初期）';
 
     el.innerHTML =
       '<div class="row">' +
         '<div class="tag">' + label + '</div>' +
-        '<div class="pct">進行度 <span style="color:' + c + ';">' + pct + '%</span></div>' +
+        '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:2px;">' + pctNote + '</span></div>' +
       '</div>' +
       (buffSpan ? ('<div class="row sub">' + buffSpan + '</div>') : '') +
       '<div class="bar"><div style="width:' + pct + '%; background:' + c + ';"></div></div>';
   }
+
+  try { updateArmyGuide(); } catch(e) {}
 }
 
 const TRANSITION_TEXT_TABLE = [
-  { min: 85, label: "今が移行タイミング", cls: "advice-now",  color: "#ef4444" },
-  { min: 70, label: "移行を考え始めよう",   cls: "advice-good", color: "#f59e0b" },
-  { min: 55, label: "移行を視野に入れよう",           cls: "advice-soon", color: "#eab308" },
+  { min: 85, label: "今すぐ移行できる！", cls: "advice-now",  color: "#ef4444" },
+  { min: 70, label: "移行の準備を始めよう",   cls: "advice-good", color: "#f59e0b" },
+  { min: 55, label: "あと少しで移行圏",           cls: "advice-soon", color: "#eab308" },
   // ここから下は「様子見」系（CSS既存クラスに寄せる）
-  { min: 40, label: "もう少し様子を見よう",     cls: "advice-wait", color: "#64748b" },
-  { min: 25, label: "今の編成を強化しよう",           cls: "advice-wait", color: "#94a3b8" },
+  { min: 40, label: "もう少し育成してから",     cls: "advice-wait", color: "#64748b" },
+  { min: 25, label: "現在の編成を伸ばそう",           cls: "advice-wait", color: "#94a3b8" },
   { min: 0,  label: "まだ移行は早い",         cls: "advice-wait", color: "#cbd5e1" }
 ];
 
@@ -2741,152 +2828,173 @@ function updateTransitionRecommendationUI(){
   const body = $id('power-transition-body') || $id('power-transition');
   if(!body) return;
 
-  const labels = { tank:"戦車", air:"航空機", mis:"ロケラン" };
-  const meta = ($id('current-meta')||{}).value || '';
+  const labels = { tank:"戦車", air:"航空", mis:"ロケラン" };
   const pool = { tank:[], air:[], mis:[] };
-  let totalPicked = 0;
+  const benchPool = { tank:[], air:[], mis:[] };
 
+  // 1〜3軍の英雄をプール
   for(let s=1; s<=3; s++){
     for(let p=1; p<=5; p++){
       const hidEl = $id(`h-${s}-${p}`);
       const wpEl  = $id(`w-${s}-${p}`);
-      if(!hidEl || !wpEl) continue;
-
+      if(!hidEl||!wpEl) continue;
       const id = hidEl.value;
-      if(!id || id === 'empty') continue;
-
+      if(!id||id==='empty') continue;
       const h = HEROES[id];
-      if(!h || h.ur) continue;
-
+      if(!h||h.ur) continue;
       const wp = normalizeWpInputFixed(wpEl.value);
-      pool[h.t].push({ id, name:h.n||id, wp, pts:wpToPts(wp) });
+      pool[h.t].push({ id, name:h.n||id, wp, pts:wpToPts(wp), squad:s });
     }
   }
+  // 控えの英雄もプール
+  for(let p=1; p<=10; p++){
+    const hidEl = $id(`h-bench-${p}`);
+    const wpEl  = $id(`w-bench-${p}`);
+    if(!hidEl||!wpEl) continue;
+    const id = hidEl.value;
+    if(!id||id==='empty') continue;
+    const h = HEROES[id];
+    if(!h||h.ur) continue;
+    const wp = normalizeWpInputFixed(wpEl.value);
+    benchPool[h.t].push({ id, name:h.n||id, wp, pts:wpToPts(wp) });
+  }
 
-  const fivePower = {};
-  const countByType = {};
-
-  (["tank","air","mis"]).forEach(t=>{
-    const list = (pool[t] || []).slice().sort((a,b)=>b.pts-a.pts);
-    countByType[t] = list.length;
-    const top5 = list.slice(0,5);
-    const buffInfo = getArmyBuffInfo(top5);
-    const sumBuffed = top5.reduce((s,o)=> s + (o.t === buffInfo.mainType ? Math.round(o.pts * (1 + buffInfo.buffRate)) : o.pts), 0);
-    fivePower[t] = Math.round(sumBuffed);
-    totalPicked += top5.length;
-  });
-
+  const totalPicked = Object.values(pool).reduce((s,a)=>s+a.length,0);
   if(totalPicked < 5){
-    const metaTxt = meta ? ` / 現在のメタ：<b class="text-meta">${labels[meta]||meta}</b>` : '';
-    body.innerHTML = `
-      <div class="section-title-spacer"></div>
-      <div class="subtle-note">
-        編成が少ないため計算できません（キャラを5人以上配置すると表示されます）。${metaTxt}
-      </div>
-    `;
+    body.innerHTML = '<div class="subtle-note">キャラを5人以上配置すると表示されます。</div>';
     return;
   }
 
-  const base = Object.keys(fivePower).sort((a,b)=>fivePower[b]-fivePower[a])[0];
-  const baseP = Math.max(fivePower[base], 1);
+  // 部隊強化の指針と連動：次に強化すべき軍を判定
+  const armyPcts = [1,2,3].map(s => computeDisplayedArmyProgress(s).pct);
+  const nextSquad = armyPcts[0] >= 80 && armyPcts[1] >= 65 ? 3
+                  : armyPcts[0] >= 80 ? 2 : 1;
+  const squadLabel = { 1:'1軍', 2:'2軍', 3:'3軍' };
 
-  const targets = Object.keys(fivePower)
-    .filter(t=>t!==base)
-    .map(t=>{
-      const ratio = baseP > 0 ? (fivePower[t] / baseP) : 0;
-      let sc = Math.round(ratio * 100 + (meta && t === meta ? 10 : 0));
-      sc = Math.max(0, Math.min(100, sc));
-      return { t, sc };
-    })
-    .sort((a,b)=>b.sc-a.sc);
+  // 各兵種の「次の軍」向け戦力ポテンシャルを計算
+  const typeScore = {};
+  const typeDetail = {};
 
-  const noteL = [];
-  (["tank","air","mis"]).forEach(t=>{
-    if(countByType[t] < 5) noteL.push(`${labels[t]}:${countByType[t]}/5`);
+  ['tank','air','mis'].forEach(t => {
+    const inSquad   = pool[t].filter(m => m.squad === nextSquad);
+    const fromBench = benchPool[t].slice().sort((a,b)=>b.pts-a.pts);
+    const otherSq   = pool[t].filter(m => m.squad !== nextSquad).sort((a,b)=>b.pts-a.pts);
+    const candidates = [...inSquad, ...fromBench, ...otherSq].sort((a,b)=>b.pts-a.pts).slice(0,5);
+
+    const buffInfo = getArmyBuffInfo(candidates);
+    const score = candidates.reduce((s,m)=>
+      s + (m.t===t ? Math.round(m.pts*(1+buffInfo.buffRate)) : m.pts), 0);
+
+    typeScore[t] = score;
+    typeDetail[t] = { inSquad, fromBench: fromBench.slice(0,3), candidates, buffRate:buffInfo.buffRate, buffCount:buffInfo.maxCount };
   });
-  const note = noteL.length ? `（5人未満: ${noteL.join(" / ")}）` : "";
-  const metaTxt = meta ? ` / 現在のメタ：<b class="text-meta">${labels[meta]||meta}</b>` : '';
 
-  // S6覚醒状況チェック
-  const kimAw  = (typeof loadAwTier!=='undefined') ? parseAwTier(loadAwTier('kimberly')) : {star:-1};
-  const dvaAw  = (typeof loadAwTier!=='undefined') ? parseAwTier(loadAwTier('dva'))      : {star:-1};
-  const teslaAw= (typeof loadAwTier!=='undefined') ? parseAwTier(loadAwTier('tesla'))    : {star:-1};
-  const kimHas  = pool.tank.some(m=>m.id==='kimberly') && kimAw.star >= 0;
-  const dvaHas  = pool.air.some(m=>m.id==='dva')       && dvaAw.star >= 0;
-  const teslaHas= pool.mis.some(m=>m.id==='tesla')     && teslaAw.star >= 0;
+  const sorted = Object.entries(typeScore).sort((a,b)=>b[1]-a[1]);
+  const bestType  = sorted[0][0];
+  const bestScore = Math.max(sorted[0][1], 1);
 
-  // 覚醒注意バナー生成
-  const awBanners = [];
-  if (kimHas && dvaHas) {
-    awBanners.push('<span style="color:#92400e;background:#fffbeb;padding:3px 7px;border-radius:6px;border:1px solid #fde68a;font-size:var(--fs-sm);display:inline-block;margin-top:4px;">👑 覚醒キム(戦車)+覚醒DVAの4+1混成は純粋5体より実戦で強い場合があります</span>');
-  }
-  if (kimAw.star >= 0 && !dvaHas) {
-    awBanners.push('<span style="color:#1e3a8a;background:#eff6ff;padding:3px 7px;border-radius:6px;border:1px solid #bfdbfe;font-size:var(--fs-sm);display:inline-block;margin-top:4px;">💡 DVA覚醒（Week3）に備えシャードを温存しておくと航空移行が一気に楽になります</span>');
-  }
-  const awBannerHtml = awBanners.length ? `<div style="margin-top:6px;">${awBanners.join('<br>')}</div>` : '';
+  // S6覚醒チェック
+  const kimAw   = parseAwTier(loadAwTier('kimberly'));
+  const dvaAw   = parseAwTier(loadAwTier('dva'));
+  const teslaAw = parseAwTier(loadAwTier('tesla'));
+  const kimAwAll  = pool.tank.some(m=>m.id==='kimberly') && kimAw.star >= 0;
+  const dvaAwAll  = [...pool.air,...benchPool.air].some(m=>m.id==='dva') && dvaAw.star >= 0;
+  const hasTesla  = [...pool.mis,...benchPool.mis].some(m=>m.id==='tesla');
 
-  const line = (row)=>{
-    const adv = getTransitionAdvice(row.sc);
-    const color = adv.color;
-    const w = Math.max(0, Math.min(100, row.sc));
-    const shortage = Math.max(0, fivePower[base] - fivePower[row.t]);
-    const shortagePct = Math.round((shortage / baseP) * 100);
+  // キム+DVA覚醒混成型の評価（packsify推奨）
+  // 両方覚醒済みで手持ちにいる場合、混成型ボーナスを計算
+  const kimExists = [...pool.tank,...benchPool.tank].some(m=>m.id==='kimberly');
+  const dvaExists = [...pool.air,...benchPool.air].some(m=>m.id==='dva');
+  const showMixedRecommend = kimAwAll && dvaAwAll && kimExists && dvaExists;
 
-    const tops = (pool[row.t] || [])
-      .map(m=>{
-        const nxt = m.wp < 10 ? 10 : (m.wp < 20 ? 20 : (m.wp < 30 ? 30 : null));
-        if(nxt == null) return null;
-        const gain = wpToPts(nxt) - wpToPts(m.wp);
-        return { ...m, nxt, gain };
-      })
-      .filter(x=>x && x.gain > 0)
-      .sort((a,b)=>(b.gain-a.gain)||(a.wp-b.wp))
-      .slice(0,3);
+  const hName = id => (HEROES[id]||{}).n || id;
 
-    const topTxt = tops.length ? tops.map(x=>`${x.name} EW Lv${x.wp}→${x.nxt}`).join('<br>') : '—';
+  const typeCard = (t, rank) => {
+    const d = typeDetail[t];
+    const pct = Math.round((typeScore[t] / bestScore) * 100);
+    const isBest = t === bestType;
+    const c = isBest ? '#d97706' : '#94a3b8';
+    // 同兵種候補の実数（控え含む）で「目標バフ」を表示
+    const allSameType = [...(pool[t]||[]), ...(benchPool[t]||[])];
+    const targetCount = Math.min(5, allSameType.length);
+    const buffBadge = targetCount >= 5 ? '✅ 5体バフ+20%達成可能'
+      : targetCount === 4 ? '🔶 4体バフ+15%達成可能'
+      : targetCount >= 3 ? `⚠️ 現在${targetCount}体（あと${5-targetCount}体で+20%）`
+      : `📋 ${targetCount}体（育成で兵種バフ獲得可能）`;
 
-    return `
-      <div class="trans-row trans-row-top">
-        <div class="trans-left">
-          <div class="trans-title">${labels[base]} → ${labels[row.t]} <span class="trans-badge ${adv.cls}">${adv.txt}</span></div>
-          <div class="trans-meta">あと${shortagePct}%（強化石${shortage}個分相当）</div>
-          <div class="trans-meta">推奨：${topTxt}</div>
+    // 最も育っていない英雄 → 次の節目
+    const weakest = d.candidates.length ? [...d.candidates].sort((a,b)=>a.wp-b.wp)[0] : null;
+    const nextMile = weakest ? (weakest.wp<10?10:weakest.wp<20?20:weakest.wp<30?30:null) : null;
+    const actionTxt = weakest && nextMile
+      ? `⚠️ <b>${hName(weakest.id)}</b> EW Lv${weakest.wp} → 次の節目は<b>Lv${nextMile}</b>`
+      : weakest ? `✅ <b>${hName(weakest.id)}</b> 目標EW到達済み` : '';
+
+    // 控えから補充候補
+    const benchTxt = d.fromBench.length
+      ? d.fromBench.map(m=>`<b>${hName(m.id)}</b>(EW${m.wp})`).join('・')
+      : 'なし';
+
+    // 覚醒メモ
+    let memo = '';
+    if(t==='tank' && kimAwAll) memo = '👑 キム覚醒済みで戦車軸が強化中';
+    if(t==='air'  && dvaAwAll) memo = '👑 DVA覚醒済みで航空軸が強化中';
+    if(t==='air'  && !dvaAwAll && kimAwAll) memo = '💡 DVA覚醒（Week3）後に一気に強化可能';
+    if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = '💡 テスラ覚醒（Week6）後にさらに強化可能';
+
+    return `<div style="background:#fff;border:1px solid ${isBest?'#f59e0b':'#e8edf5'};border-radius:12px;padding:12px;margin-bottom:8px;${isBest?'box-shadow:0 2px 8px rgba(245,158,11,0.15);':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">✨ 推奨</span>':`<span style="font-size:var(--fs-xxs);color:#94a3b8;font-weight:700;">${rank}番目</span>`}
+          <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">${labels[t]}軸</span>
+          <span style="font-size:var(--fs-xxs);font-weight:700;color:${d.buffCount>=5?'#059669':d.buffCount>=4?'#d97706':'#94a3b8'};">${buffBadge}</span>
         </div>
-        <div class="trans-right trans-right-fixed">
-          <div class="trans-pct" style="color:${color};">${row.sc}%</div>
-          <div class="trans-bar trans-bar-fixed">
-            <div style="width:${w}%; height:100%; background:${color};"></div>
-          </div>
-        </div>
+        <span style="font-size:var(--fs-md);font-weight:900;color:${c};">${pct}%</span>
       </div>
-    `;
+      ${actionTxt?`<div style="font-size:var(--fs-sm);margin-bottom:3px;">${actionTxt}</div>`:''}
+      <div style="font-size:var(--fs-xs);color:#64748b;margin-bottom:3px;">控え補充候補：${benchTxt}</div>
+      ${memo?`<div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">${memo}</div>`:''}
+      <div style="background:#f1f5f9;border-radius:4px;height:4px;margin-top:5px;">
+        <div style="background:${c};width:${pct}%;height:100%;border-radius:4px;"></div>
+      </div>
+    </div>`;
   };
 
-  // 移行タイミング：覚醒状況で補足
-  let transitionNote = '';
-  if (kimHas && !dvaHas && base === 'tank') {
-    transitionNote = '<div class="trans-note-green2">📌 <b>S6移行メモ：</b> キム覚醒済みの今は戦車軸強化を継続し、DVA覚醒（Week3）後に航空移行を検討するのが海外ガチ勢の主流判断です。</div>';
-  } else if (dvaHas && !teslaHas && base === 'air') {
-    transitionNote = '<div class="trans-note-blue">📌 <b>S6移行メモ：</b> DVA覚醒済み。テスラ覚醒（Week5）後にロケラン軸も検討価値が出てきます（フィオナ+テスラのDoTコンボ）。</div>';
-  }
-
-  // シャード配分警告
-  const shardWarning = (typeof checkAwakeningResourceWarning !== 'undefined') ? checkAwakeningResourceWarning() : '';
+  // 混成型推奨カード
+  const mixedCard = showMixedRecommend ? `
+    <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:0 2px 10px rgba(245,158,11,0.2);">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">
+        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">👑 覚醒特別推奨</span>
+        <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">キム+DVA 混成型</span>
+        <span style="font-size:var(--fs-xxs);font-weight:700;color:#059669;">🔶 4体バフ+15%</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:4px;">
+        AoE（覚醒キム）＋単体バースト（覚醒DVA）の実戦最強コンビ。<br>
+        兵種バフは15%になるが、覚醒効果で純粋5体を上回ることが多い（packsify推奨）
+      </div>
+      <div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">
+        👑 キム ${awStarLabel(kimAw)} ＋ DVA ${awStarLabel(dvaAw)} のコンボが有効<br>
+        <span style="font-size:var(--fs-xxs);color:#92400e;">
+          最低：キム★0-1解放済み＋DVA★0-1解放済み　理想：キム★3-0＋DVA★3-0
+        </span>
+      </div>
+      <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:4px;">
+        構成例：ウィリアムズ+マーフィ（前衛）+キム+DVA+マーシャル
+      </div>
+    </div>` : '';
 
   body.innerHTML = `
-    <div class="section-title-spacer"></div>
-    <div class="subtle-note subtle-note-gap">
-      基準：5人同兵種の想定（${labels[base]}）${metaTxt} <span class="note-muted-strong">${note}</span>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+      <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">🎯 ${squadLabel[nextSquad]}の推奨兵種</span>
+      <span style="font-size:var(--fs-xxs);color:#94a3b8;">手持ち＋控えから算出 / EW20基準</span>
     </div>
-    ${awBannerHtml}
-    ${targets.map(line).join('')}
-    ${transitionNote}
-    ${shardWarning}
-    <div class="footnote-muted">
-      ※ 達成率は「移行先編成の推定戦力 ÷ 現在の主力編成の戦力」の目安です。100%超えで移行検討圏。推奨EWは次の節目（Lv10/20/30）が目標です。
+    ${mixedCard}
+    ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
+    <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:4px;">
+      ※ 達成率は最もスコアが高い兵種を100%として相対比較。兵種バフ表示は手持ち＋控えで達成可能な目標値です。
     </div>
   `;
 }
+
 
 function getPreciseCost(current, target) {
     if (current >= 30 || target <= current) return 0;
@@ -3283,9 +3391,9 @@ function renderPresetPanel() {
           <div style="font-size:var(--fs-md);font-weight:900;color:#111827;line-height:1.3;">${p.name}</div>
         </div>
         <div style="display:flex;gap:3px;flex-shrink:0;">
-          <button onclick="applyPreset('${p.id}',1)" style="font-size:var(--fs-xxs);background:#2563eb;color:#fff;border:none;border-radius:5px;padding:3px 7px;font-weight:900;cursor:pointer;">1軍</button>
-          <button onclick="applyPreset('${p.id}',2)" style="font-size:var(--fs-xxs);background:#7c3aed;color:#fff;border:none;border-radius:5px;padding:3px 7px;font-weight:900;cursor:pointer;">2軍</button>
-          <button onclick="applyPreset('${p.id}',3)" style="font-size:var(--fs-xxs);background:#059669;color:#fff;border:none;border-radius:5px;padding:3px 7px;font-weight:900;cursor:pointer;">3軍</button>
+          <button onclick="applyPreset('${p.id}',1)" style="font-size:var(--fs-xs);background:#2563eb;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">1軍</button>
+          <button onclick="applyPreset('${p.id}',2)" style="font-size:var(--fs-xs);background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">2軍</button>
+          <button onclick="applyPreset('${p.id}',3)" style="font-size:var(--fs-xs);background:#059669;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">3軍</button>
         </div>
       </div>
       <!-- 説明 -->
@@ -3319,59 +3427,62 @@ function applyPreset(presetId, squadNum) {
   if (!preset) return;
   if (!confirm('「'+preset.name+'」を'+sLabel+'に反映しますか？\nキャラ配置のみ変更し、現在のEW Lvはそのまま維持されます。')) return;
 
+  // ステップ1: テンプレートに含まれるキャラのEW Lvを事前に収集
+  // 他軍・控えから同キャラを見つけてEWを引き継ぐ
+  const presetIds = new Set(preset.squad.map(m => m.id));
+  const wpMap = {}; // heroId → 現在のEW Lv
+
+  for (let os = 1; os <= 3; os++) {
+    for (let pp = 1; pp <= 5; pp++) {
+      const id = (document.getElementById('h-'+os+'-'+pp)||{}).value;
+      const wp = parseInt((document.getElementById('w-'+os+'-'+pp)||{}).value)||0;
+      if (id && presetIds.has(id) && !(id in wpMap)) wpMap[id] = wp;
+    }
+  }
+  for (let pp = 1; pp <= 10; pp++) {
+    const id = (document.getElementById('h-bench-'+pp)||{}).value;
+    const wp = parseInt((document.getElementById('w-bench-'+pp)||{}).value)||0;
+    if (id && presetIds.has(id) && !(id in wpMap)) wpMap[id] = wp;
+  }
+
+  // ステップ2: 他軍のスロットから重複するキャラを空にする（移動扱い）
+  for (let os = 1; os <= 3; os++) {
+    if (os === s) continue; // 反映先の軍はスキップ
+    for (let pp = 1; pp <= 5; pp++) {
+      const hEl = document.getElementById('h-'+os+'-'+pp);
+      if (hEl && presetIds.has(hEl.value)) {
+        hEl.value = 'empty';
+        const wEl = document.getElementById('w-'+os+'-'+pp);
+        if (wEl) wEl.value = 0;
+      }
+    }
+  }
+  // 控えからも除去
+  for (let pp = 1; pp <= 10; pp++) {
+    const hEl = document.getElementById('h-bench-'+pp);
+    if (hEl && presetIds.has(hEl.value)) {
+      hEl.value = 'empty';
+      const wEl = document.getElementById('w-bench-'+pp);
+      if (wEl) wEl.value = 0;
+    }
+  }
+
+  // ステップ3: テンプレートを反映先の軍に配置
   preset.squad.forEach((m, i) => {
     const p = i + 1;
     const hEl = document.getElementById('h-'+s+'-'+p);
     const wEl = document.getElementById('w-'+s+'-'+p);
     if (!hEl) return;
-
-    // 同じキャラが既にこの軍のどこかにいる場合はそのEW Lvを引き継ぐ
-    let keepWp = null;
-    for (let pp = 1; pp <= 5; pp++) {
-      const existH = document.getElementById('h-'+s+'-'+pp);
-      const existW = document.getElementById('w-'+s+'-'+pp);
-      if (existH && existH.value === m.id && pp !== p) {
-        keepWp = parseInt(existW && existW.value) || 0;
-        break;
-      }
-    }
-    // 他軍・控えにも同じキャラがいればそのEW Lvを引き継ぐ
-    if (keepWp === null) {
-      for (let os = 1; os <= 3; os++) {
-        for (let pp = 1; pp <= 5; pp++) {
-          const existH = document.getElementById('h-'+os+'-'+pp);
-          const existW = document.getElementById('w-'+os+'-'+pp);
-          if (existH && existH.value === m.id) {
-            keepWp = parseInt(existW && existW.value) || 0;
-            break;
-          }
-        }
-        if (keepWp !== null) break;
-      }
-    }
-    // 控えも確認
-    if (keepWp === null) {
-      for (let pp = 1; pp <= 10; pp++) {
-        const existH = document.getElementById('h-bench-'+pp);
-        const existW = document.getElementById('w-bench-'+pp);
-        if (existH && existH.value === m.id) {
-          keepWp = parseInt(existW && existW.value) || 0;
-          break;
-        }
-      }
-    }
-    // 現在のスロットのEW Lvを維持（同キャラが見つかった場合はそちらを優先）
-    const currentWp = parseInt(wEl && wEl.value) || 0;
-    const finalWp = keepWp !== null ? keepWp : currentWp;
-
     hEl.value = m.id;
-    if (wEl) wEl.value = finalWp;
+    if (wEl) wEl.value = wpMap[m.id] !== undefined ? wpMap[m.id] : 0;
   });
 
-  try { updateSquad(s); } catch(e) {}
+  // ステップ4: 全軍を更新してランキング再計算
+  try { for(let sq=1;sq<=3;sq++) updateSquad(sq); } catch(e) {}
   try { renderSlots(); } catch(e) {}
   try { updateAllSquads(); } catch(e) {}
-  showToast('✅ 「'+preset.name+'」を'+sLabel+'に反映（EW Lvは現状維持）');
+  try { scheduleAi(); } catch(e) {}
+  showToast('✅ 「'+preset.name+'」を'+sLabel+'に反映（他軍の重複は移動）');
 }
 
 function initSquadHTML() {
@@ -4860,11 +4971,15 @@ function updateSummaryBar(result, effData){
 
     el.innerHTML = `
         <div class="summary-grid">
-            <div style="flex:1; min-width:220px;">
+            <div style="flex:1; min-width:0;">
                 <div class="summary-title">⭐ 次の育成目標</div>
-                <div class="summary-main">${top.name} の ${roleLabel}を強化しよう（${badge}）</div>
-                <div class="summary-sub">次の目標：EW Lv${top.to}を目指そう　1軍：${needText(weak1)}</div>
-                <div class="summary-sub" style="margin-top:6px;">${powerLine}</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;">
+                  <span class="summary-main" style="font-size:var(--fs-lg);">${top.name}</span>
+                  <span style="font-size:var(--fs-xs);background:#eff6ff;color:#1d4ed8;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${roleLabel}強化</span>
+                  <span style="font-size:var(--fs-xs);background:#f0fdf4;color:#15803d;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${badge}</span>
+                </div>
+                <div class="summary-sub">目標 EW Lv${top.to}　／　1軍：${needText(weak1)}</div>
+                <div class="summary-sub" style="margin-top:4px;">${powerLine}</div>
             </div>
         </div>`;
 }
@@ -4877,6 +4992,152 @@ function getColor(percent, base){
     if(percent < 40) return "#ef4444";
     if(percent < 60) return "#f59e0b";
     return base;
+}
+
+// ===============================
+// 🎯 部隊強化指針（部隊間の投資バランスアドバイス）
+// 「1軍が十分育ったら2軍へ」という段階的投資の指針
+// ===============================
+function updateArmyGuide() {
+  const panel  = document.getElementById('army-guide-panel');
+  const result = document.getElementById('army-guide-result');
+  if (!panel || !result) return;
+
+  // 全軍のスコアと進行度を取得
+  const armies = [1, 2, 3].map(s => {
+    const prog = computeDisplayedArmyProgress(s);
+    const members = collectArmyMembersForProgress(s);
+    // 最もEW Lvが低いメンバー（育成の遅れている人）
+    const weakest = members.length
+      ? members.slice().sort((a, b) => a.wp - b.wp)[0]
+      : null;
+    // 平均EW Lv
+    const avgWp = members.length
+      ? Math.round(members.reduce((sum, m) => sum + m.wp, 0) / members.length)
+      : 0;
+    return { s, prog, members, weakest, avgWp, filled: members.length };
+  });
+
+  // 10人未満なら非表示
+  const totalFilled = armies.reduce((sum, a) => sum + a.filled, 0);
+  if (totalFilled < 10) {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'block';
+
+  // 控えから昇格候補を検出
+  const benchCandidates = [];
+  for (let p = 1; p <= 10; p++) {
+    const id  = ($id(`h-bench-${p}`) || {}).value;
+    const wp  = parseInt(($id(`w-bench-${p}`) || {}).value) || 0;
+    if (!id || id === 'empty' || !HEROES[id]) continue;
+    // 各軍の最弱メンバーより強い場合に候補
+    armies.forEach(army => {
+      if (!army.weakest) return;
+      if (wp > army.weakest.wp + 5) {
+        benchCandidates.push({
+          id, wp, squad: army.s,
+          weakestId: army.weakest.id,
+          weakestWp: army.weakest.wp,
+          gain: wp - army.weakest.wp,
+        });
+      }
+    });
+  }
+  // 同一(id+squad)で最大gainのみ残す
+  const bestBench = {};
+  benchCandidates.forEach(c => {
+    const key = `${c.id}-${c.squad}`;
+    if (!bestBench[key] || c.gain > bestBench[key].gain) bestBench[key] = c;
+  });
+  const topBench = Object.values(bestBench).sort((a, b) => b.gain - a.gain).slice(0, 3);
+
+  // 部隊間の投資フェーズを判定
+  // 基準：1軍戦力70%以上→2軍投資開始、85%以上→3軍も投資
+  const p1 = armies[0].prog.pct;
+  const p2 = armies[1].prog.pct;
+  const p3 = armies[2].prog.pct;
+
+  let phaseMsg = '';
+  let phaseColor = '#4f46e5';
+  let nextTarget = '';
+
+  // F2P目標基準（100%超えあり）
+  // 80%以上 = EW20前後の現実的な「十分育った」水準
+  // 100%超 = EW20を超えてEW30方向への追加投資中
+  if (p1 >= 80 && p2 >= 65) {
+    phaseMsg = '🥇 1軍・2軍ともに充実。3軍の底上げ、またはEW30への追加投資を検討しましょう';
+    phaseColor = '#059669';
+    nextTarget = '3軍';
+  } else if (p1 >= 80) {
+    phaseMsg = '🥈 1軍がF2P目標水準に到達。2軍の強化を始めるタイミングです';
+    phaseColor = '#2563eb';
+    nextTarget = '2軍';
+  } else if (p1 >= 60) {
+    phaseMsg = '🥇 1軍があと一歩。EW20を目標に育成を続けましょう（80%到達で2軍投資開始の目安）';
+    phaseColor = '#d97706';
+    nextTarget = '1軍';
+  } else {
+    phaseMsg = '🥇 まずは1軍を優先。キム・ウィリアムズのEW20が最初の大きな節目です';
+    phaseColor = '#dc2626';
+    nextTarget = '1軍';
+  }
+
+  const hName = id => (HEROES[id] || {}).n || id;
+
+  // 各軍のボトルネック（最弱メンバー）
+  // 次の節目EW Lvを計算
+  const nextMilestone = wp => wp < 10 ? 10 : wp < 20 ? 20 : wp < 30 ? 30 : null;
+
+  const bottleneckHtml = armies.map(army => {
+    if (!army.weakest || army.filled < 3) return '';
+    const colorMap = { 1:'#10b981', 2:'#3b82f6', 3:'#8b5cf6' };
+    const c = colorMap[army.s];
+    const next = nextMilestone(army.weakest.wp);
+    const nextStr = next ? ` → 次の節目はLv${next}` : ' → EW MAX';
+    return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:28px;">${army.s}軍</span>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;flex-wrap:wrap;">
+          <div style="width:24px;height:24px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+            <img src="img/${army.weakest.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+          </div>
+          <span style="font-size:var(--fs-xs);font-weight:900;color:#374151;">${hName(army.weakest.id)}</span>
+          <span style="font-size:var(--fs-xxs);color:#f97316;font-weight:700;">⚠️ EW Lv${army.weakest.wp}${nextStr}</span>
+        </div>
+        <div style="background:#f1f5f9;border-radius:3px;height:4px;">
+          <div style="background:${c};width:${army.prog.pct}%;height:100%;border-radius:3px;"></div>
+        </div>
+      </div>
+      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:36px;text-align:right;">${army.prog.pct}%</span>
+    </div>`;
+  }).join('');
+
+  // 控えから昇格候補HTML
+  const benchHtml = topBench.length > 0
+    ? `<div style="margin-top:8px;padding:8px 10px;background:#f5f3ff;border-radius:8px;border:1px solid #ddd6fe;">
+        <div style="font-size:var(--fs-xs);font-weight:900;color:#6d28d9;margin-bottom:5px;">⬆️ 控えから昇格候補</div>
+        ${topBench.map(c => `
+          <div style="display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);margin-bottom:3px;">
+            <div style="width:22px;height:22px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+              <img src="img/${c.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+            </div>
+            <span style="font-weight:900;color:#374151;">${hName(c.id)}</span>
+            <span style="color:#94a3b8;">EW${c.wp}</span>
+            <span style="color:#7c3aed;font-weight:700;">→ ${c.squad}軍</span>
+            <span style="font-size:var(--fs-xxs);color:#94a3b8;">（${hName(c.weakestId)} EW${c.weakestWp}と入替候補）</span>
+          </div>`).join('')}
+      </div>`
+    : '';
+
+  result.innerHTML = `
+    <div style="font-size:var(--fs-sm);font-weight:900;color:${phaseColor};margin-bottom:8px;padding:6px 8px;background:${phaseColor}12;border-radius:7px;">${phaseMsg}</div>
+    <div style="font-size:var(--fs-xs);color:#64748b;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度</div>
+    <div style="font-size:var(--fs-xs);font-weight:900;color:#374151;margin-bottom:4px;">📊 各部隊の戦力と育成ボトルネック</div>
+    ${bottleneckHtml}
+    ${benchHtml}
+  `;
 }
 
 function renderProgress(percent, baseColor){
@@ -5026,7 +5287,7 @@ function generateAiSuggestion() {
             el.innerHTML =
               '<div class="row">' +
                 '<div class="tag">' + tagHtml + '</div>' +
-                '<div class="pct">進行度 <span style="color:' + c + ';">' + pct + '%</span></div>' +
+                '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span></div>' +
               '</div>' +
               (buffSpan ? ('<div class="row sub">' + buffSpan + '</div>') : '') +
               '<div class="bar"><div style="width:' + pct + '%; background:' + c + ';"></div></div>';
@@ -6284,8 +6545,8 @@ try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getA
       <div id="awaken-section" style="display:none; margin-top:14px;">
         <div class="awaken-section-title">
           <span style="color:#ef4444;">👑 覚醒システム</span>
-          <span id="awaken-hero-name" style="color:#fde68a;"></span>
-          <span id="awaken-skill-name" style="color:#94a3b8; font-size:var(--fs-sm); font-weight:normal;"></span>
+          <span id="awaken-hero-name" style="color:#b45309;font-weight:900;"></span>
+          <span id="awaken-skill-name" style="color:#92400e; font-size:var(--fs-sm); font-weight:900; background:#fef3c7; border:1px solid #fde68a; border-radius:4px; padding:1px 6px;"></span>
         </div>
         <div id="awaken-req-hint" class="awaken-req-hint" style="display:none;"></div>
         <div id="awaken-star-row" class="awaken-star-row">
