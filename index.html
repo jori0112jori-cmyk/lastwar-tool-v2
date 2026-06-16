@@ -35,14 +35,14 @@
 
     /* === タブUI === */
     .tabs { display: flex; background: #e2e8f0; border-radius: 10px; padding: 4px; margin-bottom: 12px; }
-    .tab-btn { flex: 1; padding: 14px 0; text-align: center; font-size:var(--fs-md); font-weight: 900; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; min-height: 52px; display: flex; align-items: center; justify-content: center; }
+    .tab-btn { flex: 1; padding: 14px 0; text-align: center; font-size:var(--fs-md); font-weight: 900; color:#475569; cursor: pointer; border-radius: 8px; transition: 0.2s; min-height: 52px; display: flex; align-items: center; justify-content: center; }
     .tab-btn.active { background: #fff; color: #2563eb; box-shadow: 0 2px 8px rgba(37,99,235,0.12); font-weight: 900; }
     .tab-content { display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     /* === パネル共通 === */
-    .panel { background: #fff; padding: 14px 14px 16px; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; border: 1px solid #e8edf5; }
+    .panel { background: #fff; padding: 14px 14px 16px; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; border: 1px solid #cbd5e1; }
     .ai-panel { background: linear-gradient(135deg, #ffffff, #f8fafc); border-left: 3px solid #3b82f6; }
     .route-panel { background: linear-gradient(135deg, #ffffff, #fdf4ff); border-left: 3px solid #c026d3; }
     .panel-title { font-weight: 900; font-size: 1.08rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; letter-spacing: 0.01em; }
@@ -69,20 +69,20 @@
     .icon-box { width: 28px; height: 28px; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #475569; }
     .card-select { width: 95%; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px 0; font-size:var(--fs-md); font-weight: bold; margin-bottom: 6px; text-align: center; text-align-last: center; outline: none; -webkit-appearance: none; }
     .card-select option { background: #1e293b; color: #fff; }
-    .card-select optgroup { background: #0f172a; color: #94a3b8; font-weight: bold; }
+    .card-select optgroup { background: #0f172a; color:#475569; font-weight: bold; }
     .card-stepper { display: flex; align-items: center; background: rgba(0,0,0,0.3); border-radius: 4px; width: 95%; }
     .card-stepper button { flex: 1; background: transparent; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
     .card-stepper input { width: 40px; background: transparent; border: none; color: #fff; font-size:var(--fs-md); text-align: center; font-weight: bold; pointer-events: none; white-space: nowrap; }
     
-    .shard-info { color: #fbbf24; height: 22px; display: flex; align-items: center; justify-content: center; letter-spacing: -0.5px; white-space: nowrap; font-weight: 900; margin-top: 2px; }
+    .shard-info { color:#b45309; height: 22px; display: flex; align-items: center; justify-content: center; letter-spacing: -0.5px; white-space: nowrap; font-weight: 900; margin-top: 2px; }
     .shard-icon { width: var(--ui-ico); height: var(--ui-ico); margin: 0 2px; vertical-align: -2px; }
     .awaken-badge { background: linear-gradient(135deg, #b45309, #f59e0b); color: #fff; font-size:var(--fs-sm); font-weight: 900; padding: 1px 6px; border-radius: 12px; border: 1px solid #fde68a; }
     .card-empty { opacity: 0.6; border: 2px dashed #475569 !important; background: rgba(0,0,0,0.2) !important; border-bottom: 2px dashed #475569 !important; }
     .card-ur { border-bottom-color: #a855f7; }
-    .card-tank { border-bottom-color: #f59e0b; }
+    .card-tank { border-bottom-color:#b45309; }
     .card-air { border-bottom-color: #3b82f6; }
     .card-mis { border-bottom-color: #ef4444; }
-    .card-awakened { border-color: #fbbf24 !important; border-bottom: 4px solid #f59e0b !important; box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important; }
+    .card-awakened { border-color:#b45309 !important; border-bottom: 4px solid #f59e0b !important; box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important; }
 
     .advice { font-size:var(--fs-md); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; line-height: 1.5; border-left: 3px solid #cbd5e1; }
     .adv-perfect { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
@@ -114,7 +114,7 @@
     .summary-grid { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
     .summary-title { font-weight:900; color:#0f172a; font-size:var(--fs-lg); }
     .summary-main { font-weight:900; color:#1d4ed8; font-size:var(--fs-lg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
-    .summary-sub { font-size:var(--fs-sm); color:#64748b; font-weight:bold; line-height:1.4; }
+    .summary-sub { font-size:var(--fs-sm); color:#374151; font-weight:700; line-height:1.4; }
     .jump-row { display:flex; gap:8px; margin: 10px 0 14px; flex-wrap:wrap; }
     .jump-btn { flex:1; min-width: 98px; border:none; border-radius: 12px; padding: 10px 10px; font-weight: 900; cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .jump-btn.j1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; }
@@ -127,12 +127,12 @@
 .role-badge {
   display:inline-flex; align-items:center; justify-content:center;
   padding:2px 7px; border-radius:999px; font-weight:900; font-size:var(--fs-xs);
-  color:#334155; line-height:1; border:1px solid #cbd5e1;
+  color:#334155; line-height:1; border:1px solid #94a3b8;
   box-shadow: inset 0 -1px 0 rgba(255,255,255,.45);
 }
-.role-badge.atk { background: #ffedd5; color:#9a3412; border-color:#fdba74; }
-.role-badge.wall { background: #dbeafe; color:#1d4ed8; border-color:#93c5fd; }
-.role-badge.sup { background: #e5e7eb; color:#374151; border-color:#cbd5e1; }
+.role-badge.atk { background: #ffedd5; color:#9a3412; border-color:#c2410c; }
+.role-badge.wall { background: #dbeafe; color:#1d4ed8; border-color:#1d4ed8; }
+.role-badge.sup { background: #e5e7eb; color:#374151; border-color:#475569; }
 
 .role-ico {
   width:var(--ui-ico); height:var(--ui-ico); display:inline-block;
@@ -149,7 +149,7 @@
   display:inline-flex; align-items:center; gap:3px;
   padding:3px 7px; border-radius:20px;
   font-size:var(--fs-xxs); font-weight:700; color:#334155; line-height:1;
-  border:1px solid #cbd5e1;
+  border:1px solid #94a3b8;
   letter-spacing:0.01em;
   white-space:nowrap;
 }
@@ -166,8 +166,8 @@
 .impact-badge.atk         { background:#fff7ed; color:#c2410c; border-color:#fed7aa; }
 .impact-badge.atk.strong  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; font-weight:900; }
 .impact-badge.wall        { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
-.impact-badge.wall.strong { background:#dbeafe; color:#1e40af; border-color:#93c5fd; font-weight:900; }
-.impact-badge.bal         { background:#f1f5f9; color:#475569; border-color:#cbd5e1; }
+.impact-badge.wall.strong { background:#dbeafe; color:#1e40af; border-color:#1d4ed8; font-weight:900; }
+.impact-badge.bal         { background:#f1f5f9; color:#475569; border-color:#475569; }
 .impact-badge.green       { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
 .impact-badge.green.strong{ background:#dcfce7; color:#166534; border-color:#86efac; font-weight:900; }
 .impact-badge.purple      { background:#faf5ff; color:#7c3aed; border-color:#ddd6fe; }
@@ -180,16 +180,16 @@
     .slot-army-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:nowrap; }
 
     .slot-army-head .label { font-weight:900; color:#0f172a; display:flex; align-items:center; gap:6px; }
-    .slot-army-head .hint { font-size:var(--fs-sm); color:#64748b; font-weight:bold; white-space:nowrap; }
+    .slot-army-head .hint { font-size:var(--fs-sm); color:#475569; font-weight:bold; white-space:nowrap; }
     .slot-tiles { display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; padding: 6px 2px 8px; scroll-snap-type:x mandatory; }
     .slot-tile { width:68px; flex:0 0 68px; cursor:pointer; user-select:none; -webkit-tap-highlight-color: transparent; text-align:center; scroll-snap-align:start; }
     .slot-avatar { width:64px; height:64px; border-radius:16px; background:#0f172a; border:2px solid #cbd5e1; position:relative; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
     .slot-avatar img { width:100%; height:100%; object-fit:cover; }
-    .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#cbd5e1; font-weight:900; font-size:var(--fs-md); }
+    .slot-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#475569; font-weight:900; font-size:var(--fs-md); }
     .slot-lv { position:relative; margin-top:-9px; display:inline-block; background:#334155; color:#fff; font-weight:900; font-size:var(--fs-xxs); border-radius:10px; padding:2px 7px; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.2); }
     .slot-name { margin-top:3px; font-size:clamp(0.60rem,2.0vw,0.72rem); line-height:1.1; font-weight:900; color:#0f172a; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1.1em; }
     .slot-empty .slot-avatar { background: rgba(15, 23, 42, 0.06); border: 2px dashed #94a3b8; box-shadow:none; }
-    .slot-empty .slot-fallback { color:#64748b; font-size:1.45rem; }
+    .slot-empty .slot-fallback { color:#475569; font-size:1.45rem; }
     .slot-empty .slot-lv, .slot-empty .slot-name { opacity:0.65; }
 
     /* モーダル */
@@ -222,7 +222,7 @@
     .modal-body { padding:12px 16px; overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
     .modal-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
     .modal-row label { font-weight:900; color:#334155; font-size:var(--fs-lg); white-space:nowrap; }
-    .modal-select { flex:1; padding:11px 12px; border-radius:12px; border:1px solid #cbd5e1; font-weight:900; background:#f8fafc; font-size:var(--fs-md); }
+    .modal-select { flex:1; padding:11px 12px; border-radius:12px; border:1px solid #94a3b8; font-weight:900; background:#f8fafc; font-size:var(--fs-md); }
     .modal-step { display:flex; gap:8px; align-items:center; justify-content:flex-end; }
     .modal-step button { width:52px; height:52px; border:none; border-radius:14px; font-size:1.5rem; font-weight:900; color:#fff; cursor:pointer; box-shadow:0 6px 14px rgba(37,99,235,0.25); background:linear-gradient(135deg,#2563eb,#1d4ed8); }
     .modal-step .val { width:78px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#0f172a; color:#fff; font-weight:900; font-size:1.3rem; }
@@ -524,7 +524,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   white-space:nowrap;
   font-size:var(--fs-md);
   font-weight:900;
-  color:#64748b;
+  color:#475569;
 }
 
 .gear-cost{
@@ -766,7 +766,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   margin-left:4px;
   transform: translateY(2px);
   font-size:18px;
-  color:#64748b;
+  color:#475569;
 }
 
 .eff-title-line{
@@ -784,15 +784,15 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 #eff-result .reinf-visual{width:84px;text-align:center;}
 #eff-result .reinf-chip-row{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;}
 #eff-result .reinf-chip-row .ui-ico{width:14px !important;height:14px !important;}
-#eff-result .reinf-avatar-wrap{width:44px;height:44px;margin:0 auto;border-radius:12px;overflow:hidden;background:#0b1220;box-shadow:0 6px 16px rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;}
+#eff-result .reinf-avatar-wrap{width:42px;height:42px;margin:0 auto;border-radius:10px;overflow:hidden;background:#0b1220;box-shadow:0 2px 8px rgba(0,0,0,.12);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;}
 #eff-result .reinf-avatar-img{width:100%;height:100%;object-fit:cover;display:block;}
 #eff-result .reinf-avatar-fallback{width:100%;height:100%;align-items:center;justify-content:center;background:#0f172a;color:#fff;font-size:var(--fs-xxs);font-weight:900;}
 #eff-result .reinf-name{margin-top:6px;font-size:var(--fs-lg);font-weight:900;color:#1f2937;line-height:1.2;word-break:break-word;}
 #eff-result .reinf-meta{min-width:0;padding-top:4px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
-#eff-result .reinf-lv{font-size:var(--fs-xl);font-weight:900;color:#64748b;line-height:1.2;white-space:nowrap;}
+#eff-result .reinf-lv{font-size:var(--fs-xl);font-weight:900;color:#475569;line-height:1.2;white-space:nowrap;}
 #eff-result .reinf-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
-#eff-result .reinf-subline{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:#64748b;font-size:var(--fs-md);font-weight:900;}
-#eff-result .reinf-gain{font-weight:900;color:#64748b;font-size:var(--fs-xl);line-height:1;}
+#eff-result .reinf-subline{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:#374151;font-size:var(--fs-md);font-weight:900;}
+#eff-result .reinf-gain{font-weight:900;color:#374151;font-size:var(--fs-xl);line-height:1;}
 #eff-result .reinf-cost{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
 #eff-result .reinf-cost-sep{opacity:.65;margin-right:2px;}
 #eff-result .reinf-cost-icon{width:34px;height:34px;flex-shrink:0;}
@@ -810,53 +810,53 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
 
 /* === 育成優先ランキング / 編成補強おすすめ 2段レイアウト === */
-#eff-result .rankhero-card{padding:12px 6px;}
-#eff-result .rankhero-card + .rankhero-card{position:relative;margin-top:10px;padding-top:14px;}
+#eff-result .rankhero-card{padding:8px 4px;}
+#eff-result .rankhero-card + .rankhero-card{position:relative;margin-top:8px;padding-top:12px;}
 #eff-result .rankhero-card + .rankhero-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.55) 18%, rgba(244,114,182,.55) 82%, rgba(244,114,182,0));}
 #eff-result .rankhero-card--split{border-top:none;margin-top:0;}
 #eff-result #eff-more-list[data-open="1"]{position:relative;margin-top:14px !important;padding-top:16px;}
 #eff-result #eff-more-list[data-open="1"]::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.55) 18%, rgba(244,114,182,.55) 82%, rgba(244,114,182,0));}
 
-#eff-result .rankhero-card--best{background:#fff7ed;border:1px solid #fdba74;box-shadow:0 2px 8px rgba(0,0,0,.06);border-radius:12px;padding:12px 10px;}
-#eff-result .rankhero-row{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:12px;}
-#eff-result .rankhero-visual{width:96px;text-align:center;}
+#eff-result .rankhero-card--best{background:#fff7ed;border:1px solid #f97316;box-shadow:0 2px 8px rgba(0,0,0,.06);border-radius:12px;padding:10px 8px;}
+#eff-result .rankhero-row{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:10px;}
+#eff-result .rankhero-visual{width:72px;text-align:center;}
 #eff-result .rankhero-chip-row{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px;}
 #eff-result .rankhero-chip-row .ui-ico{width:14px !important;height:14px !important;}
-#eff-result .rankhero-avatar-wrap{width:48px;height:48px;margin:0 auto;border-radius:12px;overflow:hidden;background:#0b1220;box-shadow:0 4px 12px rgba(0,0,0,.15);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;}
+#eff-result .rankhero-avatar-wrap{width:42px;height:42px;margin:0 auto;border-radius:10px;overflow:hidden;background:#0b1220;box-shadow:0 2px 8px rgba(0,0,0,.12);border:2px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;}
 #eff-result .rankhero-avatar-img{width:100%;height:100%;object-fit:cover;display:block;}
 #eff-result .rankhero-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1e293b;color:#fff;font-size:.72rem;font-weight:900;}
-#eff-result .rankhero-name{margin-top:6px;font-size:var(--fs-lg);font-weight:900;color:#1f2937;line-height:1.2;white-space:nowrap;overflow:visible;text-overflow:clip;}
+#eff-result .rankhero-name{margin-top:4px;font-size:var(--fs-md);font-weight:900;color:#1f2937;line-height:1.3;white-space:normal;overflow:visible;word-break:keep-all;}
 #eff-result .rankhero-best{margin-top:3px;font-size:.66rem;font-weight:900;color:#92400e;line-height:1;}
-#eff-result .rankhero-body{min-width:0;display:flex;flex-direction:column;gap:8px;justify-content:center;}
-#eff-result .rankhero-topline{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;}
-#eff-result .rankhero-lv{font-size:var(--fs-xl);font-weight:900;color:#64748b;line-height:1.2;white-space:nowrap;flex:0 1 auto;}
+#eff-result .rankhero-body{min-width:0;display:flex;flex-direction:column;gap:4px;justify-content:center;}
+#eff-result .rankhero-topline{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}
+#eff-result .rankhero-lv{font-size:var(--fs-md);font-weight:900;color:#1f2937;line-height:1.2;white-space:nowrap;flex:0 1 auto;}
 #eff-result .rankhero-topbadge{display:flex;justify-content:flex-end;flex:0 0 auto;}
 #eff-result .rankhero-bottomline{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;}
 #eff-result .rankhero-leftline{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap;}
-#eff-result .rankhero-gain{font-weight:900;color:#64748b;font-size:var(--fs-xl);line-height:1;display:block;margin-top:0;white-space:nowrap;}
+#eff-result .rankhero-gain{font-weight:900;color:#374151;font-size:var(--fs-xl);line-height:1;display:block;margin-top:0;white-space:nowrap;}
 #eff-result .rankhero-costwrap{display:flex;justify-content:flex-end;align-items:center;flex:0 0 auto;}
-#eff-result .rankhero-cost{display:inline-flex;align-items:center;gap:4px;min-width:104px;justify-content:flex-end;padding:3px 8px;border-radius:12px;box-sizing:border-box;background:#fff7ed;border:1px solid #fdba74;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+#eff-result .rankhero-cost{display:inline-flex;align-items:center;gap:3px;min-width:80px;justify-content:flex-end;padding:2px 6px;border-radius:8px;box-sizing:border-box;background:#fff7ed;border:1px solid #f97316;box-shadow:0 1px 2px rgba(0,0,0,.06);}
 #eff-result .rankhero-cost-sep{opacity:.65;margin-right:2px;color:#c2410c;font-weight:900;}
-#eff-result .rankhero-cost-icon{width:34px;height:34px;flex-shrink:0;}
-#eff-result .rankhero-cost-num{min-width:40px;text-align:right;font-size:1.1em;font-weight:900;font-variant-numeric:tabular-nums;color:#9a3412;}
+#eff-result .rankhero-cost-icon{width:20px;height:20px;flex-shrink:0;}
+#eff-result .rankhero-cost-num{min-width:32px;text-align:right;font-size:var(--fs-md);font-weight:900;font-variant-numeric:tabular-nums;color:#9a3412;}
 #eff-result .rankhero-mini{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-weight:900;font-size:var(--fs-xxs);line-height:1.2;border:1px solid transparent;white-space:nowrap;}
-#eff-result .rankhero-mini--cost{background:#dbeafe;color:#1e3a8a;border-color:#93c5fd;}
+#eff-result .rankhero-mini--cost{background:#dbeafe;color:#1e3a8a;border-color:#1d4ed8;}
 #eff-result .rankhero-mini--safe{background:#dcfce7;color:#166534;border-color:#86efac;}
 
 @media (max-width: 640px){
-  #eff-result .rankhero-row{grid-template-columns:96px minmax(0,1fr);gap:8px;}
-  #eff-result .rankhero-visual{width:96px;}
-  #eff-result .rankhero-chip-row .ui-ico{width:18px !important;height:18px !important;}
-  #eff-result .rankhero-avatar-wrap{width:48px;height:48px;border-radius:13px;}
-  #eff-result .rankhero-name{font-size:var(--fs-lg);white-space:nowrap;overflow:visible;text-overflow:clip;}
+  #eff-result .rankhero-row{grid-template-columns:72px minmax(0,1fr);gap:8px;}
+  #eff-result .rankhero-visual{width:72px;}
+  #eff-result .rankhero-chip-row .ui-ico{width:14px !important;height:14px !important;}
+  #eff-result .rankhero-avatar-wrap{width:42px;height:42px;border-radius:10px;}
+  #eff-result .rankhero-name{font-size:var(--fs-sm);white-space:normal;overflow:visible;}
   #eff-result .rankhero-best{font-size:.6rem;}
-  #eff-result .rankhero-lv{font-size:var(--fs-xl);}
+  #eff-result .rankhero-lv{font-size:var(--fs-md);}
   #eff-result .rankhero-gain{font-size:var(--fs-xl);}
   #eff-result .rankhero-topline{gap:8px;}
   #eff-result .rankhero-bottomline{gap:8px;}
-  #eff-result .rankhero-cost{min-width:104px;padding:3px 8px;}
-  #eff-result .rankhero-cost-icon{width:34px;height:34px;}
-  #eff-result .rankhero-cost-num{min-width:40px;font-size:1.1em;}
+  #eff-result .rankhero-cost{min-width:80px;padding:2px 6px;}
+  #eff-result .rankhero-cost-icon{width:20px;height:20px;}
+  #eff-result .rankhero-cost-num{min-width:32px;font-size:var(--fs-md);}
 }
 
 
@@ -1003,7 +1003,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   /* panel-title のデフォルト margin を避けて、▼の縦位置を上（他と同じ）に揃える */
   .power-transition-title{
     font-weight:900;
-    color:#f59e0b;
+    color:#b45309;
     margin:0;
     line-height:1.2;
   }
@@ -1017,7 +1017,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .ucard {
   background: #fff;
   border-radius: 14px;
-  border: 1px solid #e8edf5;
+  border: 1px solid #cbd5e1;
   padding: 13px 13px 12px;
   margin-bottom: 8px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 3px 8px rgba(0,0,0,0.03);
@@ -1025,7 +1025,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 .ucard--best {
   background: linear-gradient(135deg, #fffbeb, #fff);
-  border-color: #f59e0b;
+  border-color:#b45309;
   box-shadow: 0 2px 10px rgba(245,158,11,0.18);
 }
 .ucard--awaken {
@@ -1063,7 +1063,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   object-fit: cover;
   display: block;
 }
-.ucard--best .ucard-avatar-img  { border-color: #f59e0b; }
+.ucard--best .ucard-avatar-img  { border-color:#b45309; }
 .ucard--awaken .ucard-avatar-img { border-color: #ef4444; }
 .ucard--swap .ucard-avatar-img   { border-color: #8b5cf6; }
 
@@ -1071,7 +1071,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .ucard-rank {
   font-size:var(--fs-xxs);
   font-weight: 900;
-  color: #94a3b8;
+  color:#475569;
   text-align: center;
   margin-bottom: 2px;
   line-height: 1;
@@ -1150,7 +1150,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 .ucard-cost-label {
   font-size:var(--fs-xxs);
-  color: #94a3b8;
+  color:#475569;
   font-weight: 700;
 }
 
@@ -1278,7 +1278,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .panel-title   { font-size: var(--fs-xl); }
 .rankhero-name { font-size: var(--fs-lg); }
 .rankhero-summary { font-size: var(--fs-sm); }
-.advice        { font-size: var(--fs-sm); }
+.advice        { font-size: var(--fs-sm); color: #374151; }
 .suggestion-box { font-size: var(--fs-sm); }
 .weak-badge .t  { font-size: var(--fs-sm); }
 .impact-badge   { font-size: var(--fs-xxs); }
@@ -1296,7 +1296,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 /* キャラ選択セレクト */
 .modal-hero-select {
   width:78px; font-size:var(--fs-lg); padding:4px 8px;
-  border-radius:6px; border:1px solid #cbd5e1;
+  border-radius:6px; border:1px solid #94a3b8;
   background:#fff; font-weight:bold; color:#0f172a; outline:none;
 }
 /* 兵種移行ラベル */
@@ -1305,7 +1305,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .trans-note-orange { margin-top:8px; font-size:var(--fs-sm); color:#7c2d12; background:#fff7ed; padding:7px 9px; border-radius:7px; border-left:3px solid #f97316; line-height:1.6; }
 /* EW説明ヒント */
 .modal-ew-hint {
-  margin-top:8px; font-size:var(--fs-md); color:#64748b;
+  margin-top:8px; font-size:var(--fs-md); color:#475569;
   font-weight:bold; background:#f8fafc; border:1px solid #e2e8f0;
   padding:8px 10px; border-radius:10px; line-height:1.4;
 }
@@ -1323,7 +1323,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 /* 覚醒セクションタイトル */
 .awaken-section-title {
-  font-weight:900; color:#f59e0b; font-size:var(--fs-lg);
+  font-weight:900; color:#b45309; font-size:var(--fs-lg);
   margin-bottom:6px; display:flex; align-items:center;
   gap:6px; flex-wrap:wrap;
 }
@@ -1340,25 +1340,25 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 /* 兵種バッジ（pill型） */
 .pill-badge-red   { display:inline-flex; align-items:center; gap:6px; background:#fff1f2; border:1px solid #fecdd3; color:#be123c; padding:2px 10px; border-radius:999px; font-weight:900; font-size:var(--fs-sm); }
-.pill-badge-gray  { display:inline-flex; align-items:center; gap:6px; background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; padding:2px 10px; border-radius:999px; font-weight:900; font-size:var(--fs-sm); }
+.pill-badge-gray  { display:inline-flex; align-items:center; gap:6px; background:#f1f5f9; border:1px solid #94a3b8; color:#334155; padding:2px 10px; border-radius:999px; font-weight:900; font-size:var(--fs-sm); }
 /* 入れ替え診断 buff/aw テキスト */
 
 /* JS生成HTML用クラス */
 .pill-badge-amber { color:#92400e; background:#fffbeb; padding:3px 7px; border-radius:6px; border:1px solid #fde68a; font-size:var(--fs-sm); display:inline-block; }
-.select-lv-blue   { font-size:var(--fs-lg); padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; font-weight:bold; color:#1d4ed8; outline:none; }
+.select-lv-blue   { font-size:var(--fs-lg); padding:4px 8px; border-radius:6px; border:1px solid #94a3b8; background:#fff; font-weight:bold; color:#1d4ed8; outline:none; }
 .gear-save-panel  { width:min(520px,100%); background:#fff; border-radius:16px 16px 0 0; padding:14px; box-shadow:0 -10px 30px rgba(0,0,0,0.18); }
 .avatar-dark      { width:44px; height:44px; border-radius:12px; background:#0b1220; overflow:hidden; flex-shrink:0; }
 .trans-note-green2 { margin-top:8px; font-size:var(--fs-sm); color:#065f46; background:#ecfdf5; padding:6px 9px; border-radius:7px; border-left:3px solid #10b981; }
 .best-card-box    { margin-top:12px; background:#fff7ed; border:1px solid #fdba74; padding:12px; border-radius:10px; }
 .gear-save-btn    { margin-top:10px; width:100%; background:#fff; border:1px solid #fbcfe8; color:#a21caf; font-weight:900; padding:10px; border-radius:10px; cursor:pointer; }
-.footnote-tip     { margin-top:10px; font-size:var(--fs-xs); color:#94a3b8; font-weight:800; line-height:1.45; }
-.awaken-can-badge { font-size:var(--fs-xxs); color:#f59e0b; background:rgba(245,158,11,0.12); border:1px solid #78350f; border-radius:6px; padding:1px 5px; margin-left:4px; font-weight:900; }
+.footnote-tip     { margin-top:10px; font-size:var(--fs-xs); color:#475569; font-weight:800; line-height:1.45; }
+.awaken-can-badge { font-size:var(--fs-xxs); color:#b45309; background:rgba(245,158,11,0.12); border:1px solid #78350f; border-radius:6px; padding:1px 5px; margin-left:4px; font-weight:900; }
 .awaken-tier-badge{ font-size:var(--fs-xs); font-weight:900; color:#ef4444; margin-left:3px; flex-shrink:0; }
 .awaken-ms-badge  { font-size:var(--fs-xs); font-weight:900; color:#ef4444; background:#fff1f2; border:1px solid #fecaca; border-radius:5px; padding:2px 6px; flex-shrink:0; white-space:nowrap; }
 .synergy-badge    { font-size:var(--fs-xs); color:#7c3aed; background:#f5f3ff; border-radius:5px; padding:2px 7px; font-weight:700; }
-.btn-sm-gray      { font-size:var(--fs-sm); background:#fff; border:1px solid #cbd5e1; border-radius:4px; cursor:pointer; padding:3px 8px; font-weight:bold; color:#64748b; }
+.btn-sm-gray      { font-size:var(--fs-sm); background:#fff; border:1px solid #94a3b8; border-radius:4px; cursor:pointer; padding:3px 8px; font-weight:bold; color:#475569; }
 .meta-tag         { font-size:var(--fs-md); color:#4b5563; background:#f8fafc; padding:4px 10px; border-radius:12px; border:1px solid #e2e8f0; font-weight:bold; }
-.btn-md-gray      { font-size:var(--fs-md); background:#fff; color:#64748b; border:1px solid #cbd5e1; padding:8px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
+.btn-md-gray      { font-size:var(--fs-md); background:#fff; color:#475569; border:1px solid #94a3b8; padding:8px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -1405,7 +1405,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         <!-- 推奨編成テンプレート（育成アドバイスの直下） -->
         <div id="preset-panel" class="panel" style="border-left:3px solid #f59e0b;display:none;">
           <div class="panel-title" style="color:#d97706;">📋 推奨編成テンプレート</div>
-          <div style="font-size:var(--fs-sm);color:#64748b;margin-bottom:8px;">コミュニティ検証済みの編成をワンタップで反映（packsify/allclash参照）</div>
+          <div style="font-size:var(--fs-sm);color:#475569;margin-bottom:8px;">コミュニティ検証済みの編成をワンタップで反映（packsify/allclash参照）</div>
           <div id="preset-list" style="display:flex;flex-direction:column;gap:6px;"></div>
         </div>
 
@@ -1579,15 +1579,15 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
         <div class="suggestion-box" style="font-size:var(--fs-lg);">
             <div style="margin-bottom:8px;">
                 <a href="https://game8.jp/lastwar-survival" target="_blank" rel="noopener noreferrer" style="font-weight:900; color:#2563eb; text-decoration:none;">Game8（ラストウォー攻略）</a><br>
-                <span style="color:#64748b;">キャラ/装備/イベントなどの基本情報をざっと確認したい時に便利。</span>
+                <span style="color:#475569;">キャラ/装備/イベントなどの基本情報をざっと確認したい時に便利。</span>
             </div>
             <div style="margin-bottom:8px;">
                 <a href="https://cpt-hedge.com/" target="_blank" rel="noopener noreferrer" style="font-weight:900; color:#2563eb; text-decoration:none;">cpt-hedge.com</a><br>
-                <span style="color:#64748b;">育成/効率系の情報収集に。更新頻度も高め。</span>
+                <span style="color:#475569;">育成/効率系の情報収集に。更新頻度も高め。</span>
             </div>
             <div>
                 <a href="https://alliance-duel.pages.dev/" target="_blank" rel="noopener noreferrer" style="font-weight:900; color:#2563eb; text-decoration:none;">連盟対決ツール（自作）</a><br>
-                <span style="color:#64748b;">連盟対決のポイント計算。</span>
+                <span style="color:#475569;">連盟対決のポイント計算。</span>
             </div>
         </div>
     </div>
@@ -1596,7 +1596,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 
 <div id="footer-bar" class="footer" style="display:none;">
     <div style="font-size:var(--fs-xl); font-weight:900; color:#b91c1c;">今より <span id="growth-rate" style="font-size:1.4rem;">1.00</span> 倍!</div>
-    <div class="meta-tag">必要: <span style="color:#f59e0b;">UR<span id="ft-ur">0</span></span> <span style="color:#b91c1c;">MR<span id="ft-mr">0</span></span></div>
+    <div class="meta-tag">必要: <span style="color:#b45309;">UR<span id="ft-ur">0</span></span> <span style="color:#b91c1c;">MR<span id="ft-mr">0</span></span></div>
 </div>
 
 <script>
@@ -2713,7 +2713,7 @@ function updateSlotEvalsFromCurrentInputs(){
     el.innerHTML =
       '<div class="row">' +
         '<div class="tag">' + label + '</div>' +
-        '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:2px;">' + pctNote + '</span></div>' +
+        '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span><span style="font-size:0.65rem;color:#475569;margin-left:2px;">' + pctNote + '</span></div>' +
       '</div>' +
       (buffSpan ? ('<div class="row sub">' + buffSpan + '</div>') : '') +
       '<div class="bar"><div style="width:' + pct + '%; background:' + c + ';"></div></div>';
@@ -2944,14 +2944,14 @@ function updateTransitionRecommendationUI(){
     return `<div style="background:#fff;border:1px solid ${isBest?'#f59e0b':'#e8edf5'};border-radius:12px;padding:12px;margin-bottom:8px;${isBest?'box-shadow:0 2px 8px rgba(245,158,11,0.15);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
         <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
-          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">✨ 推奨</span>':`<span style="font-size:var(--fs-xxs);color:#94a3b8;font-weight:700;">${rank}番目</span>`}
+          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">✨ 推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;">${rank}番目</span>`}
           <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">${labels[t]}軸</span>
           <span style="font-size:var(--fs-xxs);font-weight:700;color:${d.buffCount>=5?'#059669':d.buffCount>=4?'#d97706':'#94a3b8'};">${buffBadge}</span>
         </div>
         <span style="font-size:var(--fs-md);font-weight:900;color:${c};">${pct}%</span>
       </div>
       ${actionTxt?`<div style="font-size:var(--fs-sm);margin-bottom:3px;">${actionTxt}</div>`:''}
-      <div style="font-size:var(--fs-xs);color:#64748b;margin-bottom:3px;">控え補充候補：${benchTxt}</div>
+      <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:3px;">控え補充候補：${benchTxt}</div>
       ${memo?`<div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">${memo}</div>`:''}
       <div style="background:#f1f5f9;border-radius:4px;height:4px;margin-top:5px;">
         <div style="background:${c};width:${pct}%;height:100%;border-radius:4px;"></div>
@@ -2977,7 +2977,7 @@ function updateTransitionRecommendationUI(){
           最低：キム★0-1解放済み＋DVA★0-1解放済み　理想：キム★3-0＋DVA★3-0
         </span>
       </div>
-      <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:4px;">
+      <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
         構成例：ウィリアムズ+マーフィ（前衛）+キム+DVA+マーシャル
       </div>
     </div>` : '';
@@ -2985,11 +2985,11 @@ function updateTransitionRecommendationUI(){
   body.innerHTML = `
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
       <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">🎯 ${squadLabel[nextSquad]}の推奨兵種</span>
-      <span style="font-size:var(--fs-xxs);color:#94a3b8;">手持ち＋控えから算出 / EW20基準</span>
+      <span style="font-size:var(--fs-xxs);color:#475569;">手持ち＋控えから算出 / EW20基準</span>
     </div>
     ${mixedCard}
     ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
-    <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:4px;">
+    <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
       ※ 達成率は最もスコアが高い兵種を100%として相対比較。兵種バフ表示は手持ち＋控えで達成可能な目標値です。
     </div>
   `;
@@ -3094,34 +3094,34 @@ function effTitleLine(rank, item){
       .eff-left{ line-height:1.4; min-width:0; }
       .eff-right{ display:flex; flex-direction:column; align-items:flex-end; text-align:right; gap:6px; flex-shrink:0; }
       .eff-sub{ display:flex; justify-content:flex-end; width:100%; }
-      .eff-subline{ display:inline-flex; align-items:center; gap:6px; white-space:nowrap; color:#64748b; font-size:var(--fs-md); font-weight:900; }
+      .eff-subline{ display:inline-flex; align-items:center; gap:6px; white-space:nowrap; color:#475569; font-size:var(--fs-md); font-weight:900; }
       .eff-plus{ font-weight:900; }
       .gear-cost{ display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
       .gear-cost img{ width:36px; height:36px; flex-shrink:0; }
       .gear-num{ font-size:1.15em; font-weight:900; }
       .gear-cost .sep{ opacity:.65; margin-right:2px; }
       .rankhero-topbadge{ display:flex; align-items:flex-start; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
-      .rankhero-pinbtn{ appearance:none; border:1px solid #d1d5db; background:#fff; color:#94a3b8; border-radius:999px; width:24px; height:24px; min-width:24px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:900; line-height:1; cursor:pointer; transform:translateY(-3px); }
-      .rankhero-pinbtn.is-active{ background:#fff7ed; border-color:#fdba74; color:#c2410c; border-radius:10px; width:auto; min-width:34px; padding:0 8px; }
+      .rankhero-pinbtn{ appearance:none; border:1px solid #d1d5db; background:#fff; color:#475569; border-radius:999px; width:24px; height:24px; min-width:24px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:900; line-height:1; cursor:pointer; transform:translateY(-3px); }
+      .rankhero-pinbtn.is-active{ background:#fff7ed; border-color:#c2410c; color:#c2410c; border-radius:10px; width:auto; min-width:34px; padding:0 8px; }
       .hold-pin-summary{ margin:0 0 10px; padding:10px; border:1px dashed #fbcfe8; border-radius:10px; background:#fff; }
       .hold-pin-title{ font-size:var(--fs-md); font-weight:900; color:#a21caf; margin-bottom:6px; }
       .hold-pin-list{ display:flex; flex-wrap:wrap; gap:6px; }
       .hold-pin-chip{ appearance:none; border:1px solid #fdba74; background:#fff7ed; color:#c2410c; border-radius:999px; padding:5px 10px; font-size:.74rem; font-weight:900; cursor:pointer; }
-      .rankhero-reasons{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+      .rankhero-reasons{ display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
       .rankhero-card--split,
       .reinf-card + .reinf-card{ position:relative; margin-top:14px; padding-top:16px; }
       .rankhero-card--split::before,
       .reinf-card + .reinf-card::before{ content:''; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.42) 12%, rgba(244,114,182,.42) 88%, rgba(244,114,182,0)); }
-      .reason-badge{ display:inline-flex; align-items:center; border-radius:999px; padding:3px 8px; font-size:.70rem; font-weight:900; line-height:1.2; border:1px solid transparent; white-space:nowrap; }
-      .reason-badge--neutral{ background:#f1f5f9; color:#475569; border-color:#cbd5e1; }
+      .reason-badge{ display:inline-flex; align-items:center; border-radius:999px; padding:2px 6px; font-size:var(--fs-xxs); font-weight:700; line-height:1.2; border:1px solid transparent; white-space:nowrap; }
+      .reason-badge--neutral{ background:#f1f5f9; color:#475569; border-color:#475569; }
       .reason-badge--accent{ background:#e0e7ff; color:#3730a3; border-color:#a5b4fc; }
       .reason-badge--good{ background:#ecfdf5; color:#047857; border-color:#a7f3d0; }
-      .reason-badge--warn{ background:#fff7ed; color:#c2410c; border-color:#fdba74; }
+      .reason-badge--warn{ background:#fff7ed; color:#c2410c; border-color:#c2410c; }
       .reason-badge--attack{ background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
       .reason-badge--defense{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
       .reason-badge--support{ background:#faf5ff; color:#7e22ce; border-color:#e9d5ff; }
       .reason-badge--future{ background:#ede9fe; color:#5b21b6; border-color:#c4b5fd; font-weight:900; }
-      .rankhero-summary{ margin-top:6px; font-size:var(--fs-xs); line-height:1.45; color:#6b7280; }
+      .rankhero-summary{ margin-top:5px; font-size:var(--fs-sm); line-height:1.5; color:#374151; }
     `;
     document.head.appendChild(st);
   }catch(e){}
@@ -3225,16 +3225,17 @@ function topRankCardHtml(rank, item, opts){
             <img class="rankhero-avatar-img" src="${getHeroImagePath(safeItem.id || safeItem.key || safeItem.heroId || '')}" alt="${safeItem.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <span class="rankhero-avatar-fallback" style="display:none;">${typeIcon(safeItem.type)}</span>
           </span>
-          <div class="rankhero-name">${rank}. ${safeItem.name}${(()=>{
+          <div class="rankhero-name">${rank}. ${safeItem.name}</div>
+          ${(()=>{
             if(typeof AWAKENING_HEROES==='undefined') return '';
             const awData = AWAKENING_HEROES[safeItem.id||safeItem.key||safeItem.heroId||''];
             if(!awData) return '';
             const awTierStr = loadAwTier(safeItem.id||safeItem.key||safeItem.heroId||'');
             const awAt = (typeof parseAwTier!=='undefined') ? parseAwTier(awTierStr) : {star:-1,tier:0};
-            if(awAt.star < 0) return '<span class="awaken-can-badge">覚醒可</span>';
-            const tl = awAt.tier === 0 ? ('覚醒★' + awAt.star) : ('覚醒★' + awAt.star + '-' + awAt.tier);
-            return '<span class="awaken-badge-star" style="margin-left:4px;font-size:var(--fs-xxs);">' + tl + '</span>';
-          })()}</div>
+            if(awAt.star < 0) return '<span class="awaken-can-badge" style="display:inline-block;margin-top:2px;">覚醒可</span>';
+            const tl = awStarLabel(awAt);
+            return '<span style="display:inline-block;margin-top:2px;font-size:var(--fs-xxs);color:#b45309;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;font-weight:900;">' + tl + '</span>';
+          })()}
         </div>
 
         <div class="rankhero-body">
@@ -3401,7 +3402,7 @@ function renderPresetPanel() {
       <!-- F2P注意点 -->
       ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
       <!-- 英雄アイコン -->
-      <div style="font-size:var(--fs-xxs);color:#f59e0b;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
+      <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         ${p.squad.map(m => {
           const h = HEROES[m.id]||{};
@@ -3411,11 +3412,11 @@ function renderPresetPanel() {
             +'</div>'
             +'<span style="font-size:0.62rem;font-weight:900;color:#111827;text-align:center;line-height:1.2;word-break:keep-all;width:100%;">'+(h.n||m.id)+'</span>'
             +'<span style="font-size:var(--fs-xxs);color:#2563eb;font-weight:700;text-align:center;">目標EW'+m.wp+'</span>'
-            +(m.note ? '<span style="font-size:0.58rem;color:#94a3b8;text-align:center;line-height:1.2;">'+m.note+'</span>' : '')
+            +(m.note ? '<span style="font-size:0.58rem;color:#475569;text-align:center;line-height:1.2;">'+m.note+'</span>' : '')
             +'</div>';
         }).join('')}
       </div>
-      <div style="margin-top:6px;font-size:var(--fs-xxs);color:#94a3b8;">📖 出典: ${p.source}</div>
+      <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
     </div>
   `).join('');
 }
@@ -3581,7 +3582,7 @@ function updateSquad(s) {
             if (v >= 30) {
                 $id(`syn-${s}-${p}`).innerHTML = `<div class="awaken-badge">👑 覚醒</div>`;
             } else if (v === 0 && !h.ur) {
-                $id(`syn-${s}-${p}`).innerHTML = `<span class="shard-info" style="color:#94a3b8; font-size:var(--fs-md);">未解放</span>`;
+                $id(`syn-${s}-${p}`).innerHTML = `<span class="shard-info" style="color:#475569; font-size:var(--fs-md);">未解放</span>`;
                 actPool.push({ p:p, h:h, wp:v });
             } else if (v > 0) { 
                 let ms = getNextMilestone(v);
@@ -5124,16 +5125,16 @@ function updateArmyGuide() {
               <img src="img/${c.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
             </div>
             <span style="font-weight:900;color:#374151;">${hName(c.id)}</span>
-            <span style="color:#94a3b8;">EW${c.wp}</span>
+            <span style="color:#475569;">EW${c.wp}</span>
             <span style="color:#7c3aed;font-weight:700;">→ ${c.squad}軍</span>
-            <span style="font-size:var(--fs-xxs);color:#94a3b8;">（${hName(c.weakestId)} EW${c.weakestWp}と入替候補）</span>
+            <span style="font-size:var(--fs-xxs);color:#475569;">（${hName(c.weakestId)} EW${c.weakestWp}と入替候補）</span>
           </div>`).join('')}
       </div>`
     : '';
 
   result.innerHTML = `
     <div style="font-size:var(--fs-sm);font-weight:900;color:${phaseColor};margin-bottom:8px;padding:6px 8px;background:${phaseColor}12;border-radius:7px;">${phaseMsg}</div>
-    <div style="font-size:var(--fs-xs);color:#64748b;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度</div>
+    <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度</div>
     <div style="font-size:var(--fs-xs);font-weight:900;color:#374151;margin-bottom:4px;">📊 各部隊の戦力と育成ボトルネック</div>
     ${bottleneckHtml}
     ${benchHtml}
@@ -5366,7 +5367,7 @@ if(effData.normal.length > 0){
     // 専用武装育成候補セクション削除（S6以降は育成ランキングに統合済み）
     // unlock英雄はnormalResultsに自動混在して評価される
 
-    $id('eff-result').innerHTML = effOut || "<div style='color:#64748b; font-size:var(--fs-lg);'>強化可能なキャラがいません。</div>";
+    $id('eff-result').innerHTML = effOut || "<div style='color:#475569; font-size:var(--fs-lg);'>強化可能なキャラがいません。</div>";
 
     // -------------------------------------------------------
     // 覚醒ランキングパネルを描画
@@ -5641,7 +5642,7 @@ function renderAwakenRanking(awakenResults) {
         </div>`;
     });
 
-    result.innerHTML = html || '<div style="color:#64748b;font-size:var(--fs-lg);">覚醒対象英雄が見つかりません。</div>';
+    result.innerHTML = html || '<div style="color:#374151;font-size:var(--fs-lg);">覚醒対象英雄が見つかりません。</div>';
 }
 
 function applyMultiArmy() {
@@ -6111,7 +6112,7 @@ function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
             html += `<div style="color:#475569;">+${awGain}pt / 換算${awCost}強化石</div>`;
             html += `<div style="background:#e2e8f0;border-radius:4px;height:6px;margin-top:4px;"><div style="background:${winner==='awaken'?'#ef4444':'#94a3b8'};width:${awBar}%;height:100%;border-radius:4px;"></div></div>`;
         } else {
-            html += `<div style="color:#94a3b8;">（覚醒MAX or 前提未達）</div>`;
+            html += `<div style="color:#475569;">（覚醒MAX or 前提未達）</div>`;
         }
         html += `</div>`;
         html += `</div>`;
@@ -6559,7 +6560,7 @@ try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getA
         <!-- EW vs 覚醒 優先度判定 -->
         <details id="ew-vs-awaken-details" style="margin-top:10px; display:none;">
           <summary style="cursor:pointer; font-size:var(--fs-md); font-weight:900; color:#334155; padding:6px 10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; list-style:none; display:flex; align-items:center; justify-content:space-between;">
-            ⚖️ EW強化 vs 覚醒 優先度 <span style="color:#94a3b8;font-size:var(--fs-xs);">▼ タップで展開</span>
+            ⚖️ EW強化 vs 覚醒 優先度 <span style="color:#374151;font-size:var(--fs-xs);">▼ タップで展開</span>
           </summary>
           <div id="ew-vs-awaken-panel" class="ew-vs-aw-body"></div>
         </details>
