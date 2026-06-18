@@ -500,15 +500,15 @@ const HERO_WEAPON_TAGS = {
 // ===============================
 const REASON_LABELS = {
   policy: {
-    build_main: "現状維持OK",
-    hold: "現状維持OK",
-    seed: "次兵種準備",
-    seed_air: "航空種まき",
-    seed_mis: "ロケラン種まき",
-    shift: "本格移行",
-    shift_air: "航空移行",
-    shift_mis: "ロケラン移行",
-    full_shift: "兵種移行"
+    build_main: "主力編成の強化",
+    hold: "今の編成で活躍",
+    seed: "次世代の布石",
+    seed_air: "航空の布石",
+    seed_mis: "ロケランの布石",
+    shift: "移行を加速",
+    shift_air: "航空シフト中",
+    shift_mis: "ロケランシフト中",
+    full_shift: "兵種完全移行"
   },
   efficiency: {
     low_cost: "省コスト",
@@ -2171,10 +2171,13 @@ function growthBadge(g){
     const labelColorMap = {
         '火力補強':   'atk',   '主力強化':  'atk',   '弱点補強':  'atk',
         '防御補強':   'wall',  '耐久補強':  'wall',  '編成強化':  'wall',
-        '安定強化':   'bal',   '現状維持OK':'bal',
+        'バランス良く強化': 'bal', '今の編成で活躍':'bal', '主力編成の強化':'bal',
         '即戦力UP':   'green', 'コスパ◎':  'green',
-        '効果★★★':  'green strong', '効果★★': 'green',
-        '将来有望':   'purple',
+        '低コストで戦力UP': 'green', '主力に成長': 'atk',
+        '火力が大幅UP': 'atk strong', '耐久が大幅UP': 'wall strong', '支援力が大幅UP': 'bal strong',
+        '耐久アップ': 'wall', '支援力アップ': 'bal',
+        '長期投資向き': 'purple',
+        '無理なく強化': 'bal',
         '👑 覚醒':   'purple strong',
     };
 
@@ -2280,12 +2283,12 @@ function __summaryImpactKey(item){
   const role  = item.roleKey || '';
 
   // 1. ラベルによる明示的な分類（最優先）
-  if(label === '安定強化' || label === '編成強化') return 'stability';
+  if(label === 'バランス良く強化' || label === '編成強化') return 'stability';
   if(label === '支援強化') return 'support';
   if(label === '後衛火力') return 'subdps';
   if(label === '爆発力')   return 'burst';
   if(label === '即戦力UP' || label === 'コスパ◎') return 'immediate';
-  if(label === '将来有望') return 'future';
+  if(label === '長期投資向き') return 'future';
   if(label === '火力補強' || label === '主力強化') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : 'carry';
   if(label === '防御補強' || label === '耐久補強') return 'tankiness';
   if(label === '弱点補強') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : role === 'atk' ? 'subdps' : 'stability';
@@ -2889,7 +2892,7 @@ function __aiReasonBadgeFromScores(meta){
     return '弱点補強';
   }
 
-  let label = '安定強化';
+  let label = 'バランス良く強化';
   let axis = 'bal';
   let strong = false;
 
@@ -2905,19 +2908,23 @@ function __aiReasonBadgeFromScores(meta){
   } else if(top.key === 'future'){
     const futureQualified = (ms && ms.target >= 30) || sameInvest || longterm >= 0.72;
     if(futureQualified && top.value >= second.value * 1.03){
-      label = '将来有望';
+      label = '長期投資向き';
       axis = 'atk';
       strong = !!(ms && ms.target >= 30);
     }else if(futureQualified && !close && (ms && ms.target >= 20)){
-      label = '将来有望';
+      label = '長期投資向き';
       axis = 'atk';
     }
   } else if(top.key === 'cost'){
-    const effectLabel = (ms && ms.target >= 30) ? '効果★★★' : '効果★★';
+    const isWall = roleKey === 'wall';
+    const isSup = roleKey === 'sup';
+    const effectLabel = (ms && ms.target >= 30)
+      ? (isWall ? '耐久が大幅UP' : isSup ? '支援力が大幅UP' : '火力が大幅UP')
+      : (isWall ? '耐久アップ' : isSup ? '支援力アップ' : ms.target >= 20 ? '主力に成長' : '低コストで戦力UP');
     if(top.value >= second.value * 1.05){
       label = effectLabel;
     }else if(safeQualified || close){
-      label = '安全';
+      label = '無理なく強化';
     }else if(top.value >= second.value * 1.02){
       label = effectLabel;
     }
@@ -2929,15 +2936,16 @@ function __aiReasonBadgeFromScores(meta){
 
 function __aiDisplaySafeLabel(hero, ms, context, reasonBadge, scoreCost, scoreCoverage, scoreFuture){
   if(!hero || !ms || !context || !reasonBadge) return '';
-  if(reasonBadge.label !== '効果★★' && reasonBadge.label !== '効果★★') return '';
+  const costLabels = ['低コストで戦力UP','主力に成長','耐久アップ','支援力アップ'];
+  if(!costLabels.includes(reasonBadge.label)) return '';
   if(ms.target > 20) return '';
   const sameMain = hero.t === context.currentCombatType;
   const inMainArmy = context.mainArmyIds && context.mainArmyIds.has(hero.id);
   const top = Math.max(Number(scoreCost)||0, Number(scoreCoverage)||0, Number(scoreFuture)||0, 0);
   if(top <= 0) return '';
   if((Number(scoreCost)||0) < top * 0.97) return '';
-  if(hero.t === context.currentCombatType) return '安定強化';
-  if((inMainArmy || hero.r === 'wall' || hero.r === 'sup') && ms.target === 20) return '安定強化';
+  if(hero.t === context.currentCombatType) return 'バランス良く強化';
+  if((inMainArmy || hero.r === 'wall' || hero.r === 'sup') && ms.target === 20) return 'バランス良く強化';
   return '';
 }
 
@@ -2976,7 +2984,7 @@ function calculateUpgradeEfficiencyFull(roster){
             if(gain <= 0) gain = Math.max(1, Math.round(__aiGetLongterm(hero.id) * 18 - 6));
             gain = Math.round(gain * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiSynergyBias(hero, roster, ewTarget));
             if(gain > 0){
-              unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'将来有望', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
+              unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'長期投資向き', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
             }
             return;
         }
@@ -3130,7 +3138,7 @@ function calculateUpgradeEfficiencyFull(roster){
     const reinforceList = [];
     const mainPick = pickTop('reinforceMain', '主力強化', 'bal');
     const coveragePick = pickTop('reinforceCoverage', '弱点補強', 'wall');
-    const futurePick = pickTop('reinforceFuture', '将来有望', 'atk');
+    const futurePick = pickTop('reinforceFuture', '長期投資向き', 'atk');
     if(mainPick) reinforceList.push(mainPick);
     if(coveragePick) reinforceList.push(coveragePick);
     if(futurePick) reinforceList.push(futurePick);
@@ -3180,9 +3188,9 @@ function updateSummaryBar(result, effData){
 
     // バッジ文言（数値は見せない）
     let badge = "効果あり";
-    if(top.strength === "mega") badge = "効果★★★";
-    else if(top.strength === "high") badge = "効果★★";
-    else if(top.strength === "mid") badge = "効果★";
+    if(top.strength === "mega") badge = "効果絶大";
+    else if(top.strength === "high") badge = "効果大";
+    else if(top.strength === "mid") badge = "効果中";
     else if(top.strength === "low") badge = "まず様子見";
 
     const roleLabel = (top.roleKey === "atk") ? "火力" : (top.roleKey === "wall") ? "耐久" : "サポート";
