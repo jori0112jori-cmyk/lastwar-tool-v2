@@ -1,0 +1,4798 @@
+// Auto-split from single-file build (v1.4).
+// Master data / constants
+
+// ===============================
+// 🎯 英雄別スロットアドバイス（S6対応）
+// ===============================
+const HERO_SLOT_ADVICE = {
+  kimberly: {
+    role: '主力アタッカー（戦車）',
+    s6note: 'S6最優先英雄。覚醒「燃ゆる決意」で最大30発の爆発火力に。EW20到達後すぐ覚醒解放を。',
+    ewAdvice: {
+      0:  'まずEW Lv10を目指しましょう。Lv1〜9の伸びは小さいため、一気にLv10まで上げるのがおすすめです。',
+      1:  'Lv1〜9は戦力の伸びが小さい段階です。早めにLv10を目指しましょう。',
+      10: 'Lv10到達！次の節目はLv20です。Lv20で覚醒の前提条件を満たすため、最優先で進めましょう。',
+      20: 'Lv20到達！覚醒前提クリア✅ 専用かけら×50で★0-1を解放すると基礎ステが+20%になります。まず覚醒解放を優先して、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でOKです。',
+      30: 'EW MAX！あとは覚醒強化のみです。★1（決意状態自動発動）→★3（エネルギー増幅2スタック先行）の順で進めると最大火力が出せます。★3が最重要マイルストーンです。',
+    },
+    synergy: '【必須】ウィリアムズ+マーフィの前衛2枚でキムを守る形が基本。マーシャルをサポートに入れると全体火力がさらにUP。覚醒後はDVAとのコンボで「AoE+単体バースト」の最強形に。',
+    priority: 'SSS',
+  },
+  dva: {
+    role: '主力アタッカー（航空）',
+    s6note: 'Week3に覚醒解放。キム覚醒後の第2優先。AoE（キム）＋単体バースト（DVA）の黄金コンビでラリー火力が大幅UP。',
+    ewAdvice: {
+      0:  'まずEW Lv10を目指しましょう。DVAは航空英雄なので、戦車軸メインなら焦らずキム優先でOKです。',
+      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。キムのEW20が終わったら次はDVAのLv20を目標に。',
+      20: 'Lv20到達！覚醒解放が可能です✅ キム覚醒済みなら専用かけら×50で即解放推奨。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
+      30: 'EW MAX！覚醒★1（攻撃速度スタック強化）→★3（追撃+追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
+    },
+    synergy: '【最強コンボ】覚醒キムと組む4+1混成型。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担。航空軸ならルシウス+モリソン+スカイラーと組むと航空5体バフ+20%も狙えます。',
+    priority: 'SSS',
+  },
+  tesla: {
+    role: '主力アタッカー（ロケラン）',
+    s6note: 'Week6に覚醒解放。F2Pはキム→DVA後に検討。フィオナとの「誘導電流DoTコンボ」がロケラン軸の核。',
+    ewAdvice: {
+      0:  'まずEW Lv10を目指しましょう。テスラはロケラン軸が整ってから真価を発揮します。フィオナがいない場合はキム・DVAを先に育てましょう。',
+      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。ロケラン英雄が2体以上いる場合は積極的にLv20を目指しましょう。',
+      20: 'Lv20到達！覚醒前提クリア✅ ロケラン3体+フィオナがいれば即解放推奨。DoTスタック上限は「ロケラン英雄数×3（最大15）」なので編成が重要です。',
+      30: 'EW MAX！覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化。★3で反射回数+1（8回）、★5でさらに+1（9回）になります。フィオナとのコンボが最大火力です。',
+    },
+    synergy: '【必須コンボ】フィオナとのDoTコンボ。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力に。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    priority: 'SS',
+  },
+  williams: {
+    role: '前衛タンク（戦車）',
+    s6note: 'コミュニティ評価「ゲーム最高のタンク」。チーム全体のダメージ軽減に不可欠。EW20で十分機能するため、Lv30よりキム・DVAへの投資を優先しましょう。',
+    ewAdvice: {
+      0:  'ウィリアムズは前衛として最優先で育てましょう。まずLv10を。キムEW20と並行して上げるのが理想です。',
+      10: 'Lv10到達！Lv20が最重要節目です。ウィリアムズEW20でキムを守る前衛力が大きく向上します。キムと並行して急ぎましょう。',
+      20: 'Lv20到達！前衛タンクとして十分な強さです✅ ここから先のLv30投資は「キム・DVAの覚醒が完成してから」でOKです。余裕がある場合だけ上げましょう。',
+      30: 'EW MAX！前衛として最大限機能しています。戦車軸の盾として申し分ない強さです。',
+    },
+    synergy: '【必須前衛】キンバリーと必ずセットで。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持します。マーシャルをサポートに加えると完成形。',
+    priority: 'S',
+  },
+  murphy: {
+    role: '前衛タンク（戦車）',
+    s6note: '戦車軸の前衛2枚目。EWコスパはやや低めですが、ウィリアムズと組んで前衛2枚体制を維持することが重要です。',
+    ewAdvice: {
+      0:  '前衛2枚目として大切な役割です。まずLv10を目指しましょう。ウィリアムズの育成が優先ですが、マーフィも並行して上げると安定感が増します。',
+      10: 'Lv10到達！戦力の伸びはゆるやかですが、前衛として確実に機能しています。余裕があればLv20を目指しましょう。',
+      20: 'Lv20到達！前衛タンクとして十分な水準です✅ ここからLv30に上げるよりも、キム・DVAの覚醒やウィリアムズのLv20〜30を優先しましょう。',
+      30: 'EW MAX！前衛2枚目として最大限機能しています。',
+    },
+    synergy: 'ウィリアムズと2枚前衛を組むことで戦車5体バフ+20%が安定して入ります。この2枚でキムを守るのが戦車軸の基本形です。',
+    priority: 'B',
+  },
+  marshall: {
+    role: 'サポート（戦車）',
+    s6note: 'EW0でも機能する優秀なサポート。スキルは攻撃力増幅でEW依存度が低いため、他英雄を優先育成してOK。',
+    ewAdvice: {
+      0:  'EW0でも攻撃バフが発動します✅ キム・ウィリアムズ・DVAを先に育てましょう。マーシャルはEW投資の優先度が低い英雄です。',
+      10: 'Lv10に上げると基礎ステが向上します。ただし他のアタッカー・前衛が育っていない場合はそちらを優先しましょう。',
+      20: 'Lv20到達。サポートとして十分な水準です。Lv30への投資はキム覚醒★3完成後に余裕があれば検討しましょう。',
+      30: 'EW MAX！サポートとして最大限の効果を発揮しています。',
+    },
+    synergy: 'どの兵種軸でも使える万能サポート。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
+    priority: 'A',
+  },
+  stetmann: {
+    role: 'サブアタッカー（戦車）',
+    s6note: '戦車軸の2番手火力。キム・ウィリアムズが揃った後に育成。EW20が実用的な節目です。',
+    ewAdvice: {
+      0:  'まずLv10を目指しましょう。キム・ウィリアムズのEW優先が終わった後に投資するのが理想です。',
+      10: 'Lv10到達！戦車軸のサブ火力として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20到達！戦車軸のサブアタッカーとして十分な水準です✅ Lv30への投資よりキム覚醒を優先しましょう。',
+      30: 'EW MAX！戦車軸の2番手として最大戦力です。',
+    },
+    synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力。純戦車編成で最も安定したダメージを出せます。',
+    priority: 'A',
+  },
+  lucius: {
+    role: '前衛タンク（航空）',
+    s6note: '航空軸の必須前衛。高い耐久力で味方を守ります。EW20で前衛として十分機能します。',
+    ewAdvice: {
+      0:  '航空軸の前衛として重要です。まずLv10を目指しましょう。DVA育成と並行して上げるのが理想です。',
+      10: 'Lv10到達！次のLv20が重要な節目です。航空前衛としての耐久力が大きく向上します。',
+      20: 'Lv20到達！航空前衛として十分な水準です✅ DVAの覚醒が終わっていない場合はDVAを優先。ルシウスLv30は余裕ができてから。',
+      30: 'EW MAX！航空軸の前衛として最強状態。DVAとの連携で航空軸の最強形を維持しています。',
+    },
+    synergy: '【航空軸の必須前衛】DVA・モリソン・スカイラーと組む航空5体軸の安定役。ルシウスの高耐久がDVAの高火力を支えます。',
+    priority: 'SS',
+  },
+  morrison: {
+    role: 'サブアタッカー（航空）',
+    s6note: '航空軸のサブ火力。DVA+ルシウスが育ってから投資するのがコスパ良好です。',
+    ewAdvice: {
+      0:  'まずLv10を目指しましょう。DVA・ルシウスの育成が先決です。',
+      10: 'Lv10到達！航空サブ火力として機能し始めます。DVAのEW20が完了してからLv20を目指しましょう。',
+      20: 'Lv20到達！航空軸のサブアタッカーとして十分な水準です✅ Lv30よりDVAの覚醒を優先しましょう。',
+      30: 'EW MAX！航空軸のサブ火力として最大戦力です。',
+    },
+    synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
+    priority: 'A',
+  },
+  schuyler: {
+    role: 'コントロール（航空）',
+    s6note: 'CC（行動妨害）が得意な航空英雄。EW10で十分機能するため投資コスパが良好。packsify推奨のキム+DVA混成型にも採用される重要ロール。',
+    ewAdvice: {
+      0:  'まずLv10を目指しましょう。スカイラーはEW10で十分なCCが発揮できます。',
+      10: 'Lv10到達！スカイラーはこのLvで十分機能します✅ 他の主力英雄（キム・ウィリアムズ・DVA）の育成を優先しましょう。',
+      20: 'Lv20到達。十分な水準です。CC効果がさらに安定します。',
+      30: 'EW MAX！CCキャラとして最大限機能しています。',
+    },
+    synergy: 'ルシウスとのコンボが強力。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺しながらキムのAoEが炸裂します。',
+    priority: 'B',
+  },
+  carlie: {
+    role: '前衛タンク（航空）',
+    s6note: '航空軸の前衛候補。ルシウスが育つまでの代替役。EW10で十分で、ルシウスが育ったら控えに回しましょう。',
+    ewAdvice: {
+      0:  'ルシウスが育っていない場合の前衛として活躍します。まずLv10を目指しましょう。',
+      10: 'Lv10到達。カーリーはこのLvで十分です。ルシウス・DVAの育成を優先しましょう。',
+      20: 'Lv20到達。航空前衛として安定します。ルシウスEW20完成後は控えへの移行を検討しましょう。',
+      30: 'EW MAX！',
+    },
+    synergy: 'ルシウス不在時の航空前衛代替。ルシウスが揃えばルシウス+DVA+モリソン+スカイラー+カーリーの5航空体制も可能です。',
+    priority: 'C',
+  },
+  fiona: {
+    role: '主力アタッカー（ロケラン）',
+    s6note: 'ロケラン軸のエース。テスラ覚醒との「誘導電流DoTコンボ」がS6で最強クラスの継続ダメージを発揮します。',
+    ewAdvice: {
+      0:  'ロケラン軸の核となる英雄です。まずLv10を目指しましょう。テスラと並行して育てるのが理想です。',
+      10: 'Lv10到達！次のLv20が重要な節目です。フィオナEW20でロケラン軸の火力が本格的になります。',
+      20: 'Lv20到達！テスラ覚醒との組み合わせでDoTコンボが本格化します✅ テスラ覚醒★1+フィオナEW20の組み合わせが理想形です。',
+      30: 'EW MAX！テスラ・マクレガー・アダムと組むロケラン5体軸の最強形です。継続ダメージ（DoT）でどんな相手も削れます。',
+    },
+    synergy: '【必須コンボ】テスラ覚醒との相性が抜群。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    priority: 'SS',
+  },
+  mcgregor: {
+    role: '前衛タンク（ロケラン）',
+    s6note: 'ロケラン軸の主力前衛。アダムと前衛2枚体制を組むことでロケラン5体軸が完成します。',
+    ewAdvice: {
+      0:  'ロケラン軸の前衛として重要です。まずLv10を目指しましょう。フィオナ・テスラの育成が先決ですが並行して上げましょう。',
+      10: 'Lv10到達！ロケラン前衛として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20到達！ロケラン前衛として十分な水準です✅ Lv30よりフィオナ・テスラのEW強化を優先しましょう。',
+      30: 'EW MAX！アダムとの前衛2枚体制で最大の耐久力です。テスラDoTのスタック上限引き上げにも貢献しています。',
+    },
+    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。',
+    priority: 'A',
+  },
+  swift: {
+    role: 'サブアタッカー（ロケラン）',
+    s6note: 'ロケラン軸のサブ候補。フィオナ・テスラが育つまでの代替役。EW10で十分で、無理に育てなくてよいです。',
+    ewAdvice: {
+      0:  'まずLv10を目指しましょう。フィオナ・テスラの育成を優先してからスウィフトに投資するのが賢明です。',
+      10: 'Lv10到達。スウィフトはこのLvで十分機能します。主力（フィオナ・テスラ・マクレガー）を先に育てましょう。',
+      20: 'Lv20到達。ロケランサブとしての戦力が安定します。',
+      30: 'EW MAX！',
+    },
+    synergy: 'フィオナ・テスラ不在時のロケランサブ候補。テスラDoTのスタック上限は「ロケラン英雄数×3」なので、スウィフトを入れるとスタック上限が上がります。',
+    priority: 'B',
+  },
+  adam: {
+    role: '前衛タンク（ロケラン）',
+    s6note: 'ロケラン軸の前衛2枚目。マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
+    ewAdvice: {
+      0:  'ロケラン軸の前衛2枚目として重要です。まずLv10を目指しましょう。マクレガーと同時並行で育てるのが理想。',
+      10: 'Lv10到達！ロケラン前衛2枚目として機能します。テスラのDoTスタック上限は「ロケラン英雄数×3」なので、アダムがいることでスタック上限も上がります。',
+      20: 'Lv20到達！前衛2枚目として十分な水準です✅ フィオナ・テスラの育成が先なので、ここからはゆっくりでOKです。',
+      30: 'EW MAX！マクレガーとの前衛2枚体制で最大の安定感です。',
+    },
+    synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
+    priority: 'B',
+  },
+  mason: {
+    role: 'UR アタッカー（戦車）',
+    s6note: 'UR英雄。キンバリーが育つまでのつなぎアタッカー。フル育成のSSRがUR中途半端を上回れるため（packsify）、キムへの投資を優先しましょう。',
+    ewAdvice: {
+      0:  'キンバリーのEW育成が最優先です。メイソンへの投資はキムEW20完成後に検討しましょう。',
+      10: 'Lv10。キンバリーが育っていない場合の暫定アタッカーとして活躍します。キムEW20が完成したらキムへ移行しましょう。',
+      20: 'Lv20。戦力としては十分ですが、キム覚醒★0以上になるとキムの方が強くなる場合が多いです。',
+      30: 'EW MAX！フル育成URとして十分な戦力です。ただしキム覚醒が進んだ場合はキムを優先しましょう。',
+    },
+    synergy: 'キンバリー不在・育成前の戦車アタッカー候補。ウィリアムズ+マーフィ+マーシャルとの戦車軸編成で使いましょう。',
+    priority: 'C',
+  },
+  scarlett: {
+    role: 'UR 前衛タンク（戦車）',
+    s6note: 'UR英雄。ウィリアムズが育つまでの前衛候補。ウィリアムズEW20が完成したら控えへ移行を検討しましょう。',
+    ewAdvice: {
+      0:  'ウィリアムズの育成を最優先に。スカーレットへのEW投資はウィリアムズEW20完成後に検討しましょう。',
+      10: 'Lv10。前衛として機能します。ウィリアムズEW20が完成したらウィリアムズをメインに切り替えましょう。',
+      20: 'Lv20。UR前衛として安定した耐久力です。ウィリアムズが十分に育った場合は控えへの移行を検討しましょう。',
+      30: 'EW MAX！UR前衛として最大戦力です。ウィリアムズとの2枚前衛体制も選択肢になります。',
+    },
+    synergy: '戦車前衛の代替候補。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ+マーフィの前衛2枚体制が理想です。',
+    priority: 'D',
+  },
+};
+
+// EW Lvに最も近いアドバイスを取得
+function getHeroEwAdvice(heroId, ewLv) {
+  const advice = HERO_SLOT_ADVICE[heroId];
+  if (!advice) return null;
+  const keys = Object.keys(advice.ewAdvice).map(Number).sort((a,b)=>b-a);
+  for (const k of keys) {
+    if (ewLv >= k) return advice.ewAdvice[k];
+  }
+  return advice.ewAdvice[0] || '';
+}
+
+const SHARD_ICON = 'img/original.webp';
+
+
+// ===============================
+// ⭐ メタ育成優先（兵種コア / tier）
+// ===============================
+const META_TIER = {
+  // 🚜 戦車
+  kimberly:{ tier:'atk1', ew:'SSS', ewTarget:30 },
+  williams:{ tier:'tank1', ew:'S',  ewTarget:20 },
+  stetmann:{ tier:'atk2', ew:'S',  ewTarget:20 },
+  marshall:{ tier:'sup',  ew:'B',  ewTarget:0  },
+  murphy:{   tier:'tank2',ew:'C',  ewTarget:0  },
+
+  // ✈️ 航空
+  lucius:{   tier:'tank1',ew:'SSS',ewTarget:30 },
+  dva:{      tier:'atk1', ew:'SSS',ewTarget:30 },
+  morrison:{ tier:'atk2', ew:'S',  ewTarget:20 },
+  schuyler:{ tier:'atk2', ew:'A',  ewTarget:10 },
+  carlie:{   tier:'tank2',ew:'A',  ewTarget:10 },
+
+  // 🚀 ミサイル（ロケラン）
+  fiona:{    tier:'atk1', ew:'SSS',ewTarget:30 },
+  tesla:{    tier:'atk1', ew:'SS', ewTarget:20 },
+  mcgregor:{ tier:'tank1',ew:'S',  ewTarget:20 },
+  swift:{    tier:'atk2', ew:'A',  ewTarget:10 },
+  adam:{     tier:'tank2',ew:'B',  ewTarget:10 }
+};
+
+
+// ===============================
+// ⭐ 兵種シフト（完全自動推定）用の設定
+// ※閾値は app.js 側で毎回推定（ここは係数とコア定義だけ）
+// ===============================
+const META_SHIFT = {
+  core: {
+    tank:   { ids:['kimberly','williams','stetmann'], targets:[30,20,20] },
+    air:    { ids:['lucius','dva'],                   targets:[30,20] },  // DVAはLv20で覚醒前提を満たす
+    missile:{ ids:['fiona','tesla','mcgregor'],        targets:[30,20,20] }
+  },
+  mult: {
+    boostNext: 1.08,   // 次兵種を押し上げ（控えめ）
+    dampPrev:  0.98,   // 前兵種を少し抑える（抑えすぎ防止）
+    seedBoost: 1.05,   // 種まき段階（やや慎重）
+    shiftBoost: 1.10,  // 本格移行段階
+    weakOfftypeDamp: 0.90
+  },
+  progress: {
+    maxWp: 30,
+    minMult: 0.92,     // wp=0
+    maxMult: 1.08      // wp=max
+  }
+};
+
+const META_SHIFT_STAGE = {
+  weakMain: 0.58,
+  matureMain: 0.74,
+  seedStart: 0.38,
+  shiftStart: 0.60,
+  fullShift: 0.82,
+  keepCurrentCost: 1.06,
+  keepCurrentFuture: 1.03,
+  seedFuture: 1.04,
+  shiftFuture: 1.10,
+  lowMainOfftypeCost: 0.94,
+  lowMainOfftypeFuture: 0.92
+};
+
+
+// ===============================
+// ⭐ 汎用化ロジック用マスタ
+// ===============================
+const HERO_ROLE_PROFILE = {
+  kimberly:{ role:'main_dps', lane:'back', core:true },
+  murphy:{ role:'front_tank', lane:'front', core:true },
+  williams:{ role:'front_tank', lane:'front', core:false },
+  marshall:{ role:'support', lane:'back', core:true },
+  stetmann:{ role:'sub_dps', lane:'back', core:true },
+  mason:{ role:'sub_dps', lane:'back', core:false, promotedUr:true },
+  scarlett:{ role:'front_tank', lane:'front', core:false, promotedUr:true },
+  violet:{ role:'front_tank', lane:'front', core:false, promotedUr:true },
+
+  dva:{ role:'main_dps', lane:'back', core:true },
+  lucius:{ role:'front_tank', lane:'front', core:true },
+  carlie:{ role:'front_tank', lane:'front', core:false },
+  schuyler:{ role:'control', lane:'back', core:true },
+  morrison:{ role:'sub_dps', lane:'back', core:true },
+  sarah:{ role:'support', lane:'back', core:false, promotedUr:true },
+
+  fiona:{ role:'main_dps', lane:'back', core:true },
+  tesla:{ role:'sub_dps', lane:'back', core:true },
+  mcgregor:{ role:'front_tank', lane:'front', core:true },
+  swift:{ role:'sub_dps', lane:'back', core:true },
+  adam:{ role:'front_tank', lane:'front', core:false },
+  venom:{ role:'sub_dps', lane:'back', core:false, promotedUr:true }
+};
+
+const HERO_LONGTERM_VALUE = {
+  kimberly:1.00, dva:1.00, fiona:0.96,
+  lucius:0.88, stetmann:0.86, morrison:0.85,
+  tesla:0.84, mcgregor:0.83, williams:0.80,
+  schuyler:0.79, adam:0.76, marshall:0.74,
+  murphy:0.72, carlie:0.70, swift:0.68,
+  scarlett:0.72, mason:0.64, venom:0.62, sarah:0.58, violet:0.46
+};
+
+const HERO_EVAL_META = {
+  // tank
+  kimberly:{ milestone10Fit:1.03 },
+  marshall:{ milestone10Fit:1.05 },
+  murphy:{ milestone10Fit:1.06 },
+  williams:{ milestone10Fit:1.06 },
+  stetmann:{ milestone10Fit:1.01 },
+  scarlett:{ milestone10Fit:1.06, promotedUrImmediateFit:1.08 },
+  mason:{ milestone10Fit:1.05, promotedUrImmediateFit:1.07 },
+  violet:{ milestone10Fit:1.02, promotedUrImmediateFit:0.98 },
+
+  // air
+  dva:{ milestone10Fit:1.03 },
+  lucius:{ milestone10Fit:1.07 },
+  morrison:{ milestone10Fit:1.01 },
+  schuyler:{ milestone10Fit:1.06 },
+  carlie:{ milestone10Fit:1.02 },
+  sarah:{ milestone10Fit:1.04, promotedUrImmediateFit:1.01 },
+
+  // missile
+  tesla:{ milestone10Fit:1.05 },
+  fiona:{ milestone10Fit:1.05 },
+  mcgregor:{ milestone10Fit:1.05 },
+  adam:{ milestone10Fit:1.01 },
+  swift:{ milestone10Fit:1.03 },
+  venom:{ milestone10Fit:1.04, promotedUrImmediateFit:1.02 }
+};
+
+
+const HERO_PAIR_SYNERGY = {
+  // Air core
+  dva: {
+    lucius:   { base: 1.05, lv10: 1.06, lv20: 1.08, lv30: 1.10 },
+    morrison: { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.07 },
+    schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    murphy:   { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 4+1想定
+  },
+  lucius: {
+    dva:      { base: 1.05, lv10: 1.06, lv20: 1.08, lv30: 1.10 },
+    schuyler: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    morrison: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    murphy:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // 4+1想定
+  },
+  morrison: {
+    dva:      { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.07 },
+    lucius:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+  schuyler: {
+    lucius:   { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    dva:      { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+
+  // Tank core
+  kimberly: {
+    marshall: { base: 1.04, lv10: 1.06, lv20: 1.08, lv30: 1.09 },
+    murphy:   { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.06 },
+    williams: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    stetmann: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 }
+  },
+  marshall: {
+    kimberly: { base: 1.04, lv10: 1.06, lv20: 1.08, lv30: 1.09 },
+    stetmann: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    dva:      { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 汎用支援
+  },
+  murphy: {
+    williams: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    kimberly: { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.06 },
+    marshall: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+  williams: {
+    murphy:   { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    kimberly: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    marshall: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+  stetmann: {
+    kimberly: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    marshall: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 }
+  },
+
+  // Missile core
+  adam: {
+    tesla:    { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
+    fiona:    { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
+    mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    swift:    { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 },
+    venom:    { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 }
+  },
+  fiona: {
+    tesla:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    adam:     { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
+    mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    venom:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+  tesla: {
+    fiona:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    adam:     { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 }
+  },
+  mcgregor: {
+    adam:     { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    fiona:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  }
+};
+
+// 互換用（既存 app.js 参照名）
+const HERO_SYNERGY = HERO_PAIR_SYNERGY;
+
+
+
+const MATCHUP_MODIFIER = {
+  morrison: { vsEnemy: { murphy: 0.94 } },
+  dvaFront: { vsEnemy: { williams: 0.93 } },
+  lucius: { withEW30: 1.05 }
+};
+
+
+
+const TYPE_COUNTER_WEIGHT = {
+  tank:{ tank:0.30, air:1.00, mis:0.50 },
+  air:{ tank:0.50, air:0.30, mis:1.00 },
+  mis:{ tank:1.00, air:0.50, mis:0.30 },
+  none:{ tank:0.50, air:0.50, mis:0.50 }
+};
+
+const ROUTE_WEIGHT_PRESET = {
+  overall:{ cost:0.45, coverage:0.30, future:0.25 },
+  safe:{ cost:0.60, coverage:0.25, future:0.15 }
+};
+
+
+// ===============================
+// ⭐ 専用武装タグ（簡易判定用）
+// ===============================
+const HERO_WEAPON_TAGS = {
+  murphy: ['shield_like_protect','frontline_protect','low_hp_protect','team_guard','damage_mitigation'],
+  kimberly: ['single_burst','energy_damage','stack_scaling','skill_multi_hit','aoe_bonus_30'],
+  marshall: ['atk_buff','crit_buff','focus_fire_support','target_mark','cooldown_reset_30'],
+  williams: ['interrupt','frontline_control','backline_control','team_def_buff','energy_vuln'],
+  stetmann: ['anti_shield','backline_hit','energy_bonus_hit','charge_scaling','cc_guard_30'],
+
+  dva: ['opening_burst','attack_speed','air_synergy','instant_opening_30','tempo_accel'],
+  carlie: ['anti_energy','enemy_atk_down','enemy_energy_down','frontline_stability','death_effect_30'],
+  schuyler: ['cc_stun','disrupt','backline_hit','anti_backline','guaranteed_cc_30'],
+  lucius: ['shield','energy_resist','low_hp_protect','team_barrier','atk_speed_on_break_30'],
+  morrison: ['hp_percent_damage','anti_tank','high_hp_target','def_down','finisher'],
+
+  tesla: ['dot','energy_dot','stack_dot','backline_pressure_30','dot_scaling'],
+  mcgregor: ['taunt','dot_amp','enemy_atk_down','frontline_stability','iron_wall_30'],
+  adam: ['counter','team_counter','frontline_protect','counter_amp','armor_break_counter_30'],
+  fiona: ['dot','physical_dot','aoe','dispel','anti_buff'],
+  swift: ['burn_dot','physical_dot','dot_synergy','sustained_damage'],
+
+  // promoted UR
+  scarlett: ['promoted_ur_no_ew','frontline_stability','budget_wall','early_pvp_hold'],
+  mason: ['promoted_ur_no_ew','boss_focus','budget_sub_dps','pve_value'],
+  sarah: ['promoted_ur_no_ew','budget_support','air_bridge','tempo_support'],
+  venom: ['promoted_ur_no_ew','dot_bridge','missile_bridge','sustained_damage'],
+  violet: ['promoted_ur_no_ew','budget_wall','early_hold','low_ceiling'],
+};
+
+
+// ===============================
+// ⭐ 表示理由ラベル辞書（UI文言は data.js 管理）
+// ===============================
+const REASON_LABELS = {
+  policy: {
+    build_main: "現状維持OK",
+    hold: "現状維持OK",
+    seed: "次兵種準備",
+    seed_air: "航空種まき",
+    seed_mis: "ロケラン種まき",
+    shift: "本格移行",
+    shift_air: "航空移行",
+    shift_mis: "ロケラン移行",
+    full_shift: "兵種移行"
+  },
+  efficiency: {
+    low_cost: "省コスト",
+    mid_cost: "中コスト",
+    high_cost: "大型投資",
+    ew_milestone: "Lv節目",
+    lv30: "MAX育成"
+  },
+  timing: {
+    immediate: "即戦力UP",
+    future: "長期向き",
+    promoted_ur: "昇格UR"
+  }
+};
+
+const IMPACT_LABELS = {
+  tankiness: "耐久補強",
+  stability: "編成強化",
+  carry: "火力強化",
+  subdps: "後衛火力",
+  support: "支援強化",
+  burst: "爆発力",
+  efficiency: "コスパ◎"
+};
+
+const REASON_BADGE_STYLE = {
+  build_main: "neutral",
+  hold: "neutral",
+  seed: "accent",
+  seed_air: "accent",
+  seed_mis: "accent",
+  shift: "accent",
+  shift_air: "accent",
+  shift_mis: "accent",
+  full_shift: "accent",
+  low_cost: "good",
+  mid_cost: "neutral",
+  high_cost: "warn",
+  ew_milestone: "accent",
+  lv30: "future",   // MAX育成 → 紫（将来への大投資）
+  immediate: "good",
+  future: "future",
+  promoted_ur: "neutral"
+};
+
+const IMPACT_BADGE_STYLE = {
+  tankiness: "defense",
+  stability: "neutral",
+  carry: "attack",
+  subdps: "attack",
+  support: "support",
+  burst: "attack",
+  efficiency: "good"
+};
+
+const REASON_BADGE_PRIORITY = [
+  "policy",
+  "efficiency",
+  "timing"
+];
+
+const REASON_EXCLUDE_BY_IMPACT = {
+  tankiness: ["front_fill", "sustain"],
+  stability: ["coverage"],
+  carry: ["carry_boost"],
+  subdps: ["subdps_boost"],
+  support: ["support_value"],
+  burst: [],
+  efficiency: []
+};
+
+
+const SUMMARY_TEMPLATES = {
+  build_main: {
+    tankiness: "前衛タンクを育てて編成の耐久力を高めよう",
+    stability: "今の編成バランスを維持しながら底上げできる",
+    carry: "主力エースをさらに強くして火力を引き上げよう",
+    subdps: "サブ火力を強化して攻撃の厚みを増やそう",
+    support: "サポートを育てて全体のスキル回転を上げよう",
+    burst: "開幕バーストの威力を高めて先手を取りやすくしよう",
+    default: "1軍の戦力を直接引き上げられる"
+  },
+  hold: {
+    tankiness: "前衛タンクを補強して編成の安定感を上げよう",
+    stability: "現在の編成を崩さず底上げできる",
+    carry: "主力エースをさらに育てて火力を上げよう",
+    support: "サポートを強化してチーム全体を底上げしよう",
+    default: "1軍の強化を安定して進められる"
+  },
+  seed: {
+    tankiness: "次兵種の前衛タンク候補を先に育てておこう",
+    stability: "兵種移行の下準備として育てておくと後が楽になる",
+    carry: "次の主力候補を今から育て始めると移行がスムーズ",
+    subdps: "次兵種の火力候補を先行育成しておこう",
+    support: "次兵種向けサポートの準備を進めよう",
+    burst: "次兵種の開幕火力候補として先行育成しておこう",
+    default: "次の兵種移行に向けた先行投資として有効"
+  },
+  shift: {
+    tankiness: "兵種移行中の前衛不足を補える重要な1枚",
+    stability: "移行期の編成を安定させるために育てよう",
+    carry: "新しい主力エースとして移行をリードできる",
+    subdps: "新しい主軸の火力を補完できる",
+    support: "移行後の編成を支えるサポートとして有効",
+    default: "兵種移行を加速できるタイミング"
+  },
+  full_shift: {
+    tankiness: "新兵種の前衛タンクを固めて編成を完成させよう",
+    stability: "新しい主軸編成の完成度を高めよう",
+    carry: "新しい主力エースをMAXに近づけよう",
+    support: "移行完了後の編成に必要なサポートを育てよう",
+    default: "新兵種の編成をさらに強化できる"
+  },
+  low_cost: {
+    default: "少ないコストで着実に戦力を底上げできる"
+  },
+  high_cost: {
+    default: "コストは重いが強化後の伸びが大きい"
+  },
+  lv30: {
+    carry: "Lv30でエースの火力が大きく跳ね上がる",
+    subdps: "Lv30でサブ火力の伸びが期待できる",
+    support: "Lv30でサポート効果が本格的になる",
+    default: "Lv30投資で戦力の伸びが大きい"
+  },
+  future: {
+    default: "今は地味でも中長期で大きく戦力に貢献する"
+  },
+  immediate: {
+    default: "育てるとすぐ1軍で活躍できる"
+  }
+};
+
+
+// ===============================
+// ⭐ S6 英雄覚醒システム
+// ===============================
+// 覚醒の構造：
+//   ★0 = 未覚醒
+//   ★1〜5：各★に5段階ティア（★1だけは4ティア）
+//   表記例：awTier = { star:1, tier:3 } → 「★1-3」
+//
+// シャードコスト（cpt-hedge.com検証済み）:
+//   解放     : 50個（名前付き）
+//   ★1 ティア1〜4 : 各20個（計80個）  → ★1合計130
+//   ★2 ティア1〜5 : 各40個（計200個） → ★2追加200
+//   ★3 ティア1〜5 : 各70個（計350個） → ★3追加350
+//   ★4 ティア1〜5 : 各80個（計400個） → ★4追加400（未公式推定）
+//   ★5 ティア1〜5 : 各100個（計500個）→ ★5追加500（未公式推定）
+//   最大合計 : 1,580個
+//
+// awTier の保存形式: "star-tier" 文字列（例 "1-3"）
+//   未覚醒 = "0-0"  解放済み（★0完了）= "1-0"（★1への途中）
+
+// 覚醒ティア構造：★0〜★5、各★に1〜5の5ティア
+// "star-tier" 文字列で管理（例: "0-1"=★0-1, "1-3"=★1-3）
+// 未覚醒 = "none"
+//
+// シャードコスト（cpt-hedge.com確認済み）:
+//   ★0-1 : 専用覚醒かけら×50（名前付き、解放）
+//   ★0-2〜★0-5 : 各20個（汎用可）
+//   ★1-1〜★1-5 : 各40個
+//   ★2-1〜★2-5 : 各70個
+//   ★3-1〜★3-5 : 各80個（未公式・推定）
+//   ★4-1〜★4-5 : 各100個（未公式・推定）
+//   ★0合計130・★1〜4追加200/350/400/500、総計1,580個
+
+// ★ごとのティアあたりシャードコスト（★0-1のみ特殊）
+const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMAX
+// ★0-1だけ専用かけら50（named:true で区別）
+
+// ====================================================
+// S6 英雄覚醒データ（統合版）
+// AWAKENING_HEROES と AWAKENING_HEROES を1つに統合
+// ====================================================
+
+
+// --- ユーティリティ ---
+
+// awTier文字列 → {star, tier}
+// 覚醒★数を編成画面の表記に統一して返す
+// star=-1 → '未覚醒'
+// star=0, tier=1以上 → '★0-1解放済み'（以降 ★0-N）
+// star=1以上 → '★N-T'
+function awStarLabel(at) {
+  if (!at || at.star < 0) return '未覚醒';
+  if (at.star === 0) return at.tier >= 1 ? `★0-${at.tier}` : '★0-1解放済み';
+  return `★${at.star}-${at.tier}`;
+}
+// 推奨マイルストーンのコメント付きラベル
+// 「★0-1解放済み（最低限）」「★3-0（理想）」など
+function awStarLabelWithNote(at, heroId) {
+  const label = awStarLabel(at);
+  if (!at || at.star < 0) return label;
+  const notes = {
+    kimberly: { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（自動決意発動）', 3:'（最重要★：増幅先行獲得）', 5:'（MAX）' },
+    dva:      { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（スタック効率UP）', 3:'（追撃+20%）', 5:'（MAX）' },
+    tesla:    { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（DoT本格化）', 3:'（反射+1）', 5:'（MAX）' },
+  };
+  const heroNotes = notes[heroId] || {};
+  const note = heroNotes[at.star] || '';
+  return `${label}${note}`;
+}
+
+function parseAwTier(val) {
+  if (!val || val === 'none') return { star:-1, tier:0 };
+  const m = String(val).match(/^(\d+)-(\d+)$/);
+  if (!m) return { star:-1, tier:0 };
+  return { star: parseInt(m[1]), tier: parseInt(m[2]) };
+}
+
+// {star, tier} → 表示文字列（例: "★1-3"）// 覚醒前提チェック
+function checkAwakeningEligible(heroId, ewLv, heroStars) {
+  const aw = AWAKENING_HEROES[heroId];
+  if (!aw) return { eligible: false, reason: '覚醒非対応英雄' };
+  if ((heroStars || 5) < aw.starRequired)
+    return { eligible: false, reason: '英雄★' + aw.starRequired + 'が必要' };
+  if ((ewLv || 0) < aw.ewMinRequired)
+    return { eligible: false, reason: 'EW Lv' + aw.ewMinRequired + '以上が必要' };
+  return { eligible: true };
+}
+
+// 覚醒スコア補正（star単位で線形補間、tier0-5で進行度）
+function getAwakeningScoreBonus(heroId, awTierStr) {
+  const aw = AWAKENING_HEROES[heroId];
+  if (!aw) return 1.0;
+  const at = parseAwTier(awTierStr);
+  if (at.star < 0) return 1.0;
+  const base = aw.scoreBonus[at.star] || 1.0;
+  const next = aw.scoreBonus[Math.min(5, at.star + 1)] || base;
+  const frac = at.tier / 5;
+  return base + (next - base) * frac;  // ティア進行度をフルに反映
+}
+
+// 次のティアへのコスト
+function awNextTierCost(awTierStr) {
+  const at = parseAwTier(awTierStr);
+  // 未覚醒 → ★0-1（名前付きかけら×50）
+  if (at.star < 0) return { cost:50, named:true, nextStar:0, nextTier:1 };
+  // ★4-5 = MAX
+  if (at.star >= 4 && at.tier >= 5) return null;
+  if (at.tier < 5) {
+    // 同じ★の次ティアへ（★0-1のみ名前付き、それ以外は汎用）
+    const named = (at.star === 0 && at.tier === 0); // ★0-0→★0-1は該当しないが念のため
+    return { cost: AW_SHARD_PER_TIER[at.star], named: false, nextStar: at.star, nextTier: at.tier + 1 };
+  }
+  // 次の★-1へ
+  const nextStar = at.star + 1;
+  return { cost: AW_SHARD_PER_TIER[nextStar], named: false, nextStar, nextTier: 1 };
+}
+
+function escapeHtml(str){
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Auto-split from single-file build (v1.4)
+// App logic
+// --- マスタデータ ---
+
+
+
+
+
+
+let previousAssignment = null;
+
+// ===============================
+// 🔁 乗り換え推奨度：色連動コピー（%で文言変化）
+// ===============================
+
+// === Shared helpers for squad-based transition/progress ===
+function wpToPts(wp){
+  // EW Lv → スコアポイント換算
+  // 実際のゲーム：Lv10/20/30が主要節目、Lv1〜9の伸びは小さい
+  // Lv0=50, Lv1=55, Lv5=75, Lv10=160, Lv20=260, Lv30=430
+  wp = parseInt(wp, 10);
+  if(!Number.isFinite(wp)) return 0;
+  if(wp <= 0) return 50;
+  wp = Math.max(0, Math.min(30, wp));
+  let pts = 70;
+  if (wp >= 30) pts += 360;
+  else if (wp >= 20) pts += 190 + (wp - 20) * 8;
+  else if (wp >= 10) pts += 90 + (wp - 10) * 5;
+  else pts += 5 + wp * 2;   // Lv1〜9: 伸び小（5+wp*2）← 旧: 20+wp*3
+  return pts;
+}
+
+function normalizeWpInputFixed(wpRaw){
+  if(wpRaw == null) return 0;
+  const s = String(wpRaw).trim();
+  if(!s || s === '-' || s.includes('未')) return 0;
+  const v = parseInt(s, 10);
+  return Number.isFinite(v) ? v : 0;
+}
+
+function toggleTransitionPanel(){
+  const body = $id('power-transition-body');
+  const icon = $id('trans-icon');
+  if(!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if(icon) icon.classList.toggle('open', !isOpen);
+  try { localStorage.setItem('panel_power-transition-body', isOpen ? '0' : '1'); } catch(e) {}
+  // 展開時にコンテンツを更新
+  if(!isOpen) try { updateTransitionRecommendationUI(); } catch(e) {}
+}
+
+
+function getArmyTypeCounts(members){
+  const counts = { tank:0, air:0, mis:0 };
+  (members || []).forEach(m => {
+    if(!m || !m.t) return;
+    if(counts[m.t] !== undefined) counts[m.t]++;
+  });
+  return counts;
+}
+
+
+function getArmyBuffInfo(members){
+  const counts = getArmyTypeCounts(members);
+  const totalFilled = (members || []).filter(m => m && m.t && m.t !== 'none').length;
+  const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+  const mainType = entries[0] ? entries[0][0] : 'tank';
+  const maxCount = entries[0] ? entries[0][1] : 0;
+
+  let buffRate = 0;
+  if(maxCount >= 5) buffRate = 0.20;
+  else if(maxCount === 4) buffRate = 0.15;
+  else if(maxCount === 3){
+    buffRate = (totalFilled >= 5) ? 0.10 : 0.05;
+  }
+
+  return { counts, mainType, maxCount, totalFilled, buffRate };
+}
+
+
+function collectArmyMembersForProgress(armyNo){
+  const members = [];
+  for(let p=1; p<=5; p++){
+    const hidEl = $id(`h-${armyNo}-${p}`);
+    const wpEl  = $id(`w-${armyNo}-${p}`);
+    if(!hidEl || !wpEl) continue;
+    const id = hidEl.value;
+    if(!id || id === 'empty') continue;
+    const h = HEROES[id];
+    if(!h) continue;
+    members.push({
+      id,
+      name: h.n,
+      t: h.t,
+      r: h.r,
+      ur: h.ur,
+      wp: normalizeWpInputFixed(wpEl.value)
+    });
+  }
+  return members;
+}
+
+
+
+function getIdealMembersForType(type){
+  // F2P現実的目標（packsify/allclash準拠）
+  // キャリー(atk): EW20 = 覚醒前提クリア・実戦十分な水準
+  // タンク(wall):  EW20 = 前衛として十分な水準
+  // サポート(sup): EW10 = マーシャル等はEW不要
+  // EW30は長期目標のため基準から外す
+  const idealType = ['tank','air','mis'].includes(type) ? type : 'tank';
+  return [
+    { id:`${idealType}-i1`, wp:20, t:idealType, r:'wall' },
+    { id:`${idealType}-i2`, wp:20, t:idealType, r:'wall' },
+    { id:`${idealType}-i3`, wp:20, t:idealType, r:'atk'  },
+    { id:`${idealType}-i4`, wp:20, t:idealType, r:'atk'  },
+    { id:`${idealType}-i5`, wp:10, t:idealType, r:'sup'  },
+  ];
+}
+
+function computeDisplayedArmyProgress(armyNo){
+  const members = collectArmyMembersForProgress(armyNo);
+  if(!members.length){
+    return { pct:0, maxCount:0, buffRate:0, detail:{attack:0, defense:0}, mainType:null };
+  }
+
+  const res = evaluateSquadRealCombat(members);
+
+  // F2P現実目標：ロール別の目標EW Lv
+  // atk（アタッカー）: EW20、wall（タンク）: EW20、sup（サポート）: EW10
+  // 各英雄を「そのロールの目標EW」と1対1比較して平均達成率を算出
+  const roleTarget = { atk:20, wall:20, sup:10 };
+
+  let totalRate = 0;
+  let count = 0;
+  members.forEach(m => {
+    const target = roleTarget[m.r] || 20;
+    const rate = Math.min(1.0, m.wp / Math.max(target, 1));
+    totalRate += rate;
+    count++;
+  });
+
+  // 平均達成率（0〜100%、100%超えなし）
+  const pct = count > 0
+    ? Math.max(0, Math.min(100, Math.round((totalRate / count) * 100)))
+    : 0;
+
+  return {
+    pct: pct,
+    maxCount: res.maxCount,
+    buffRate: res.buffRate,
+    mainType: res.mainType,
+    detail:{ attack:res.attack, defense:res.defense },
+    members: members  // ボトルネック表示用
+  };
+}
+
+
+
+function updateSlotEvalsFromCurrentInputs(){
+  const baseColors = { 1:"#10b981", 2:"#3b82f6", 3:"#8b5cf6" };
+
+  for(let armyNo=1; armyNo<=3; armyNo++){
+    const el = $id(`slot-eval-${armyNo}`);
+    if(!el) continue;
+
+    const prog = computeDisplayedArmyProgress(armyNo);
+    const pct = prog.pct;
+    const c = pct < 40 ? "#ef4444" : (pct < 60 ? "#f59e0b" : baseColors[armyNo]);
+
+    const weak = (typeof detectArmyWeaknessFromDetail === 'function')
+      ? detectArmyWeaknessFromDetail(prog.detail)
+      : 'balance';
+
+    const label = weak === "defense"
+      ? "📊 前衛が手薄"
+      : (weak === "attack"
+          ? "📊 火力が不足"
+          : pct >= 80 ? "📊 バランス良好" : pct >= 45 ? "📊 育成中" : "📊 強化が必要");
+
+    let buff = "";
+    if (prog.maxCount === 5) buff = "✅ 兵種バフ20%";
+    else if (prog.maxCount === 4) buff = "🔶 兵種バフ15%";
+    else if (prog.maxCount === 3) buff = (prog.buffRate >= 0.10 ? "⚠️ 兵種バフ10%" : "⚠️ 兵種バフ5%");
+
+    const buffSpan = buff ? `<span class="buff-badge">${buff}</span>` : "";
+
+    // 進行度の段階別説明
+    // ロール別目標EWへの達成率段階
+    const pctNote = pct >= 100 ? '✅ 目標EW達成'
+      : pct >= 80  ? '（あと少し）'
+      : pct >= 60  ? '（育成中）'
+      : pct >= 40  ? '（基盤完成）'
+      : '（育成初期）';
+
+    el.innerHTML =
+      '<div class="row">' +
+        '<div class="tag">' + label + '</div>' +
+        '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span><span style="font-size:0.65rem;color:#475569;margin-left:2px;">' + pctNote + '</span></div>' +
+      '</div>' +
+      (buffSpan ? ('<div class="row sub">' + buffSpan + '</div>') : '') +
+      '<div class="bar"><div style="width:' + pct + '%; background:' + c + ';"></div></div>';
+  }
+
+  try { updateArmyGuide(); } catch(e) {}
+}
+
+const TRANSITION_TEXT_TABLE = [
+  { min: 85, label: "今すぐ移行できる！", cls: "advice-now",  color: "#ef4444" },
+  { min: 70, label: "移行の準備を始めよう",   cls: "advice-good", color: "#f59e0b" },
+  { min: 55, label: "あと少しで移行圏",           cls: "advice-soon", color: "#eab308" },
+  // ここから下は「様子見」系（CSS既存クラスに寄せる）
+  { min: 40, label: "もう少し育成してから",     cls: "advice-wait", color: "#64748b" },
+  { min: 25, label: "現在の編成を伸ばそう",           cls: "advice-wait", color: "#94a3b8" },
+  { min: 0,  label: "まだ移行は早い",         cls: "advice-wait", color: "#cbd5e1" }
+];
+
+function getTransitionAdvice(score){
+  const sc = Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 0;
+  for(const row of TRANSITION_TEXT_TABLE){
+    if(sc >= row.min) return { txt: row.label, cls: row.cls, color: row.color };
+  }
+  const last = TRANSITION_TEXT_TABLE[TRANSITION_TEXT_TABLE.length-1];
+  return { txt: last.label, cls: last.cls, color: last.color };
+}
+
+
+// === 内部最適化ヘルパー（UI変更なし） ===
+// getElementById をキャッシュ（初回 null の場合は再取得）
+const $id = (() => {
+  const cache = new Map();
+  return (id) => {
+    if (cache.has(id)) {
+      const v = cache.get(id);
+      // Re-rendered UI can replace nodes; cached elements may be detached.
+      if (v && v.isConnected) return v;
+      cache.delete(id);
+    }
+    const el = document.getElementById(id);
+    if (el) cache.set(id, el);
+    return el;
+  };
+})();
+
+// AI計算をまとめて実行（連打・全軍更新時の多重計算を防止）
+let __aiTimer = null;
+function scheduleAi() {
+  if (__aiTimer) clearTimeout(__aiTimer);
+  __aiTimer = setTimeout(() => {
+    __aiTimer = null;
+    try { updateTransitionRecommendationUI(); } catch(e) {}
+    generateAiSuggestion();
+    try { updateSlotEvalsFromCurrentInputs(); } catch(e) {}
+  }, 60);
+}
+
+const HOLD_PIN_STORAGE_KEY = 'lw_hold_pins_v1';
+function loadHoldPins(){
+  try{
+    const raw = localStorage.getItem(HOLD_PIN_STORAGE_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(arr) ? arr : []);
+  }catch(e){
+    return new Set();
+  }
+}
+function saveHoldPins(setObj){
+  try{ localStorage.setItem(HOLD_PIN_STORAGE_KEY, JSON.stringify(Array.from(setObj || []))); }catch(e){}
+}
+function getHoldPinKey(item){
+  const id = item && (item.id || item.heroId || item.key || '');
+  const from = item && item.from != null ? item.from : '';
+  const to = item && item.to != null ? item.to : '';
+  return `${id}__${from}__${to}`;
+}
+function isHoldPinned(item){
+  return loadHoldPins().has(getHoldPinKey(item));
+}
+function toggleHoldPinByKey(pinKey){
+  const pins = loadHoldPins();
+  if(pins.has(pinKey)) pins.delete(pinKey);
+  else pins.add(pinKey);
+  saveHoldPins(pins);
+  try{ generateAiSuggestion(); }catch(e){}
+}
+function getHoldPinnedItems(items){
+  const pins = loadHoldPins();
+  return (items || []).filter(item => pins.has(getHoldPinKey(item)));
+}
+function holdPinChipHtml(item){
+  const pinKey = getHoldPinKey(item);
+  const pinned = isHoldPinned(item);
+  const cls = pinned ? ' is-active' : '';
+  const label = pinned ? '保留解除' : '保留';
+  return `<button type="button" class="rankhero-pinbtn${cls}" onclick="toggleHoldPinByKey('${pinKey}')" title="${label}" aria-label="${label}">📌</button>`;
+}
+function holdPinnedSummaryHtml(items){
+  const list = getHoldPinnedItems(items).slice(0, 4);
+  if(!list.length) return '';
+  const chips = list.map(item => {
+    const pinKey = getHoldPinKey(item);
+    return `<button type="button" class="hold-pin-chip" onclick="toggleHoldPinByKey('${pinKey}')">📌 ${item.name} Lv${item.from}→${item.to}</button>`;
+  }).join('');
+  return `<div class="hold-pin-summary"><div class="hold-pin-title">後回し候補</div><div class="hold-pin-list">${chips}</div></div>`;
+}
+
+
+// === 戦力入力（任意）をAI判定に使う ===// 育成段階（初期/中盤/成熟）と移行先（航空寄り/ロケラン寄り）を汎用判定// ================= 戦力差ベース：乗り換え推奨度（%） =================
+
+function updateTransitionRecommendationUI(){
+  const body = $id('power-transition-body') || $id('power-transition');
+  if(!body) return;
+
+  const labels = { tank:"戦車", air:"航空", mis:"ロケラン" };
+  const pool = { tank:[], air:[], mis:[] };
+  const benchPool = { tank:[], air:[], mis:[] };
+
+  // 1〜3軍の英雄をプール
+  for(let s=1; s<=3; s++){
+    for(let p=1; p<=5; p++){
+      const hidEl = $id(`h-${s}-${p}`);
+      const wpEl  = $id(`w-${s}-${p}`);
+      if(!hidEl||!wpEl) continue;
+      const id = hidEl.value;
+      if(!id||id==='empty') continue;
+      const h = HEROES[id];
+      if(!h||h.ur) continue;
+      const wp = normalizeWpInputFixed(wpEl.value);
+      pool[h.t].push({ id, name:h.n||id, wp, pts:wpToPts(wp), squad:s });
+    }
+  }
+  // 控えの英雄もプール
+  for(let p=1; p<=10; p++){
+    const hidEl = $id(`h-bench-${p}`);
+    const wpEl  = $id(`w-bench-${p}`);
+    if(!hidEl||!wpEl) continue;
+    const id = hidEl.value;
+    if(!id||id==='empty') continue;
+    const h = HEROES[id];
+    if(!h||h.ur) continue;
+    const wp = normalizeWpInputFixed(wpEl.value);
+    benchPool[h.t].push({ id, name:h.n||id, wp, pts:wpToPts(wp) });
+  }
+
+  const totalPicked = Object.values(pool).reduce((s,a)=>s+a.length,0);
+  if(totalPicked < 5){
+    body.innerHTML = '<div class="subtle-note">キャラを5人以上配置すると表示されます。</div>';
+    return;
+  }
+
+  // 部隊強化の指針と連動：次に強化すべき軍を判定
+  const armyPcts = [1,2,3].map(s => computeDisplayedArmyProgress(s).pct);
+  const nextSquad = armyPcts[0] >= 80 && armyPcts[1] >= 65 ? 3
+                  : armyPcts[0] >= 80 ? 2 : 1;
+  const squadLabel = { 1:'1軍', 2:'2軍', 3:'3軍' };
+
+  // 各兵種の「次の軍」向け戦力ポテンシャルを計算
+  const typeScore = {};
+  const typeDetail = {};
+
+  ['tank','air','mis'].forEach(t => {
+    const inSquad   = pool[t].filter(m => m.squad === nextSquad);
+    const fromBench = benchPool[t].slice().sort((a,b)=>b.pts-a.pts);
+    const otherSq   = pool[t].filter(m => m.squad !== nextSquad).sort((a,b)=>b.pts-a.pts);
+    const candidates = [...inSquad, ...fromBench, ...otherSq].sort((a,b)=>b.pts-a.pts).slice(0,5);
+
+    const buffInfo = getArmyBuffInfo(candidates);
+    const score = candidates.reduce((s,m)=>
+      s + (m.t===t ? Math.round(m.pts*(1+buffInfo.buffRate)) : m.pts), 0);
+
+    typeScore[t] = score;
+    typeDetail[t] = { inSquad, fromBench: fromBench.slice(0,3), candidates, buffRate:buffInfo.buffRate, buffCount:buffInfo.maxCount };
+  });
+
+  const sorted = Object.entries(typeScore).sort((a,b)=>b[1]-a[1]);
+  const bestType  = sorted[0][0];
+  const bestScore = Math.max(sorted[0][1], 1);
+
+  // S6覚醒チェック
+  const kimAw   = parseAwTier(loadAwTier('kimberly'));
+  const dvaAw   = parseAwTier(loadAwTier('dva'));
+  const teslaAw = parseAwTier(loadAwTier('tesla'));
+  const kimAwAll  = pool.tank.some(m=>m.id==='kimberly') && kimAw.star >= 0;
+  const dvaAwAll  = [...pool.air,...benchPool.air].some(m=>m.id==='dva') && dvaAw.star >= 0;
+  const hasTesla  = [...pool.mis,...benchPool.mis].some(m=>m.id==='tesla');
+
+  // キム+DVA覚醒混成型の評価（packsify推奨）
+  // 両方覚醒済みで手持ちにいる場合、混成型ボーナスを計算
+  const kimExists = [...pool.tank,...benchPool.tank].some(m=>m.id==='kimberly');
+  const dvaExists = [...pool.air,...benchPool.air].some(m=>m.id==='dva');
+  const showMixedRecommend = kimAwAll && dvaAwAll && kimExists && dvaExists;
+
+  const hName = id => (HEROES[id]||{}).n || id;
+
+  const typeCard = (t, rank) => {
+    const d = typeDetail[t];
+    const pct = Math.round((typeScore[t] / bestScore) * 100);
+    const isBest = t === bestType;
+    const c = isBest ? '#d97706' : '#94a3b8';
+    // 同兵種候補の実数（控え含む）で「目標バフ」を表示
+    const allSameType = [...(pool[t]||[]), ...(benchPool[t]||[])];
+    const targetCount = Math.min(5, allSameType.length);
+    const buffBadge = targetCount >= 5 ? '✅ 5体バフ+20%達成可能'
+      : targetCount === 4 ? '🔶 4体バフ+15%達成可能'
+      : targetCount >= 3 ? `⚠️ 現在${targetCount}体（あと${5-targetCount}体で+20%）`
+      : `📋 ${targetCount}体（育成で兵種バフ獲得可能）`;
+
+    // 最も育っていない英雄 → 次の節目
+    const weakest = d.candidates.length ? [...d.candidates].sort((a,b)=>a.wp-b.wp)[0] : null;
+    const nextMile = weakest ? (weakest.wp<10?10:weakest.wp<20?20:weakest.wp<30?30:null) : null;
+    const actionTxt = weakest && nextMile
+      ? `⚠️ <b>${hName(weakest.id)}</b> EW Lv${weakest.wp} → 次の節目は<b>Lv${nextMile}</b>`
+      : weakest ? `✅ <b>${hName(weakest.id)}</b> 目標EW到達済み` : '';
+
+    // 控えから補充候補
+    const benchTxt = d.fromBench.length
+      ? d.fromBench.map(m=>`<b>${hName(m.id)}</b>(EW${m.wp})`).join('・')
+      : 'なし';
+
+    // 覚醒メモ
+    let memo = '';
+    if(t==='tank' && kimAwAll) memo = '👑 キム覚醒済みで戦車軸が強化中';
+    if(t==='air'  && dvaAwAll) memo = '👑 DVA覚醒済みで航空軸が強化中';
+    if(t==='air'  && !dvaAwAll && kimAwAll) memo = '💡 DVA覚醒（Week3）後に一気に強化可能';
+    if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = '💡 テスラ覚醒（Week6）後にさらに強化可能';
+
+    return `<div style="background:#fff;border:1px solid ${isBest?'#f59e0b':'#e8edf5'};border-radius:12px;padding:12px;margin-bottom:8px;${isBest?'box-shadow:0 2px 8px rgba(245,158,11,0.15);':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">✨ 推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;">${rank}番目</span>`}
+          <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">${labels[t]}軸</span>
+          <span style="font-size:var(--fs-xxs);font-weight:700;color:${d.buffCount>=5?'#059669':d.buffCount>=4?'#d97706':'#94a3b8'};">${buffBadge}</span>
+        </div>
+        <span style="font-size:var(--fs-md);font-weight:900;color:${c};">${pct}%</span>
+      </div>
+      ${actionTxt?`<div style="font-size:var(--fs-sm);margin-bottom:3px;">${actionTxt}</div>`:''}
+      <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:3px;">控え補充候補：${benchTxt}</div>
+      ${memo?`<div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">${memo}</div>`:''}
+      <div style="background:#f1f5f9;border-radius:4px;height:4px;margin-top:5px;">
+        <div style="background:${c};width:${pct}%;height:100%;border-radius:4px;"></div>
+      </div>
+    </div>`;
+  };
+
+  // 混成型推奨カード
+  const mixedCard = showMixedRecommend ? `
+    <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:0 2px 10px rgba(245,158,11,0.2);">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">
+        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">👑 覚醒特別推奨</span>
+        <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">キム+DVA 混成型</span>
+        <span style="font-size:var(--fs-xxs);font-weight:700;color:#059669;">🔶 4体バフ+15%</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:4px;">
+        AoE（覚醒キム）＋単体バースト（覚醒DVA）の実戦最強コンビ。<br>
+        兵種バフは15%になるが、覚醒効果で純粋5体を上回ることが多い（packsify推奨）
+      </div>
+      <div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">
+        👑 キム ${awStarLabel(kimAw)} ＋ DVA ${awStarLabel(dvaAw)} のコンボが有効<br>
+        <span style="font-size:var(--fs-xxs);color:#92400e;">
+          最低：キム★0-1解放済み＋DVA★0-1解放済み　理想：キム★3-0＋DVA★3-0
+        </span>
+      </div>
+      <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
+        構成例：ウィリアムズ+マーフィ（前衛）+キム+DVA+マーシャル
+      </div>
+    </div>` : '';
+
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+      <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">🎯 ${squadLabel[nextSquad]}の推奨兵種</span>
+      <span style="font-size:var(--fs-xxs);color:#475569;">手持ち＋控えから算出 / EW20基準</span>
+    </div>
+    ${mixedCard}
+    ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
+    <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
+      ※ 達成率は最もスコアが高い兵種を100%として相対比較。兵種バフ表示は手持ち＋控えで達成可能な目標値です。
+    </div>
+  `;
+}
+
+
+function getPreciseCost(current, target) {
+    if (current >= 30 || target <= current) return 0;
+    let total = 0;
+    for (let i = current + 1; i <= target; i++) {
+        if (i === 1) total += 50;
+        else if (i >= 2 && i <= 5) total += 20;
+        else if (i >= 6 && i <= 10) total += 40;
+        else if (i >= 11 && i <= 15) total += 60;
+        else if (i >= 16 && i <= 20) total += 100;
+        else if (i >= 21 && i <= 25) total += 150;
+        else if (i >= 26 && i <= 30) total += 200;
+    }
+    return total;
+}
+
+function getNextMilestone(lv) {
+    if (lv >= 30) return null;
+    let target = lv < 10 ? 10 : (lv < 20 ? 20 : 30);
+    return { target: target, cost: getPreciseCost(lv, target) };
+}
+
+window.onload = function() { 
+    try{ let ref=document.getElementById('ref-panel'); if(ref) ref.style.display='none'; }catch(e){} 
+
+    initSquadHTML();
+    try { renderPresetPanel(); } catch(e) {} 
+loadAllData();
+
+// ===== オンボーディング =====
+function showOnboardIfNeeded() {
+  try {
+    const dismissed = localStorage.getItem('lw_onboard_dismissed');
+    const hasData   = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final');
+    if (dismissed === '1' || hasData) return; // 既存ユーザーはスキップ
+    document.getElementById('onboard-overlay').style.display = 'flex';
+  } catch(e) {}
+}
+function closeOnboard() {
+  try {
+    const noShow = document.getElementById('onboard-no-show');
+    if (noShow && noShow.checked) {
+      localStorage.setItem('lw_onboard_dismissed', '1');
+    }
+    const el = document.getElementById('onboard-overlay');
+    if (el) {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity .2s';
+      setTimeout(() => el.style.display = 'none', 200);
+    }
+  } catch(e) {}
+}
+
+    showOnboardIfNeeded();
+    try { restorePanelStates(); } catch(e) {}
+    try { renderSlots(); } catch(e) {}
+   
+   // ★★★ これを追加（超重要）
+    updateTransitionRecommendationUI();
+    try{ updateSlotEvalsFromCurrentInputs(); }catch(e){}
+};
+
+function showTab(id, el) { 
+    document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); 
+    document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); 
+    $id('tab-'+id).classList.add('active'); 
+    if(el) el.classList.add('active'); 
+    let footer = $id('footer-bar');
+    let ref = document.getElementById('ref-panel');
+    if(ref) ref.style.display = (id === 'guide') ? 'block' : 'none';
+    if(footer) footer.style.display = 'none';
+}
+
+
+function makeDataSvg(svg){
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+function getHeroImagePath(heroId){
+  if(!heroId || heroId === 'empty') return '';
+  return `img/${heroId}.webp`;
+}function makeShardIcon(){
+  return makeDataSvg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs><rect x="6" y="6" width="52" height="52" rx="14" fill="url(#g)"/><path d="M32 14l8 14-8 22-8-22z" fill="rgba(255,255,255,.92)"/></svg>`);
+}
+
+function showToast(msg) { 
+    let x = $id("toast"); 
+    x.innerText = msg; x.style.visibility = "visible"; x.style.bottom = "80px"; 
+    setTimeout(() => { x.style.visibility = "hidden"; x.style.bottom = "30px"; }, 2500); 
+}
+
+
+/* === UIアイコン（兵種/役割） === */
+
+
+
+
+function uiIcon(src, alt){
+  if(!src) return "";
+  return `<img class="ui-ico" src="${src}" alt="${alt||''}">`;
+}
+function typeIcon(t){ return uiIcon(TYPE_ICON[t], t); }
+function roleIcon(r){ return uiIcon(ROLE_ICON[r], r); }
+
+/* 育成ランキング表示用：兵種アイコン - キャラ名 - 役割アイコン */
+function effTitleLine(rank, item){
+  const t = item.type || item.t;
+  const r = item.roleKey || item.r;
+  return `<div class="eff-title-line">${typeIcon(t)}<b>${rank}. ${item.name}</b>${roleIcon(r)}</div>`;
+}
+
+// ===============================
+// 育成ランキング：カード用CSSを強制注入（styles.css をいじっても効かない問題対策）
+// ===============================
+(function(){
+  try{
+    if(document.getElementById('__eff_rank_css')) return;
+    const st = document.createElement('style');
+    st.id = '__eff_rank_css';
+    st.textContent = `
+      .eff-card{ padding:10px 10px; border-radius:12px; }
+      .eff-card + .eff-card{ border-top:1px solid #f3c4dd; margin-top:10px; padding-top:14px; }
+      .eff-card-best{ background:#fff7ed; border:1px solid #fdba74; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+      .eff-row{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+      .eff-left{ line-height:1.4; min-width:0; }
+      .eff-right{ display:flex; flex-direction:column; align-items:flex-end; text-align:right; gap:6px; flex-shrink:0; }
+      .eff-sub{ display:flex; justify-content:flex-end; width:100%; }
+      .eff-subline{ display:inline-flex; align-items:center; gap:6px; white-space:nowrap; color:#475569; font-size:var(--fs-md); font-weight:900; }
+      .eff-plus{ font-weight:900; }
+      .gear-cost{ display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+      .gear-cost img{ width:36px; height:36px; flex-shrink:0; }
+      .gear-num{ font-size:1.15em; font-weight:900; }
+      .gear-cost .sep{ opacity:.65; margin-right:2px; }
+      .rankhero-topbadge{ display:flex; align-items:flex-start; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+      .rankhero-pinbtn{ appearance:none; border:1px solid #d1d5db; background:#fff; color:#475569; border-radius:999px; width:24px; height:24px; min-width:24px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:900; line-height:1; cursor:pointer; transform:translateY(-3px); }
+      .rankhero-pinbtn.is-active{ background:#fff7ed; border-color:#c2410c; color:#c2410c; border-radius:10px; width:auto; min-width:34px; padding:0 8px; }
+      .hold-pin-summary{ margin:0 0 10px; padding:10px; border:1px dashed #fbcfe8; border-radius:10px; background:#fff; }
+      .hold-pin-title{ font-size:var(--fs-md); font-weight:900; color:#a21caf; margin-bottom:6px; }
+      .hold-pin-list{ display:flex; flex-wrap:wrap; gap:6px; }
+      .hold-pin-chip{ appearance:none; border:1px solid #fdba74; background:#fff7ed; color:#c2410c; border-radius:999px; padding:5px 10px; font-size:.74rem; font-weight:900; cursor:pointer; }
+      .rankhero-reasons{ display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+      .rankhero-card--split,
+      .reinf-card + .reinf-card{ position:relative; margin-top:14px; padding-top:16px; }
+      .rankhero-card--split::before,
+      .reinf-card + .reinf-card::before{ content:''; position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, rgba(244,114,182,0), rgba(244,114,182,.42) 12%, rgba(244,114,182,.42) 88%, rgba(244,114,182,0)); }
+      .reason-badge{ display:inline-flex; align-items:center; border-radius:999px; padding:2px 6px; font-size:var(--fs-xxs); font-weight:700; line-height:1.2; border:1px solid transparent; white-space:nowrap; }
+      .reason-badge--neutral{ background:#f1f5f9; color:#475569; border-color:#475569; }
+      .reason-badge--accent{ background:#e0e7ff; color:#3730a3; border-color:#a5b4fc; }
+      .reason-badge--good{ background:#ecfdf5; color:#047857; border-color:#a7f3d0; }
+      .reason-badge--warn{ background:#fff7ed; color:#c2410c; border-color:#c2410c; }
+      .reason-badge--attack{ background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
+      .reason-badge--defense{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+      .reason-badge--support{ background:#faf5ff; color:#7e22ce; border-color:#e9d5ff; }
+      .reason-badge--future{ background:#ede9fe; color:#5b21b6; border-color:#c4b5fd; font-weight:900; }
+      .rankhero-summary{ margin-top:5px; font-size:var(--fs-sm); line-height:1.5; color:#374151; }
+    `;
+    document.head.appendChild(st);
+  }catch(e){}
+})();
+
+function effCardHtml(rank, item, opts){
+  opts = opts || {};
+  const isBest = !!opts.isBest;
+  const isTop = !!opts.isTop;
+  const mode = opts.mode || 'normal'; // normal | unlock
+
+  const safeItem = Object.assign({}, item || {});
+  // フォールバック（データ差分吸収）
+  safeItem.type = safeItem.type || safeItem.t;
+  safeItem.roleKey = safeItem.roleKey || safeItem.r;
+  safeItem.name = safeItem.name || safeItem.n;
+
+  const lvLine = safeItem.isAwakeningItem
+    ? `<span class="eff-lv" style="color:#ef4444;font-weight:900;">👑 覚醒 ${safeItem.awTierStr==='none'?'未覚醒':'★'+safeItem.awTierStr} → ★${safeItem.nextTierStr}</span>`
+    : (safeItem.from !== undefined && safeItem.to !== undefined)
+      ? `<span class="eff-lv">(Lv${safeItem.from}→${safeItem.to})</span>`
+      : '';
+
+  const badge = (mode === 'normal' && safeItem.growthType) ? growthBadge(safeItem.growthType) : (opts.rightBadge || '');
+
+  let sub = '';
+  if(mode === 'unlock'){
+    const unlockLv = (safeItem.to !== undefined) ? ` <span class="eff-lv">(Lv${safeItem.from||0}→${safeItem.to})</span>` : '';
+    sub = `<div class="eff-sub"><span class="eff-subline">解放時${unlockLv}</span></div>`;
+  }else{
+    const costPart = safeItem.isAwakeningItem
+      ? `<span class="gear-cost"><span class="sep">必要：</span>${safeItem.nextShardNamed ? '🔑専用' : '<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;">'} <span class="gear-num">×${safeItem.nextShardCost}</span></span>`
+      : (safeItem.cost !== undefined && safeItem.cost !== null)
+        ? `<span class="gear-cost"><span class="sep">必要：</span><img src="${SHARD_ICON_SRC}" alt="gear"> <span class="gear-num">${safeItem.cost}</span></span>`
+        : '';
+    sub = `<div class="eff-sub"><span class="eff-subline">${costPart || ''}</span></div>`;
+  }
+
+  return `
+    <div class="eff-card ${isTop?'eff-card-top':''} ${isBest?'eff-card-best':''}">
+      <div class="eff-row">
+        <div class="eff-left">
+          ${effTitleLine(rank, safeItem)}
+          ${isBest ? '<span class="eff-best">👑 最優先</span>' : ''}
+          ${lvLine}
+        </div>
+        <div class="eff-right">
+          ${badge}
+          ${sub}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function reinfCardHtml(rank, item){
+  const safeItem = Object.assign({}, item || {});
+  safeItem.type = safeItem.type || safeItem.t;
+  safeItem.roleKey = safeItem.roleKey || safeItem.r;
+  safeItem.name = safeItem.name || safeItem.n || '';
+  safeItem.id = safeItem.id || safeItem.key || safeItem.heroId || '';
+
+  // 育成ランキングと完全に同じ描画ルートを使う
+  // （画像・名前行・右側メタの構造を揃える）
+  return `<div class="reinf-card">${topRankCardHtml(rank, safeItem, { compact:true, showPin:false })}</div>`;
+}
+
+function topRankCardHtml(rank, item, opts){
+  opts = opts || {};
+  const compact = !!opts.compact;
+  const safeItem = Object.assign({}, item || {});
+  safeItem.type = safeItem.type || safeItem.t;
+  safeItem.roleKey = safeItem.roleKey || safeItem.r;
+  safeItem.name = safeItem.name || safeItem.n || '';
+
+  const lvLine = (safeItem.from !== undefined && safeItem.to !== undefined)
+    ? `<div class="rankhero-lv">(Lv${safeItem.from}→${safeItem.to})</div>`
+    : '';
+
+  const costPart = (safeItem.cost !== undefined && safeItem.cost !== null)
+    ? `<span class="rankhero-cost"><span class="rankhero-cost-sep">あと</span><img class="rankhero-cost-icon" src="${SHARD_ICON_SRC}" alt="gear"> <span class="rankhero-cost-num">${safeItem.cost}</span></span>`
+    : '';
+
+  const badge = safeItem.growthType ? growthBadge(safeItem.growthType) : (opts.rightBadge || '');
+  const reasonBadges = Array.isArray(safeItem.reasonCodes) ? __aiSelectReasonCodes(safeItem.reasonCodes, 2).map(reasonCodeBadge).join('') : '';
+  const summaryText = __buildRecommendationSummary(safeItem);
+  const pinBtn = (opts.showPin === false) ? '' : holdPinChipHtml(safeItem);
+  const cardClass = compact ? 'rankhero-card rankhero-card--compact' : `rankhero-card ${rank>1?'rankhero-card--split':''}`;
+  const rowClass = compact ? 'rankhero-row rankhero-row--compact' : 'rankhero-row';
+
+  return `
+    <div class="${cardClass}">
+      <div class="${rowClass}">
+        <div class="rankhero-visual">
+          <div class="rankhero-chip-row">
+            <span class="rankhero-chip">${typeIcon(safeItem.type)}</span>
+            <span class="rankhero-chip">${roleIcon(safeItem.roleKey)}</span>
+          </div>
+          <span class="rankhero-avatar-wrap">
+            <img class="rankhero-avatar-img" src="${getHeroImagePath(safeItem.id || safeItem.key || safeItem.heroId || '')}" alt="${safeItem.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <span class="rankhero-avatar-fallback" style="display:none;">${typeIcon(safeItem.type)}</span>
+          </span>
+          <div class="rankhero-name">${rank}. ${safeItem.name}</div>
+          ${(()=>{
+            if(typeof AWAKENING_HEROES==='undefined') return '';
+            const awData = AWAKENING_HEROES[safeItem.id||safeItem.key||safeItem.heroId||''];
+            if(!awData) return '';
+            const awTierStr = loadAwTier(safeItem.id||safeItem.key||safeItem.heroId||'');
+            const awAt = (typeof parseAwTier!=='undefined') ? parseAwTier(awTierStr) : {star:-1,tier:0};
+            if(awAt.star < 0) return '<span class="awaken-can-badge" style="display:inline-block;margin-top:2px;">覚醒可</span>';
+            const tl = awStarLabel(awAt);
+            return '<span style="display:inline-block;margin-top:2px;font-size:var(--fs-xxs);color:#b45309;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;font-weight:900;">' + tl + '</span>';
+          })()}
+        </div>
+
+        <div class="rankhero-body">
+          <div class="rankhero-topline">
+            ${lvLine}
+            <div class="rankhero-topbadge">${badge}${pinBtn}</div>
+          </div>
+          ${reasonBadges ? `<div class="rankhero-reasons">${reasonBadges}</div>` : ''}
+          ${summaryText ? `<div class="rankhero-summary">${escapeHtml(summaryText)}</div>` : ''}
+          ${(()=>{
+            const hid = safeItem.id||safeItem.key||safeItem.heroId||'';
+            const advice = __buildAwakeningAdvice(hid, safeItem.wp || safeItem.from || 0);
+            return advice ? `<div class="rankhero-summary" style="color:#ef4444;border-left:2px solid #b91c1c;padding-left:6px;margin-top:3px;">${escapeHtml(advice)}</div>` : '';
+          })()}
+          <div class="rankhero-bottomline">
+            <div class="rankhero-leftline">
+              <!-- gain数値は非表示（効果バッジで表現） -->
+            </div>
+            <div class="rankhero-costwrap">${costPart}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 育成効率ランキング：Top3 + 「もっと見る」トグル
+function toggleEffMore() {
+    let more = $id('eff-more-list');
+    let btn = $id('eff-more-btn');
+    if(!more || !btn) return;
+    let open = more.getAttribute('data-open') === '1';
+    if(open) {
+        more.style.display = 'none';
+        more.setAttribute('data-open','0');
+        btn.innerText = 'もっと見る（おすすめ）';
+    } else {
+        more.style.display = 'block';
+        more.setAttribute('data-open','1');
+        btn.innerText = '閉じる';
+    }
+}
+
+// ===============================
+// 📋 推奨編成テンプレート（コミュニティ検証済み）
+// ===============================
+// ===============================
+// 推奨編成テンプレート（F2P〜微課金向け）
+// EWは「推奨目標値」。EW Lv20が各英雄の現実的な節目。
+// 出典: packsify/allclash/cpt-hedge/ldshop (2026年6月時点)
+// ===============================
+
+
+function renderPresetPanel() {
+  const panel = document.getElementById('preset-panel');
+  const list  = document.getElementById('preset-list');
+  if (!panel || !list) return;
+  panel.style.display = 'block';
+  const TC = { tank:'#3b82f6', air:'#8b5cf6', mis:'#ef4444', mix:'#f59e0b' };
+  const TL = { tank:'戦車軸', air:'航空軸', mis:'ロケラン軸', mix:'混成型' };
+  const SL = { f2p:'🆓 無課金向け', low:'💰 低課金向け', mid:'💎 中課金向け' };
+  const SC = { f2p:'#059669', low:'#2563eb', mid:'#7c3aed' };
+
+  list.innerHTML = FORMATION_PRESETS.map(p => `
+    <div style="background:#fff;border:1px solid #e8edf5;border-radius:12px;padding:12px;">
+      <!-- ヘッダー -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:2px;">
+            <span style="font-size:var(--fs-xxs);font-weight:900;color:${SC[p.spendLevel]};background:${SC[p.spendLevel]}18;border:1px solid ${SC[p.spendLevel]}44;border-radius:4px;padding:1px 5px;">${SL[p.spendLevel]}</span>
+            <span style="font-size:var(--fs-xxs);font-weight:900;color:${TC[p.type]};background:${TC[p.type]}18;border-radius:4px;padding:1px 5px;">${TL[p.type]}</span>
+          </div>
+          <div style="font-size:var(--fs-md);font-weight:900;color:#111827;line-height:1.3;">${p.name}</div>
+        </div>
+        <div style="display:flex;gap:3px;flex-shrink:0;">
+          <button onclick="applyPreset('${p.id}',1)" style="font-size:var(--fs-xs);background:#2563eb;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">1軍</button>
+          <button onclick="applyPreset('${p.id}',2)" style="font-size:var(--fs-xs);background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">2軍</button>
+          <button onclick="applyPreset('${p.id}',3)" style="font-size:var(--fs-xs);background:#059669;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">3軍</button>
+        </div>
+      </div>
+      <!-- 説明 -->
+      <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;">${p.desc}</div>
+      <!-- F2P注意点 -->
+      ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
+      <!-- 英雄アイコン：前衛2体（上段）＋後衛3体（下段） -->
+      <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
+      ${(()=>{
+        const heroCard = m => {
+          const h = HEROES[m.id]||{};
+          return '<div class="preset-hero-col">'
+            +'<div class="preset-hero-icon">'
+            +'<img src="img/'+m.id+'.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">'
+            +'</div>'
+            +'<span class="preset-hero-name">'+(h.n||m.id)+'</span>'
+            +'<span class="preset-hero-ew">目標EW'+m.wp+'</span>'
+            +(m.note ? '<span class="preset-hero-note">'+m.note+'</span>' : '')
+            +'</div>';
+        };
+        const front = p.squad.filter(m => (HEROES[m.id]||{}).r === 'wall');
+        const back  = p.squad.filter(m => (HEROES[m.id]||{}).r !== 'wall');
+        // スマホ(<640px): 編成スロットと同じグリッド配置（上2・下3）
+        // タブレット・PC: 横一列
+        const isMobile = window.innerWidth < 640;
+        if (!isMobile) {
+          return '<div style="display:flex;gap:10px;flex-wrap:wrap;">'+p.squad.map(heroCard).join('')+'</div>';
+        }
+        // スマホ: 5体を編成スロットと同じ grid で配置
+        const cards = p.squad.map(heroCard);
+        // 編成スロットと同じ gap:8px 58px + translateX で中央寄せ
+        return '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,70px));justify-content:center;gap:8px 58px;">'          + '<div style="grid-column:1;grid-row:1;justify-self:end;transform:translateX(60px);">'+cards[0]+'</div>'          + '<div style="grid-column:3;grid-row:1;justify-self:start;transform:translateX(-60px);">'+cards[1]+'</div>'          + '<div style="grid-column:1;grid-row:2;justify-self:start;">'+cards[2]+'</div>'          + '<div style="grid-column:2;grid-row:2;justify-self:center;">'+cards[3]+'</div>'          + '<div style="grid-column:3;grid-row:2;justify-self:end;">'+cards[4]+'</div>'          + '</div>';
+      })()}
+      <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
+    </div>
+  `).join('');
+}
+
+function applyPreset(presetId, squadNum) {
+  const s = squadNum || 1;
+  const sLabel = s+'軍';
+  const preset = FORMATION_PRESETS.find(p => p.id === presetId);
+  if (!preset) return;
+  if (!confirm('「'+preset.name+'」を'+sLabel+'に反映しますか？\nキャラ配置のみ変更し、現在のEW Lvはそのまま維持されます。')) return;
+
+  // ステップ1: テンプレートに含まれるキャラのEW Lvを事前に収集
+  // 他軍・控えから同キャラを見つけてEWを引き継ぐ
+  const presetIds = new Set(preset.squad.map(m => m.id));
+  const wpMap = {}; // heroId → 現在のEW Lv
+
+  for (let os = 1; os <= 3; os++) {
+    for (let pp = 1; pp <= 5; pp++) {
+      const id = (document.getElementById('h-'+os+'-'+pp)||{}).value;
+      const wp = parseInt((document.getElementById('w-'+os+'-'+pp)||{}).value)||0;
+      if (id && presetIds.has(id) && !(id in wpMap)) wpMap[id] = wp;
+    }
+  }
+  for (let pp = 1; pp <= 10; pp++) {
+    const id = (document.getElementById('h-bench-'+pp)||{}).value;
+    const wp = parseInt((document.getElementById('w-bench-'+pp)||{}).value)||0;
+    if (id && presetIds.has(id) && !(id in wpMap)) wpMap[id] = wp;
+  }
+
+  // ステップ2: 他軍のスロットから重複するキャラを空にする（移動扱い）
+  for (let os = 1; os <= 3; os++) {
+    if (os === s) continue; // 反映先の軍はスキップ
+    for (let pp = 1; pp <= 5; pp++) {
+      const hEl = document.getElementById('h-'+os+'-'+pp);
+      if (hEl && presetIds.has(hEl.value)) {
+        hEl.value = 'empty';
+        const wEl = document.getElementById('w-'+os+'-'+pp);
+        if (wEl) wEl.value = 0;
+      }
+    }
+  }
+  // 控えからも除去
+  for (let pp = 1; pp <= 10; pp++) {
+    const hEl = document.getElementById('h-bench-'+pp);
+    if (hEl && presetIds.has(hEl.value)) {
+      hEl.value = 'empty';
+      const wEl = document.getElementById('w-bench-'+pp);
+      if (wEl) wEl.value = 0;
+    }
+  }
+
+  // ステップ3: テンプレートを反映先の軍に配置
+  preset.squad.forEach((m, i) => {
+    const p = i + 1;
+    const hEl = document.getElementById('h-'+s+'-'+p);
+    const wEl = document.getElementById('w-'+s+'-'+p);
+    if (!hEl) return;
+    hEl.value = m.id;
+    if (wEl) wEl.value = wpMap[m.id] !== undefined ? wpMap[m.id] : 0;
+  });
+
+  // ステップ4: 全軍を更新してランキング再計算
+  try { for(let sq=1;sq<=3;sq++) updateSquad(sq); } catch(e) {}
+  try { renderSlots(); } catch(e) {}
+  try { updateAllSquads(); } catch(e) {}
+  try { scheduleAi(); } catch(e) {}
+  showToast('✅ 「'+preset.name+'」を'+sLabel+'に反映（他軍の重複は移動）');
+}
+
+function initSquadHTML() {
+    let html = '';
+    let opts = '<option value="empty">未設定</option>';
+    let grps = { tank: '<optgroup label="戦車">', air: '<optgroup label="航空">', mis: '<optgroup label="ロケラン">' };
+    for(let k in HEROES) {
+        if(k==='empty') continue;
+        grps[HEROES[k].t] += `<option value="${k}">${HEROES[k].n}${HEROES[k].ur?"(UR)":""}</option>`;
+    }
+    opts += grps.tank + '</optgroup>' + grps.air + '</optgroup>' + grps.mis + '</optgroup>';
+
+    for(let s=1; s<=4; s++) {
+        let isB = s===4;
+        html += `<div class="squad-section"><div class="squad-header" onclick="toggleSquad(${s}, this)"><span>${isB?'控え室':'第'+s+'部隊'}</span><span>▶</span></div><div class="squad-body ${s===1?'open':''}" id="sq-body-${s}">`;
+        
+        if(!isB) { html += `<div id="adv-${s}" class="advice"></div>`; }
+        
+        html += `<div class="squad-grid">`;
+        let slots = [];
+        for(let p=1; p<=(isB?10:5); p++) {
+            slots.push(`
+            <div class="interactive-card" id="card-${s}-${p}">
+                <div class="prio-badge" id="prio-${s}-${p}"></div>
+                <div class="hero-portrait" id="img-${s}-${p}" style="display:none;"></div>
+                <div class="card-icon-wrap">
+                    <div class="icon-box" id="f-${s}-${p}" style="display:none;"></div>
+                    <div class="icon-box" id="r-${s}-${p}" style="display:none;"></div>
+                </div>
+                <select class="card-select" id="h-${s}-${p}" onchange="updateSquad(${s})">${opts}</select>
+                <div class="card-stepper" id="wp-box-${s}-${p}">
+                    <button onclick="stepWp(${s},${p},-1)">-</button>
+                    <input id="w-${s}-${p}" value="0" readonly>
+                    <button onclick="stepWp(${s},${p},1)">+</button>
+                </div>
+                <div id="syn-${s}-${p}" class="shard-info"></div>
+            </div>`);
+        }
+        
+        if(isB) {
+            html += `<div class="v-row bench">${slots.join('')}</div>`;
+        } else {
+            html += `<div class="v-row">${slots[0]}${slots[1]}</div><div class="v-row">${slots[2]}${slots[3]}${slots[4]}</div>`;
+        }
+        html += `</div></div></div>`;
+    }
+    $id('squad-container').innerHTML = html;
+}
+
+function toggleSquad(s, header) { let b = $id(`sq-body-${s}`); b.classList.toggle('open'); header.children[1].innerText = b.classList.contains('open') ? '▼' : '▶'; }
+function stepWp(s, p, d) { let el = $id(`w-${s}-${p}`); if(el.value.includes("未"))return; el.value = Math.min(Math.max((parseInt(el.value)||0)+d, 0), 30); updateSquad(s); }
+function updateAllSquads() { for(let i=1; i<=4; i++) updateSquad(i); try{ updateSlotEvalsFromCurrentInputs(); }catch(e){} try{ updateTransitionRecommendationUI(); }catch(e){} }
+
+function lockDuplicateHeroes(s) {
+    let selects = Array.from(document.querySelectorAll(`#sq-body-${s} .card-select`));
+    let vals = selects.map(el => el.value).filter(v => v !== 'empty');
+    selects.forEach(sel => {
+        let prev = sel.getAttribute('data-prev') || 'empty';
+        if (sel.value !== 'empty' && vals.filter(v => v === sel.value).length > 1) {
+            showToast("⚠️ 同じ部隊内でキャラが重複しています");
+            sel.value = prev; vals = selects.map(el => el.value).filter(v => v !== 'empty');
+        } else { sel.setAttribute('data-prev', sel.value); }
+        Array.from(sel.options).forEach(opt => {
+            let isDup = opt.value !== 'empty' && vals.includes(opt.value) && opt.value !== sel.value;
+            opt.disabled = isDup;
+            if (isDup) { if (!opt.text.includes('済')) opt.text = opt.text + " (済)"; opt.style.color = "rgba(255,255,255,0.3)"; } 
+            else { opt.text = opt.text.replace(" (済)", ""); opt.style.color = "#fff"; }
+        });
+    });
+}
+
+function updateSquad(s) {
+    lockDuplicateHeroes(s);
+    let actPool = []; let counts = {tank:0, air:0, mis:0, none:0};
+    
+    for(let p=1; p<=(s===4?10:5); p++) {
+        let hid = $id(`h-${s}-${p}`).value, wpEl = $id(`w-${s}-${p}`);
+        let h = HEROES[hid], v = parseInt(wpEl.value) || 0;
+        let card = $id(`card-${s}-${p}`), fIcon = $id(`f-${s}-${p}`), rIcon = $id(`r-${s}-${p}`), imgEl = $id(`img-${s}-${p}`);
+        card.className = 'interactive-card'; $id(`prio-${s}-${p}`).style.display = 'none';
+        
+        if(h.ur || hid === 'empty') { $id(`wp-box-${s}-${p}`).style.opacity = '0.3'; wpEl.value = h.ur ? "未実装" : "-"; v = 0; } 
+        else { $id(`wp-box-${s}-${p}`).style.opacity = '1'; wpEl.value = v; }
+        
+        if (hid === 'empty') { 
+            card.classList.add('card-empty'); counts.none++; card.style.backgroundImage = 'none'; if(imgEl){ imgEl.style.display = 'none'; imgEl.style.backgroundImage = 'none'; } fIcon.style.display = 'none'; rIcon.style.display = 'none'; $id(`syn-${s}-${p}`).innerHTML = '';
+        } else {
+            card.classList.add('card-'+(h.ur?'ur':h.t));
+            card.style.backgroundImage = 'none';
+            if(imgEl){ imgEl.style.display = 'block'; imgEl.style.backgroundImage = `url(${getHeroImagePath(hid)})`; }
+            
+            // 💡 兵種/役割アイコン（埋め込みSVG）
+            fIcon.innerHTML = uiIcon(TYPE_ICON[h.t] || TYPE_ICON.tank, h.t || 'type');
+            rIcon.innerHTML = uiIcon(ROLE_ICON[h.r] || ROLE_ICON.sup, h.r || 'role');
+            
+            if (v >= 30) {
+                $id(`syn-${s}-${p}`).innerHTML = `<div class="awaken-badge">👑 覚醒</div>`;
+            } else if (v === 0 && !h.ur) {
+                $id(`syn-${s}-${p}`).innerHTML = `<span class="shard-info" style="color:#475569; font-size:var(--fs-md);">未解放</span>`;
+                actPool.push({ p:p, h:h, wp:v });
+            } else if (v > 0) { 
+                let ms = getNextMilestone(v);
+                let iconHtml = `<img src="${SHARD_ICON_SRC}" class="shard-icon">`;
+                $id(`syn-${s}-${p}`).innerHTML = ms ? `<div class="shard-info"><span style="font-size:var(--fs-xs); margin-right:1px;">Lv${ms.target}迄</span>${iconHtml}<span style="font-size:var(--fs-xl);">${ms.cost}</span></div>` : ''; 
+                actPool.push({ p:p, h:h, wp:v }); 
+            }
+        }
+    }
+    
+    // 💡 優先度バッジ（①②③）ロジックの完全復元
+    if(s !== 4 && actPool.length > 0) { 
+        let squadAtks = actPool.filter(m => m.h.r === 'atk').sort((a,b)=>b.h.pr - a.h.pr);
+        let squadWalls = actPool.filter(m => m.h.r === 'wall').sort((a,b)=>b.h.pr - a.h.pr);
+        
+        actPool.forEach(m => {
+            let score = 0;
+            let isMainAtk = squadAtks[0] === m;
+            let isMainWall = squadWalls[0] === m;
+            let isSubWall = squadWalls.length > 1 && squadWalls.includes(m) && !isMainWall;
+            let isSubAtk = squadAtks.length > 1 && squadAtks.includes(m) && !isMainAtk;
+            let isSup = m.h.r === 'sup';
+            
+            if (isMainAtk && m.wp < 20) score = 10000 + m.h.pr;
+            else if (isMainWall && m.wp < 10) score = 9000 + m.h.pr;
+            else if (m.wp < 10) score = 8000 + m.h.pr;
+            else if (isMainWall && m.wp < 20) score = 7000 + m.h.pr;
+            else if (isSubAtk && m.wp < 20) score = 6000 + m.h.pr;
+            else if (isSup && m.wp < 20) score = 5000 + m.h.pr;
+            else if (isMainAtk && m.wp < 30) score = 4000 + m.h.pr;
+            else if (isSubWall && m.wp < 20) score = 3000 + m.h.pr;
+            else score = m.h.pr;
+            
+            m.dynamicPr = score;
+        });
+
+        actPool.sort((a,b) => b.dynamicPr - a.dynamicPr);
+        actPool.forEach((m,i)=>{ 
+            if(i<3){ 
+                let el=$id(`prio-${s}-${m.p}`); 
+                el.innerHTML=["①","②","③"][i]; 
+                el.className=`prio-badge prio-${i+1}`; 
+                el.style.display='flex'; 
+            }
+        }); 
+    }
+    
+    if(s!==4) analyzeSquad(s, counts);
+    // 💡 リアルタイム更新
+    scheduleAi();
+}
+
+function analyzeSquad(s, c) {
+    let div = $id(`adv-${s}`); 
+    let max = Math.max(c.tank, c.air, c.mis);
+    
+    if(max === 0) { 
+        div.style.display = 'block'; 
+        div.className = "advice adv-ng"; 
+        div.innerHTML = `⚠️ <b>編成未完了：</b> 5人配置してバフを発動させましょう。`;
+        return; 
+    }
+    
+    div.style.display = 'block';
+    let status = max === 5 ? 'perfect' : (max === 4 || max === 3) ? 'ok' : 'ng';
+    
+    let msg = max === 5 ? `✅ <b>5体統一編成：</b> 全員同兵種で兵種バフ+20%がフル適用されています。` 
+            : max === 4 ? `🔶 <b>4体+1体編成：</b> 主力4体に兵種バフ+15%が適用されています。` 
+            : max === 3 ? (c.none === 2
+                ? `⚠️ <b>3体編成：</b> 同兵種が3体のみで兵種バフは+5%にとどまっています。`
+                : `⚠️ <b>混成3体編成：</b> 主力3体に兵種バフ+10%が適用されています。`) 
+            : `❌ <b>兵種バラバラ：</b> 同兵種が3体未満のため兵種バフが発生していません。`;
+    
+    if(max < 5 && max > 0 && c.none === 0) {
+        // S6覚醒混成チェック：覚醒済みキム+DVAの4+1型は例外的に許容
+        const squadIds = [];
+        for(let p=1;p<=5;p++){
+            const el=$id(`h-${s}-${p}`);
+            if(el && el.value && el.value!=='empty') squadIds.push(el.value);
+        }
+        const kimAw = (typeof loadAwTier!=='undefined') ? parseAwTier(loadAwTier('kimberly')) : {star:-1};
+        const dvaAw = (typeof loadAwTier!=='undefined') ? parseAwTier(loadAwTier('dva'))       : {star:-1};
+        const kimAwakened = squadIds.includes('kimberly') && kimAw.star >= 0;
+        const dvaAwakened = squadIds.includes('dva')       && dvaAw.star >= 0;
+
+        if (kimAwakened && dvaAwakened) {
+            msg += `<br><span style="display:inline-block;margin-top:6px;font-size:var(--fs-sm);color:#92400e;background:#fffbeb;padding:6px 8px;border-radius:6px;border:1px solid #fde68a;line-height:1.4;">👑 <b>S6覚醒混成：</b> 覚醒キム(戦車)+覚醒DVA(航空)の4+1型は海外ガチ勢推奨の強力構成です。通常の出張ペナルティより実戦スコアは高めです。</span>`;
+        } else {
+            msg += `<br><span style="display:inline-block;margin-top:6px;font-size:var(--fs-sm);color:#b91c1c;background:#fef2f2;padding:6px 8px;border-radius:6px;border:1px solid #fecaca;line-height:1.4;">⚠️ <b>別兵種キャラあり：</b> 他兵種のキャラはスキルチップの恩恵を受けられず、実力を発揮しにくくなります。</span>`;
+        }
+    }
+    div.className = "advice adv-" + status; div.innerHTML = msg;
+}
+
+function combinations(arr, k) {
+    let results = [];
+    let backtrack = (start, combo) => {
+        if(combo.length === k) { results.push([...combo]); return; }
+        for(let i=start; i<arr.length; i++) {
+            combo.push(arr[i]); backtrack(i+1, combo); combo.pop();
+        }
+    };
+    backtrack(0, []);
+    return results;
+}
+
+
+function getCombatBasePts(member){
+    if(!member) return 0;
+    let pts = wpToPts(member.wp);
+    if(member.ur){
+        const profile = __aiGetProfile(member.id);
+        const evalMeta = __aiGetEvalMeta(member.id);
+        let penalty = 20;
+        if(profile.promotedUr){
+            penalty = 14;
+            if((evalMeta.promotedUrImmediateFit || 1) >= 1.08) penalty = 12;
+        }
+        pts -= penalty;
+    }
+    // 覚醒ボーナスを戦力スコアに反映
+    // ※育成効率シミュレーション時（member.simulating===true）は
+    //   覚醒前提未達の英雄にボーナスを乗せない
+    if (typeof AWAKENING_HEROES !== 'undefined' && (AWAKENING_HEROES[member.id]||{}).milestones) {
+        const awTierStr = loadAwTier(member.id);
+        const awObj = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : {star:-1,tier:0};
+        // 覚醒済みの場合のみボーナスを適用
+        // シミュレーション中（simulating）かつ未覚醒の場合はスキップ
+        const isAwakened = awObj.star >= 0;
+        // シミュレーション中（育成効率計算）かつ未覚醒の場合はボーナスをスキップ
+        // → 覚醒前提未達英雄が過大評価されるのを防ぐ
+        const skipBonus = member.simulating && !isAwakened;
+        if (isAwakened && !skipBonus) {
+            let bonus = getAwakeningScoreBonus(member.id, awTierStr);
+            // テスラ：誘導電流のスタック上限は味方ロケラン英雄数×3
+            if (member.id === 'tesla' && awObj.star >= 1) {
+                const misCount = member.squadMisCount || 1;
+                const stackMult = misCount >= 3 ? 1.08 : misCount >= 2 ? 1.04 : 1.0;
+                bonus *= stackMult;
+            }
+            pts = Math.round(pts * bonus);
+        }
+    }
+    return Math.max(0, pts);
+}
+
+function evaluateSquadRealCombat(squadMembers) {
+    if(squadMembers.length === 0) return {
+        score: 0, maxCount: 0, buffRate: 0, mainType: null,
+        attack: 0, defense: 0, totalPts: 0, buffedTotalPts: 0
+    };
+
+    // テスラ覚醒のスタック上限計算用にロケラン英雄数を付与
+    const misCount = squadMembers.filter(m => m.t === 'mis').length;
+    squadMembers.forEach(m => {
+        m.squadMisCount = misCount;
+        m.basePts = getCombatBasePts(m);
+    });
+
+    const buffInfo = getArmyBuffInfo(squadMembers);
+    const mainType = buffInfo.mainType;
+    const maxCount = buffInfo.maxCount;
+    const buffRate = buffInfo.buffRate;
+
+    let adjustedTotal = 0;
+    let attackScore = 0;
+    let defenseScore = 0;
+
+    const roleCounts = { atk:0, wall:0, sup:0 };
+    squadMembers.forEach(m => { if(roleCounts[m.r] !== undefined) roleCounts[m.r]++; });
+
+    let compMult = 1.0;
+    if(roleCounts.wall >= 2) {
+        if(roleCounts.wall === 2)       compMult *= 1.05;
+        else if(roleCounts.wall === 3)  compMult *= 0.95;
+        else                            compMult *= 0.88; // 4体以上は過剰
+    } else if(roleCounts.wall === 1) {
+        compMult *= 0.92;
+    } else {
+        compMult *= 0.85;
+    }
+    // atk==0ペナルティ：wall>=3の場合は既にペナルティ済みなので適用しない
+    if(roleCounts.atk === 0 && roleCounts.wall < 3) compMult *= 0.80;
+    if(roleCounts.sup >= 2) compMult *= 0.97;
+
+    squadMembers.forEach(m => {
+        const isMainType = m.t === mainType;
+        const buffedBase = isMainType ? (m.basePts * (1 + buffRate)) : m.basePts;
+
+        let charScore = buffedBase;
+        if (!isMainType) {
+            let penalty = 0;
+            if (m.r === 'atk') penalty = charScore * 0.40;
+            else if (m.r === 'wall') penalty = m.wp >= 20 ? charScore * 0.15 : charScore * 0.30;
+            else penalty = charScore * 0.25;
+            charScore -= penalty;
+        } else {
+            charScore += charScore * 0.10;
+        }
+
+        let finalCharScore = Math.max(0, charScore);
+        adjustedTotal += finalCharScore;
+
+        if (m.r === 'atk') attackScore += finalCharScore;
+        else if (m.r === 'wall') defenseScore += finalCharScore;
+        else { attackScore += finalCharScore * 0.5; defenseScore += finalCharScore * 0.5; }
+    });
+
+    let currentMeta = ($id('current-meta')||{}).value || '';
+    // メタ一致ボーナス：実際は相手依存のため控えめに+7%
+    let metaMult = (mainType === currentMeta) ? 1.07 : 1.0;
+
+    // S6覚醒混成ボーナス
+    // 覚醒済みキム(tank)+DVA(air)が同じ編成にいる場合、4+1混成を正当評価
+    let awakeningMixBonus = 1.0;
+    if (typeof AWAKENING_HEROES !== 'undefined' && typeof loadAwTier !== 'undefined') {
+        const ids = squadMembers.map(m => m.id);
+        const kimAw  = parseAwTier(loadAwTier('kimberly'));
+        const dvaAw  = parseAwTier(loadAwTier('dva'));
+        const hasKim = ids.includes('kimberly') && kimAw.star >= 0;
+        const hasDva = ids.includes('dva')       && dvaAw.star >= 0;
+        if (hasKim && hasDva) {
+            // キム+DVA両方覚醒済み → 混成ペナルティ緩和
+            // DVAのEW Lv依存：低Lvでは出張ペナルティが大きく混成ボーナスが薄い
+            const dvaMember = squadMembers.find(m => m.id === 'dva');
+            const dvaWp = dvaMember ? (dvaMember.wp || 0) : 0;
+            const dvaWpMult = dvaWp >= 20 ? 1.06 : dvaWp >= 10 ? 1.02 : 1.0; // 下限1.0（DVA未育成でペナルティにしない）
+            // 航空機英雄数でDVAのスタック効率が変わる
+            const airCount = squadMembers.filter(m => m.t === 'air').length;
+            const dvaAirMult = airCount >= 2 ? 1.04 : 1.0;
+            // DVA覚醒★が高いほど恩恵大
+            const dvaStarMult = dvaAw.star >= 2 ? 1.02 : 1.0;
+            awakeningMixBonus = dvaWpMult * dvaAirMult * dvaStarMult;
+        } else if (hasKim && kimAw.star >= 1) {
+            // キム単独覚醒★1以上
+            awakeningMixBonus = 1.04;
+        }
+    }
+
+    const totalPts = Math.round(squadMembers.reduce((s,m)=>s + m.basePts, 0));
+    const buffedTotalPts = Math.round(squadMembers.reduce((s,m)=>s + (m.t === mainType ? m.basePts * (1 + buffRate) : m.basePts), 0));
+
+    return {
+        score: Math.round(adjustedTotal * metaMult * compMult * awakeningMixBonus),
+        maxCount: maxCount,
+        buffRate: buffRate,
+        mainType: mainType,
+        attack: Math.round(attackScore * metaMult * compMult),
+        defense: Math.round(defenseScore * metaMult * compMult),
+        totalPts: totalPts,
+        buffedTotalPts: buffedTotalPts
+    };
+}
+
+
+
+function getMemberBasePts(member){
+    return getCombatBasePts(member);
+}
+
+function calcMultiArmyTotalScore(assignment){
+    if(!assignment) return 0;
+
+    const army1 = evaluateSquadRealCombat(assignment.army1 || []).score;
+    const army2 = evaluateSquadRealCombat(assignment.army2 || []).score;
+    const army3 = evaluateSquadRealCombat(assignment.army3 || []).score;
+
+    const bench = (assignment.bench || []).reduce((s, m) => s + getMemberBasePts(m), 0);
+    const benchScore = Math.round(bench * 0.25);
+
+    return (
+        Math.round(army1 * 1.00) +
+        Math.round(army2 * 0.90) +
+        Math.round(army3 * 0.85) +
+        benchScore
+    );
+}
+
+function optimizeMultiArmy(members, squadSize) {
+    let pool = members;
+    let combos1 = combinations(pool, squadSize);
+    let best1 = null, best1Score = -1, maxC1 = 0, b1Details = {attack:0, defense:0};
+    
+    combos1.forEach(combo => {
+        let res = evaluateSquadRealCombat(combo);
+        if(res.score > best1Score) { 
+            best1Score = res.score; 
+            best1 = combo; 
+            maxC1 = res.maxCount; 
+            b1Details = {attack: res.attack, defense: res.defense}; 
+        }
+    });
+
+    let rem1 = pool.filter(m => !best1.some(b => b.id === m.id));
+
+    let best2 = [], best2Score = 0, maxC2 = 0, b2Details = {attack:0, defense:0};
+    if(rem1.length >= squadSize) {
+        let combos2 = combinations(rem1, squadSize);
+        combos2.forEach(combo => {
+            let res = evaluateSquadRealCombat(combo);
+            if(res.score > best2Score) { 
+                best2Score = res.score; 
+                best2 = combo; 
+                maxC2 = res.maxCount; 
+                b2Details = {attack: res.attack, defense: res.defense}; 
+            }
+        });
+    } else { 
+        let res = evaluateSquadRealCombat(rem1);
+        best2 = rem1; 
+        best2Score = res.score; 
+        maxC2 = res.maxCount;
+        b2Details = {attack: res.attack, defense: res.defense}; 
+    }
+
+    let rem2 = rem1.filter(m => !best2.some(b => b.id === m.id));
+
+    let best3 = [], best3Score = 0, maxC3 = 0, b3Details = {attack:0, defense:0};
+    if(rem2.length >= squadSize) {
+        let combos3 = combinations(rem2, squadSize);
+        combos3.forEach(combo => {
+            let res = evaluateSquadRealCombat(combo);
+            if(res.score > best3Score) { 
+                best3Score = res.score; 
+                best3 = combo; 
+                maxC3 = res.maxCount; 
+                b3Details = {attack: res.attack, defense: res.defense}; 
+            }
+        });
+    } else { 
+        let res = evaluateSquadRealCombat(rem2);
+        best3 = rem2; 
+        best3Score = res.score; 
+        maxC3 = res.maxCount;
+        b3Details = {attack: res.attack, defense: res.defense}; 
+    }
+
+    let bench = rem2.filter(m => !best3.some(b => b.id === m.id));
+    // 3軍までの総合力を重視（同盟/総合寄り）
+    // 以前の「1軍偏重」(army2:0.75 / army3:0.5) を緩和し、2〜3軍の価値を引き上げる
+    let benchScore = Math.round(bench.reduce((s, m) => s + m.basePts, 0) * 0.25);
+
+    let wScores = {
+        army1: best1Score,
+        army2: Math.round(best2Score * 0.90),
+        army3: Math.round(best3Score * 0.85),
+        bench: benchScore
+    };
+    
+    return {
+        assignment: { army1: best1, army2: best2, army3: best3, bench: bench },
+        weightedScores: wScores,
+        rawScores: { army1: best1Score, army2: best2Score, army3: best3Score, bench: benchScore },
+        totalScore: calcMultiArmyTotalScore({ army1: best1, army2: best2, army3: best3, bench: bench }),
+        maxCounts: { army1: maxC1, army2: maxC2, army3: maxC3 },
+        armyDetails: { army1: b1Details, army2: b2Details, army3: b3Details }
+    };
+}
+
+function growthBadge(g){
+    if(!g || !g.label) g = { level: 1, axis: 'bal', label: 'バランス', strong:false };
+    let axis = g.axis || 'bal';
+    const strong = !!g.strong;
+    const label = g.label || '';
+
+    // ラベル→色クラス（5色体系）
+    // atk=オレンジ(火力), wall=青(防御), bal=グレー(安定),
+    // green=緑(即効・コスパ), purple=紫(将来・覚醒)
+    const labelColorMap = {
+        '火力補強':   'atk',   '主力強化':  'atk',   '弱点補強':  'atk',
+        '防御補強':   'wall',  '耐久補強':  'wall',  '編成強化':  'wall',
+        '安定強化':   'bal',   '現状維持OK':'bal',
+        '即戦力UP':   'green', 'コスパ◎':  'green',
+        '効果★★★':  'green strong', '効果★★': 'green',
+        '将来有望':   'purple',
+        '👑 覚醒':   'purple strong',
+    };
+
+    if(label === '火力補強') axis = 'atk';
+    else if(label === '防御補強' || label === '耐久補強') axis = 'wall';
+
+    let cls = labelColorMap[label] || (
+        axis === 'atk'  ? ('atk'  + (strong ? ' strong' : '')) :
+        axis === 'wall' ? ('wall' + (strong ? ' strong' : '')) : 'bal'
+    );
+
+    const icoCls = (axis === 'atk') ? 'atk' : (axis === 'wall') ? 'wall' : 'bal';
+    return `<span class="impact-badge ${cls}"><span class="impact-ico ${icoCls}"></span>${label}</span>`;
+}
+
+
+
+function __aiReasonLabel(code){
+  const dict = (typeof REASON_LABELS === 'object' && REASON_LABELS) ? REASON_LABELS : null;
+  if(!dict || !code) return '';
+  for(const groupKey of Object.keys(dict)){
+    const group = dict[groupKey] || {};
+    if(group && Object.prototype.hasOwnProperty.call(group, code)) return group[code];
+  }
+  return '';
+}
+function __aiReasonStyle(code){
+  const dict = (typeof REASON_BADGE_STYLE === 'object' && REASON_BADGE_STYLE) ? REASON_BADGE_STYLE : null;
+  return (dict && dict[code]) ? dict[code] : 'neutral';
+}
+function reasonCodeBadge(code){
+  const label = __aiReasonLabel(code) || code || '';
+  const style = __aiReasonStyle(code);
+  return `<span class="reason-badge reason-badge--${style}">${label}</span>`;
+}
+function __aiReasonPriorityGroups(){
+  const arr = (typeof REASON_BADGE_PRIORITY !== 'undefined' && Array.isArray(REASON_BADGE_PRIORITY)) ? REASON_BADGE_PRIORITY : ['policy','role','efficiency','timing'];
+  return arr;
+}
+function __aiReasonGroupOf(code){
+  const dict = (typeof REASON_LABELS === 'object' && REASON_LABELS) ? REASON_LABELS : null;
+  if(!dict || !code) return '';
+  for(const groupKey of Object.keys(dict)){
+    const group = dict[groupKey] || {};
+    if(group && Object.prototype.hasOwnProperty.call(group, code)) return groupKey;
+  }
+  return '';
+}
+function __aiTypedPolicyCode(baseCode, heroType){
+  if(baseCode === 'seed'){
+    if(heroType === 'air') return 'seed_air';
+    if(heroType === 'mis') return 'seed_mis';
+  }
+  if(baseCode === 'shift'){
+    if(heroType === 'air') return 'shift_air';
+    if(heroType === 'mis') return 'shift_mis';
+  }
+  return baseCode;
+}
+function __aiSelectReasonCodes(codes, limit=2){
+  const uniq = [];
+  (codes || []).forEach(code => { if(code && !uniq.includes(code)) uniq.push(code); });
+  if(!uniq.length) return [];
+
+  const policyCodes = ['build_main','hold','seed_air','seed_mis','seed','shift_air','shift_mis','shift','full_shift'];
+  const policyPriority = ['seed_air','seed_mis','shift_air','shift_mis','full_shift','shift','build_main','hold','seed'];
+  const costCodes = ['lv30','high_cost','low_cost','mid_cost'];
+  const timingCodes = ['future','immediate','promoted_ur'];
+
+  const bestPolicyCode = policyPriority.find(code => uniq.includes(code)) || uniq.find(code => policyCodes.includes(code)) || '';
+  const bestCostCode = costCodes.find(code => uniq.includes(code)) || '';
+  const bestTimingCode = timingCodes.find(code => uniq.includes(code)) || '';
+
+  const normalized = uniq.filter(code => !policyCodes.includes(code) && !costCodes.includes(code) && !timingCodes.includes(code));
+  if(bestPolicyCode) normalized.unshift(bestPolicyCode);
+
+  // policy がある場合は、汎用的すぎる mid_cost を優先しすぎない。
+  if(bestCostCode && !(bestPolicyCode && bestCostCode === 'mid_cost' && bestTimingCode)) normalized.push(bestCostCode);
+  if(bestTimingCode) normalized.push(bestTimingCode);
+
+  const groups = __aiReasonPriorityGroups();
+  const picked = [];
+  groups.forEach(groupKey => {
+    const found = normalized.find(code => __aiReasonGroupOf(code) === groupKey);
+    if(found && !picked.includes(found) && picked.length < limit) picked.push(found);
+  });
+  normalized.forEach(code => { if(!picked.includes(code) && picked.length < limit) picked.push(code); });
+  return picked.slice(0, limit);
+}
+
+function __summaryPolicyBase(reasonCodes = []){
+  if(reasonCodes.includes('full_shift')) return 'full_shift';
+  if(reasonCodes.includes('shift_air') || reasonCodes.includes('shift_mis') || reasonCodes.includes('shift')) return 'shift';
+  if(reasonCodes.includes('seed_air') || reasonCodes.includes('seed_mis') || reasonCodes.includes('seed')) return 'seed';
+  if(reasonCodes.includes('build_main')) return 'build_main';
+  if(reasonCodes.includes('hold')) return 'hold';
+  return '';
+}
+function __summaryImpactKey(item){
+  if(!item) return 'default';
+  const axis  = item.growthType && item.growthType.axis;
+  const label = item.growthType && item.growthType.label;
+  const role  = item.roleKey || '';
+
+  // 1. ラベルによる明示的な分類（最優先）
+  if(label === '安定強化' || label === '編成強化') return 'stability';
+  if(label === '支援強化') return 'support';
+  if(label === '後衛火力') return 'subdps';
+  if(label === '爆発力')   return 'burst';
+  if(label === '即戦力UP' || label === 'コスパ◎') return 'immediate';
+  if(label === '将来有望') return 'future';
+  if(label === '火力補強' || label === '主力強化') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : 'carry';
+  if(label === '防御補強' || label === '耐久補強') return 'tankiness';
+  if(label === '弱点補強') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : role === 'atk' ? 'subdps' : 'stability';
+
+  // 2. 英雄の実際のロール（roleKey）を優先 ← ここが修正ポイント
+  // wallロール（タンク）はどんな軸でも tankiness
+  if(role === 'wall') return 'tankiness';
+  if(role === 'sup')  return 'support';
+
+  // 3. axis による分類（role が atk のときのみ）
+  if(axis === 'atk') return role === 'atk' ? 'carry' : 'subdps';
+  if(axis === 'wall') return 'tankiness';
+
+  // 4. role fallback
+  if(role === 'atk') return 'carry';
+  return 'default';
+}
+function __pickSummaryTemplate(summaryKey, impactKey){
+  const map = (typeof SUMMARY_TEMPLATES !== 'undefined' && SUMMARY_TEMPLATES) ? SUMMARY_TEMPLATES : null;
+  if(!map || !summaryKey || !map[summaryKey]) return '';
+  const bucket = map[summaryKey];
+  return bucket[impactKey] || bucket.default || '';
+}
+function __buildRecommendationSummary(item){
+  const reasonCodes = Array.isArray(item && item.reasonCodes) ? item.reasonCodes : [];
+  const impactKey = __summaryImpactKey(item);
+  const policyKey = __summaryPolicyBase(reasonCodes);
+  let text = __pickSummaryTemplate(policyKey, impactKey);
+  if(text) return text;
+  if(reasonCodes.includes('lv30') || Number(item && (item.to || item.targetLv || 0)) >= 30){
+    text = __pickSummaryTemplate('lv30', impactKey);
+    if(text) return text;
+  }
+  if(reasonCodes.includes('high_cost') || (item && item.costTierLabel === '高コスト')){
+    text = __pickSummaryTemplate('high_cost', impactKey);
+    if(text) return text;
+  }
+  if(reasonCodes.includes('low_cost') || (item && item.costTierLabel === '低コスト')){
+    text = __pickSummaryTemplate('low_cost', impactKey);
+    if(text) return text;
+  }
+  if(reasonCodes.includes('future')){
+    text = __pickSummaryTemplate('future', impactKey);
+    if(text) return text;
+  }
+  if(reasonCodes.includes('immediate')){
+    text = __pickSummaryTemplate('immediate', impactKey);
+    if(text) return text;
+  }
+  return '戦力強化につながりやすい';
+}
+
+// 覚醒アドバイスをサマリに付記（rankheroカードの summary の後に独立して表示）
+// ===============================
+// S6 覚醒リソース配分警告
+// ===============================
+function checkAwakeningResourceWarning() {
+    if (typeof AWAKENING_HEROES === 'undefined' || typeof loadAwTier === 'undefined') return '';
+
+    const kimTier  = parseAwTier(loadAwTier('kimberly'));
+    const dvaTier  = parseAwTier(loadAwTier('dva'));
+    const teslaTier= parseAwTier(loadAwTier('tesla'));
+
+    // 各英雄の覚醒進行度（0=未着手, 1=★0解放, 2=★0-5, 3=★1以上）
+    const progress = (at) => {
+        if (at.star < 0) return 0;
+        if (at.star === 0 && at.tier === 0) return 1;
+        if (at.star === 0) return 2;
+        return 3;
+    };
+
+    const kimP   = progress(kimTier);
+    const dvaP   = progress(dvaTier);
+    const teslaP = progress(teslaTier);
+
+    const warns = [];
+
+    // キムに全投入してDVA/テスラが未着手
+    if (kimTier.star >= 1 && dvaP === 0 && teslaP === 0) {
+        warns.push('⚠️ <b>シャード集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備えシャードを分散確保することを推奨します。');
+    } else if (kimTier.star >= 1 && dvaP === 0) {
+        warns.push('💡 DVAの覚醒（Week3解放）にシャード130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
+    }
+
+    // DVA済みでテスラ未着手
+    if (dvaTier.star >= 1 && teslaP === 0) {
+        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるならシャードを確保しておきましょう。');
+    }
+
+    if (!warns.length) return '';
+
+    return `<div class="trans-note-orange">${warns.join('<br>')}</div>`;
+}
+
+function __buildAwakeningAdvice(heroId, ewLv) {
+  if (typeof AWAKENING_HEROES === 'undefined') return '';
+  const aw = AWAKENING_HEROES[heroId];
+  if (!aw || !aw.milestones) return '';
+  const awTierStr = (typeof loadAwTier !== 'undefined') ? loadAwTier(heroId) : 'none';
+  const at = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : {star:0,tier:0};
+  // MAX（★5-5）
+  if (at.star >= 4 && at.tier >= 5) return ''; // MAX
+  const check = (typeof checkAwakeningEligible !== 'undefined')
+    ? checkAwakeningEligible(heroId, ewLv, 5)
+    : { eligible: (ewLv >= (aw.ewMinRequired||20)), reason: 'EW Lv'+aw.ewMinRequired+'以上が必要' };
+  if (!check.eligible) {
+    return '💡 覚醒条件：' + check.reason;
+  }
+  if (at.star < 0) {
+    return '👑 覚醒できます！専用かけら×50で★0-1を習得（基礎ステ+20%）';
+  }
+  const next = (typeof awNextTierCost !== 'undefined') ? awNextTierCost(awTierStr) : null;
+  if (!next) return '';
+  const bonus = (aw.starBonuses || {})[next.nextStar] || '';
+  const tierLabel = next.nextTier > 0 ? '★'+next.nextStar+'-'+next.nextTier : '★'+next.nextStar+'解放';
+  return '👑 次：' + tierLabel + '（覚醒かけら：' + next.cost + '）' + (bonus ? ' → ' + bonus.substring(0,20)+'...' : '');
+}
+
+function __aiBuildReasonCodes(meta){
+  const { hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture } = meta || {};
+  const codes = [];
+  if(hero && context){
+    const sameMain = hero.t === context.currentCombatType;
+    const sameInvest = hero.t === context.investmentType;
+    const inMainArmy = !!(context.mainArmyIds && context.mainArmyIds.has(hero.id));
+    const stage = context.shiftStage || 'hold';
+    let policyCode = 'hold';
+    if((stage === 'seed' || String(context.transitionState||'').startsWith('seed_')) && sameInvest && !sameMain) policyCode = __aiTypedPolicyCode('seed', hero.t);
+    else if((stage === 'shift' || stage === 'full_shift' || String(context.transitionState||'').startsWith('shift_to_')) && sameInvest && !sameMain) policyCode = (stage === 'full_shift') ? 'full_shift' : __aiTypedPolicyCode('shift', hero.t);
+    else if(sameMain || inMainArmy) policyCode = 'build_main';
+    codes.push(policyCode);
+  }
+
+  if(ms){
+    if(ms.target >= 30) codes.push('lv30');
+    else if(ms.target >= 20) codes.push('mid_cost');
+    else codes.push('low_cost');
+    if(ms.target === 10 || ms.target === 20) codes.push('ew_milestone');
+  }
+  const top = Math.max(Number(scoreCost)||0, Number(scoreCoverage)||0, Number(scoreFuture)||0);
+  if(top > 0){
+    if((Number(scoreFuture)||0) >= top * 0.98) codes.push('future');
+    else if((Number(scoreCost)||0) >= top * 0.98) codes.push('immediate');
+  }
+  if(hero && hero.ur) codes.push('promoted_ur');
+  return __aiSelectReasonCodes(codes, 2);
+}
+
+function detectArmyWeaknessFromDetail(detail){
+    if(!detail) return "balance";
+    let total = detail.attack + detail.defense;
+    if(total === 0) return "balance";
+
+    let attackRatio = detail.attack / total;
+
+    if(attackRatio > 0.60) return "defense";
+    if(attackRatio < 0.45) return "attack";
+
+    return "balance";
+}
+
+
+function __aiGetProfile(heroId){
+  return (typeof HERO_ROLE_PROFILE === 'object' && HERO_ROLE_PROFILE[heroId])
+    ? HERO_ROLE_PROFILE[heroId]
+    : { role:'other', lane:'back', core:false };
+}
+function __aiGetLongterm(heroId){
+  return (typeof HERO_LONGTERM_VALUE === 'object' && Number.isFinite(HERO_LONGTERM_VALUE[heroId]))
+    ? HERO_LONGTERM_VALUE[heroId]
+    : 0.55;
+}
+function __aiGetEvalMeta(heroId){
+  return (typeof HERO_EVAL_META === 'object' && HERO_EVAL_META[heroId])
+    ? HERO_EVAL_META[heroId]
+    : { milestone10Fit:1.0 };
+}
+function __aiGetAiProfile(heroId){
+  return (typeof HERO_AI_PROFILE === 'object' && HERO_AI_PROFILE[heroId])
+    ? HERO_AI_PROFILE[heroId]
+    : {
+        immediate:1.0,
+        longterm:1.0,
+        cost10:1.0,
+        cost20:1.0,
+        cost30:1.0,
+        coverage:1.0,
+        future:1.0,
+        mainTypeBonus:1.0,
+        promotedUrPenalty:1.0
+      };
+}
+function __aiCounterMap(type){
+  return (typeof TYPE_COUNTER_WEIGHT === 'object' && TYPE_COUNTER_WEIGHT[type])
+    ? TYPE_COUNTER_WEIGHT[type]
+    : { tank:0.5, air:0.5, mis:0.5 };
+}
+function __aiTopByType(roster, type, n=5){
+  return roster.filter(h=>h.t===type).slice().sort((a,b)=>(b.wp-a.wp)||((HEROES[b.id]?.pr||0)-(HEROES[a.id]?.pr||0))).slice(0,n);
+}
+function __aiAvgWp(arr){ return arr.length ? arr.reduce((s,x)=>s+x.wp,0)/arr.length : 0; }
+function __aiHasAny(arr, ids){ return arr.some(x=>ids.includes(x.id)); }
+function __aiCostTierLabel(from, to){
+  if(to >= 30) return '高コスト';
+  if(to >= 20) return '中コスト';
+  return '低コスト';
+}function __aiNormalizeShiftType(type){
+  if(type === 'missile') return 'mis';
+  return ['tank','air','mis'].includes(type) ? type : 'tank';
+}
+function __aiShiftCfg(){
+  return (typeof META_SHIFT === 'object' && META_SHIFT) ? META_SHIFT : {};
+}
+function __aiShiftStageCfg(){
+  return (typeof META_SHIFT_STAGE === 'object' && META_SHIFT_STAGE) ? META_SHIFT_STAGE : {};
+}
+function __aiShiftCoreProgress(type, roster){
+  const cfg = __aiShiftCfg();
+  const core = cfg.core || {};
+  const key = (type === 'mis' && core.missile) ? 'missile' : type;
+  const row = core[key];
+  if(!row || !Array.isArray(row.ids) || !row.ids.length) return 0;
+  const targets = Array.isArray(row.targets) ? row.targets : [];
+  const members = Array.isArray(roster) ? roster : [];
+  let sum = 0;
+  let cnt = 0;
+  row.ids.forEach((id, idx) => {
+    const hero = members.find(h => h && h.id === id);
+    const wp = Math.max(0, Number(hero && hero.wp) || 0);
+    const target = Math.max(1, Number(targets[idx]) || Number(cfg.progress && cfg.progress.maxWp) || 30);
+    sum += Math.min(1, wp / target);
+    cnt += 1;
+  });
+  return cnt ? (sum / cnt) : 0;
+}
+function __aiMainArmyType(army){
+  const counts = { tank:0, air:0, mis:0 };
+  (Array.isArray(army) ? army : []).forEach(h => {
+    const t = __aiNormalizeShiftType(h && h.t);
+    if(counts[t] !== undefined) counts[t] += 1;
+  });
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'tank';
+}
+function __aiShiftStageName(mainProgress, nextProgress){
+  const cfg = __aiShiftStageCfg();
+  if(mainProgress < (cfg.weakMain || 0.55)) return 'build_main';
+  if(nextProgress >= (cfg.fullShift || 0.80)) return 'full_shift';
+  if(nextProgress >= (cfg.shiftStart || 0.55)) return 'shift';
+  if(nextProgress >= (cfg.seedStart || 0.30)) return 'seed';
+  if(mainProgress >= (cfg.matureMain || 0.78)) return 'mature_hold';
+  return 'hold';
+}
+function __aiBuildContext(roster, base){
+  const topTank = __aiTopByType(roster, 'tank');
+  const topAir = __aiTopByType(roster, 'air');
+  const topMis = __aiTopByType(roster, 'mis');
+  const progress = {
+    tank:{ top:topTank, avgWp:__aiAvgWp(topTank), count10:topTank.filter(x=>x.wp>=10).length, count20:topTank.filter(x=>x.wp>=20).length, count30:topTank.filter(x=>x.wp>=30).length, coreCount:topTank.filter(x=>['kimberly','murphy','williams','marshall','stetmann'].includes(x.id)).length },
+    air:{ top:topAir, avgWp:__aiAvgWp(topAir), count10:topAir.filter(x=>x.wp>=10).length, count20:topAir.filter(x=>x.wp>=20).length, count30:topAir.filter(x=>x.wp>=30).length, coreCount:topAir.filter(x=>['dva','lucius','morrison','schuyler','carlie'].includes(x.id)).length },
+    mis:{ top:topMis, avgWp:__aiAvgWp(topMis), count10:topMis.filter(x=>x.wp>=10).length, count20:topMis.filter(x=>x.wp>=20).length, count30:topMis.filter(x=>x.wp>=30).length, coreCount:topMis.filter(x=>['fiona','tesla','mcgregor','swift','adam'].includes(x.id)).length }
+  };
+  const typeScore = {
+    tank: progress.tank.avgWp + progress.tank.count20*2 + progress.tank.count10 + progress.tank.count30*3 + progress.tank.coreCount*1.2,
+    air: progress.air.avgWp + progress.air.count20*2 + progress.air.count10 + progress.air.count30*3 + progress.air.coreCount*1.2,
+    mis: progress.mis.avgWp + progress.mis.count20*2 + progress.mis.count10 + progress.mis.count30*3 + progress.mis.coreCount*1.2,
+  };
+  const currentCombatType = Object.entries(typeScore).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'tank';
+  const army1 = ((base && base.assignment && Array.isArray(base.assignment.army1)) ? base.assignment.army1 : []).filter(Boolean);
+  const mainArmyType = army1.length ? __aiMainArmyType(army1) : currentCombatType;
+  const mainCoreProgress = {
+    tank: __aiShiftCoreProgress('tank', roster),
+    air: __aiShiftCoreProgress('air', roster),
+    mis: __aiShiftCoreProgress('mis', roster)
+  };
+  const mainSquadProgress = __aiShiftCoreProgress(mainArmyType, army1.length ? army1 : roster);
+  const candidateTypes = ['tank','air','mis'].filter(t => t !== mainArmyType);
+  const shiftTargetType = candidateTypes.sort((a,b)=>{
+    const pa = mainCoreProgress[a] || 0;
+    const pb = mainCoreProgress[b] || 0;
+    if(pb !== pa) return pb - pa;
+    return (typeScore[b] || 0) - (typeScore[a] || 0);
+  })[0] || currentCombatType;
+  const targetProgress = mainCoreProgress[shiftTargetType] || 0;
+  const shiftStage = __aiShiftStageName(mainSquadProgress, targetProgress);
+
+  let investmentType = currentCombatType;
+  let transitionState = `stay_${currentCombatType}`;
+  if(shiftStage === 'seed'){
+    investmentType = shiftTargetType;
+    transitionState = `seed_${shiftTargetType}`;
+  } else if(shiftStage === 'shift' || shiftStage === 'full_shift'){
+    investmentType = shiftTargetType;
+    transitionState = `shift_to_${shiftTargetType}`;
+  } else if(mainArmyType !== currentCombatType && mainSquadProgress >= 0.60){
+    investmentType = mainArmyType;
+    transitionState = `stay_${mainArmyType}`;
+  }
+
+  const main = progress[mainArmyType] || progress[currentCombatType];
+  const mainTeamMaturity = (mainSquadProgress >= 0.78 || main.avgWp >= 20 || main.count20 >= 4 || main.count30 >= 1) ? 'high' : ((mainSquadProgress >= 0.55 || main.avgWp >= 12 || main.count10 >= 3) ? 'mid' : 'low');
+  const mainArmyIds = new Set(army1.map(h=>h.id));
+  // S6覚醒状況をコンテキストに追加
+  const awakeningCtx = (() => {
+    if (typeof loadAwTier === 'undefined' || typeof parseAwTier === 'undefined') return {};
+    const kimAt  = parseAwTier(loadAwTier('kimberly'));
+    const dvaAt  = parseAwTier(loadAwTier('dva'));
+    const teslaAt= parseAwTier(loadAwTier('tesla'));
+    const kimHas  = roster.some(h=>h.id==='kimberly') && kimAt.star >= 0;
+    const dvaHas  = roster.some(h=>h.id==='dva')      && dvaAt.star >= 0;
+    const teslaHas= roster.some(h=>h.id==='tesla')    && teslaAt.star >= 0;
+    return {
+      kim:   { awakened: kimHas,   star: kimAt.star,   tier: kimAt.tier   },
+      dva:   { awakened: dvaHas,   star: dvaAt.star,   tier: dvaAt.tier   },
+      tesla: { awakened: teslaHas, star: teslaAt.star, tier: teslaAt.tier },
+      hasAwakened:   kimHas || dvaHas || teslaHas,
+      kimDvaCombo:   kimHas && dvaHas,
+      teslaFiona:    teslaHas && roster.some(h=>h.id==='fiona'),
+    };
+  })();
+  return { progress, currentCombatType, investmentType, transitionState, mainTeamMaturity, mainArmyIds, mainArmyType, mainSquadProgress, shiftTargetType, shiftTargetProgress:targetProgress, shiftStage, coreProgress:mainCoreProgress, awakeningCtx };
+}
+function __aiTypePolicyMult(type, context, route='overall'){
+  let mult = ((typeof META_SHIFT==='object' && META_SHIFT.weightBase && META_SHIFT.weightBase[type]) || 1.0);
+  const current = context.currentCombatType;
+  const invest = context.investmentType || current;
+  const mainType = context.mainArmyType || current;
+  const shiftStage = context.shiftStage || 'hold';
+  const cfg = __aiShiftStageCfg();
+  const multCfg = (typeof META_SHIFT === 'object' && META_SHIFT.mult) ? META_SHIFT.mult : {};
+
+  if(route === 'cost'){
+    if(type === mainType) mult *= (cfg.keepCurrentCost || 1.06);
+    else mult *= 0.96;
+    if(context.mainTeamMaturity === 'low' && type !== mainType) mult *= (cfg.lowMainOfftypeCost || multCfg.weakOfftypeDamp || 0.94);
+    if(shiftStage === 'seed' && type === invest) mult *= (multCfg.seedBoost || cfg.seedFuture || 1.04);
+    if((shiftStage === 'shift' || shiftStage === 'full_shift') && type === invest) mult *= 1.04;
+  } else if(route === 'coverage'){
+    const cm = __aiCounterMap(current);
+    mult *= (0.9 + (cm[type] || 0.5) * 0.2);
+    if(type === invest) mult *= 1.03;
+    if(type === mainType && context.mainTeamMaturity !== 'high') mult *= 1.03;
+  } else if(route === 'future'){
+    if(type === mainType) mult *= (cfg.keepCurrentFuture || 1.03);
+    else mult *= 0.95;
+    if(type === invest) mult *= (shiftStage === 'seed' ? (cfg.seedFuture || multCfg.seedBoost || 1.04) : ((shiftStage === 'shift' || shiftStage === 'full_shift') ? (cfg.shiftFuture || multCfg.shiftBoost || 1.10) : 1.08));
+    if(context.transitionState === 'seed_air' && type === 'air') mult *= 1.03;
+    if(context.transitionState === 'shift_to_air' && type === 'air') mult *= 1.06;
+    if(context.transitionState === 'seed_mis' && type === 'mis') mult *= 1.03;
+    if(context.transitionState === 'shift_to_mis' && type === 'mis') mult *= 1.06;
+    if(context.mainTeamMaturity === 'low' && type !== mainType) mult *= (cfg.lowMainOfftypeFuture || 0.92);
+  }
+  return Math.max(0.85, Math.min(1.20, mult));
+}
+function __aiHeroBias(heroId, route='overall', context=null){
+  const p = __aiGetProfile(heroId);
+  const evalMeta = __aiGetEvalMeta(heroId);
+  const ai = __aiGetAiProfile(heroId);
+  let mult = 1.0;
+  if(p.role === 'main_dps') mult *= 1.10;
+  else if(p.role === 'sub_dps') mult *= 1.04;
+  else if(p.role === 'front_tank') mult *= 1.02;
+  else if(p.role === 'control') mult *= 1.03;
+  else if(p.role === 'support') mult *= 0.98;
+  const meta = META_TIER[heroId] || {};
+  if(meta.ew === 'SSS') mult *= 1.10;
+  else if(meta.ew === 'SS') mult *= 1.06;
+  else if(meta.ew === 'S') mult *= 1.03;
+
+  if(route === 'cost') mult *= (ai.immediate || 1.0);
+  else if(route === 'coverage') mult *= (ai.coverage || 1.0);
+  else if(route === 'future') mult *= (ai.future || 1.0) * (ai.longterm || 1.0);
+
+  if(p.promotedUr || meta.ew === 'P'){
+    const immediateFit = Math.max(0.88, Math.min(1.18, evalMeta.promotedUrImmediateFit || 1.0));
+    const promotedPenalty = Math.max(0.72, Math.min(1.0, ai.promotedUrPenalty || 0.84));
+    if(route === 'future') mult *= (__aiGetLongterm(heroId) * 0.84) * promotedPenalty;
+    else if(route === 'cost') mult *= immediateFit;
+    else if(route === 'coverage') mult *= (0.96 + Math.max(0, immediateFit - 1) * 0.70);
+    else mult *= 0.94;
+    return mult;
+  }
+
+  if(route === 'future') mult *= __aiGetLongterm(heroId);
+  if(context && context.investmentType === 'air' && heroId === 'dva') mult *= 1.02;
+  if(context && context.investmentType === 'air' && heroId === 'lucius'){
+    mult *= 1.12;
+    if(route === 'cost') mult *= 1.08;
+    else if(route === 'coverage') mult *= 1.05;
+    else if(route === 'future') mult *= 1.03;
+  }
+  return mult;
+}
+function __aiMilestoneBias(heroId, targetLv, route='overall'){
+  const p = __aiGetProfile(heroId);
+  const evalMeta = __aiGetEvalMeta(heroId);
+  const ai = __aiGetAiProfile(heroId);
+  const aiCost = targetLv === 30 ? (ai.cost30 || 1.0) : (targetLv === 20 ? (ai.cost20 || 1.0) : (ai.cost10 || 1.0));
+  if(p.promotedUr){
+    const immediateFit = Math.max(0.92, Math.min(1.12, evalMeta.promotedUrImmediateFit || 1.0));
+    if(targetLv === 10) return (route === 'cost' ? (1.03 * immediateFit * aiCost) : 1.00);
+    if(targetLv === 20) return route === 'cost' ? (0.92 * aiCost) : (route === 'future' ? 0.84 : 0.88);
+    if(targetLv === 30) return route === 'cost' ? (0.72 * aiCost) : (route === 'future' ? 0.58 : 0.66);
+  }
+  if(targetLv === 10) return route === 'cost' ? (1.05 * aiCost) : 1.00;
+  if(targetLv === 20) return route === 'cost' ? (1.15 * aiCost) : 1.11;
+  if(targetLv === 30){
+    if(p.role === 'main_dps') return route === 'future' ? 1.10 : (1.02 * aiCost);
+    if(p.role === 'front_tank') return route === 'cost' ? (0.94 * aiCost) : 1.00;
+    if(p.role === 'support') return route === 'cost' ? (0.90 * aiCost) : 0.90;
+    return route === 'cost' ? aiCost : 1.0;
+  }
+  return route === 'cost' ? aiCost : 1.0;
+}
+function __aiSynergyBias(hero, roster, targetLv){
+  const source = (typeof HERO_PAIR_SYNERGY === 'object' && HERO_PAIR_SYNERGY[hero.id])
+    ? HERO_PAIR_SYNERGY
+    : ((typeof HERO_SYNERGY === 'object') ? HERO_SYNERGY : null);
+  const table = source && source[hero.id] ? source[hero.id] : null;
+  if(!table) return 1.0;
+
+  const rosterMap = {};
+  roster.forEach(x => {
+    if(!x || !x.id) return;
+    const lv = Number.isFinite(parseInt(x.wp, 10)) ? parseInt(x.wp, 10) : 0;
+    rosterMap[x.id] = Math.max(rosterMap[x.id] || 0, lv);
+  });
+
+  let mult = 1.0;
+  for(const [partnerId, bonus] of Object.entries(table)){
+    const partnerLv = rosterMap[partnerId] || 0;
+    if(partnerLv <= 0) continue;
+
+    let pairMult = (typeof bonus === 'number') ? bonus : (bonus.base || 1.0);
+    if(typeof bonus === 'object'){
+      if(partnerLv >= 30 && bonus.lv30) pairMult = bonus.lv30;
+      else if(partnerLv >= 20 && bonus.lv20) pairMult = bonus.lv20;
+      else if(partnerLv >= 10 && bonus.lv10) pairMult = bonus.lv10;
+    }
+
+    if(targetLv === 30){
+      pairMult = 1 + (pairMult - 1) * 0.5;
+    }
+
+    mult *= pairMult;
+  }
+
+  return Math.min(mult, 1.12);
+}
+
+function __aiFormationSynergyBias(hero, roster, targetLv, context){
+  const table = (typeof FORMATION_SYNERGY === 'object' && FORMATION_SYNERGY) ? FORMATION_SYNERGY : null;
+  if(!table || !hero) return 1.0;
+  const sameType = roster.filter(x => x && x.t === hero.t);
+  const sameTypeCount = sameType.length;
+  const frontCount = roster.filter(x => x && x.r === 'wall').length;
+  const hasMainDps = roster.some(x => {
+    const p = __aiGetProfile(x.id);
+    return p.role === 'main_dps';
+  });
+  const hasSubDps = roster.some(x => {
+    const p = __aiGetProfile(x.id);
+    return p.role === 'sub_dps' || x.r === 'atk';
+  });
+  const hasSupport = roster.some(x => {
+    const p = __aiGetProfile(x.id);
+    return p.role === 'support' || x.r === 'sup';
+  });
+  let mult = 1.0;
+  if(frontCount >= 2 && table.front2) mult *= table.front2;
+  if(sameTypeCount >= 5 && table.monoType5) mult *= table.monoType5;
+  else if(sameTypeCount >= 4 && table.monoType4plus1) mult *= table.monoType4plus1;
+  if(hero.t === 'tank' && hasSupport && frontCount >= 2 && table.tankCarryCore) mult *= table.tankCarryCore;
+  if(hero.t === 'air' && __aiHasAny(roster, ['lucius','dva','morrison']) && table.airBurstCore) mult *= table.airBurstCore;
+  if(hero.t === 'air' && __aiHasAny(roster, ['lucius','schuyler']) && table.airControlCore) mult *= table.airControlCore;
+  if(hero.t === 'mis' && __aiHasAny(roster, ['adam']) && (__aiHasAny(roster, ['tesla','fiona','mcgregor','swift','venom'])) && table.missileCore) mult *= table.missileCore;
+  if((__aiGetProfile(hero.id).promotedUr) && table.promotedUrBridge) mult *= table.promotedUrBridge;
+  if(hasMainDps && hasSubDps && table.carryPlusSubDps) mult *= table.carryPlusSubDps;
+  if(hasMainDps && hasSupport && table.carryPlusSupport) mult *= table.carryPlusSupport;
+  if(context && hero.t === context.currentCombatType){
+    mult *= (__aiGetAiProfile(hero.id).mainTypeBonus || 1.0);
+  }
+  // S6覚醒シナジー
+  if(context && context.awakeningCtx) {
+    const aw = context.awakeningCtx;
+    if(hero.id === 'kimberly' && aw.kim.awakened && frontCount >= 2 && table.awakenKimCore)
+      mult *= table.awakenKimCore;
+    if((hero.id === 'kimberly' || hero.id === 'dva') && aw.kimDvaCombo && table.awakenKimDvaCombo)
+      mult *= table.awakenKimDvaCombo;
+    if(hero.id === 'dva' && aw.dva.awakened && !aw.kimDvaCombo && hero.t === 'air' && table.awakenDvaMono)
+      mult *= table.awakenDvaMono;
+    if(hero.id === 'tesla' && aw.teslaFiona && table.awakenTeslaFiona)
+      mult *= table.awakenTeslaFiona;
+  }
+  // コミュニティ推奨混成型シナジー（packsify: Kim+DVA+Schuyler）
+  if(context && context.mainArmyIds) {
+    const ids = context.mainArmyIds; // Set型
+    const hasKim      = ids.has('kimberly');
+    const hasDva      = ids.has('dva');
+    const hasSchuyler = ids.has('schuyler');
+    // キム+DVA+スカイラー同時採用 → 最強PvP編成ボーナス
+    if(hasKim && hasDva && hasSchuyler && table.kimDvaSchuyler)
+      mult *= (hero.id === 'kimberly' || hero.id === 'dva' || hero.id === 'schuyler')
+        ? table.kimDvaSchuyler : 1.0;
+    // スカイラーCC封殺型
+    else if(hasSchuyler && frontCount >= 2 && table.schuylerControl)
+      mult *= (hero.id === 'schuyler') ? table.schuylerControl : 1.0;
+  }
+  if(targetLv === 30) mult = 1 + (mult - 1) * 0.65;
+  return Math.min(mult, 1.22); // 覚醒シナジー分上限を1.16→1.22に拡張
+}
+
+function __aiMatchupBias(hero, roster, context){
+  const table = (typeof MATCHUP_MODIFIER === 'object' && MATCHUP_MODIFIER) ? MATCHUP_MODIFIER : null;
+  if(!table || !hero) return 1.0;
+  let mult = 1.0;
+  if(table[hero.id] && table[hero.id].vsEnemy && context && context.currentCombatType){
+    const mods = table[hero.id].vsEnemy;
+    if(mods[context.currentCombatType]) mult *= mods[context.currentCombatType];
+  }
+  if(hero.id === 'lucius' && table.lucius && table.lucius.withEW30 && hero.wp >= 30){
+    mult *= table.lucius.withEW30;
+  }
+  return Math.max(0.90, Math.min(mult, 1.12));
+}
+
+function __aiTankBranchBias(hero, targetLv, context){
+  if(!hero || hero.t !== 'tank') return 1.0;
+  const weaknesses = [context && context.weakness1, context && context.weakness2, context && context.weakness3].filter(Boolean);
+  const defenseNeed = weaknesses.filter(x => x === 'defense').length;
+  const attackNeed = weaknesses.filter(x => x === 'attack').length;
+  const id = hero.id;
+  let mult = 1.0;
+
+  if(id === 'lucius'){
+    mult *= 1.10;
+    if(hero.wp < 10 && targetLv === 10) mult *= 1.24;
+    if(targetLv === 20) mult *= 1.06;
+    if(targetLv === 30) mult *= 0.96;
+    if(defenseNeed > attackNeed) mult *= 1.05;
+    if(attackNeed === defenseNeed && targetLv === 10) mult *= 1.03;
+  }
+
+  if(id === 'dva'){
+    if(targetLv === 10) mult *= 0.98;
+    if(targetLv === 20) mult *= 1.03;
+    if(targetLv === 30) mult *= 1.06;
+    if(attackNeed >= defenseNeed) mult *= 1.03;
+  }
+
+  if(id === 'williams'){
+    if(defenseNeed > attackNeed) mult *= 1.10;
+    else if(attackNeed > defenseNeed) mult *= 0.94;
+    else mult *= 1.01;
+  }
+
+  if(id === 'murphy'){
+    if(attackNeed > defenseNeed) mult *= 1.10;
+    else if(defenseNeed > attackNeed) mult *= 0.95;
+    else mult *= 1.01;
+  }
+
+  if(id === 'stetmann'){
+    if(attackNeed > defenseNeed) mult *= 1.08;
+    else if(defenseNeed > attackNeed) mult *= 0.97;
+    else mult *= 1.01;
+  }
+
+  return Math.max(0.90, Math.min(mult, 1.20));
+}
+
+function __aiMatchesWeakness(roleKey, weaknesses){
+  if(!Array.isArray(weaknesses) || !weaknesses.length) return false;
+  const needDefense = weaknesses.includes('defense');
+  const needAttack = weaknesses.includes('attack');
+  if(needDefense && roleKey === 'wall') return true;
+  if(needAttack && roleKey === 'atk') return true;
+  return false;
+}
+
+function __aiReasonBadgeFromScores(meta){
+  const { hero, ms, roleKey, context, weaknesses, scoreCost, scoreCoverage, scoreFuture } = meta || {};
+  const entries = [
+    { key:'cost', value:Number(scoreCost)||0 },
+    { key:'coverage', value:Number(scoreCoverage)||0 },
+    { key:'future', value:Number(scoreFuture)||0 }
+  ].sort((a,b)=>b.value-a.value);
+
+  const top = entries[0] || { key:'cost', value:0 };
+  const second = entries[1] || { key:'coverage', value:0 };
+  const close = top.value <= 0 ? false : second.value >= top.value * 0.965;
+  const weaknessMatch = __aiMatchesWeakness(roleKey, weaknesses || []);
+  const longterm = __aiGetLongterm(hero && hero.id);
+  const sameInvest = !!(hero && context && hero.t === context.investmentType);
+  const sameMain = !!(hero && context && hero.t === context.currentCombatType);
+  const inMainArmy = !!(hero && context && context.mainArmyIds && context.mainArmyIds.has(hero.id));
+  const safeQualified = !!(hero && ms && ms.target <= 20 && (sameMain || inMainArmy || hero.r === 'wall' || hero.r === 'sup'));
+
+  function weaknessLabelFor(axisKey, role){
+    if(axisKey === 'wall' || role === 'wall') return '耐久補強';
+    if(axisKey === 'atk' || role === 'atk') return '火力補強';
+    return '弱点補強';
+  }
+
+  let label = '安定強化';
+  let axis = 'bal';
+  let strong = false;
+
+  if(top.key === 'coverage'){
+    if(weaknessMatch && top.value >= second.value * 1.02){
+      axis = (weaknesses || []).includes('attack') ? 'atk' : 'wall';
+      label = weaknessLabelFor(axis, roleKey);
+      strong = true;
+    }else if(weaknessMatch && !close){
+      axis = (weaknesses || []).includes('attack') ? 'atk' : 'wall';
+      label = weaknessLabelFor(axis, roleKey);
+    }
+  } else if(top.key === 'future'){
+    const futureQualified = (ms && ms.target >= 30) || sameInvest || longterm >= 0.72;
+    if(futureQualified && top.value >= second.value * 1.03){
+      label = '将来有望';
+      axis = 'atk';
+      strong = !!(ms && ms.target >= 30);
+    }else if(futureQualified && !close && (ms && ms.target >= 20)){
+      label = '将来有望';
+      axis = 'atk';
+    }
+  } else if(top.key === 'cost'){
+    const effectLabel = (ms && ms.target >= 30) ? '効果★★★' : '効果★★';
+    if(top.value >= second.value * 1.05){
+      label = effectLabel;
+    }else if(safeQualified || close){
+      label = '安全';
+    }else if(top.value >= second.value * 1.02){
+      label = effectLabel;
+    }
+  }
+
+  const level = (ms && ms.target>=30) ? 4 : ((ms && ms.target>=20) ? 3 : 2);
+  return { level, axis, label, strong };
+}
+
+function __aiDisplaySafeLabel(hero, ms, context, reasonBadge, scoreCost, scoreCoverage, scoreFuture){
+  if(!hero || !ms || !context || !reasonBadge) return '';
+  if(reasonBadge.label !== '効果★★' && reasonBadge.label !== '効果★★') return '';
+  if(ms.target > 20) return '';
+  const sameMain = hero.t === context.currentCombatType;
+  const inMainArmy = context.mainArmyIds && context.mainArmyIds.has(hero.id);
+  const top = Math.max(Number(scoreCost)||0, Number(scoreCoverage)||0, Number(scoreFuture)||0, 0);
+  if(top <= 0) return '';
+  if((Number(scoreCost)||0) < top * 0.97) return '';
+  if(hero.t === context.currentCombatType) return '安定強化';
+  if((inMainArmy || hero.r === 'wall' || hero.r === 'sup') && ms.target === 20) return '安定強化';
+  return '';
+}
+
+function calculateUpgradeEfficiencyFull(roster){
+    if(roster.length < 10) return {normal:[], unlock:[], weakness1:"balance", weakness2:"balance", weakness3:"balance", reinforceList:[]};
+
+    let base = optimizeMultiArmy(roster,5);
+    let baseScore = calcMultiArmyTotalScore(base.assignment);
+    if(baseScore === 0) return {normal:[], unlock:[], weakness1:"balance", weakness2:"balance", weakness3:"balance", reinforceList:[]};
+
+    let weakness1 = detectArmyWeaknessFromDetail(base.armyDetails.army1);
+    let weakness2 = detectArmyWeaknessFromDetail(base.armyDetails.army2);
+    let weakness3 = detectArmyWeaknessFromDetail(base.armyDetails.army3);
+
+    const context = __aiBuildContext(roster, base);
+    const weights = (typeof ROUTE_WEIGHT_PRESET === 'object' && ROUTE_WEIGHT_PRESET.safe) ? ROUTE_WEIGHT_PRESET.safe : { cost:0.55, coverage:0.25, future:0.20 };
+
+    let normalResults = [];
+    let unlockResults = [];
+    let awakenResults = [];  // 覚醒強化候補（専用武装ランキングとは別）
+
+    roster.forEach((hero,index)=>{
+        if(hero.ur) return;
+        const profile = __aiGetProfile(hero.id);
+        const roleKey = hero.r || (profile.role === 'front_tank' ? 'wall' : (profile.role === 'support' ? 'sup' : 'atk'));
+        const roleBadge = getRoleBadge(roleKey);
+        const simulated = roster.map(h => ({...h}));
+
+        if(hero.wp === 0){
+            const ewTarget = (META_TIER[hero.id] && META_TIER[hero.id].ewTarget) ? META_TIER[hero.id].ewTarget : 10;
+            simulated[index].wp = ewTarget;
+            simulated[index].simulating = true;
+            const newResult = optimizeMultiArmy(simulated, 5);
+            simulated[index].simulating = false;
+            let gain = calcMultiArmyTotalScore(newResult.assignment) - baseScore;
+            if(gain <= 0) gain = Math.max(1, Math.round(__aiGetLongterm(hero.id) * 18 - 6));
+            gain = Math.round(gain * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiSynergyBias(hero, roster, ewTarget));
+            if(gain > 0){
+              unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'将来有望', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
+            }
+            return;
+        }
+
+        const ms = getNextMilestone(hero.wp);
+        if(!ms) return;
+        simulated[index].wp = ms.target;
+        simulated[index].simulating = true;  // 覚醒ボーナスを現状のみ反映するフラグ
+        const newResult = optimizeMultiArmy(simulated, 5);
+        simulated[index].simulating = false;
+        let gain = Math.round(calcMultiArmyTotalScore(newResult.assignment) - baseScore);
+        if(gain <= 0){
+            const delta = Math.max(1, Math.round((wpToPts(ms.target) - wpToPts(hero.wp)) * (((META_TIER[hero.id]||{}).ew === 'SSS') ? 1.15 : 1.0)));
+            gain = delta;
+        }
+        if(gain <= 0) return;
+
+        const cost = ms.cost;
+        const basePerCost = gain / Math.max(1, Math.pow(cost || 1, 0.52));
+        const sameMain = hero.t === context.currentCombatType;
+        const sameInvest = hero.t === context.investmentType;
+        const inMainArmy = context.mainArmyIds.has(hero.id);
+        const synergy = __aiSynergyBias(hero, roster, ms.target);
+        const formationSynergy = __aiFormationSynergyBias(hero, roster, ms.target, context);
+        const matchupBias = __aiMatchupBias(hero, roster, context);
+        const tankBranchBias = __aiTankBranchBias(hero, ms.target, { weakness1, weakness2, weakness3, currentCombatType: context.currentCombatType, investmentType: context.investmentType });
+        const evalMeta = __aiGetEvalMeta(hero.id);
+        const aiProfile = __aiGetAiProfile(hero.id);
+        const milestone10EvalFit = (ms.target === 10) ? (evalMeta.milestone10Fit || 1.0) : 1.0;
+        const mainTypeBonus = (sameMain ? (aiProfile.mainTypeBonus || 1.0) : 1.0);
+        const sharedSynergy = synergy * formationSynergy * matchupBias * tankBranchBias * milestone10EvalFit;
+
+        const scoreCost = basePerCost * __aiTypePolicyMult(hero.t, context, 'cost') * __aiHeroBias(hero.id, 'cost', context) * __aiMilestoneBias(hero.id, ms.target, 'cost') * sharedSynergy * (sameMain ? 1.08 : 0.96) * (inMainArmy ? 1.06 : 1.00) * mainTypeBonus;
+        const scoreCoverage = basePerCost * __aiTypePolicyMult(hero.t, context, 'coverage') * __aiHeroBias(hero.id, 'coverage', context) * __aiMilestoneBias(hero.id, ms.target, 'coverage') * sharedSynergy * (sameMain ? 0.96 : 1.06) * (sameInvest ? 1.04 : 1.00) * mainTypeBonus;
+        const scoreFuture = basePerCost * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiMilestoneBias(hero.id, ms.target, 'future') * sharedSynergy * (sameInvest ? 1.10 : 0.96) * mainTypeBonus;
+        const efficiency = (scoreCost * weights.cost) + (scoreCoverage * weights.coverage) + (scoreFuture * weights.future);
+
+        const weaknesses = [weakness1, weakness2, weakness3].filter(Boolean);
+        const growthType = __aiReasonBadgeFromScores({
+            hero, ms, roleKey, context, weaknesses,
+            scoreCost, scoreCoverage, scoreFuture
+        });
+        const safeHintLabel = __aiDisplaySafeLabel(hero, ms, context, growthType, scoreCost, scoreCoverage, scoreFuture);
+        const reasonCodes = __aiBuildReasonCodes({ hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture });
+
+        const reinforceMain = 30 * (sameMain ? 1 : 0) + 20 * (inMainArmy ? 1 : 0.4) + 20 * (((weakness1 === 'defense' || weakness2 === 'defense') && roleKey === 'wall') || ((weakness1 === 'attack' || weakness2 === 'attack') && roleKey === 'atk') ? 1 : 0.45) + 15 * (ms.target === 20 ? 1 : (ms.target === 10 ? 0.8 : 0.55)) + 10 * ((sameMain && context.mainTeamMaturity !== 'high') ? 1 : 0.5) + 5 * (sameMain ? 1 : 0.2);
+        const reinforceCoverage = 30 * ((__aiCounterMap(context.currentCombatType)[hero.t]) || 0.5) + 25 * (profile.core ? 1 : 0.25) + 20 * Math.min(1.12, synergy * formationSynergy) + 15 * (!sameMain ? 1 : 0.45) + 10 * (ms.target <= 20 ? 1 : 0.55);
+        // S6: reinforceFuture に覚醒状況を反映
+        const awCtx = context.awakeningCtx || {};
+        const heroAwInfo = awCtx[hero.id] || {};
+        const awakenFutureBoost = heroAwInfo.awakened
+          ? (1.0 + Math.min(0.12, (heroAwInfo.star||0) * 0.03))  // 覚醒済み★数に応じたブースト
+          : (typeof AWAKENING_HEROES !== 'undefined' && AWAKENING_HEROES[hero.id] ? 1.04 : 1.0); // 未覚醒だが覚醒対象
+        const kimDvaComboBoost = awCtx.kimDvaCombo && (hero.id==='kimberly'||hero.id==='dva') ? 1.06 : 1.0;
+        const reinforceFuture = (30 * (sameInvest ? 1 : 0.2) + 25 * (profile.core ? 1 : 0.3) + 20 * __aiGetLongterm(hero.id) + 15 * (context.mainTeamMaturity === 'high' ? 1 : (context.mainTeamMaturity === 'mid' ? 0.7 : 0.35)) + 10 * (ms.target === 30 ? 1 : (ms.target === 20 ? 0.8 : 0.5))) * awakenFutureBoost * kimDvaComboBoost;
+
+        normalResults.push({
+            id: hero.id, name: hero.name, type: hero.t,
+            from: hero.wp, to: ms.target,
+            gain, cost, efficiency,
+            roleKey, roleBadge,
+            strength: (ms.target>=30 ? 'mega' : (ms.target>=20 ? 'high' : 'mid')),
+            growthType,
+            reasonCodes,
+            costTierLabel: __aiCostTierLabel(hero.wp, ms.target),
+            safeHintLabel,
+            scoreCost, scoreCoverage, scoreFuture,
+            reinforceMain, reinforceCoverage, reinforceFuture
+        });
+    });
+
+    // isAwakeningItem を normalResults から除外（専用武装ランキングを純粋に保つ）
+    normalResults = normalResults.filter(r => !r.isAwakeningItem);
+    normalResults.sort((a,b)=> (b.efficiency-a.efficiency) || (b.gain-a.gain));
+    unlockResults.sort((a,b)=> b.gain-a.gain);
+
+    // -------------------------------------------------------
+    // 覚醒ランキング用データを別途構築（normalResultsには混入させない）
+    // キンバリー(Lv30)など EW MAX で次のEW強化がない英雄が対象
+    // -------------------------------------------------------
+    if (typeof AWAKENING_HEROES !== 'undefined' && typeof loadAwTier !== 'undefined') {
+        roster.forEach(hero => {
+            const aw = AWAKENING_HEROES[hero.id];
+            if (!aw || !aw.milestones) return;
+            if (hero.wp < (aw.ewMinRequired || 20)) return; // 前提未達はスキップ
+            const awTierStr = loadAwTier(hero.id);
+            const at = parseAwTier(awTierStr);
+            if (at.star >= 4 && at.tier >= 5) return; // 覚醒MAX
+            const next = awNextTierCost(awTierStr);
+            if (!next) return;
+
+            // スコア上昇量計算
+            const BASE_PTS = wpToPts(hero.wp);
+            const curBonus  = getAwakeningScoreBonus(hero.id, awTierStr);
+            const nextTierStr = next.nextStar + '-' + next.nextTier;
+            const nextBonus = getAwakeningScoreBonus(hero.id, nextTierStr);
+            const ptGain = Math.round(BASE_PTS * (nextBonus - curBonus));
+            if (ptGain <= 0) return;
+
+            // コスト換算（専用かけら×15, 汎用かけら×10 強化石換算）
+            const convRate = next.named ? 15 : 10;
+            const costEquiv = next.cost * convRate;
+            const efficiency = ptGain / Math.max(1, Math.pow(costEquiv, 0.52));
+
+            // 重複チェック（同英雄がEWランキングにも出てる場合はawaken版を優先）
+            const awItem = {
+                id: hero.id,
+                name: hero.name || (HEROES[hero.id]||{}).n || hero.id,
+                type: hero.t,
+                gain: ptGain,
+                efficiency,
+                roleKey: hero.r || 'atk',
+                roleBadge: getRoleBadge(hero.r || 'atk'),
+                from: hero.wp,
+                to: hero.wp, // EW変化なし
+                awTierStr,
+                nextTierStr,
+                nextShardCost: next.cost,
+                nextShardNamed: next.named,
+                isAwakeningItem: true,
+                growthType: { level: 3, axis: 'atk', label: '👑 覚醒', strong: true },
+                reasonCodes: ['awakening', at.star >= 1 ? 'future' : 'immediate'],
+                costTierLabel: costEquiv >= 800 ? '高コスト' : '低コスト',
+                safeHintLabel: ''
+            };
+
+            awakenResults.push(awItem);
+        });
+        awakenResults.sort((a,b)=> (b.efficiency-a.efficiency) || (b.gain-a.gain));
+    }
+
+    const used = new Set();
+    const pickTop = (key, label, axis='bal') => {
+      const arr = [...normalResults].sort((a,b)=> (b[key]-a[key]) || (b.efficiency-a.efficiency));
+      for(const item of arr){
+        if(!used.has(item.id)){
+          used.add(item.id);
+          // hero の実際のロールから axis を決定（補強候補でも role を反映）
+          const heroRole = (HEROES[item.id] || {}).r || '';
+          const effectiveAxis = axis === 'bal'
+            ? 'bal'
+            : heroRole === 'wall' ? 'wall'
+            : heroRole === 'sup'  ? 'sup'
+            : heroRole === 'atk'  ? 'atk'
+            : axis;
+          return { ...item, growthType:{ level:2, axis:effectiveAxis, label, strong:false }, reasonCodes: __aiSelectReasonCodes(item.reasonCodes || [effectiveAxis==='atk' ? 'future' : 'coverage', item.costTierLabel==='高コスト' ? 'high_cost' : 'low_cost'], 2) };
+        }
+      }
+      return null;
+    };
+    const reinforceList = [];
+    const mainPick = pickTop('reinforceMain', '主力強化', 'bal');
+    const coveragePick = pickTop('reinforceCoverage', '弱点補強', 'wall');
+    const futurePick = pickTop('reinforceFuture', '将来有望', 'atk');
+    if(mainPick) reinforceList.push(mainPick);
+    if(coveragePick) reinforceList.push(coveragePick);
+    if(futurePick) reinforceList.push(futurePick);
+
+    return { normal: normalResults, unlock: unlockResults, awaken: awakenResults, weakness1, weakness2, weakness3, reinforceList };
+}
+
+
+// ================= 要約バー =================
+function updateSummaryBar(result, effData){
+    const el = $id('summary-bar');
+    if(!el) return;
+
+    // 10人未満の時
+    if(!result || !effData){
+        el.innerHTML = "まだデータが足りません（10人以上配置すると要約が表示されます）。";
+        return;
+    }
+
+    // 最優先候補（効率ランキングの1位）
+    const top = (effData.normal && effData.normal.length) ? effData.normal[0] : null;
+    const weak1 = effData.weakness1 || "balance";
+
+    const needText = (w) => {
+        // 1軍の傾向（AIコメント風）
+        return getWeaknessBadge(w);
+    };
+
+    const army1 = result.weightedScores ? (result.weightedScores.army1 || 0) : 0;
+    const army2 = result.weightedScores ? (result.weightedScores.army2 || 0) : 0;
+    const army3 = result.weightedScores ? (result.weightedScores.army3 || 0) : 0;
+
+    const powerLine = `📊 軍別戦力：🥇${army1}  🥈${army2}  🥉${army3}`;
+
+    if(!top){
+        el.innerHTML = `
+            <div class="summary-grid">
+                <div style="flex:1; min-width:220px;">
+                    <div class="summary-title">1軍の状態</div>
+                    <div class="summary-main">${needText(weak1)}</div>
+                    <div class="summary-sub">（育成優先ランキングが出ない状態です）</div>
+                    <div class="summary-sub" style="margin-top:6px;">${powerLine}</div>
+                </div>
+            </div>`;
+        return;
+    }
+
+    // バッジ文言（数値は見せない）
+    let badge = "効果あり";
+    if(top.strength === "mega") badge = "効果★★★";
+    else if(top.strength === "high") badge = "効果★★";
+    else if(top.strength === "mid") badge = "効果★";
+    else if(top.strength === "low") badge = "まず様子見";
+
+    const roleLabel = (top.roleKey === "atk") ? "火力" : (top.roleKey === "wall") ? "耐久" : "サポート";
+
+    el.innerHTML = `
+        <div class="summary-grid">
+            <div style="flex:1; min-width:0;">
+                <div class="summary-title">⭐ 次の育成目標</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;">
+                  <span class="summary-main" style="font-size:var(--fs-lg);">${top.name}</span>
+                  <span style="font-size:var(--fs-xs);background:#eff6ff;color:#1d4ed8;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${roleLabel}強化</span>
+                  <span style="font-size:var(--fs-xs);background:#f0fdf4;color:#15803d;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${badge}</span>
+                </div>
+                <div class="summary-sub">目標 EW Lv${top.to}　／　1軍：${needText(weak1)}</div>
+                <div class="summary-sub" style="margin-top:4px;">${powerLine}</div>
+            </div>
+        </div>`;
+}
+
+function getPriorityLabel(p, minPercent){
+    return "";
+}
+
+function getColor(percent, base){
+    if(percent < 40) return "#ef4444";
+    if(percent < 60) return "#f59e0b";
+    return base;
+}
+
+// ===============================
+// 🎯 部隊強化指針（部隊間の投資バランスアドバイス）
+// 「1軍が十分育ったら2軍へ」という段階的投資の指針
+// ===============================
+function updateArmyGuide() {
+  const panel  = document.getElementById('army-guide-panel');
+  const result = document.getElementById('army-guide-result');
+  if (!panel || !result) return;
+
+  // 全軍のスコアと進行度を取得
+  const armies = [1, 2, 3].map(s => {
+    const prog = computeDisplayedArmyProgress(s);
+    const members = collectArmyMembersForProgress(s);
+    // 最もEW Lvが低いメンバー（育成の遅れている人）
+    const weakest = members.length
+      ? members.slice().sort((a, b) => a.wp - b.wp)[0]
+      : null;
+    // 平均EW Lv
+    const avgWp = members.length
+      ? Math.round(members.reduce((sum, m) => sum + m.wp, 0) / members.length)
+      : 0;
+    return { s, prog, members, weakest, avgWp, filled: members.length };
+  });
+
+  // 10人未満なら非表示
+  const totalFilled = armies.reduce((sum, a) => sum + a.filled, 0);
+  if (totalFilled < 10) {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'block';
+
+  // 控えから昇格候補を検出
+  const benchCandidates = [];
+  for (let p = 1; p <= 10; p++) {
+    const id  = ($id(`h-bench-${p}`) || {}).value;
+    const wp  = parseInt(($id(`w-bench-${p}`) || {}).value) || 0;
+    if (!id || id === 'empty' || !HEROES[id]) continue;
+    // 各軍の最弱メンバーより強い場合に候補
+    armies.forEach(army => {
+      if (!army.weakest) return;
+      if (wp > army.weakest.wp + 5) {
+        benchCandidates.push({
+          id, wp, squad: army.s,
+          weakestId: army.weakest.id,
+          weakestWp: army.weakest.wp,
+          gain: wp - army.weakest.wp,
+        });
+      }
+    });
+  }
+  // 同一(id+squad)で最大gainのみ残す
+  const bestBench = {};
+  benchCandidates.forEach(c => {
+    const key = `${c.id}-${c.squad}`;
+    if (!bestBench[key] || c.gain > bestBench[key].gain) bestBench[key] = c;
+  });
+  const topBench = Object.values(bestBench).sort((a, b) => b.gain - a.gain).slice(0, 3);
+
+  // 部隊間の投資フェーズを判定
+  // 基準：1軍戦力70%以上→2軍投資開始、85%以上→3軍も投資
+  const p1 = armies[0].prog.pct;
+  const p2 = armies[1].prog.pct;
+  const p3 = armies[2].prog.pct;
+
+  let phaseMsg = '';
+  let phaseColor = '#4f46e5';
+  let nextTarget = '';
+
+  // F2P目標基準（100%超えあり）
+  // 80%以上 = EW20前後の現実的な「十分育った」水準
+  // 100%超 = EW20を超えてEW30方向への追加投資中
+  if (p1 >= 80 && p2 >= 65) {
+    phaseMsg = '🥇 1軍・2軍ともに充実。3軍の底上げ、またはEW30への追加投資を検討しましょう';
+    phaseColor = '#059669';
+    nextTarget = '3軍';
+  } else if (p1 >= 80) {
+    phaseMsg = '🥈 1軍がF2P目標水準に到達。2軍の強化を始めるタイミングです';
+    phaseColor = '#2563eb';
+    nextTarget = '2軍';
+  } else if (p1 >= 60) {
+    phaseMsg = '🥇 1軍があと一歩。EW20を目標に育成を続けましょう（80%到達で2軍投資開始の目安）';
+    phaseColor = '#d97706';
+    nextTarget = '1軍';
+  } else {
+    phaseMsg = '🥇 まずは1軍を優先。キム・ウィリアムズのEW20が最初の大きな節目です';
+    phaseColor = '#dc2626';
+    nextTarget = '1軍';
+  }
+
+  const hName = id => (HEROES[id] || {}).n || id;
+
+  // 各軍のボトルネック（最弱メンバー）
+  // 次の節目EW Lvを計算
+  const nextMilestone = wp => wp < 10 ? 10 : wp < 20 ? 20 : wp < 30 ? 30 : null;
+
+  const bottleneckHtml = armies.map(army => {
+    if (!army.weakest || army.filled < 3) return '';
+    const colorMap = { 1:'#10b981', 2:'#3b82f6', 3:'#8b5cf6' };
+    const c = colorMap[army.s];
+    const next = nextMilestone(army.weakest.wp);
+    const nextStr = next ? ` → 次の節目はLv${next}` : ' → EW MAX';
+    return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:28px;">${army.s}軍</span>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;flex-wrap:wrap;">
+          <div style="width:24px;height:24px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+            <img src="img/${army.weakest.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+          </div>
+          <span style="font-size:var(--fs-xs);font-weight:900;color:#374151;">${hName(army.weakest.id)}</span>
+          <span style="font-size:var(--fs-xxs);color:#f97316;font-weight:700;">⚠️ EW Lv${army.weakest.wp}${nextStr}</span>
+        </div>
+        <div style="background:#f1f5f9;border-radius:3px;height:4px;">
+          <div style="background:${c};width:${army.prog.pct}%;height:100%;border-radius:3px;"></div>
+        </div>
+      </div>
+      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:36px;text-align:right;">${army.prog.pct}%</span>
+    </div>`;
+  }).join('');
+
+  // 控えから昇格候補HTML
+  const benchHtml = topBench.length > 0
+    ? `<div style="margin-top:8px;padding:8px 10px;background:#f5f3ff;border-radius:8px;border:1px solid #ddd6fe;">
+        <div style="font-size:var(--fs-xs);font-weight:900;color:#6d28d9;margin-bottom:5px;">⬆️ 控えから昇格候補</div>
+        ${topBench.map(c => `
+          <div style="display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);margin-bottom:3px;">
+            <div style="width:22px;height:22px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
+              <img src="img/${c.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+            </div>
+            <span style="font-weight:900;color:#374151;">${hName(c.id)}</span>
+            <span style="color:#475569;">EW${c.wp}</span>
+            <span style="color:#7c3aed;font-weight:700;">→ ${c.squad}軍</span>
+            <span style="font-size:var(--fs-xxs);color:#475569;">（${hName(c.weakestId)} EW${c.weakestWp}と入替候補）</span>
+          </div>`).join('')}
+      </div>`
+    : '';
+
+  result.innerHTML = `
+    <div style="font-size:var(--fs-sm);font-weight:900;color:${phaseColor};margin-bottom:8px;padding:6px 8px;background:${phaseColor}12;border-radius:7px;">${phaseMsg}</div>
+    <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度</div>
+    <div style="font-size:var(--fs-xs);font-weight:900;color:#374151;margin-bottom:4px;">📊 各部隊の戦力と育成ボトルネック</div>
+    ${bottleneckHtml}
+    ${benchHtml}
+  `;
+}
+
+function renderProgress(percent, baseColor){
+    const color = getColor(percent, baseColor);
+    return `
+    <div class="progress-wrap">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width:${percent}%; background:${color};"></div>
+        </div>
+        <div class="progress-label">
+            進行度 <span class="progress-label-value" style="color:${color};">${percent}%</span>
+        </div>
+    </div>`;
+}
+
+function armyCard(title, content, baseColor, roleTag, progressPercent, minPercent, buffCount) {
+    let buffText = "";
+    if (buffCount === 5) buffText = `<span class="buff-pill buff-pill-5">🏆20%バフ</span>`;
+    else if (buffCount === 4) buffText = `<span class="buff-pill buff-pill-4">🚜15%バフ</span>`;
+    else if (buffCount === 3) buffText = `<span class="buff-pill buff-pill-3">⚠️5%バフ</span>`;
+
+    return `
+    <div class="army-card" style="border-left-color:${baseColor};">
+        <div class="army-card-title">
+            ${title} ${buffText} ${getPriorityLabel(progressPercent, minPercent)}
+        </div>
+        ${renderProgress(progressPercent, baseColor)}
+        <div class="army-card-role">
+            ${roleTag}
+        </div>
+        <div class="army-card-body">
+            ${content}
+        </div>
+    </div>`;
+}
+
+function generateAiSuggestion() {
+    let roster = []; 
+    for(let s=1; s<=4; s++) for(let p=1; p<=(s===4?10:5); p++) {
+        let id = $id(`h-${s}-${p}`).value; if(id==='empty') continue;
+        let wp = parseInt($id(`w-${s}-${p}`).value)||0;
+        let h = HEROES[id];
+        roster.push({ id, s, p, wp, t: h.t, r: h.r, ur: h.ur, name: h.n, pr: h.pr });
+    }
+    
+    let pool = roster.filter(h => h.id !== 'empty');
+    if(pool.length < 10) {
+        $id('ai-result').innerHTML = "<div style='font-size:var(--fs-lg); color:#475569;'>最低10人以上配置すると、自動的に全軍の最適化結果が表示されます。</div>"; 
+        $id('eff-result').innerHTML = "<div style='font-size:var(--fs-lg); color:#475569;'>最低10人以上配置してください。</div>";
+        updateSummaryBar(null, null);
+        return;
+    }
+
+    let result = optimizeMultiArmy(pool, 5);
+    previousAssignment = result.assignment;
+
+    let effData = calculateUpgradeEfficiencyFull(pool);
+
+    // 🥇 要約バー更新
+    updateSummaryBar(result, effData);
+    // 進行度バー＆兵種バフ（画像の見た目に合わせる）
+    try{
+        const s1 = result.weightedScores.army1 || 0;
+        const s2 = result.weightedScores.army2 || 0;
+        const s3 = result.weightedScores.army3 || 0;
+        const maxScore = Math.max(s1, s2, s3, 1);
+        const p1 = Math.round((s1 / maxScore) * 100);
+        const p2 = Math.round((s2 / maxScore) * 100);
+        const p3 = Math.round((s3 / maxScore) * 100);
+        const minPercent = Math.min(p1, p2, p3);
+
+        const weakText = (w) => {
+            // 進行度タグ用：不足時だけ強めに目立つ
+            return getWeaknessBadge(w);
+        };
+
+        const colorOf = (pct, base) => {
+            if(pct < 40) return "#ef4444";
+            if(pct < 60) return "#f59e0b";
+            return base;
+        };
+
+        
+        const detailedDiag = (armyArr, fallbackWeak) => {
+            const list = (armyArr || []).filter(h => h && h.id && h.id !== 'empty' && !h.ur);
+            const avg = (arr) => arr.length ? (arr.reduce((a,x)=>a + (parseInt(x.wp)||0), 0) / arr.length) : 0;
+
+            const atk = list.filter(h => h.r === 'atk');
+            const wall = list.filter(h => h.r === 'wall');
+            const avgAll = avg(list);
+            const avgAtk = avg(atk);
+            const avgWall = avg(wall);
+
+            let key = fallbackWeak || 'balance';
+            let level = '中';
+
+            // 役割の欠損は最優先で「大」
+            if(wall.length === 0){
+                key = 'defense'; level = '大';
+            }else if(atk.length === 0){
+                key = 'attack'; level = '大';
+            }else{
+                const diff = avgAtk - avgWall; // +なら盾が遅れてる（耐久不足）
+                if(diff >= 6){
+                    key = 'defense';
+                    level = (diff >= 12) ? '大' : (diff >= 8) ? '中' : '小';
+                }else if(diff <= -6){
+                    key = 'attack';
+                    level = (diff <= -12) ? '大' : (diff <= -8) ? '中' : '小';
+                }else{
+                    key = 'balance';
+                    level = (avgAll >= 20) ? '高' : (avgAll >= 12) ? '中' : '低';
+                }
+
+                // 絶対値が低い場合は段階を引き上げ
+                if(key === 'defense'){
+                    if(avgWall < 8) level = '大';
+                    else if(avgWall < 12 && level === '小') level = '中';
+                }
+                if(key === 'attack'){
+                    if(avgAtk < 8) level = '大';
+                    else if(avgAtk < 12 && level === '小') level = '中';
+                }
+            }
+
+            const label = (key === 'defense')
+                ? (level === '大' ? '前衛が手薄' : level === '中' ? '耐久やや不足' : '耐久微不足')
+                : (key === 'attack')
+                ? (level === '大' ? '火力が不足' : level === '中' ? '火力やや不足' : '火力微不足')
+                : (level === '高' ? 'バランス良好' : level === '中' ? 'バランス普通' : '全体的に育成中');
+            return { key, level, label };
+        };
+
+        const setEval = (armyNo, pct, baseColor, tagHtml, buffCount) => {
+            const el = document.getElementById(`slot-eval-${armyNo}`);
+            if(!el) return;
+
+            let buff = "";
+            if (buffCount === 5) buff = "✅ 兵種バフ20%";
+            else if (buffCount === 4) buff = "🔶 兵種バフ15%";
+            else if (buffCount === 3) buff = "⚠️ 兵種バフ5%";
+
+            const c = colorOf(pct, baseColor);
+
+            const buffSpan = buff ? `<span class="buff-badge">${buff}</span>` : "";
+
+            el.innerHTML =
+              '<div class="row">' +
+                '<div class="tag">' + tagHtml + '</div>' +
+                '<div class="pct" title="各英雄のロール別目標EWへの平均到達度">達成率 <span style="color:' + c + ';">' + pct + '%</span></div>' +
+              '</div>' +
+              (buffSpan ? ('<div class="row sub">' + buffSpan + '</div>') : '') +
+              '<div class="bar"><div style="width:' + pct + '%; background:' + c + ';"></div></div>';
+        };
+
+        const d1 = detailedDiag(result.assignment.army1, effData.weakness1);
+        const d2 = detailedDiag(result.assignment.army2, effData.weakness2);
+        const d3 = detailedDiag(result.assignment.army3, effData.weakness3 || 'balance');
+
+        setEval(1, p1, "#10b981", '📊 ' + d1.label, result.maxCounts.army1);
+        setEval(2, p2, "#3b82f6", '📊 ' + d2.label, result.maxCounts.army2);
+        setEval(3, p3, "#8b5cf6", '📊 ' + d3.label, result.maxCounts.army3);
+    }catch(e){}
+
+
+    // ✅ 3軍総合最適化結果カードは表示しない（入力UI=slotタイルを主役にする）
+    $id('ai-result').innerHTML = `
+      <div style="font-size:var(--fs-lg); color:#475569; line-height:1.6;">
+        上の <b>編成（タップで編集）</b> がそのまま評価画面です。<br>
+        最適化案を反映したい場合は、下のボタンで <b>自動反映</b> できます。
+      </div>
+      <button class="apply-btn" onclick="applyMultiArmy()">この最強編成を自動反映する</button>
+    `;
+
+
+    let effOut = "";
+
+    
+if(effData.normal.length > 0){
+        const TOP_N = 3;
+        const MORE_MAX = 10;
+
+        effOut += `
+        <div style="background:#fdf4ff; border:1px solid #fbcfe8; padding:12px; border-radius:10px;">
+            <div style="font-weight:900; color:#a21caf; margin-bottom:8px; font-size:var(--fs-xl);"></div>
+            ${holdPinnedSummaryHtml(effData.normal)}`;
+
+        // Top3（おすすめ）
+        effData.normal.slice(0, TOP_N).forEach((item,i)=>{
+            effOut += topRankCardHtml(i+1, item, { isBest:(i===0) });
+        });
+
+        // もっと見る（任意）
+        if(effData.normal.length > TOP_N){
+            let moreList = "";
+            effData.normal.slice(TOP_N, Math.min(effData.normal.length, MORE_MAX)).forEach((item,idx)=>{
+                let rank = TOP_N + idx + 1;
+                moreList += topRankCardHtml(rank, item, { compact:true });
+            });
+
+            effOut += `
+            <div id="eff-more-list" data-open="0" style="display:none; margin-top:6px;">
+                ${moreList}
+            </div>
+            <button id="eff-more-btn" onclick="toggleEffMore()" class="gear-save-btn">
+                もっと見る（おすすめ）
+            </button>`;
+        }
+
+        effOut += "</div>";
+    }
+
+    if(effData.reinforceList && effData.reinforceList.length > 0){
+        effOut += `
+        <div class="best-card-box">
+            <div style="font-weight:900; color:#ea580c; margin-bottom:8px; font-size:var(--fs-lg);">
+                🛡️ 補強候補ランキング
+            </div>`;
+
+        effData.reinforceList.forEach((r,i)=>{
+            effOut += reinfCardHtml(i+1, r);
+        });
+        effOut += `</div>`;
+    }
+
+    // 専用武装育成候補セクション削除（S6以降は育成ランキングに統合済み）
+    // unlock英雄はnormalResultsに自動混在して評価される
+
+    $id('eff-result').innerHTML = effOut || "<div style='color:#475569; font-size:var(--fs-lg);'>強化可能なキャラがいません。</div>";
+
+    // -------------------------------------------------------
+    // 覚醒ランキングパネルを描画
+    // -------------------------------------------------------
+    renderAwakenRanking(effData.awaken || []);
+}
+
+// ===============================================================
+// ===============================================================
+// 覚醒ランキング 3軸評価（コミュニティメタ反映版）
+// 軸1: 即効性 - 今すぐ戦力になるか
+// 軸2: コスパ - シャード1個あたりの戦力上昇
+// 軸3: シナジー - 現在の編成との相乗効果
+// ===============================================================
+
+// ===============================================================
+// 覚醒マイルストーン定義
+// 「未覚醒→★0-1解放」「★0-5→★1到達」のような
+// 実際にプレイヤーが意識する節目単位で評価
+// コスト・戦力増加・優先度をコミュニティ検証値で設定
+// 出典: packsify.com, cpt-hedge.com, ldshop.gg, Reddit r/LastWarSurvival
+// ===============================================================
+// ===============================================================
+// マイルストーン定義
+// starMin/starMax: この範囲の★にいるプレイヤーが対象
+// to: 目標の内部キー（star-tier形式）
+// toLabel: 表示用目標名
+// ===============================================================
+// 現在の覚醒状態から次のマイルストーンを取得
+function getNextMilestone_aw(heroId, awTierStr) {
+  const milestones = (AWAKENING_HEROES[heroId] || {}).milestones;
+  if (!milestones) return null;
+  const at = parseAwTier(awTierStr);
+  const currentStar = at.star; // -1=未覚醒, 0〜4=★0〜4
+
+  for (const ms of milestones) {
+    if (currentStar >= ms.starMin && currentStar <= ms.starMax) {
+      // 目標に既に到達しているか確認
+      const toAt = parseAwTier(ms.to);
+      if (currentStar > toAt.star) continue;          // 既に超えている
+      if (currentStar === toAt.star && at.tier >= toAt.tier) continue; // 同★で到達済み
+      return ms;
+    }
+  }
+  return null; // MAX
+}
+
+// 現在の★数から次のマイルストーンまでの残りシャード数を計算
+// 例: キンバリーが★1-3にいて★3到達を目指す場合
+//   ★1-3→★1-5: 40×2=80
+//   ★2-1→★2-5: 70×5=350
+//   合計: 430枚
+function calcRemainingShards(awTierStr, targetTierStr) {
+  const at  = parseAwTier(awTierStr);
+  const to  = parseAwTier(targetTierStr);
+  if (at.star < 0) return null; // 未覚醒は専用かけら固定なのでここでは計算しない
+  if (to.star < 0) return 0;
+
+  let total = 0;
+
+  // 同じ★内の残りティア
+  if (at.star === to.star) {
+    const remaining = to.tier - at.tier;
+    if (remaining <= 0) return 0;
+    total += remaining * (AW_SHARD_PER_TIER[at.star] || 20);
+    return total;
+  }
+
+  // 現在★の残りティア
+  const tierInCurrentStar = 5 - at.tier;
+  total += tierInCurrentStar * (AW_SHARD_PER_TIER[at.star] || 20);
+
+  // 中間★を全部通過
+  for (let s = at.star + 1; s < to.star; s++) {
+    total += 5 * (AW_SHARD_PER_TIER[s] || 20);
+  }
+
+  // 目標★のティア分
+  if (to.tier > 0) {
+    total += to.tier * (AW_SHARD_PER_TIER[to.star] || 20);
+  }
+
+  return total;
+}
+
+function calcAwakenScore(heroId, awTierStr, roster) {
+  const ms = getNextMilestone_aw(heroId, awTierStr);
+  if (!ms) return null; // MAX or 未対応
+
+  // 編成シナジー補正（1軍メンバーのみで計算）
+  const squad1 = roster ? roster.filter(h => {
+    // 1軍のIDを取得して絞り込み
+    try {
+      for (let p=1;p<=5;p++) {
+        const el = document.getElementById('h-1-'+p);
+        if (el && el.value === h.id) return true;
+      }
+    } catch(e) {}
+    return false;
+  }) : [];
+  const main = squad1.length >= 3 ? squad1 : (roster || []);
+
+  let synergyBonus = 0;
+  let synergyNote  = '';
+  if (heroId === 'kimberly') {
+    const hasFront2  = main.filter(h=>h.t==='tank'&&h.r==='wall').length >= 2;
+    const hasMarshall= main.some(h=>h.id==='marshall');
+    if (hasFront2)   { synergyBonus += 2; synergyNote += '前衛2枚あり'; }
+    if (hasMarshall) { synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'マーシャルあり'; }
+  }
+  if (heroId === 'dva') {
+    const kimAw = parseAwTier(loadAwTier('kimberly'));
+    if (kimAw.star >= 0) { synergyBonus += 3; synergyNote += 'キム覚醒済み'; }
+    const airCount = main.filter(h=>h.t==='air').length;
+    if (airCount >= 2)   { synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'航空'+airCount+'体(1軍)'; }
+  }
+  if (heroId === 'tesla') {
+    const hasFiona = main.some(h=>h.id==='fiona');
+    const misCount = main.filter(h=>h.t==='mis').length;
+    if (hasFiona)          { synergyBonus += 3; synergyNote += 'フィオナあり'; }
+    if (misCount >= 3)     { synergyBonus += 2; synergyNote += (synergyNote?'・':'')+'ロケラン'+misCount+'体(1軍)'; }
+    else if (misCount >= 2){ synergyBonus += 1; synergyNote += (synergyNote?'・':'')+'ロケラン'+misCount+'体(1軍)'; }
+  }
+  const synergy = Math.min(10, 5 + synergyBonus);
+
+  // 戦力増加の大きさを数値に変換
+  const powerMap = { xlarge:10, large:8, mid:6, small:4 };
+  const powerVal = powerMap[ms.powerGain] || 6;
+
+  // 総合スコア（コスパ40%・即効性30%・戦力増加20%・シナジー10%）
+  const total = ms.costpa*0.40 + ms.immediacy*0.30 + powerVal*0.20 + synergy*0.10;
+
+  // 現在位置から次マイルストーンまでの残りシャードを計算
+  let remainingShards = ms.shardCost; // デフォルトはマイルストーン固定値
+  let remainingNamed  = ms.named;
+  if (!ms.named && ms.to && awTierStr !== 'none' && awTierStr !== ms.from) {
+    // 解放後で、現在位置がマイルストーム開始点と異なる場合は差分計算
+    const toAt = parseAwTier(ms.to.replace('★',''));
+    const calc = calcRemainingShards(awTierStr, ms.to.replace('★',''));
+    if (calc !== null && calc > 0) remainingShards = calc;
+  }
+  // 「現在★X-Y → 目標★N まであとN枚」の表示用文字列
+  const atNow = parseAwTier(awTierStr);
+  const nowLabel = atNow.star < 0 ? '未覚醒' : '★' + atNow.star + '-' + atNow.tier;
+  const goalLabel = ms.toLabel || (ms.to === '1-0' ? '★1' : ms.to === '3-0' ? '★3' : ms.to === '5-0' ? '★5MAX' : '★'+ms.to);
+  const shardDisp = remainingNamed
+    ? `${nowLabel} → ${goalLabel}（専用かけら×${remainingShards}）`
+    : `${nowLabel} → ${goalLabel}（あと${remainingShards}枚）`;
+
+  return {
+    total,
+    costpa:    ms.costpa,
+    immediacy: ms.immediacy,
+    powerGain: powerVal,
+    synergy,
+    synergyNote: synergyNote.trim() || '',
+    note:    ms.note,
+    verdict: ms.verdict,
+    msLabel: ms.label,
+    fromStr: ms.from,
+    toStr:   ms.to,
+    shardCost:  remainingShards,
+    shardDisp,
+    nowLabel,       // 現在の★表示（例：★1-3）
+    goalLabel,      // 目標の★表示（例：★3）
+    named:      remainingNamed,
+  };
+}
+
+function renderAwakenRanking(awakenResults) {
+    const panel  = document.getElementById('awaken-rank-panel');
+    const result = document.getElementById('awaken-rank-result');
+    if (!panel || !result) return;
+    if (!awakenResults || awakenResults.length === 0) {
+        panel.style.display = 'none';
+        return;
+    }
+    panel.style.display = 'block';
+
+    const heroNames = { kimberly:'キンバリー', dva:'DVA', tesla:'テスラ' };
+
+    // 全ロースターを取得（シナジー計算用）
+    const rosterForSynergy = (() => {
+        try {
+            const r = [];
+            for (let s=1;s<=3;s++) for (let p=1;p<=5;p++) {
+                const id = ($id(`h-${s}-${p}`)||{}).value;
+                const wp = parseInt(($id(`w-${s}-${p}`)||{}).value)||0;
+                if (id && id !== 'empty' && HEROES[id]) r.push({ id, wp, t:HEROES[id].t, r:HEROES[id].r });
+            }
+            return r;
+        } catch(e) { return []; }
+    })();
+
+    // 3軸スコアを計算してソート
+    const scored = awakenResults.map(item => {
+        const sc = calcAwakenScore(item.id, item.awTierStr, rosterForSynergy);
+        return { ...item, sc };
+    }).filter(x => x.sc).sort((a,b) => b.sc.total - a.sc.total);
+
+    let html = '';
+    scored.forEach((item, i) => {
+        const rank   = i + 1;
+        const isBest = rank === 1;
+        const sc     = item.sc;
+        const aw     = AWAKENING_HEROES[item.id];
+        const name   = heroNames[item.id] || item.name;
+        const heroImg = `img/${item.id}.webp`;
+        // マイルストーン表示（curTier/nxtTierは不使用になったが互換のため残す）
+        const curTier = item.awTierStr === 'none' ? '未覚醒' : '★' + item.awTierStr;
+        const nxtTier = sc.toStr ? ('★' + sc.toStr) : '';
+
+        // コスト表示
+        const shardLabel = sc.named
+            ? `🔑 専用かけら×${sc.shardCost}`
+            :  `<img src="img/kakusei.webp"
+            style="width:34px;height:34px;vertical-align:-2px;margin-right:3px;"
+            alt=""> ×${sc.shardCost}`;
+
+        // 3軸バー（直感的な絵文字+ドット形式）
+        const bar = (val, color, label, icon) => {
+            const dots = [1,2,3,4,5].map(d =>
+                `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;
+                 background:${d <= Math.round(val/2) ? color : '#e2e8f0'};
+                 flex-shrink:0;"></span>`
+            ).join('');
+            const levelLabel = val >= 9 ? '最高' : val >= 7 ? '高い' : val >= 5 ? '普通' : '低め';
+            return `<div class="ucard-bar-row">
+              <span class="ucard-bar-label">${icon} ${label}</span>
+              <div style="display:flex;gap:3px;align-items:center;">${dots}</div>
+              <span class="ucard-bar-val" style="color:${color};font-size:var(--fs-xxs);">${levelLabel}</span>
+            </div>`;
+        };
+
+        // 総合優先度ラベル
+        const priorityLabel = sc.total >= 7.5 ? '🔥 最優先' : sc.total >= 6 ? '⚡ 優先' : '📌 後回しOK';
+        const priorityColor = sc.total >= 7.5 ? '#ef4444' : sc.total >= 6 ? '#f97316' : '#94a3b8';
+
+        html += `
+        <div class="ucard ${isBest?'ucard--best':'ucard--awaken'}">
+          <div class="ucard-row">
+            <div class="ucard-avatar">
+              <div class="ucard-rank">${rank}位</div>
+              <div class="ucard-avatar-img">
+                <img src="${heroImg}" onerror="this.style.opacity=0">
+              </div>
+            </div>
+            <div class="ucard-body">
+              <div class="ucard-header">
+                <span class="ucard-name">${name}</span>
+                <span class="awaken-ms-badge">目標 ${sc.goalLabel}</span>
+                <span class="ucard-priority" style="color:${priorityColor};">${priorityLabel}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <!-- かけら行 -->
+                <div><span style="background:#f8fafc;color:#374151;border:1px solid #e2e8f0;border-radius:5px;padding:2px 7px;font-size:var(--fs-xs);font-weight:700;">${shardLabel}</span></div>
+                <!-- 編成相性行 -->
+                ${sc.synergyNote ? `<div><span style="background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:5px;padding:2px 7px;font-size:var(--fs-xs);font-weight:700;">🤝 ${sc.synergyNote}</span></div>` : ''}
+              </div>
+              <div class="ucard-summary">${sc.note}</div>
+              <div class="ucard-bars">
+                ${bar(sc.immediacy,'#3b82f6','即効性','⚡')}
+                ${bar(sc.costpa,   '#10b981','コスパ','💎')}
+                ${bar(sc.powerGain,'#f97316','将来性','📈')}
+              </div>
+              <details class="ucard-details">
+                <summary>💬 海外ガチ勢の評価 ▼</summary>
+                <div class="ucard-details-body">${sc.verdict}</div>
+              </details>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    result.innerHTML = html || '<div style="color:#374151;font-size:var(--fs-lg);">覚醒対象英雄が見つかりません。</div>';
+}
+
+function applyMultiArmy() {
+    let data = previousAssignment;
+    let setSquad = (s, squadArray) => {
+        let walls = squadArray.filter(h => HEROES[h.id].r === 'wall').sort((a,b) => b.wp - a.wp);
+        let others = squadArray.filter(h => HEROES[h.id].r !== 'wall').sort((a,b) => b.wp - a.wp);
+        let ordered = [...walls, ...others];
+        
+        for(let i=1; i<=5; i++) {
+            let h = ordered[i-1];
+            if(h) {
+                $id(`h-${s}-${i}`).value = h.id;
+                $id(`w-${s}-${i}`).value = h.wp;
+            } else {
+                $id(`h-${s}-${i}`).value = 'empty';
+                $id(`w-${s}-${i}`).value = 0;
+            }
+        }
+    };
+
+    setSquad(1, data.army1);
+    setSquad(2, data.army2);
+    setSquad(3, data.army3);
+
+    for(let i=1; i<=10; i++) {
+        let h = data.bench[i-1];
+        if(h) {
+            $id(`h-4-${i}`).value = h.id;
+            $id(`w-4-${i}`).value = h.wp;
+        } else {
+            $id(`h-4-${i}`).value = 'empty';
+            $id(`w-4-${i}`).value = 0;
+        }
+    }
+
+    updateAllSquads();
+    showToast("🔄 最強の編成を反映しました！");
+}
+
+
+
+function loadAllData() {
+  let sv = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final'); 
+  let d = {};
+  if(sv){
+    try { d = JSON.parse(sv) || {}; } catch(e){ d = {}; }
+  }
+
+  // （ここから下は今の処理をそのまま）
+  for(let s=1; s<=4; s++) {
+    for(let p=1; p<=(s===4?10:5); p++) { 
+      if(d[`h-${s}-${p}`]) $id(`h-${s}-${p}`).value = d[`h-${s}-${p}`]; 
+      if(d[`w-${s}-${p}`]) $id(`w-${s}-${p}`).value = d[`w-${s}-${p}`]; 
+    }
+  }
+
+  // 装備データ読み込み削除済み
+
+  if(d['current-meta']) $id('current-meta').value = d['current-meta'];
+  if(d['pow-tank'] !== undefined && $id('pow-tank')) $id('pow-tank').value = d['pow-tank'];
+  if(d['pow-air'] !== undefined && $id('pow-air')) $id('pow-air').value = d['pow-air'];
+  if(d['pow-mis'] !== undefined && $id('pow-mis')) $id('pow-mis').value = d['pow-mis'];
+
+  // ✅ ここは必ず実行される
+  updateAllSquads();
+  // gear処理削除済み
+}
+
+
+// ================= 統合スロットUI =================
+let __slotModalState = { s:1, p:1, lv:0, awTier:'none' }; // awTier: 'star-tier' 例 '0-1'=★0-1, '2-3'=★2-3, 'none'=未覚醒
+
+// 現在のフィルター状態
+let __heroFilter = 'all';
+
+function buildSlotHeroOptions(filter) {
+    filter = filter || __heroFilter || 'all';
+    const sel = document.getElementById('slot-modal-hero');
+    if (!sel) return;
+    const currentVal = sel.value; // 選択中の値を保持
+
+    const typeLabel = { tank:'⚔️ 戦車', air:'✈️ 航空', mis:'🚀 ロケラン' };
+    const awakenIds = new Set(Object.keys(AWAKENING_HEROES || {}));
+
+    let opts = '<option value="empty">未設定</option>';
+    const groups = { tank:[], air:[], mis:[] };
+
+    Object.keys(HEROES).forEach(k => {
+        if (k === 'empty') return;
+        const h = HEROES[k];
+        // フィルター適用
+        if (filter === 'tank'   && h.t !== 'tank') return;
+        if (filter === 'air'    && h.t !== 'air')  return;
+        if (filter === 'mis'    && h.t !== 'mis')  return;
+        if (filter === 'awaken' && !awakenIds.has(k)) return;
+        const label = h.n + (h.ur ? ' (UR)' : '') + (awakenIds.has(k) ? ' 👑' : '');
+        groups[h.t].push(`<option value="${k}">${label}</option>`);
+    });
+
+    const mk = (title, arr) => arr.length ? `<optgroup label="${title}">${arr.join('')}</optgroup>` : '';
+    opts += mk(typeLabel.tank, groups.tank) + mk(typeLabel.air, groups.air) + mk(typeLabel.mis, groups.mis);
+    sel.innerHTML = opts;
+
+    // 以前の選択を復元（フィルターで非表示になる場合はemptyに）
+    if (currentVal && sel.querySelector(`option[value="${currentVal}"]`)) {
+        sel.value = currentVal;
+    } else {
+        sel.value = 'empty';
+    }
+}
+
+function filterHeroes(filter) {
+    __heroFilter = filter;
+    // ボタンのアクティブ状態を切り替え
+    document.querySelectorAll('.hero-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    buildSlotHeroOptions(filter);
+}
+
+function renderSlots(){
+    // 1〜3軍は5枠、控えは10枠
+    const configs = [
+        {s:1, n:5, el:'slot-tiles-1'},
+        {s:2, n:5, el:'slot-tiles-2'},
+        {s:3, n:5, el:'slot-tiles-3'},
+        {s:4, n:10, el:'slot-tiles-4'}
+    ];
+    configs.forEach(cfg=>{
+        const wrap = document.getElementById(cfg.el);
+        if(!wrap) return;
+        let html = '';
+        for(let p=1; p<=cfg.n; p++){
+            const hEl = document.getElementById(`h-${cfg.s}-${p}`);
+            const wEl = document.getElementById(`w-${cfg.s}-${p}`);
+            if(!hEl || !wEl){
+                // まだ初期化前
+                continue;
+            }
+            const id = hEl.value || 'empty';
+            const h = HEROES[id] || HEROES.empty;
+            const lvRaw = wEl.value;
+            const lv = (typeof lvRaw === 'string' && (lvRaw.includes('未') || lvRaw === '-' )) ? 0 : (parseInt(lvRaw)||0);
+            const isEmpty = (id === 'empty');
+            const shortName = (h.n || '未設定').substring(0,3);
+
+            if(isEmpty){
+                html += `
+                <div class="slot-tile slot-empty" onclick="openSlotModal(${cfg.s},${p});">
+                    <div class="slot-avatar">
+                        <div class="slot-fallback" style="display:flex;">+</div>
+                    </div>
+                    <div class="slot-lv">Lv.-</div>
+                    <div class="slot-name">追加</div>
+                </div>`;
+            } else {
+                // 覚醒バッジ
+                let awBadge = '';
+                const awData = (typeof AWAKENING_HEROES !== 'undefined') ? AWAKENING_HEROES[id] : null;
+                const awTierStr = awData ? loadAwTier(id) : 'none';
+                const awObj = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : {star:-1,tier:0};
+                const isAwakened = awObj.star >= 0;
+                if (isAwakened) {
+                    const tierLabel = awObj.tier === 0
+                        ? '覚醒★' + awObj.star
+                        : '覚醒★' + awObj.star + '-' + awObj.tier;
+                    awBadge = `<div class="awaken-badge-star">${tierLabel}</div>`;
+                }
+                html += `
+                <div class="slot-tile${isAwakened ? ' is-awakened' : ''}" onclick="openSlotModal(${cfg.s},${p});">
+                    <div class="slot-avatar">
+                        <img src="${getHeroImagePath(id)}" alt="${h.n}" onerror="this.style.display='none'; this.parentNode.querySelector('.slot-fallback').style.display='flex';">
+                        <div class="slot-fallback" style="display:none;">${shortName}</div>
+                    </div>
+                    ${awBadge}
+                    <div class="slot-lv">Lv.${lv}</div>
+                    <div class="slot-name">${h.n}</div>
+                </div>`;
+            }
+        }
+        wrap.innerHTML = html;
+    });
+}
+
+function openSlotModal(s,p){
+    __heroFilter = 'all';
+    // フィルターボタンをリセット
+    document.querySelectorAll('.hero-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === 'all');
+    });
+    buildSlotHeroOptions('all');
+    __slotModalState.s = s; __slotModalState.p = p;
+
+    const hEl = document.getElementById(`h-${s}-${p}`);
+    const wEl = document.getElementById(`w-${s}-${p}`);
+    const heroSel = document.getElementById('slot-modal-hero');
+
+    const id = hEl ? (hEl.value || 'empty') : 'empty';
+    heroSel.value = id;
+    // hero変更時に覚醒セクション更新
+    heroSel.onchange = function() {
+        try { updateHeroAdvicePanel(this.value, __slotModalState.lv); } catch(e){}
+        try { openAwakeningSection(this.value, __slotModalState.lv); } catch(e){}
+    };
+
+    const lvRaw = wEl ? wEl.value : 0;
+    const lv = (typeof lvRaw === 'string' && (lvRaw.includes('未') || lvRaw === '-' )) ? 0 : (parseInt(lvRaw)||0);
+    __slotModalState.lv = lv;
+    document.getElementById('slot-modal-lv').innerText = lv;
+
+    // --- 英雄アドバイス ---
+    try { updateHeroAdvicePanel(id, lv); } catch(e) {}
+    // --- 覚醒セクション ---
+    try { openAwakeningSection(id, lv); } catch(e) {}
+
+    document.getElementById('slot-modal').classList.add('open');
+}
+
+function updateHeroAdvicePanel(heroId, ewLv) {
+    const panel    = document.getElementById('hero-advice-panel');
+    const roleEl   = document.getElementById('hero-advice-role');
+    const ewEl     = document.getElementById('hero-advice-ew');
+    const synEl    = document.getElementById('hero-advice-synergy');
+    if (!panel) return;
+
+    const adv = (typeof HERO_SLOT_ADVICE !== 'undefined') ? HERO_SLOT_ADVICE[heroId] : null;
+    if (!adv || !heroId || heroId === 'empty') {
+        panel.style.display = 'none';
+        return;
+    }
+    panel.style.display = 'block';
+
+    // 役割バッジ
+    const typeLabel = { tank:'⚔️ 戦車', air:'✈️ 航空', mis:'🚀 ロケラン' };
+    const roleLabel = { atk:'🔴 アタッカー', wall:'🛡️ タンク', sup:'💚 サポート' };
+    const hero = (typeof HEROES !== 'undefined') ? (HEROES[heroId] || {}) : {};
+    const prioColor = adv.priority === 'SSS' ? '#ef4444' : adv.priority === 'SS' ? '#f97316' : adv.priority === 'S' ? '#eab308' : '#94a3b8';
+
+    roleEl.innerHTML = `
+        <span style="background:#f1f5f9;color:#334155;border-radius:5px;padding:2px 7px;font-size:var(--fs-xs);font-weight:700;">${typeLabel[hero.t]||''} ${roleLabel[hero.r]||''}</span>
+        <span style="background:${prioColor}22;color:${prioColor};border:1px solid ${prioColor}44;border-radius:5px;padding:2px 7px;font-size:var(--fs-xs);font-weight:900;">優先度 ${adv.priority}</span>
+        ${adv.s6note ? `<span class="synergy-badge">S6: ${adv.s6note}</span>` : ''}
+    `;
+
+    // EW Lv別アドバイス
+    const ewAdvice = (typeof getHeroEwAdvice !== 'undefined') ? getHeroEwAdvice(heroId, ewLv) : '';
+    ewEl.innerHTML = ewAdvice ? `💡 <b>EW Lv${ewLv} アドバイス：</b><br>${ewAdvice}` : '';
+    ewEl.style.display = ewAdvice ? 'block' : 'none';
+
+    // 編成での役割・シナジー
+    synEl.innerHTML = adv.synergy ? `🤝 <b>編成での役割：</b><br>${adv.synergy}` : '';
+    synEl.style.display = adv.synergy ? 'block' : 'none';
+}
+
+function openAwakeningSection(heroId, ewLv) {
+    const section = document.getElementById('awaken-section');
+    if (!section) return;
+
+    const aw = (typeof AWAKENING_HEROES !== 'undefined') ? AWAKENING_HEROES[heroId] : null;
+    if (!aw || !aw.milestones) {
+        section.style.display = 'none';
+        __slotModalState.awTier = 'none';
+        return;
+    }
+    section.style.display = 'block';
+    document.getElementById('awaken-hero-name').innerText = (HEROES[heroId] || {}).n || '';
+    document.getElementById('awaken-skill-name').innerText = '「' + aw.skillName + '」';
+
+    // 前提チェック
+    const reqHint = document.getElementById('awaken-req-hint');
+    const starRow = document.getElementById('awaken-star-row');
+    const check = (typeof checkAwakeningEligible !== 'undefined')
+        ? checkAwakeningEligible(heroId, ewLv, 5)
+        : { eligible: false, reason: 'EW Lv' + (aw.ewMinRequired||20) + '以上が必要' };
+    if (!check.eligible) {
+        reqHint.style.display = 'block';
+        reqHint.innerText = '⚠ ' + check.reason;
+        starRow.classList.add('disabled-aw');
+    } else {
+        reqHint.style.display = 'none';
+        starRow.classList.remove('disabled-aw');
+    }
+
+    // 保存済みティアを読み込む
+    const saved = loadAwTier(heroId);
+    __slotModalState.awTier = (saved && saved !== '0-0') ? saved : 'none';
+    renderAwTierUI(__slotModalState.awTier, aw);
+}
+
+// awTier UIの描画
+// 構造：★0〜★4、各★に1〜5の5ティア
+// "star-tier" 文字列（例 "0-1"=★0-1, "2-3"=★2-3）
+// 未覚醒 = "none"
+function renderAwTierUI(awTierStr, aw) {
+    const disp = document.getElementById('awaken-star-display');
+    const valEl = document.getElementById('awaken-star-val');
+    const bonusHint = document.getElementById('awaken-bonus-hint');
+    const commHint = document.getElementById('awaken-community-hint');
+    if (!disp) return;
+
+    const at = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : { star:-1, tier:0 };
+    const currentStar = at.star;  // -1=未覚醒, 0〜4=★0〜4
+    const currentTier = at.tier;  // 1〜5
+
+    // 表示ルール：
+    //   未覚醒 = "none"
+    //   ★0     = 解放のみ（専用かけら×50、tier=0扱い）
+    //   ★0-1〜★0-5 = ★0の5ティア（各20シャード）→ ★0-5完了で「★1」到達
+    //   ★1-1〜★1-5 → ★2到達、以降同様
+    //   内部 star=N, tier=T → 表示「★N-T」そのまま
+    //   ただし tier=0 は「★N 解放済み」(ティア未進行)
+
+    function displayLabel(star, tier) {
+        if (star < 0) return '未覚醒';
+        if (tier === 0) return '★' + star + '（到達）';
+        if (tier === 5) return '★' + (star + 1) + '（到達）';
+        return '★' + star + '-' + tier;
+    }
+
+    const reachedStar = (s) => s + 1; // ★s-5完了で到達する★
+
+    // ===== 星セクション塗りSVG生成 =====
+    const cx = 50, cy = 52;
+    function starOuterPts(outerR, innerR) {
+        const pts = [];
+        for (let i = 0; i < 10; i++) {
+            const angle = (Math.PI / 5) * i - Math.PI / 2;
+            const r = i % 2 === 0 ? outerR : innerR;
+            pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
+        }
+        return pts;
+    }
+    const starPts = starOuterPts(46, 18);
+    function sectionPath(tipIdx) {
+        const prevInner = starPts[(tipIdx - 1 + 10) % 10];
+        const tip = starPts[tipIdx];
+        const nextInner = starPts[(tipIdx + 1) % 10];
+        return `M${cx},${cy} L${prevInner[0]},${prevInner[1]} L${tip[0]},${tip[1]} L${nextInner[0]},${nextInner[1]} Z`;
+    }
+    const tipIndices = [0,2,4,6,8];
+    function renderStarSvg(filledCount, isCurrent) {
+        const outline = starPts.map(p => p.join(',')).join(' ');
+        let svg = `<svg width="36" height="36" viewBox="0 0 100 100">`;
+        svg += `<polygon points="${outline}" fill="none" stroke="${(isCurrent || filledCount>0) ? '#ef4444' : '#3a4356'}" stroke-width="4"/>`;
+        for (let i = 0; i < 5; i++) {
+            if (i < filledCount) svg += `<path d="${sectionPath(tipIndices[i])}" fill="#ef4444"/>`;
+        }
+        svg += `</svg>`;
+        return svg;
+    }
+
+    // 5つの★を横に並べる（★0〜★4、ラベルなし）
+    let starsHtml = '<div style="display:flex;gap:4px;justify-content:center;flex:1;min-width:0;">';
+    for (let s = 0; s <= 4; s++) {
+        let filled;
+        if (currentStar > s) filled = 5;
+        else if (currentStar === s) filled = currentTier;
+        else filled = 0;
+        const isCurrent = (currentStar === s);
+        starsHtml += `<div style="cursor:pointer;" onclick="setAwTier(${s}, 1)" title="★${s}-1へ">
+            ${renderStarSvg(filled, isCurrent)}
+        </div>`;
+    }
+    starsHtml += '</div>';
+
+    // 現在地点ラベル（未覚醒に戻すボタンの上に表示）
+    const curLbl = displayLabel(currentStar, currentTier);
+    const curLblHtml = `<div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:var(--fs-md);color:#ef4444;font-weight:700;margin-top:6px;">${curLbl}</div>`;
+
+    // +/- ボタンで1ティアずつ移動
+    const html = `<div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="stepAwTier(-1)" style="width:34px;height:34px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">−</button>
+        ${starsHtml}
+        <button onclick="stepAwTier(1)" style="width:34px;height:34px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">+</button>
+    </div>
+    ${curLblHtml}
+    <div onclick="setAwTier(-1,0)" class="awaken-reset-btn" style="text-align:center;margin-top:4px;">未覚醒に戻す</div>`;
+    disp.innerHTML = html;
+
+    // 現在値ラベル（★0-5=★1 と表示）
+    const lbl = displayLabel(currentStar, currentTier);
+    if (valEl) valEl.innerText = lbl;
+
+    // ボーナスヒント
+    if (bonusHint && aw) {
+        bonusHint.style.display = 'block';
+        let bonusTxt = (aw.tierBonuses || {})[currentStar + '-' + currentTier] || '';
+        if (!bonusTxt) {
+            outer: for (let ss = currentStar; ss >= 0; ss--) {
+                const maxT = (ss === currentStar) ? currentTier - 1 : 5;
+                for (let tt = maxT; tt >= (ss === 0 ? 0 : 1); tt--) {
+                    bonusTxt = (aw.tierBonuses || {})[ss + '-' + tt];
+                    if (bonusTxt) { bonusTxt += '（継続中）'; break outer; }
+                }
+            }
+        }
+        bonusHint.innerText = currentStar >= 0
+            ? (lbl + ' 効果: ' + (bonusTxt || '—'))
+            : '★0 解放で覚醒スキル習得・基礎ステ約2倍';
+    }
+    if (commHint && aw) {
+        commHint.style.display = 'block';
+        commHint.innerText = '💬 海外ガチ勢: ' + (aw.communityNotes || '');
+    }
+
+    // EW vs 覚醒 優先度判定パネル更新
+    try { updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw); } catch(e) {}
+}
+
+function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
+    const panel = document.getElementById('ew-vs-awaken-panel');
+    if (!panel || !aw) return;
+
+    const at = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : { star:-1, tier:0 };
+    const nextEwLv = ewLv < 10 ? 10 : ewLv < 20 ? 20 : ewLv < 30 ? 30 : null;
+
+    // EWスコア上昇量を計算
+    function ewPts(lv) {
+        lv = Math.max(0, Math.min(30, lv));
+        let p = 70;
+        if(lv>=30) p+=360; else if(lv>=20) p+=190+(lv-20)*8;
+        else if(lv>=10) p+=90+(lv-10)*5; else p+=5+lv*2;
+        return p;
+    }
+
+    // EW強化のコストあたりスコア上昇
+    // getPreciseCost の実値に合わせる（Lv0→10: 330, Lv10→20: 800, Lv20→30: 1750）
+    const EW_COST = { 10:330, 20:800, 30:1750 };
+    let ewGain = 0, ewCost = 0, ewLabel = '';
+    if (nextEwLv) {
+        ewGain = ewPts(nextEwLv) - ewPts(ewLv);
+        ewCost = EW_COST[nextEwLv] || 999;
+        ewLabel = `EW Lv${ewLv}→${nextEwLv}`;
+    }
+
+    // 覚醒次ティアのコストあたりスコア上昇
+    const BASE_PTS = ewPts(ewLv);
+    let awGain = 0, awCost = 0, awLabel = '';
+
+    if (at.star < 0) {
+        // 未覚醒 → ★0-1: 専用かけら×50、スコア×1.20
+        if (ewLv >= (aw.ewMinRequired || 20)) {
+            awGain = Math.round(BASE_PTS * (1.20 - 1.0));
+            awCost = 50; // 専用かけら（換算値：1個≒15強化石相当とする）
+            awLabel = '覚醒★0-1（専用かけら×50）';
+        }
+    } else {
+        const next = (typeof awNextTierCost !== 'undefined') ? awNextTierCost(awTierStr) : null;
+        if (next) {
+            const curBonus  = (typeof getAwakeningScoreBonus !== 'undefined') ? getAwakeningScoreBonus(heroId, awTierStr) : 1.0;
+            const nextTierStr = next.nextStar + '-' + next.nextTier;
+            const nextBonus = (typeof getAwakeningScoreBonus !== 'undefined') ? getAwakeningScoreBonus(heroId, nextTierStr) : 1.0;
+            awGain = Math.round(BASE_PTS * (nextBonus - curBonus));
+            // 専用かけら→強化石換算（1かけら≒15強化石）、汎用かけら→1かけら≒10強化石
+            const convRate = next.named ? 15 : 10;
+            awCost = next.cost * convRate;
+            awLabel = `覚醒${nextTierStr}（${next.named ? '専用' : '汎用'}かけら×${next.cost}）`;
+        }
+    }
+
+    panel.style.display = 'block';
+    // details要素も表示
+    const det = document.getElementById('ew-vs-awaken-details');
+    if (det) det.style.display = 'block';
+
+    // 判定
+    let html = '<div style="font-weight:900;color:#334155;margin-bottom:6px;">⚖️ EW強化 vs 覚醒 優先度</div>';
+
+    // EW前提未達
+    if (ewLv < (aw.ewMinRequired || 20)) {
+        html += `<div style="color:#b91c1c;font-weight:700;">🔒 EW Lv${aw.ewMinRequired}未達 → まずEW強化が必須</div>`;
+        panel.innerHTML = html;
+        return;
+    }
+
+    // EW MAX
+    if (!nextEwLv && awGain > 0) {
+        html += `<div style="color:#065f46;font-weight:700;">✅ EW MAX → 覚醒を優先</div>`;
+        if (awLabel) html += `<div style="color:#374151;">次: ${awLabel}（+${awGain}pt）</div>`;
+        panel.innerHTML = html;
+        return;
+    }
+
+    // コスパ比較
+    const ewEff  = nextEwLv ? (ewGain / Math.max(1, ewCost) * 1000) : 0;
+    const awEff  = awGain   ? (awGain  / Math.max(1, awCost) * 1000) : 0;
+
+    if (ewEff > 0 || awEff > 0) {
+        const ewBar  = Math.round((ewEff  / Math.max(ewEff, awEff, 0.001)) * 100);
+        const awBar  = Math.round((awEff  / Math.max(ewEff, awEff, 0.001)) * 100);
+        const winner = awEff >= ewEff ? 'awaken' : 'ew';
+
+        html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">`;
+
+        // EW列
+        const ewColor = winner === 'ew' ? '#1e3a8a' : '#64748b';
+        const ewBg    = winner === 'ew' ? '#eff6ff' : '#f1f5f9';
+        html += `<div style="background:${ewBg};border-radius:8px;padding:6px 8px;border:1px solid ${winner==='ew'?'#bfdbfe':'#e2e8f0'};">`;
+        html += `<div style="color:${ewColor};font-weight:900;">🔧 ${ewLabel || 'EW MAX'}</div>`;
+        if (nextEwLv) {
+            html += `<div style="color:#475569;">+${ewGain}pt / 強化石${ewCost}個</div>`;
+            html += `<div style="background:#e2e8f0;border-radius:4px;height:6px;margin-top:4px;"><div style="background:${winner==='ew'?'#3b82f6':'#94a3b8'};width:${ewBar}%;height:100%;border-radius:4px;"></div></div>`;
+        }
+        html += `</div>`;
+
+        // 覚醒列
+        const awColor = winner === 'awaken' ? '#7f1d1d' : '#64748b';
+        const awBg    = winner === 'awaken' ? '#fff1f2' : '#f1f5f9';
+        html += `<div style="background:${awBg};border-radius:8px;padding:6px 8px;border:1px solid ${winner==='awaken'?'#fecaca':'#e2e8f0'};">`;
+        html += `<div style="color:${awColor};font-weight:900;">👑 ${awLabel || '覚醒なし'}</div>`;
+        if (awGain > 0) {
+            html += `<div style="color:#475569;">+${awGain}pt / 換算${awCost}強化石</div>`;
+            html += `<div style="background:#e2e8f0;border-radius:4px;height:6px;margin-top:4px;"><div style="background:${winner==='awaken'?'#ef4444':'#94a3b8'};width:${awBar}%;height:100%;border-radius:4px;"></div></div>`;
+        } else {
+            html += `<div style="color:#475569;">（覚醒MAX or 前提未達）</div>`;
+        }
+        html += `</div>`;
+        html += `</div>`;
+
+        // 推奨メッセージ
+        const margin = Math.abs(awEff - ewEff) / Math.max(awEff, ewEff, 0.001);
+        if (margin < 0.15) {
+            html += `<div style="margin-top:6px;color:#92400e;font-weight:700;">⚠️ コスパはほぼ同等 — 覚醒かけらの在庫次第で判断</div>`;
+        } else if (winner === 'awaken') {
+            html += `<div style="margin-top:6px;color:#7f1d1d;font-weight:700;">✅ 覚醒優先がコスパ良好</div>`;
+        } else {
+            html += `<div style="margin-top:6px;color:#1e3a8a;font-weight:700;">✅ EW強化優先がコスパ良好</div>`;
+        }
+    }
+
+    panel.innerHTML = html;
+}
+
+function setAwTier(star, tier) {
+    const heroId = (document.getElementById('slot-modal-hero') || {}).value;
+    const aw = (typeof AWAKENING_HEROES !== 'undefined') ? AWAKENING_HEROES[heroId] : null;
+    let s = star, t = tier;
+    if (s > 4) { s = 4; t = 5; }
+    const tierStr = (s < 0) ? 'none' : (s + '-' + t);
+    __slotModalState.awTier = tierStr;
+    renderAwTierUI(tierStr, aw);
+    // EW vs 覚醒パネル更新
+    try { updateEwVsAwakenPanel(heroId, __slotModalState.lv, tierStr, aw); } catch(e) {}
+}
+
+// +/- ボタンで現在地点から1ティアずつ前後させる（tier=0の「到達」中間状態は経由しない）
+function stepAwTier(direction) {
+    const cur = (typeof parseAwTier !== 'undefined') ? parseAwTier(__slotModalState.awTier) : { star:-1, tier:0 };
+    let s = cur.star, t = cur.tier;
+    if (t === 0 && s >= 0) t = 1; // 到達状態は便宜上tier1扱いで処理開始
+
+    if (direction > 0) {
+        // 進める
+        if (s < 0) { s = 0; t = 1; }
+        else if (t >= 5) { s = s + 1; t = 1; }
+        else { t = t + 1; }
+        if (s > 4) { s = 4; t = 5; }
+    } else {
+        // 戻す
+        if (s < 0) return; // 既に未覚醒
+        if (t <= 1) {
+            if (s === 0) { s = -1; t = 0; } // 未覚醒に戻る
+            else { s = s - 1; t = 5; }
+        } else {
+            t = t - 1;
+        }
+    }
+    setAwTier(s, t);
+}
+
+function awTierKey(heroId) { return 'awTier_' + heroId; }
+function saveAwTier(heroId, tierStr) {
+    try { localStorage.setItem(awTierKey(heroId), String(tierStr)); } catch(e) {}
+}
+function loadAwTier(heroId) {
+    try {
+        const v = localStorage.getItem(awTierKey(heroId));
+        return v !== null ? v : 'none';
+    } catch(e) { return 'none'; }
+}
+
+function closeSlotModal(){
+    document.getElementById('slot-modal').classList.remove('open');
+}
+
+function slotModalStep(d){
+    __slotModalState.lv = Math.min(30, Math.max(0, (__slotModalState.lv||0) + d));
+    document.getElementById('slot-modal-lv').innerText = __slotModalState.lv;
+    try {
+        const id = (document.getElementById('slot-modal-hero')||{}).value;
+        if(id) {
+            openAwakeningSection(id, __slotModalState.lv);
+            // EW Lv低下で前提外れた場合は覚醒状態をUIからもリセット
+            const aw = AWAKENING_HEROES && AWAKENING_HEROES[id];
+            if (aw && __slotModalState.lv < (aw.ewMinRequired||20)) {
+                __slotModalState.awTier = 'none';
+            }
+        }
+    } catch(e){}
+}
+function slotModalSet(v){
+    __slotModalState.lv = Math.min(30, Math.max(0, v));
+    document.getElementById('slot-modal-lv').innerText = __slotModalState.lv;
+    try {
+        const id = (document.getElementById('slot-modal-hero')||{}).value;
+        if(id) {
+            openAwakeningSection(id, __slotModalState.lv);
+            const aw = AWAKENING_HEROES && AWAKENING_HEROES[id];
+            if (aw && __slotModalState.lv < (aw.ewMinRequired||20)) {
+                __slotModalState.awTier = 'none';
+            }
+        }
+    } catch(e){}
+}
+function slotModalClear(){
+    document.getElementById('slot-modal-hero').value = 'empty';
+    slotModalSet(0);
+    __slotModalState.awTier = 'none';
+    try { openAwakeningSection('empty', 0); } catch(e) {}
+}
+function slotModalApply(){
+    const s = __slotModalState.s, p = __slotModalState.p;
+    const id = document.getElementById('slot-modal-hero').value;
+    const lv = __slotModalState.lv;
+    const awTier = __slotModalState.awTier;
+
+    const hEl = document.getElementById(`h-${s}-${p}`);
+    const wEl = document.getElementById(`w-${s}-${p}`);
+    if(hEl) hEl.value = id;
+    if(wEl) wEl.value = (id==='empty') ? 0 : lv;
+
+    // 覚醒ティアを保存（前提条件チェック：EW Lv不足なら覚醒データをリセット）
+    if (id !== 'empty' && typeof AWAKENING_HEROES !== 'undefined' && AWAKENING_HEROES[id]) {
+        const awCheck = (typeof checkAwakeningEligible !== 'undefined')
+            ? checkAwakeningEligible(id, lv, 5)
+            : { eligible: lv >= (AWAKENING_HEROES[id].ewMinRequired || 20) };
+        if (awCheck.eligible) {
+            saveAwTier(id, awTier);
+        } else {
+            // 前提未達 → 覚醒データをリセット
+            saveAwTier(id, 'none');
+        }
+    }
+
+    // 再評価
+    try { updateSquad(s); } catch(e) {}
+    try { renderSlots(); } catch(e) {}
+    closeSlotModal();
+    try { updateAllSquads(); } catch(e) {}
+}
+
+// updateAllSquads の後にタイルも更新する
+const __origUpdateAllSquads = updateAllSquads;
+updateAllSquads = function(){
+    __origUpdateAllSquads();
+    try { renderSlots(); } catch(e) {}
+};
+
+function exportAsImage() { showToast("📸 生成中..."); html2canvas($id('squad-container')).then(c => { let l = document.createElement('a'); l.download = `配置_${Date.now()}.png`; l.href = c.toDataURL(); l.click(); showToast("✨ 保存完了"); }); }
+function resetSquads() { if(confirm("リセット？")) { localStorage.clear(); location.reload(); } }
+function jumpToArmy(n){
+    // どのタブからでも「部隊編成」へ戻してジャンプできるようにする
+    try{
+        const firstTab = document.querySelectorAll('.tab-btn')[0];
+        showTab('squad', firstTab);
+    }catch(e){}
+
+    // 統合スロットUI（slot-army）を優先してスクロール
+    const target = $id(`slot-army-${n}`) || $id("sq-body-"+n);
+    if(!target) return;
+
+    // 旧UI（アコーディオン）が存在する場合は開く
+    if(target.id && target.id.startsWith("sq-body-")){
+        const header = target.previousElementSibling;
+        if(!target.classList.contains("open")){
+            target.classList.add("open");
+            if(header && header.children[1]) header.children[1].innerText = "▼";
+        }
+    }
+
+    setTimeout(()=>{
+        target.scrollIntoView({behavior:"smooth", block:"start"});
+    }, 60);
+}
+
+// === Role Color Unified (UI polish) ===
+function getRoleBadge(role){
+    if(!role) return "";
+    let cls = (role === 'atk') ? 'atk' : (role === 'wall' ? 'wall' : 'sup');
+    return `<span class="role-badge ${cls}"><span class="role-ico ${cls}"></span></span>`;
+}
+
+// 弱点ラベル（不足時だけ強めに目立たせる）
+function getWeaknessBadge(w){
+    const role = (w === "attack") ? "atk" : (w === "defense") ? "wall" : "sup";
+    const cls  = (w === "attack") ? "atk" : (w === "defense") ? "wall" : "bal";
+
+    const txt =
+        (w === "attack") ? "火力を強化しよう" :
+        (w === "defense") ? "前衛を強化しよう" :
+        "バランス良好";
+
+    return `<span class="weak-badge ${cls}">${getRoleBadge(role)}<span class="t">${txt}</span></span>`;
+}
+
+
+
+// 🛠️ 装備強化優先度（役割ごと2装備 / 編成へは影響しない）
+// ===============================
+
+// 役割ごとの「見る装備」2つ（安全運用：編成最適化には一切反映しない）
+// === ★上げ判定（UR/MRレシピの誤爆防止：費用対効果の簡易モデル） ===
+// ※ゲーム内の正確な必要数はサーバー/仕様で変わり得るため、ここは「無・微課金向けの意思決定用ヒューリスティック」。
+// 　必要数/重みはいつでも調整できるよう定数化している。// 無・微課金の「重さ」：MRの方が入手難と仮定（必要ならここを調整）
+// ★の段階ごとの「伸び」を大雑把に表現（高★ほど価値が高い想定）
+// 役割×装備の重要度（同一役割内の相対）
+// 比較UIの状態
+
+function recipeCostWeight(targetStar){
+  const c = GEAR_RECIPE_COST_BY_TARGET_STAR[targetStar] || { mr:0, ur:0 };
+  const w = (c.mr||0)*GEAR_RECIPE_WEIGHT.mr + (c.ur||0)*GEAR_RECIPE_WEIGHT.ur;
+  // 0割り防止（低★の微コストを少しだけ効かせる）
+  return Math.max(0.35, w);
+}
+
+function computeUpgradeCandidate(hero, gearKey, currentStar, role){
+  const cur = Math.max(0, Math.min(5, parseInt(currentStar)||0));
+  if(cur >= 5) return null;
+
+  const targetStar = cur + 1;
+  const lv = Math.max(0, Math.min(30, parseInt(hero.wp)||0));
+  const lvW = 1 + (lv/30); // 1.0〜2.0（既存の考え方に合わせる） fileciteturn5file0L8-L12
+
+  const impMap = (GEAR_IMPORTANCE[role] || {});
+  const imp = (impMap[gearKey] !== undefined) ? impMap[gearKey] : 1.0;
+
+  const marginal = (GEAR_MARGINAL_VALUE_BY_TARGET_STAR[targetStar] || 1.0);
+  const costW = recipeCostWeight(targetStar);
+
+  const score = (marginal * imp * lvW) / costW;
+
+  const cost = (GEAR_RECIPE_COST_BY_TARGET_STAR[targetStar] || {mr:0, ur:0});
+  return {
+    heroId: hero.id,
+    heroName: hero.name || hero.id,
+    gearKey,
+    currentStar: cur,
+    targetStar,
+    wp: lv,
+    imp,
+    marginal,
+    cost,
+    score
+  };
+}
+
+function formatRecipeCost(cost){
+  const mr = cost && cost.mr ? cost.mr : 0;
+  const ur = cost && cost.ur ? cost.ur : 0;
+  const parts = [];
+  if(mr>0) parts.push(`MR×${mr}`);
+  if(ur>0) parts.push(`UR×${ur}`);
+  return parts.length ? parts.join(" + ") : "（軽）";
+}
+// 編成タブの入力（キャラ + 武装Lv）を流用して、装備タブで一覧にする
+function getRosterFromSquadsUnique(){
+  const map = new Map(); // id -> {id, wp, role, type, name}
+  for(let s=1; s<=4; s++){
+    const n = (s===4)?10:5;
+    for(let p=1; p<=n; p++){
+      const hEl = document.getElementById(`h-${s}-${p}`);
+      const wEl = document.getElementById(`w-${s}-${p}`);
+      if(!hEl || !wEl) continue;
+      const id = (hEl.value || "empty");
+      if(id==="empty") continue;
+      const h = HEROES[id];
+      if(!h || h.ur) continue;
+      const wpRaw = wEl.value;
+      const wp = (typeof wpRaw === "string" && (wpRaw.includes("未") || wpRaw === "-")) ? 0 : (parseInt(wpRaw)||0);
+      const prev = map.get(id);
+      if(!prev || wp > (prev.wp||0)){
+        map.set(id, { id, wp, role: h.r, type: h.t, name: h.n });
+      }
+    }
+  }
+  return Array.from(map.values());
+}
+
+
+
+
+function renderStars(n){
+  const v = Math.max(0, Math.min(5, parseInt(n)||0));
+  let s = "";
+  for(let i=0;i<5;i++) s += (i<v) ? "★" : "☆";
+  return s;
+}
+
+
+function gearStarClear(){
+  __gearModal.s1 = 0; __gearModal.s2 = 0;
+  refreshGearStarModalStars();
+}
+window.gearStarClear = gearStarClear;
+// inline handler / 外部から呼べるように window に公開
+window.scheduleAi = scheduleAi;
+window.updateTransitionRecommendationUI = updateTransitionRecommendationUI;
+
+
+// ================= スロット: 折りたたみ =================
+const SLOT_COLLAPSE_KEY_PREFIX = "slot-collapse-";
+const SLOT_KEEP_EVAL_KEY = "slot-keep-eval-on-collapse";
+
+function applyKeepEvalPref(keep){
+  try{
+    document.body.classList.toggle('keep-eval-collapse', !!keep);
+  }catch(e){}
+}
+
+function initKeepEvalPref(){
+  // default: 現状の見た目に合わせて「折りたたみ時は評価を消す」
+  let keep = false;
+  try{ keep = (localStorage.getItem(SLOT_KEEP_EVAL_KEY) === '1'); }catch(e){}
+  applyKeepEvalPref(keep);
+
+  const cb = document.getElementById('slot-keep-eval');
+  if(cb){
+    cb.checked = keep;
+    cb.addEventListener('change', ()=>{
+      const v = !!cb.checked;
+      applyKeepEvalPref(v);
+      try{ localStorage.setItem(SLOT_KEEP_EVAL_KEY, v ? '1' : '0'); }catch(e){}
+    });
+  }
+}
+
+function setSlotToggleState(n, isExpanded){
+  const army = document.getElementById(`slot-army-${n}`);
+  const btn = army ? (army.querySelector('.slot-toggle-btn') || army.querySelector('.slot-toggle')) : null;
+  if(!army || !btn) return;
+
+  // isExpanded: true = 展開（タイル表示）
+  army.classList.toggle('slot-collapsed', !isExpanded);
+  // Icon button (▼/▶)
+  if(btn.classList.contains('slot-toggle-btn')){
+    btn.textContent = isExpanded ? '▼' : '▶';
+  }else{
+    // legacy switch
+    btn.setAttribute('aria-checked', String(!!isExpanded));
+  }
+  const label = (n===4) ? '控え' : `${n}軍`;
+  btn.setAttribute('aria-label', isExpanded ? `${label}を折りたたむ` : `${label}を展開する`);
+}
+
+function toggleSlotArmy(n){
+  const army = document.getElementById(`slot-army-${n}`);
+  if(!army) return;
+  const isExpanded = army.classList.contains('slot-collapsed'); // collapsed -> will expand
+  setSlotToggleState(n, isExpanded);
+  try{ localStorage.setItem(SLOT_COLLAPSE_KEY_PREFIX + n, isExpanded ? "0" : "1"); }catch(e){}
+}
+window.toggleSlotArmy = toggleSlotArmy;
+
+
+// === トグルボタンだけで開閉（ヘッダー全体タップは無効） ===
+// DOM再描画でボタンが差し替わっても効くように「イベント委譲」にする（PCでも安定）
+(function(){
+  function armyNoFromBtn(btn){
+    const p = btn.closest("[id^='slot-army-']");
+    if(p && p.id){
+      const m = p.id.match(/slot-army-(\d+)/);
+      if(m) return Number(m[1]);
+    }
+    const oc = btn.getAttribute('onclick') || '';
+    const mm = oc.match(/toggleSlotArmy\((\d+)\)/);
+    if(mm) return Number(mm[1]);
+    return null;
+  }
+  function handler(e){
+    const btn = e.target && e.target.closest ? e.target.closest('.slot-toggle-btn, .slot-toggle') : null;
+    if(!btn) return;
+    try{ e.preventDefault(); }catch(_){}
+    try{ e.stopPropagation(); }catch(_){}
+    if(e.stopImmediatePropagation){ try{ e.stopImmediatePropagation(); }catch(_){ } }
+    const n = armyNoFromBtn(btn);
+    if(!n) return;
+    if(typeof window.toggleSlotArmy === 'function') window.toggleSlotArmy(n);
+  }
+  document.addEventListener('click', handler, true);
+  document.addEventListener('touchend', handler, { capture:true, passive:false });
+})();
+
+
+
+function initSlotToggles(){
+  for(let n=1; n<=4; n++){
+    const army = document.getElementById(`slot-army-${n}`);
+    if(!army) continue;
+    const btn = army.querySelector('.slot-toggle-btn') || army.querySelector('.slot-toggle');
+    if(!btn) continue;
+
+    let collapsed = false;
+    try{ collapsed = (localStorage.getItem(SLOT_COLLAPSE_KEY_PREFIX + n) === "1"); }catch(e){}
+    setSlotToggleState(n, !collapsed);
+  }
+}
+
+// index.html はスクリプトが末尾なので、基本は即時でOK
+try{ initSlotToggles(); }catch(e){}
+try{ initKeepEvalPref(); }catch(e){}
+try{ window.toggleTransitionPanel = toggleTransitionPanel; }catch(e){}
+
+try{ window.getArmyTypeCounts = getArmyTypeCounts; window.getArmyBuffInfo = getArmyBuffInfo; }catch(e){}
+
+
+// ===== 折りたたみパネル（グローバル） =====
+function togglePanel(bodyId, iconId) {
+  const body = document.getElementById(bodyId);
+  const icon = document.getElementById(iconId);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (icon) icon.classList.toggle('open', !isOpen);
+  try { localStorage.setItem('panel_' + bodyId, isOpen ? '0' : '1'); } catch(e) {}
+}
+function restorePanelStates() {
+  const iconMap = {
+    'army-guide-body':       'army-guide-icon',
+    'power-transition-body': 'trans-icon',
+    'awaken-rank-body':      'awaken-rank-icon',
+  };
+  Object.entries(iconMap).forEach(([id, iconId]) => {
+    try {
+      const saved = localStorage.getItem('panel_' + id);
+      if (saved === null) return;
+      const body = document.getElementById(id);
+      const icon = document.getElementById(iconId);
+      if (!body) return;
+      const shouldOpen = saved === '1';
+      body.classList.toggle('open', shouldOpen);
+      if (icon) icon.classList.toggle('open', shouldOpen);
+    } catch(e) {}
+  });
+}
