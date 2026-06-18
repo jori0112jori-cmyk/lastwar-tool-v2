@@ -1183,7 +1183,7 @@ function updateTransitionRecommendationUI(){
     const weakest = d.candidates.length ? [...d.candidates].sort((a,b)=>a.wp-b.wp)[0] : null;
     const nextMile = weakest ? (weakest.wp<10?10:weakest.wp<20?20:weakest.wp<30?30:null) : null;
     const actionTxt = weakest && nextMile
-      ? `次の強化目標：<b>${hName(weakest.id)}</b>（現EW Lv${weakest.wp} → 目標Lv${nextMile}）`
+      ? `次の強化目標<br><b>${hName(weakest.id)}</b>（現EW Lv${weakest.wp} → 目標Lv${nextMile}）`
       : weakest ? `<b>${hName(weakest.id)}</b> は目標EWに到達済み` : '';
 
     // 控えから補充候補
