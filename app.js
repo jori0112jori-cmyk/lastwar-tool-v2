@@ -7,207 +7,207 @@
 const HERO_SLOT_ADVICE = {
   kimberly: {
     role: '主力アタッカー（戦車）',
-    s6note: 'S6最優先英雄。覚醒「燃ゆる決意」で最大30発の爆発火力に。EW20到達後すぐ覚醒解放を。',
+    s6note: 'S6最優先英雄。覚醒「燃ゆる決意」で最大30発の爆発火力に変化します。EW20到達後は速やかに覚醒解放に進みましょう。',
     ewAdvice: {
-      0:  'まずEW Lv10を目指しましょう。Lv1〜9の伸びは小さいため、一気にLv10まで上げるのがおすすめです。',
+      0:  'まずEW Lv10を目指しましょう。Lv1〜9は戦力の伸びが小さいため、一気にLv10まで上げるのがおすすめです。',
       1:  'Lv1〜9は戦力の伸びが小さい段階です。早めにLv10を目指しましょう。',
-      10: 'Lv10到達！次の節目はLv20です。Lv20で覚醒の前提条件を満たすため、最優先で進めましょう。',
-      20: 'Lv20到達！覚醒前提クリア✅ 専用かけら×50で★0-1を解放すると基礎ステが+20%になります。まず覚醒解放を優先して、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でOKです。',
-      30: 'EW MAX！あとは覚醒強化のみです。★1（決意状態自動発動）→★3（エネルギー増幅2スタック先行）の順で進めると最大火力が出せます。★3が最重要マイルストーンです。',
+      10: 'Lv10に到達しました。次の節目はLv20です。Lv20で覚醒の前提条件を満たすため、最優先で進めましょう。',
+      20: 'Lv20に到達し、覚醒の前提条件を満たしました。専用かけら×50で★0-1を解放すると基礎ステータスが+20%になります。まず覚醒解放を優先し、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でも問題ありません。',
+      30: 'EWが上限に到達しました。残りは覚醒強化のみです。★1（決意状態の自動発動）→★3（エネルギー増幅2スタックの先行獲得）の順で進めると最大火力に到達します。★3が最重要のマイルストーンです。',
     },
-    synergy: '【必須】ウィリアムズ+マーフィの前衛2枚でキムを守る形が基本。マーシャルをサポートに入れると全体火力がさらにUP。覚醒後はDVAとのコンボで「AoE+単体バースト」の最強形に。',
+    synergy: '基本形はウィリアムズ＋マーフィの前衛2枚でキムを守る編成です。マーシャルをサポートに加えると全体火力がさらに上がります。覚醒後はDVAとのコンボで「AoE＋単体バースト」の構成が完成します。',
     priority: 'SSS',
   },
   dva: {
     role: '主力アタッカー（航空）',
-    s6note: 'Week3に覚醒解放。キム覚醒後の第2優先。AoE（キム）＋単体バースト（DVA）の黄金コンビでラリー火力が大幅UP。',
+    s6note: 'Week3に覚醒解放可能になります。キム覚醒に次ぐ第2優先です。AoE（キム）＋単体バースト（DVA）の組み合わせでラリー火力が大きく上がります。',
     ewAdvice: {
-      0:  'まずEW Lv10を目指しましょう。DVAは航空英雄なので、戦車軸メインなら焦らずキム優先でOKです。',
-      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。キムのEW20が終わったら次はDVAのLv20を目標に。',
-      20: 'Lv20到達！覚醒解放が可能です✅ キム覚醒済みなら専用かけら×50で即解放推奨。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
-      30: 'EW MAX！覚醒★1（攻撃速度スタック強化）→★3（追撃+追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
+      0:  'まずEW Lv10を目指しましょう。DVAは航空英雄のため、戦車軸メインの編成なら焦らずキム優先で進めて問題ありません。',
+      10: 'Lv10に到達しました。次の節目はLv20（覚醒の前提条件）です。キムのEW20が終わったら、次はDVAのLv20を目標にしましょう。',
+      20: 'Lv20に到達し、覚醒解放が可能になりました。キムが覚醒済みなら専用かけら×50での解放を推奨します。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
+      30: 'EWが上限に到達しました。覚醒★1（攻撃速度スタック強化）→★3（追撃と追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
     },
-    synergy: '【最強コンボ】覚醒キムと組む4+1混成型。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担。航空軸ならルシウス+モリソン+スカイラーと組むと航空5体バフ+20%も狙えます。',
+    synergy: '覚醒キムと組む4+1混成型が最大効率の構成です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担になります。航空軸を組む場合はルシウス＋モリソン＋スカイラーと合わせると航空5体バフ+20%も狙えます。',
     priority: 'SSS',
   },
   tesla: {
     role: '主力アタッカー（ロケラン）',
-    s6note: 'Week6に覚醒解放。F2Pはキム→DVA後に検討。フィオナとの「誘導電流DoTコンボ」がロケラン軸の核。',
+    s6note: 'Week6に覚醒解放可能になります。F2Pはキム→DVAの育成を終えた後に検討しましょう。フィオナとの「誘導電流DoTコンボ」がロケラン軸の核になります。',
     ewAdvice: {
-      0:  'まずEW Lv10を目指しましょう。テスラはロケラン軸が整ってから真価を発揮します。フィオナがいない場合はキム・DVAを先に育てましょう。',
-      10: 'Lv10到達！次の節目はLv20（覚醒前提）です。ロケラン英雄が2体以上いる場合は積極的にLv20を目指しましょう。',
-      20: 'Lv20到達！覚醒前提クリア✅ ロケラン3体+フィオナがいれば即解放推奨。DoTスタック上限は「ロケラン英雄数×3（最大15）」なので編成が重要です。',
-      30: 'EW MAX！覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化。★3で反射回数+1（8回）、★5でさらに+1（9回）になります。フィオナとのコンボが最大火力です。',
+      0:  'まずEW Lv10を目指しましょう。テスラはロケラン軸が整ってから真価を発揮するため、フィオナがいない場合はキム・DVAを先に育てるのがおすすめです。',
+      10: 'Lv10に到達しました。次の節目はLv20（覚醒の前提条件）です。ロケラン英雄が2体以上いる場合は積極的にLv20を目指しましょう。',
+      20: 'Lv20に到達し、覚醒の前提条件を満たしました。ロケラン3体＋フィオナがいれば即時解放を推奨します。DoTスタック上限は「ロケラン英雄数×3（最大15）」のため、編成構成が重要です。',
+      30: 'EWが上限に到達しました。覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化します。★3で反射回数+1（8回）、★5でさらに+1（9回）になります。フィオナとのコンボが最大火力の鍵です。',
     },
-    synergy: '【必須コンボ】フィオナとのDoTコンボ。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力に。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    synergy: 'フィオナとのDoTコンボが核になります。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力を発揮します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
     priority: 'SS',
   },
   williams: {
     role: '前衛タンク（戦車）',
-    s6note: 'コミュニティ評価「ゲーム最高のタンク」。チーム全体のダメージ軽減に不可欠。EW20で十分機能するため、Lv30よりキム・DVAへの投資を優先しましょう。',
+    s6note: 'コミュニティ評価「ゲーム最高のタンク」。チーム全体のダメージ軽減に不可欠な存在です。EW20で十分機能するため、Lv30よりキム・DVAへの投資を優先しましょう。',
     ewAdvice: {
-      0:  'ウィリアムズは前衛として最優先で育てましょう。まずLv10を。キムEW20と並行して上げるのが理想です。',
-      10: 'Lv10到達！Lv20が最重要節目です。ウィリアムズEW20でキムを守る前衛力が大きく向上します。キムと並行して急ぎましょう。',
-      20: 'Lv20到達！前衛タンクとして十分な強さです✅ ここから先のLv30投資は「キム・DVAの覚醒が完成してから」でOKです。余裕がある場合だけ上げましょう。',
-      30: 'EW MAX！前衛として最大限機能しています。戦車軸の盾として申し分ない強さです。',
+      0:  'ウィリアムズは前衛として最優先で育てましょう。まずLv10を目指し、キムのEW20と並行して上げるのが理想です。',
+      10: 'Lv10に到達しました。Lv20が最も重要な節目です。ウィリアムズEW20でキムを守る前衛力が大きく向上するため、キムと並行して進めましょう。',
+      20: 'Lv20に到達し、前衛タンクとして十分な強さになりました。Lv30への投資はキム・DVAの覚醒が完成してからで問題ありません。余裕がある場合のみ進めましょう。',
+      30: 'EWが上限に到達しました。前衛として最大限機能しており、戦車軸の盾として申し分ない強さです。',
     },
-    synergy: '【必須前衛】キンバリーと必ずセットで。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持します。マーシャルをサポートに加えると完成形。',
+    synergy: 'キンバリーとは必ずセットで編成します。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持しましょう。マーシャルをサポートに加えると完成形です。',
     priority: 'S',
   },
   murphy: {
     role: '前衛タンク（戦車）',
-    s6note: '戦車軸の前衛2枚目。EWコスパはやや低めですが、ウィリアムズと組んで前衛2枚体制を維持することが重要です。',
+    s6note: '戦車軸の前衛2枚目です。EWコスパはやや低めですが、ウィリアムズと組んで前衛2枚体制を維持することが重要な役割です。',
     ewAdvice: {
       0:  '前衛2枚目として大切な役割です。まずLv10を目指しましょう。ウィリアムズの育成が優先ですが、マーフィも並行して上げると安定感が増します。',
-      10: 'Lv10到達！戦力の伸びはゆるやかですが、前衛として確実に機能しています。余裕があればLv20を目指しましょう。',
-      20: 'Lv20到達！前衛タンクとして十分な水準です✅ ここからLv30に上げるよりも、キム・DVAの覚醒やウィリアムズのLv20〜30を優先しましょう。',
-      30: 'EW MAX！前衛2枚目として最大限機能しています。',
+      10: 'Lv10に到達しました。戦力の伸びはゆるやかですが、前衛として確実に機能しています。余裕があればLv20を目指しましょう。',
+      20: 'Lv20に到達し、前衛タンクとして十分な水準になりました。ここからLv30に上げるよりも、キム・DVAの覚醒やウィリアムズのLv20〜30を優先しましょう。',
+      30: 'EWが上限に到達しました。前衛2枚目として最大限機能しています。',
     },
     synergy: 'ウィリアムズと2枚前衛を組むことで戦車5体バフ+20%が安定して入ります。この2枚でキムを守るのが戦車軸の基本形です。',
     priority: 'B',
   },
   marshall: {
     role: 'サポート（戦車）',
-    s6note: 'EW0でも機能する優秀なサポート。スキルは攻撃力増幅でEW依存度が低いため、他英雄を優先育成してOK。',
+    s6note: 'EW0でも機能する優秀なサポートです。スキルは攻撃力増幅でEW依存度が低いため、他英雄を優先育成して問題ありません。',
     ewAdvice: {
-      0:  'EW0でも攻撃バフが発動します✅ キム・ウィリアムズ・DVAを先に育てましょう。マーシャルはEW投資の優先度が低い英雄です。',
-      10: 'Lv10に上げると基礎ステが向上します。ただし他のアタッカー・前衛が育っていない場合はそちらを優先しましょう。',
-      20: 'Lv20到達。サポートとして十分な水準です。Lv30への投資はキム覚醒★3完成後に余裕があれば検討しましょう。',
-      30: 'EW MAX！サポートとして最大限の効果を発揮しています。',
+      0:  'EW0でも攻撃バフが発動します。キム・ウィリアムズ・DVAを先に育てましょう。マーシャルはEW投資の優先度が低い英雄です。',
+      10: 'Lv10に上げると基礎ステータスが向上します。ただし他のアタッカー・前衛が育っていない場合はそちらを優先しましょう。',
+      20: 'Lv20に到達し、サポートとして十分な水準になりました。Lv30への投資はキム覚醒★3完成後に余裕があれば検討しましょう。',
+      30: 'EWが上限に到達しました。サポートとして最大限の効果を発揮しています。',
     },
-    synergy: 'どの兵種軸でも使える万能サポート。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
+    synergy: 'どの兵種軸でも使える万能サポートです。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
     priority: 'A',
   },
   stetmann: {
     role: 'サブアタッカー（戦車）',
-    s6note: '戦車軸の2番手火力。キム・ウィリアムズが揃った後に育成。EW20が実用的な節目です。',
+    s6note: '戦車軸の2番手火力です。キム・ウィリアムズが揃った後に育成しましょう。EW20が実用的な節目です。',
     ewAdvice: {
       0:  'まずLv10を目指しましょう。キム・ウィリアムズのEW優先が終わった後に投資するのが理想です。',
-      10: 'Lv10到達！戦車軸のサブ火力として機能し始めます。次のLv20を目指しましょう。',
-      20: 'Lv20到達！戦車軸のサブアタッカーとして十分な水準です✅ Lv30への投資よりキム覚醒を優先しましょう。',
-      30: 'EW MAX！戦車軸の2番手として最大戦力です。',
+      10: 'Lv10に到達しました。戦車軸のサブ火力として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20に到達し、戦車軸のサブアタッカーとして十分な水準になりました。Lv30への投資よりキム覚醒を優先しましょう。',
+      30: 'EWが上限に到達しました。戦車軸の2番手として最大戦力です。',
     },
-    synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力。純戦車編成で最も安定したダメージを出せます。',
+    synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力です。純戦車編成で最も安定したダメージを出せます。',
     priority: 'A',
   },
   lucius: {
     role: '前衛タンク（航空）',
-    s6note: '航空軸の必須前衛。高い耐久力で味方を守ります。EW20で前衛として十分機能します。',
+    s6note: '航空軸の必須前衛です。高い耐久力で味方を守ります。EW20で前衛として十分機能します。',
     ewAdvice: {
-      0:  '航空軸の前衛として重要です。まずLv10を目指しましょう。DVA育成と並行して上げるのが理想です。',
-      10: 'Lv10到達！次のLv20が重要な節目です。航空前衛としての耐久力が大きく向上します。',
-      20: 'Lv20到達！航空前衛として十分な水準です✅ DVAの覚醒が終わっていない場合はDVAを優先。ルシウスLv30は余裕ができてから。',
-      30: 'EW MAX！航空軸の前衛として最強状態。DVAとの連携で航空軸の最強形を維持しています。',
+      0:  '航空軸の前衛として重要な役割です。まずLv10を目指しましょう。DVAの育成と並行して上げるのが理想です。',
+      10: 'Lv10に到達しました。次のLv20が重要な節目です。航空前衛としての耐久力が大きく向上します。',
+      20: 'Lv20に到達し、航空前衛として十分な水準になりました。DVAの覚醒が終わっていない場合はDVAを優先し、ルシウスのLv30は余裕ができてから進めましょう。',
+      30: 'EWが上限に到達しました。航空軸の前衛として最強の状態です。DVAとの連携で航空軸の最強形を維持できます。',
     },
-    synergy: '【航空軸の必須前衛】DVA・モリソン・スカイラーと組む航空5体軸の安定役。ルシウスの高耐久がDVAの高火力を支えます。',
+    synergy: '航空軸の必須前衛として、DVA・モリソン・スカイラーと組む航空5体軸の安定役を担います。ルシウスの高耐久がDVAの高火力を支えます。',
     priority: 'SS',
   },
   morrison: {
     role: 'サブアタッカー（航空）',
-    s6note: '航空軸のサブ火力。DVA+ルシウスが育ってから投資するのがコスパ良好です。',
+    s6note: '航空軸のサブ火力です。DVA＋ルシウスが育ってから投資するとコスパが良好です。',
     ewAdvice: {
       0:  'まずLv10を目指しましょう。DVA・ルシウスの育成が先決です。',
-      10: 'Lv10到達！航空サブ火力として機能し始めます。DVAのEW20が完了してからLv20を目指しましょう。',
-      20: 'Lv20到達！航空軸のサブアタッカーとして十分な水準です✅ Lv30よりDVAの覚醒を優先しましょう。',
-      30: 'EW MAX！航空軸のサブ火力として最大戦力です。',
+      10: 'Lv10に到達しました。航空サブ火力として機能し始めます。DVAのEW20が完了してからLv20を目指しましょう。',
+      20: 'Lv20に到達し、航空軸のサブアタッカーとして十分な水準になりました。Lv30よりDVAの覚醒を優先しましょう。',
+      30: 'EWが上限に到達しました。航空軸のサブ火力として最大戦力です。',
     },
-    synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
+    synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力です。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
     priority: 'A',
   },
   schuyler: {
     role: 'コントロール（航空）',
-    s6note: 'CC（行動妨害）が得意な航空英雄。EW10で十分機能するため投資コスパが良好。packsify推奨のキム+DVA混成型にも採用される重要ロール。',
+    s6note: 'CC（行動妨害）が得意な航空英雄です。EW10で十分機能するため投資コスパが良好です。packsify推奨のキム+DVA混成型にも採用される重要なロールです。',
     ewAdvice: {
       0:  'まずLv10を目指しましょう。スカイラーはEW10で十分なCCが発揮できます。',
-      10: 'Lv10到達！スカイラーはこのLvで十分機能します✅ 他の主力英雄（キム・ウィリアムズ・DVA）の育成を優先しましょう。',
-      20: 'Lv20到達。十分な水準です。CC効果がさらに安定します。',
-      30: 'EW MAX！CCキャラとして最大限機能しています。',
+      10: 'Lv10に到達しました。スカイラーはこのレベルで十分機能します。他の主力英雄（キム・ウィリアムズ・DVA）の育成を優先しましょう。',
+      20: 'Lv20に到達しました。十分な水準で、CC効果がさらに安定します。',
+      30: 'EWが上限に到達しました。CCキャラとして最大限機能しています。',
     },
-    synergy: 'ルシウスとのコンボが強力。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺しながらキムのAoEが炸裂します。',
+    synergy: 'ルシウスとのコンボが強力です。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺しながらキムのAoEが炸裂します。',
     priority: 'B',
   },
   carlie: {
     role: '前衛タンク（航空）',
-    s6note: '航空軸の前衛候補。ルシウスが育つまでの代替役。EW10で十分で、ルシウスが育ったら控えに回しましょう。',
+    s6note: '航空軸の前衛候補です。ルシウスが育つまでの代替役として機能します。EW10で十分なので、ルシウスが育ったら控えに回しましょう。',
     ewAdvice: {
       0:  'ルシウスが育っていない場合の前衛として活躍します。まずLv10を目指しましょう。',
-      10: 'Lv10到達。カーリーはこのLvで十分です。ルシウス・DVAの育成を優先しましょう。',
-      20: 'Lv20到達。航空前衛として安定します。ルシウスEW20完成後は控えへの移行を検討しましょう。',
-      30: 'EW MAX！',
+      10: 'Lv10に到達しました。カーリーはこのレベルで十分です。ルシウス・DVAの育成を優先しましょう。',
+      20: 'Lv20に到達しました。航空前衛として安定します。ルシウスEW20完成後は控えへの移行を検討しましょう。',
+      30: 'EWが上限に到達しました。',
     },
-    synergy: 'ルシウス不在時の航空前衛代替。ルシウスが揃えばルシウス+DVA+モリソン+スカイラー+カーリーの5航空体制も可能です。',
+    synergy: 'ルシウス不在時の航空前衛代替です。ルシウスが揃えばルシウス＋DVA＋モリソン＋スカイラー＋カーリーの5航空体制も可能です。',
     priority: 'C',
   },
   fiona: {
     role: '主力アタッカー（ロケラン）',
-    s6note: 'ロケラン軸のエース。テスラ覚醒との「誘導電流DoTコンボ」がS6で最強クラスの継続ダメージを発揮します。',
+    s6note: 'ロケラン軸のエースです。テスラ覚醒との「誘導電流DoTコンボ」がS6で最強クラスの継続ダメージを発揮します。',
     ewAdvice: {
       0:  'ロケラン軸の核となる英雄です。まずLv10を目指しましょう。テスラと並行して育てるのが理想です。',
-      10: 'Lv10到達！次のLv20が重要な節目です。フィオナEW20でロケラン軸の火力が本格的になります。',
-      20: 'Lv20到達！テスラ覚醒との組み合わせでDoTコンボが本格化します✅ テスラ覚醒★1+フィオナEW20の組み合わせが理想形です。',
-      30: 'EW MAX！テスラ・マクレガー・アダムと組むロケラン5体軸の最強形です。継続ダメージ（DoT）でどんな相手も削れます。',
+      10: 'Lv10に到達しました。次のLv20が重要な節目です。フィオナEW20でロケラン軸の火力が本格的になります。',
+      20: 'Lv20に到達し、テスラ覚醒との組み合わせでDoTコンボが本格化します。テスラ覚醒★1＋フィオナEW20の組み合わせが理想形です。',
+      30: 'EWが上限に到達しました。テスラ・マクレガー・アダムと組むロケラン5体軸の最強形です。継続ダメージ（DoT）でどんな相手も削れます。',
     },
-    synergy: '【必須コンボ】テスラ覚醒との相性が抜群。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー+アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    synergy: 'テスラ覚醒との相性が抜群です。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
     priority: 'SS',
   },
   mcgregor: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の主力前衛。アダムと前衛2枚体制を組むことでロケラン5体軸が完成します。',
+    s6note: 'ロケラン軸の主力前衛です。アダムと前衛2枚体制を組むことでロケラン5体軸が完成します。',
     ewAdvice: {
-      0:  'ロケラン軸の前衛として重要です。まずLv10を目指しましょう。フィオナ・テスラの育成が先決ですが並行して上げましょう。',
-      10: 'Lv10到達！ロケラン前衛として機能し始めます。次のLv20を目指しましょう。',
-      20: 'Lv20到達！ロケラン前衛として十分な水準です✅ Lv30よりフィオナ・テスラのEW強化を優先しましょう。',
-      30: 'EW MAX！アダムとの前衛2枚体制で最大の耐久力です。テスラDoTのスタック上限引き上げにも貢献しています。',
+      0:  'ロケラン軸の前衛として重要な役割です。まずLv10を目指しましょう。フィオナ・テスラの育成が先決ですが並行して上げましょう。',
+      10: 'Lv10に到達しました。ロケラン前衛として機能し始めます。次のLv20を目指しましょう。',
+      20: 'Lv20に到達し、ロケラン前衛として十分な水準になりました。Lv30よりフィオナ・テスラのEW強化を優先しましょう。',
+      30: 'EWが上限に到達しました。アダムとの前衛2枚体制で最大の耐久力です。テスラDoTのスタック上限引き上げにも貢献しています。',
     },
-    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。',
+    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当です。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。',
     priority: 'A',
   },
   swift: {
     role: 'サブアタッカー（ロケラン）',
-    s6note: 'ロケラン軸のサブ候補。フィオナ・テスラが育つまでの代替役。EW10で十分で、無理に育てなくてよいです。',
+    s6note: 'ロケラン軸のサブ候補です。フィオナ・テスラが育つまでの代替役で、EW10で十分なため無理に育てる必要はありません。',
     ewAdvice: {
       0:  'まずLv10を目指しましょう。フィオナ・テスラの育成を優先してからスウィフトに投資するのが賢明です。',
-      10: 'Lv10到達。スウィフトはこのLvで十分機能します。主力（フィオナ・テスラ・マクレガー）を先に育てましょう。',
-      20: 'Lv20到達。ロケランサブとしての戦力が安定します。',
-      30: 'EW MAX！',
+      10: 'Lv10に到達しました。スウィフトはこのレベルで十分機能します。主力（フィオナ・テスラ・マクレガー）を先に育てましょう。',
+      20: 'Lv20に到達しました。ロケランサブとしての戦力が安定します。',
+      30: 'EWが上限に到達しました。',
     },
-    synergy: 'フィオナ・テスラ不在時のロケランサブ候補。テスラDoTのスタック上限は「ロケラン英雄数×3」なので、スウィフトを入れるとスタック上限が上がります。',
+    synergy: 'フィオナ・テスラ不在時のロケランサブ候補です。テスラDoTのスタック上限は「ロケラン英雄数×3」のため、スウィフトを入れるとスタック上限が上がります。',
     priority: 'B',
   },
   adam: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の前衛2枚目。マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
+    s6note: 'ロケラン軸の前衛2枚目です。マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
     ewAdvice: {
-      0:  'ロケラン軸の前衛2枚目として重要です。まずLv10を目指しましょう。マクレガーと同時並行で育てるのが理想。',
-      10: 'Lv10到達！ロケラン前衛2枚目として機能します。テスラのDoTスタック上限は「ロケラン英雄数×3」なので、アダムがいることでスタック上限も上がります。',
-      20: 'Lv20到達！前衛2枚目として十分な水準です✅ フィオナ・テスラの育成が先なので、ここからはゆっくりでOKです。',
-      30: 'EW MAX！マクレガーとの前衛2枚体制で最大の安定感です。',
+      0:  'ロケラン軸の前衛2枚目として重要な役割です。まずLv10を目指しましょう。マクレガーと同時並行で育てるのが理想です。',
+      10: 'Lv10に到達しました。ロケラン前衛2枚目として機能します。テスラのDoTスタック上限は「ロケラン英雄数×3」のため、アダムがいることでスタック上限も上がります。',
+      20: 'Lv20に到達し、前衛2枚目として十分な水準になりました。フィオナ・テスラの育成が先のため、ここからはゆっくり進めて問題ありません。',
+      30: 'EWが上限に到達しました。マクレガーとの前衛2枚体制で最大の安定感です。',
     },
     synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
     priority: 'B',
   },
   mason: {
     role: 'UR アタッカー（戦車）',
-    s6note: 'UR英雄。キンバリーが育つまでのつなぎアタッカー。フル育成のSSRがUR中途半端を上回れるため（packsify）、キムへの投資を優先しましょう。',
+    s6note: 'UR英雄です。キンバリーが育つまでのつなぎアタッカーとして使えます。フル育成のSSRがUR中途半端を上回るため（packsify）、キムへの投資を優先しましょう。',
     ewAdvice: {
       0:  'キンバリーのEW育成が最優先です。メイソンへの投資はキムEW20完成後に検討しましょう。',
-      10: 'Lv10。キンバリーが育っていない場合の暫定アタッカーとして活躍します。キムEW20が完成したらキムへ移行しましょう。',
-      20: 'Lv20。戦力としては十分ですが、キム覚醒★0以上になるとキムの方が強くなる場合が多いです。',
-      30: 'EW MAX！フル育成URとして十分な戦力です。ただしキム覚醒が進んだ場合はキムを優先しましょう。',
+      10: 'Lv10です。キンバリーが育っていない場合の暫定アタッカーとして活躍します。キムEW20が完成したらキムへ移行しましょう。',
+      20: 'Lv20です。戦力としては十分ですが、キム覚醒★0以上になるとキムの方が強くなる場合が多くなります。',
+      30: 'EWが上限に到達しました。フル育成URとして十分な戦力ですが、キム覚醒が進んだ場合はキムを優先しましょう。',
     },
-    synergy: 'キンバリー不在・育成前の戦車アタッカー候補。ウィリアムズ+マーフィ+マーシャルとの戦車軸編成で使いましょう。',
+    synergy: 'キンバリー不在・育成前の戦車アタッカー候補です。ウィリアムズ＋マーフィ＋マーシャルとの戦車軸編成で使いましょう。',
     priority: 'C',
   },
   scarlett: {
     role: 'UR 前衛タンク（戦車）',
-    s6note: 'UR英雄。ウィリアムズが育つまでの前衛候補。ウィリアムズEW20が完成したら控えへ移行を検討しましょう。',
+    s6note: 'UR英雄です。ウィリアムズが育つまでの前衛候補として使えます。ウィリアムズEW20が完成したら控えへの移行を検討しましょう。',
     ewAdvice: {
       0:  'ウィリアムズの育成を最優先に。スカーレットへのEW投資はウィリアムズEW20完成後に検討しましょう。',
-      10: 'Lv10。前衛として機能します。ウィリアムズEW20が完成したらウィリアムズをメインに切り替えましょう。',
-      20: 'Lv20。UR前衛として安定した耐久力です。ウィリアムズが十分に育った場合は控えへの移行を検討しましょう。',
-      30: 'EW MAX！UR前衛として最大戦力です。ウィリアムズとの2枚前衛体制も選択肢になります。',
+      10: 'Lv10です。前衛として機能します。ウィリアムズEW20が完成したらウィリアムズをメインに切り替えましょう。',
+      20: 'Lv20です。UR前衛として安定した耐久力があります。ウィリアムズが十分に育った場合は控えへの移行を検討しましょう。',
+      30: 'EWが上限に到達しました。UR前衛として最大戦力です。ウィリアムズとの2枚前衛体制も選択肢になります。',
     },
-    synergy: '戦車前衛の代替候補。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ+マーフィの前衛2枚体制が理想です。',
+    synergy: '戦車前衛の代替候補です。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ＋マーフィの前衛2枚体制が理想です。',
     priority: 'D',
   },
 };
@@ -317,7 +317,8 @@ const HERO_ROLE_PROFILE = {
   mcgregor:{ role:'front_tank', lane:'front', core:true },
   swift:{ role:'sub_dps', lane:'back', core:true },
   adam:{ role:'front_tank', lane:'front', core:false },
-  venom:{ role:'sub_dps', lane:'back', core:false, promotedUr:true }
+  venom:{ role:'sub_dps', lane:'back', core:false, promotedUr:true },
+  brats:{ role:'sub_dps', lane:'back', core:false, promotedUr:true }
 };
 
 const HERO_LONGTERM_VALUE = {
@@ -326,7 +327,7 @@ const HERO_LONGTERM_VALUE = {
   tesla:0.84, mcgregor:0.83, williams:0.80,
   schuyler:0.79, adam:0.76, marshall:0.74,
   murphy:0.72, carlie:0.70, swift:0.68,
-  scarlett:0.72, mason:0.64, venom:0.62, sarah:0.58, violet:0.46
+  scarlett:0.72, mason:0.64, venom:0.62, brats:0.62, sarah:0.58, violet:0.46
 };
 
 const HERO_EVAL_META = {
@@ -354,7 +355,8 @@ const HERO_EVAL_META = {
   mcgregor:{ milestone10Fit:1.05 },
   adam:{ milestone10Fit:1.01 },
   swift:{ milestone10Fit:1.03 },
-  venom:{ milestone10Fit:1.04, promotedUrImmediateFit:1.02 }
+  venom:{ milestone10Fit:1.04, promotedUrImmediateFit:1.02 },
+  brats:{ milestone10Fit:1.04, promotedUrImmediateFit:1.02 }
 };
 
 
@@ -415,13 +417,15 @@ const HERO_PAIR_SYNERGY = {
     fiona:    { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
     mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
     swift:    { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 },
-    venom:    { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 }
+    venom:    { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 },
+    brats:    { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 }
   },
   fiona: {
     tesla:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
     adam:     { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
     mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
-    venom:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+    venom:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    brats:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
   },
   tesla: {
     fiona:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
@@ -486,6 +490,7 @@ const HERO_WEAPON_TAGS = {
   mason: ['promoted_ur_no_ew','boss_focus','budget_sub_dps','pve_value'],
   sarah: ['promoted_ur_no_ew','budget_support','air_bridge','tempo_support'],
   venom: ['promoted_ur_no_ew','dot_bridge','missile_bridge','sustained_damage'],
+  brats: ['promoted_ur_no_ew','missile_bridge','sustained_damage','anti_backline'],
   violet: ['promoted_ur_no_ew','budget_wall','early_hold','low_ceiling'],
 };
 
@@ -690,6 +695,7 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 // star=1以上 → '★N-T'
 function awStarLabel(at) {
   if (!at || at.star < 0) return '未覚醒';
+  if (at.tier === 5) return `★${at.star + 1}（到達）`;
   if (at.star === 0) return at.tier >= 1 ? `★0-${at.tier}` : '★0-1解放済み';
   return `★${at.star}-${at.tier}`;
 }
@@ -1167,43 +1173,44 @@ function updateTransitionRecommendationUI(){
     // 同兵種候補の実数（控え含む）で「目標バフ」を表示
     const allSameType = [...(pool[t]||[]), ...(benchPool[t]||[])];
     const targetCount = Math.min(5, allSameType.length);
-    const buffBadge = targetCount >= 5 ? '✅ 5体バフ+20%達成可能'
-      : targetCount === 4 ? '🔶 4体バフ+15%達成可能'
-      : targetCount >= 3 ? `⚠️ 現在${targetCount}体（あと${5-targetCount}体で+20%）`
-      : `📋 ${targetCount}体（育成で兵種バフ獲得可能）`;
+    const buffBadge = targetCount >= 5 ? '5体編成・兵種バフ+20%達成可能'
+      : targetCount === 4 ? '4体編成・兵種バフ+15%達成可能'
+      : targetCount >= 3 ? `現在${targetCount}体（あと${5-targetCount}体で+20%バフ）`
+      : `現在${targetCount}体（育成で兵種バフ獲得可能）`;
+    const buffColor = targetCount>=5?'#059669':targetCount>=4?'#d97706':'#94a3b8';
 
     // 最も育っていない英雄 → 次の節目
     const weakest = d.candidates.length ? [...d.candidates].sort((a,b)=>a.wp-b.wp)[0] : null;
     const nextMile = weakest ? (weakest.wp<10?10:weakest.wp<20?20:weakest.wp<30?30:null) : null;
     const actionTxt = weakest && nextMile
-      ? `⚠️ <b>${hName(weakest.id)}</b> EW Lv${weakest.wp} → 次の節目は<b>Lv${nextMile}</b>`
-      : weakest ? `✅ <b>${hName(weakest.id)}</b> 目標EW到達済み` : '';
+      ? `次の強化目標：<b>${hName(weakest.id)}</b>（現EW Lv${weakest.wp} → 目標Lv${nextMile}）`
+      : weakest ? `<b>${hName(weakest.id)}</b> は目標EWに到達済み` : '';
 
     // 控えから補充候補
     const benchTxt = d.fromBench.length
-      ? d.fromBench.map(m=>`<b>${hName(m.id)}</b>(EW${m.wp})`).join('・')
+      ? d.fromBench.map(m=>`<b>${hName(m.id)}</b>（EW${m.wp}）`).join('・')
       : 'なし';
 
     // 覚醒メモ
     let memo = '';
-    if(t==='tank' && kimAwAll) memo = '👑 キム覚醒済みで戦車軸が強化中';
-    if(t==='air'  && dvaAwAll) memo = '👑 DVA覚醒済みで航空軸が強化中';
-    if(t==='air'  && !dvaAwAll && kimAwAll) memo = '💡 DVA覚醒（Week3）後に一気に強化可能';
-    if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = '💡 テスラ覚醒（Week6）後にさらに強化可能';
+    if(t==='tank' && kimAwAll) memo = 'キム覚醒済みのため戦車軸が強化されています';
+    if(t==='air'  && dvaAwAll) memo = 'DVA覚醒済みのため航空軸が強化されています';
+    if(t==='air'  && !dvaAwAll && kimAwAll) memo = 'DVA覚醒（Week3解放）後にさらに強化可能です';
+    if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = 'テスラ覚醒（Week6解放）後にさらに強化可能です';
 
     return `<div style="background:#fff;border:1px solid ${isBest?'#f59e0b':'#e8edf5'};border-radius:12px;padding:12px;margin-bottom:8px;${isBest?'box-shadow:0 2px 8px rgba(245,158,11,0.15);':''}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
-        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
-          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">✨ 推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;">${rank}番目</span>`}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;">推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;background:#f1f5f9;border-radius:4px;padding:1px 6px;">${rank}番目</span>`}
           <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">${labels[t]}軸</span>
-          <span style="font-size:var(--fs-xxs);font-weight:700;color:${d.buffCount>=5?'#059669':d.buffCount>=4?'#d97706':'#94a3b8'};">${buffBadge}</span>
         </div>
         <span style="font-size:var(--fs-md);font-weight:900;color:${c};">${pct}%</span>
       </div>
-      ${actionTxt?`<div style="font-size:var(--fs-sm);margin-bottom:3px;">${actionTxt}</div>`:''}
+      <div style="font-size:var(--fs-xxs);font-weight:700;color:${buffColor};margin-bottom:6px;">${buffBadge}</div>
+      ${actionTxt?`<div style="font-size:var(--fs-sm);color:#374151;margin-bottom:4px;line-height:1.5;">${actionTxt}</div>`:''}
       <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:3px;">控え補充候補：${benchTxt}</div>
-      ${memo?`<div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">${memo}</div>`:''}
-      <div style="background:#f1f5f9;border-radius:4px;height:4px;margin-top:5px;">
+      ${memo?`<div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;margin-top:2px;">${memo}</div>`:''}
+      <div style="background:#f1f5f9;border-radius:4px;height:4px;margin-top:6px;">
         <div style="background:${c};width:${pct}%;height:100%;border-radius:4px;"></div>
       </div>
     </div>`;
@@ -1212,35 +1219,39 @@ function updateTransitionRecommendationUI(){
   // 混成型推奨カード
   const mixedCard = showMixedRecommend ? `
     <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:0 2px 10px rgba(245,158,11,0.2);">
-      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;">
-        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 5px;">👑 覚醒特別推奨</span>
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap;">
+        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;">覚醒コンボ推奨</span>
         <span style="font-size:var(--fs-md);font-weight:900;color:#111827;">キム+DVA 混成型</span>
-        <span style="font-size:var(--fs-xxs);font-weight:700;color:#059669;">🔶 4体バフ+15%</span>
       </div>
-      <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:4px;">
-        AoE（覚醒キム）＋単体バースト（覚醒DVA）の実戦最強コンビ。<br>
-        兵種バフは15%になるが、覚醒効果で純粋5体を上回ることが多い（packsify推奨）
+      <div style="font-size:var(--fs-xxs);font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:2px 7px;display:inline-block;margin-bottom:6px;">
+        兵種バフ +15%（4体編成）
       </div>
-      <div style="font-size:var(--fs-xs);color:#7c3aed;font-weight:700;">
-        👑 キム ${awStarLabel(kimAw)} ＋ DVA ${awStarLabel(dvaAw)} のコンボが有効<br>
-        <span style="font-size:var(--fs-xxs);color:#92400e;">
-          最低：キム★0-1解放済み＋DVA★0-1解放済み　理想：キム★3-0＋DVA★3-0
+      <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;line-height:1.6;">
+        AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。<br>
+        兵種バフは純粋5体構成（+20%）より下がるが、覚醒効果で総合火力を上回ることが多い（packsify推奨）。
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;">
+        <span style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:4px;padding:2px 7px;">
+          現在地点：キム${awStarLabel(kimAw)} ＋ DVA${awStarLabel(dvaAw)}
         </span>
       </div>
-      <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
-        構成例：ウィリアムズ+マーフィ（前衛）+キム+DVA+マーシャル
+      <div style="font-size:var(--fs-xxs);color:#92400e;margin-bottom:6px;">
+        最低ライン：キム★0-1＋DVA★0-1（両者覚醒解放済み）　/　理想ライン：キム★3-0＋DVA★3-0
+      </div>
+      <div style="font-size:var(--fs-xxs);color:#475569;border-top:1px solid #fde68a;padding-top:6px;">
+        構成例：ウィリアムズ＋マーフィ（前衛2体）＋キム＋DVA＋マーシャル
       </div>
     </div>` : '';
 
   body.innerHTML = `
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-      <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">🎯 ${squadLabel[nextSquad]}の推奨兵種</span>
-      <span style="font-size:var(--fs-xxs);color:#475569;">手持ち＋控えから算出 / EW20基準</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+      <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">${squadLabel[nextSquad]}の推奨兵種</span>
+      <span style="font-size:var(--fs-xxs);color:#475569;background:#f1f5f9;border-radius:4px;padding:2px 7px;">手持ち＋控えから算出・EW20基準</span>
     </div>
     ${mixedCard}
     ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
-    <div style="font-size:var(--fs-xxs);color:#475569;margin-top:4px;">
-      ※ 達成率は最もスコアが高い兵種を100%として相対比較。兵種バフ表示は手持ち＋控えで達成可能な目標値です。
+    <div style="font-size:var(--fs-xxs);color:#475569;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">
+      達成率は最もスコアが高い兵種を100%とした相対比較です。兵種バフは手持ち＋控えで実現可能な目標値を示します。
     </div>
   `;
 }
@@ -2751,7 +2762,7 @@ function __aiFormationSynergyBias(hero, roster, targetLv, context){
   if(hero.t === 'tank' && hasSupport && frontCount >= 2 && table.tankCarryCore) mult *= table.tankCarryCore;
   if(hero.t === 'air' && __aiHasAny(roster, ['lucius','dva','morrison']) && table.airBurstCore) mult *= table.airBurstCore;
   if(hero.t === 'air' && __aiHasAny(roster, ['lucius','schuyler']) && table.airControlCore) mult *= table.airControlCore;
-  if(hero.t === 'mis' && __aiHasAny(roster, ['adam']) && (__aiHasAny(roster, ['tesla','fiona','mcgregor','swift','venom'])) && table.missileCore) mult *= table.missileCore;
+  if(hero.t === 'mis' && __aiHasAny(roster, ['adam']) && (__aiHasAny(roster, ['tesla','fiona','mcgregor','swift','venom','brats'])) && table.missileCore) mult *= table.missileCore;
   if((__aiGetProfile(hero.id).promotedUr) && table.promotedUrBridge) mult *= table.promotedUrBridge;
   if(hasMainDps && hasSubDps && table.carryPlusSubDps) mult *= table.carryPlusSubDps;
   if(hasMainDps && hasSupport && table.carryPlusSupport) mult *= table.carryPlusSupport;
@@ -4098,11 +4109,11 @@ function updateHeroAdvicePanel(heroId, ewLv) {
 
     // EW Lv別アドバイス
     const ewAdvice = (typeof getHeroEwAdvice !== 'undefined') ? getHeroEwAdvice(heroId, ewLv) : '';
-    ewEl.innerHTML = ewAdvice ? `💡 <b>EW Lv${ewLv} アドバイス：</b><br>${ewAdvice}` : '';
+    ewEl.innerHTML = ewAdvice ? `<b>EW Lv${ewLv} アドバイス</b><br>${ewAdvice}` : '';
     ewEl.style.display = ewAdvice ? 'block' : 'none';
 
     // 編成での役割・シナジー
-    synEl.innerHTML = adv.synergy ? `🤝 <b>編成での役割：</b><br>${adv.synergy}` : '';
+    synEl.innerHTML = adv.synergy ? `<b>編成での役割</b><br>${adv.synergy}` : '';
     synEl.style.display = adv.synergy ? 'block' : 'none';
 }
 
@@ -4249,12 +4260,11 @@ function renderAwTierUI(awTierStr, aw) {
             }
         }
         bonusHint.innerText = currentStar >= 0
-            ? (lbl + ' 効果: ' + (bonusTxt || '—'))
-            : '★0 解放で覚醒スキル習得・基礎ステ約2倍';
+            ? (lbl + '：' + (bonusTxt || '—').replace(/\s*→\s*★\d+到達/, ''))
+            : '★0の解放で覚醒スキルを習得し、基礎ステータスが約2倍になります';
     }
-    if (commHint && aw) {
-        commHint.style.display = 'block';
-        commHint.innerText = '💬 海外ガチ勢: ' + (aw.communityNotes || '');
+    if (commHint) {
+        commHint.style.display = 'none';
     }
 
     // EW vs 覚醒 優先度判定パネル更新
