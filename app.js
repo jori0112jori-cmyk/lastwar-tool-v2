@@ -4026,7 +4026,9 @@ function renderSlots(){
                 if (isAwakened) {
                     const tierLabel = awObj.tier === 0
                         ? '覚醒★' + awObj.star
-                        : '覚醒★' + awObj.star + '-' + awObj.tier;
+                        : awObj.tier === 5
+                            ? '覚醒★' + (awObj.star + 1)
+                            : '覚醒★' + awObj.star + '-' + awObj.tier;
                     awBadge = `<div class="awaken-badge-star">${tierLabel}</div>`;
                 }
                 html += `
