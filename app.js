@@ -4087,6 +4087,8 @@ function openSlotModal(s,p){
     try { openAwakeningSection(id, lv); } catch(e) {}
 
     document.getElementById('slot-modal').classList.add('open');
+    const modalBody = document.querySelector('#slot-modal .modal-body');
+    if (modalBody) modalBody.scrollTop = 0;
 }
 
 function updateHeroAdvicePanel(heroId, ewLv) {
@@ -4242,9 +4244,9 @@ function renderAwTierUI(awTierStr, aw) {
 
     // +/- ボタンで1ティアずつ移動
     const html = `<div style="display:flex;align-items:center;gap:8px;">
-        <button onclick="stepAwTier(-1)" style="width:34px;height:34px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">−</button>
+        <button onclick="stepAwTier(-1)" style="width:38px;height:38px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">−</button>
         ${starsHtml}
-        <button onclick="stepAwTier(1)" style="width:34px;height:34px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">+</button>
+        <button onclick="stepAwTier(1)" style="width:38px;height:38px;background:#ef4444;color:#fff;border:none;border-radius:0;font-size:1.2rem;font-weight:bold;cursor:pointer;flex-shrink:0;">+</button>
     </div>
     ${curLblHtml}
     <div onclick="setAwTier(-1,0)" class="awaken-reset-btn" style="text-align:center;margin-top:4px;">未覚醒に戻す</div>`;
