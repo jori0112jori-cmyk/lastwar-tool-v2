@@ -1227,8 +1227,7 @@ function updateTransitionRecommendationUI(){
         兵種バフ+15%（4体編成）
       </div>
       <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;line-height:1.6;">
-        AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。<br>
-        兵種バフは純粋5体構成（+20%）より下がるが、覚醒効果で総合火力を上回ることが多い（packsify推奨）。
+        AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。兵種バフは純粋5体構成（+20%）より下がりますが、覚醒効果で総合火力を上回ることが多いです（packsify推奨）。
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:var(--card-radius-sm);padding:4px 7px;margin-bottom:6px;line-height:1.5;">
         現在地点：キム${awStarLabel(kimAw)}・DVA${awStarLabel(dvaAw)}

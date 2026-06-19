@@ -40,7 +40,7 @@
         <div id="summary-panel" class="panel summary-panel">
             <div class="panel-title" style="color:#0ea5e9;">🥇 最優先育成</div>
             <div id="summary-bar" class="suggestion-box">
-                まだデータが足りません（10人以上配置すると要約が表示されます）。
+                10人以上配置すると、最優先育成サマリーが表示されます。
             </div>
             <div class="jump-row" aria-label="編成ジャンプ">
                 <button class="jump-btn j1" onclick="jumpToArmy(1)">🥇 1軍へ</button>
@@ -181,52 +181,52 @@
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🧩 ステップ1：編成を入力する</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>「部隊編成」タブを開き、第1〜第3軍（各5枠）と控え（10枠）のタイルをタップします。</li>
-            <li>各スロットで <b>キャラ選択</b> と <b>専用武装Lv（0〜30）</b> を設定してください。</li>
-            <li>覚醒対象英雄（キンバリー・DVA・テスラ）は <b>覚醒★数（★0-1〜★5-0）</b> も設定できます。</li>
-            <li><b>10人以上</b>配置すると、育成アドバイスと各ランキングが自動で更新されます。</li>
-            <li>控えにも英雄を設定しておくと、昇格候補や兵種方針の精度が上がります。</li>
+            <li>「部隊編成」タブで第1〜第3軍（各5枠）と控え（10枠）のタイルをタップ。</li>
+            <li>各スロットでキャラと専用武装Lv（0〜30）を設定します。</li>
+            <li>覚醒対象英雄（キンバリー・DVA・テスラ）は覚醒★数も設定可能です。</li>
+            <li><b>10人以上</b>配置すると、育成アドバイスと各ランキングが自動更新されます。</li>
+            <li>控えにも英雄を設定すると、昇格候補や兵種方針の精度が上がります。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">📋 推奨編成テンプレート</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>F2P〜中課金向けの編成をワンタップで反映できます（1軍・2軍・3軍を選択）。</li>
-            <li>EWは<b>現在のLvを維持</b>したままキャラ配置のみ変更します。</li>
-            <li>他の軍や控えに同じキャラがいた場合は<b>移動扱い</b>（重複しない）になります。</li>
+            <li>F2P〜中課金向けの編成をワンタップで反映できます。</li>
+            <li>EWは現在のLvを維持したままキャラ配置のみ変更します。</li>
+            <li>同じキャラが他の軍・控えにいる場合は移動扱い（重複なし）になります。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🎯 部隊強化の指針</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li><b>達成率</b>は各英雄のロール別目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度です。</li>
-            <li>達成率80%到達が<b>2軍投資を始める目安</b>です。</li>
+            <li>達成率は各英雄のロール別目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度です。</li>
+            <li>達成率80%が2軍投資を始める目安です。</li>
             <li>各軍のボトルネック英雄（最もEWが低い英雄）と次の節目を表示します。</li>
-            <li>控えに育成済み英雄がいると<b>昇格候補</b>として自動検出されます。</li>
+            <li>控えに育成済み英雄がいると昇格候補として自動検出されます。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🗺️ 次の部隊の編成方針</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>部隊強化の指針と連動して<b>次に強化すべき軍</b>を自動判定します。</li>
+            <li>次に強化すべき軍を自動判定し、推奨兵種を提示します。</li>
             <li>手持ち＋控えから各兵種の上位5体を選出してスコアを算出します。</li>
-            <li>キム+DVA両覚醒時は<b>混成型（4+1）</b>を特別推奨として表示します。</li>
+            <li>キム+DVA両覚醒時は混成型（4+1）を特別推奨として表示します。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🚀 育成優先ランキング</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li><b>専用武装ランキング</b>：次のLv目標（10/20/30）への効率順。</li>
             <li><b>補強候補ランキング</b>：現在の編成の弱点を埋める英雄の提案。</li>
-            <li><b>英雄覚醒ランキング</b>：コスパ・即効性・戦力増加の3軸＋現在★から次マイルストーンまでの必要かけら数を表示。</li>
+            <li><b>英雄覚醒ランキング</b>：コスパ・即効性・戦力増加から判定し、次マイルストーンまでの必要かけら数を表示。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">👑 S6覚醒システム（スロット編集内）</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>覚醒対象英雄のスロットを編集すると<b>覚醒★選択UI</b>が表示されます。</li>
+            <li>覚醒対象英雄のスロットを編集すると覚醒★選択UIが表示されます。</li>
             <li>★0-1解放が最低条件（専用かけら×50）、★3-0が最重要マイルストーンです。</li>
-            <li><b>EW強化 vs 覚醒 優先度</b>パネルで今どちらを優先すべきか確認できます。</li>
+            <li>「EW強化 vs 覚醒 優先度」パネルで今どちらを優先すべきか確認できます。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">💾 データ保存</div>
           <ul style="margin:0 0 4px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>入力内容はブラウザに<b>自動保存</b>されます（同じ端末・同じブラウザ内のみ）。</li>
+            <li>入力内容は同じ端末・同じブラウザ内に自動保存されます。</li>
             <li>別端末・別ブラウザには引き継がれません。シークレットモードでは保存されません。</li>
           </ul>
 
