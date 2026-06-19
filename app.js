@@ -1496,7 +1496,10 @@ function topRankCardHtml(rank, item, opts){
   const reasonBadges = Array.isArray(safeItem.reasonCodes) ? __aiSelectReasonCodes(safeItem.reasonCodes, 2).map(reasonCodeBadge).join('') : '';
   const summaryText = __buildRecommendationSummary(safeItem);
   const pinBtn = (opts.showPin === false) ? '' : holdPinChipHtml(safeItem);
-  const cardClass = compact ? 'rankhero-card rankhero-card--compact' : `rankhero-card ${rank>1?'rankhero-card--split':''}`;
+  const isBestRank = !!opts.isBest;
+  const cardClass = compact
+    ? 'rankhero-card rankhero-card--compact'
+    : `rankhero-card ${isBestRank ? 'rankhero-card--best' : (rank>1?'rankhero-card--split':'')}`;
   const rowClass = compact ? 'rankhero-row rankhero-row--compact' : 'rankhero-row';
 
   return `
