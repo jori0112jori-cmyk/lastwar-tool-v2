@@ -1198,10 +1198,10 @@ function updateTransitionRecommendationUI(){
     if(t==='air'  && !dvaAwAll && kimAwAll) memo = 'DVA覚醒（Week3解放）後にさらに強化可能です';
     if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = 'テスラ覚醒（Week6解放）後にさらに強化可能です';
 
-    return `<div style="background:#fff;border:1px solid ${isBest?'#f59e0b':'#e8edf5'};border-radius:12px;padding:10px 10px 12px;margin-bottom:8px;overflow:hidden;${isBest?'box-shadow:0 2px 8px rgba(245,158,11,0.15);':''}">
+    return `<div style="background:#fff;border:${isBest?'var(--card-border-best)':'var(--card-border)'};border-radius:var(--card-radius);padding:var(--card-padding);margin-bottom:var(--card-gap);overflow:hidden;${isBest?'box-shadow:var(--card-shadow-best);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;white-space:nowrap;">推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;background:#f1f5f9;border-radius:4px;padding:1px 6px;white-space:nowrap;">${rank}番目</span>`}
+          ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;background:#f1f5f9;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">${rank}番目</span>`}
           <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">${labels[t]}軸</span>
         </div>
         <span style="font-size:var(--fs-md);font-weight:900;color:${c};white-space:nowrap;">${pct}%</span>
@@ -1218,19 +1218,19 @@ function updateTransitionRecommendationUI(){
 
   // 混成型推奨カード
   const mixedCard = showMixedRecommend ? `
-    <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:12px;padding:10px 10px 12px;margin-bottom:8px;box-shadow:0 2px 10px rgba(245,158,11,0.2);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:var(--card-radius);padding:var(--card-padding);margin-bottom:var(--card-gap);box-shadow:0 2px 10px rgba(245,158,11,0.2);overflow:hidden;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap;">
-        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;white-space:nowrap;">覚醒コンボ推奨</span>
+        <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">覚醒コンボ推奨</span>
         <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">キム+DVA混成型</span>
       </div>
-      <div style="font-size:var(--fs-xxs);font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;display:inline-block;margin-bottom:6px;white-space:nowrap;">
+      <div style="font-size:var(--fs-xxs);font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:var(--card-radius-sm);padding:2px 6px;display:inline-block;margin-bottom:6px;white-space:nowrap;">
         兵種バフ+15%（4体編成）
       </div>
       <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;line-height:1.6;">
         AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。<br>
         兵種バフは純粋5体構成（+20%）より下がるが、覚醒効果で総合火力を上回ることが多い（packsify推奨）。
       </div>
-      <div style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:4px;padding:4px 7px;margin-bottom:6px;line-height:1.5;">
+      <div style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:var(--card-radius-sm);padding:4px 7px;margin-bottom:6px;line-height:1.5;">
         現在地点：キム${awStarLabel(kimAw)}・DVA${awStarLabel(dvaAw)}
       </div>
       <div style="font-size:var(--fs-xxs);color:#92400e;margin-bottom:6px;line-height:1.6;">
