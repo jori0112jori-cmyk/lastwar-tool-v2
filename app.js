@@ -2238,7 +2238,7 @@ function growthBadge(g){
     // atk=オレンジ(火力), wall=青(防御), bal=グレー(安定),
     // green=緑(即効・コスパ), purple=紫(将来・覚醒)
     const labelColorMap = {
-        '火力補強':   'atk',   '主力強化':  'atk',   '弱点補強':  'atk',
+        '火力補強':   'atk',   '主力強化':  'atk',   '不利属性の対策':  'atk',
         '防御補強':   'wall',  '耐久補強':  'wall',  '編成強化':  'wall',
         'バランス良く強化': 'bal', '今の編成で活躍':'bal', '主力編成の強化':'bal',
         '即戦力UP':   'green', 'コスパ◎':  'green',
@@ -2360,7 +2360,7 @@ function __summaryImpactKey(item){
   if(label === '長期投資向き') return 'future';
   if(label === '火力補強' || label === '主力強化') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : 'carry';
   if(label === '防御補強' || label === '耐久補強') return 'tankiness';
-  if(label === '弱点補強') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : role === 'atk' ? 'subdps' : 'stability';
+  if(label === '不利属性の対策') return role === 'wall' ? 'tankiness' : role === 'sup' ? 'support' : role === 'atk' ? 'subdps' : 'stability';
 
   // 2. 英雄の実際のロール（roleKey）を優先 ← ここが修正ポイント
   // wallロール（タンク）はどんな軸でも tankiness
@@ -3209,27 +3209,27 @@ function calculateUpgradeEfficiencyFull(roster){
     }
 
     const used = new Set();
-    const pickTop = (key, label, axis='bal') => {
+    const pickTop = (key, label, axis='bal', roleFilter=null) => {
       const arr = [...normalResults].sort((a,b)=> (b[key]-a[key]) || (b.efficiency-a.efficiency));
       for(const item of arr){
-        if(!used.has(item.id)){
-          used.add(item.id);
-          // hero の実際のロールから axis を決定（補強候補でも role を反映）
-          const heroRole = (HEROES[item.id] || {}).r || '';
-          const effectiveAxis = axis === 'bal'
-            ? 'bal'
-            : heroRole === 'wall' ? 'wall'
-            : heroRole === 'sup'  ? 'sup'
-            : heroRole === 'atk'  ? 'atk'
-            : axis;
-          return { ...item, growthType:{ level:2, axis:effectiveAxis, label, strong:false }, reasonCodes: __aiSelectReasonCodes(item.reasonCodes || [effectiveAxis==='atk' ? 'future' : 'coverage', item.costTierLabel==='高コスト' ? 'high_cost' : 'low_cost'], 2) };
-        }
+        if(used.has(item.id)) continue;
+        const heroRole = (HEROES[item.id] || {}).r || '';
+        if(roleFilter && heroRole !== roleFilter) continue;
+        used.add(item.id);
+        // hero の実際のロールから axis を決定（補強候補でも role を反映）
+        const effectiveAxis = axis === 'bal'
+          ? 'bal'
+          : heroRole === 'wall' ? 'wall'
+          : heroRole === 'sup'  ? 'sup'
+          : heroRole === 'atk'  ? 'atk'
+          : axis;
+        return { ...item, growthType:{ level:2, axis:effectiveAxis, label, strong:false }, reasonCodes: __aiSelectReasonCodes(item.reasonCodes || [effectiveAxis==='atk' ? 'future' : 'coverage', item.costTierLabel==='高コスト' ? 'high_cost' : 'low_cost'], 2) };
       }
       return null;
     };
     const reinforceList = [];
     const mainPick = pickTop('reinforceMain', '主力強化', 'bal');
-    const coveragePick = pickTop('reinforceCoverage', '弱点補強', 'wall');
+    const coveragePick = pickTop('reinforceCoverage', '不利属性の対策', 'wall');
     const futurePick = pickTop('reinforceFuture', '長期投資向き', 'atk');
     if(mainPick) reinforceList.push(mainPick);
     if(coveragePick) reinforceList.push(coveragePick);
