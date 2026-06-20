@@ -505,9 +505,11 @@ const MATCHUP_MODIFIER = {
 
 
 const TYPE_COUNTER_WEIGHT = {
-  tank:{ tank:0.30, air:1.00, mis:0.50 },
-  air:{ tank:0.50, air:0.30, mis:1.00 },
-  mis:{ tank:1.00, air:0.50, mis:0.30 },
+  // 実際の相性：戦車はミサイルに強く航空に弱い／航空は戦車に強くミサイルに弱い／ミサイルは航空に強く戦車に弱い
+  // 値は「自分の兵種から見て、相手の兵種に対する有利度」（1.00=最も有利、0.30=不利）
+  tank:{ tank:0.30, air:0.50, mis:1.00 },
+  air:{ tank:1.00, air:0.30, mis:0.50 },
+  mis:{ tank:0.50, air:1.00, mis:0.30 },
   none:{ tank:0.50, air:0.50, mis:0.50 }
 };
 
