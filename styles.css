@@ -1208,8 +1208,10 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .ucard-bar-val {
   font-size:var(--fs-xxs);
   font-weight: 900;
-  width: 28px;
+  width: 56px;
   text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 
@@ -1323,6 +1325,12 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   font-size:var(--fs-sm); color:#374151;
   background:#f0fdf4; border-left:3px solid #22c55e;
   padding:6px 8px; border-radius:0 6px 6px 0; line-height:1.5;
+}
+.hero-advice-warn-box {
+  font-size:var(--fs-sm); color:#7c2d12;
+  background:#fff7ed; border-left:3px solid #f97316;
+  padding:6px 8px; border-radius:0 6px 6px 0; line-height:1.5;
+  margin-top:5px;
 }
 /* 覚醒セクションタイトル */
 .awaken-section-title {

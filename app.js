@@ -27,7 +27,7 @@ const HERO_SLOT_ADVICE = {
       20: 'Lv20に到達し、覚醒解放が可能になりました。キムが覚醒済みなら専用かけら×50での解放を推奨します。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
       30: 'EWが上限に到達しました。覚醒★1（攻撃速度スタック強化）→★3（追撃と追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
     },
-    synergy: '覚醒キムと組む4+1混成型が最大効率の構成です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担になります。航空軸を組む場合はルシウス＋モリソン＋スカイラーと合わせると航空5体バフ+20%も狙えます。',
+    synergy: '覚醒キムと組む4体+1体の混成編成（兵種バフ+15%）が最大効率の構成です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担になります。航空軸を組む場合はルシウス＋モリソン＋スカイラーと合わせると航空5体バフ+20%も狙えます。',
     priority: 'SSS',
   },
   tesla: {
@@ -128,15 +128,15 @@ const HERO_SLOT_ADVICE = {
   },
   carlie: {
     role: '前衛タンク（航空）',
-    s6note: '航空軸の前衛候補です。ルシウスが育つまでの代替役として機能します。EW10で十分なので、ルシウスが育ったら控えに回しましょう。',
+    s6note: '航空軸の前衛2枚目です。ルシウスと組んで「2枚前衛」体制を作ることで、航空5体軸の安定感が大きく上がります。',
     ewAdvice: {
-      0:  'ルシウスが育っていない場合の前衛として活躍します。まずLv10を目指しましょう。',
-      10: 'Lv10に到達しました。カーリーはこのレベルで十分です。ルシウス・DVAの育成を優先しましょう。',
-      20: 'Lv20に到達しました。航空前衛として安定します。ルシウスEW20完成後は控えへの移行を検討しましょう。',
-      30: 'EWが上限に到達しました。',
+      0:  '航空軸の前衛2枚目として重要な役割です。まずLv10を目指しましょう。ルシウスと並行して育てるのが理想です。',
+      10: 'Lv10に到達しました。航空前衛2枚目として機能します。次のLv20を目指しましょう。',
+      20: 'Lv20に到達しました。ルシウスとの前衛2枚体制が安定します。Lv30への投資はDVA・ルシウスの育成を優先してからで問題ありません。',
+      30: 'EWが上限に到達しました。ルシウスとの前衛2枚体制で航空軸の耐久力が最大化されています。',
     },
-    synergy: 'ルシウス不在時の航空前衛代替です。ルシウスが揃えばルシウス＋DVA＋モリソン＋スカイラー＋カーリーの5航空体制も可能です。',
-    priority: 'C',
+    synergy: 'ルシウスと前衛2枚を組むことで、DVA・モリソン・スカイラーの後衛火力陣を安定して守れます。ルシウス単体より2枚前衛の方が耐久面で優れる構成です。',
+    priority: 'A',
   },
   fiona: {
     role: '主力アタッカー（ロケラン）',
@@ -196,6 +196,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。フル育成URとして十分な戦力ですが、キム覚醒が進んだ場合はキムを優先しましょう。',
     },
     synergy: 'キンバリー不在・育成前の戦車アタッカー候補です。ウィリアムズ＋マーフィ＋マーシャルとの戦車軸編成で使いましょう。',
+    warning: 'UR昇格直後の3星URは5星SSR時より弱くなります（ウォール・オブ・オナーの恩恵がリセットされるため）。昇格は計画的に、できればかけらを確保して即5星まで上げられるタイミングで行いましょう（Reddit報告）。',
     priority: 'C',
   },
   scarlett: {
@@ -208,7 +209,60 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。UR前衛として最大戦力です。ウィリアムズとの2枚前衛体制も選択肢になります。',
     },
     synergy: '戦車前衛の代替候補です。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ＋マーフィの前衛2枚体制が理想です。',
+    warning: 'UR昇格直後は星0からの再育成になります（昇格でティアがリセットされ、スキルメダルは返却）。長期で戦車軸を使う予定がある場合のみ、かけらを事前に確保してから昇格しましょう。',
     priority: 'D',
+  },
+  sarah: {
+    role: 'UR サポート（航空）',
+    s6note: 'UR昇格可能な航空サポートです。DVA・モリソンなど後衛火力陣のスキル効果を支援しますが、かけら収集に長い準備期間が必要です。',
+    ewAdvice: {
+      0:  'まずDVA・ルシウスの育成を優先しましょう。サラのかけら収集は早めに始めると後々楽になります。',
+      10: 'Lv10です。サポートとして機能し始めます。DVA・ルシウスのEW育成を優先しつつ、並行してかけらを集めましょう。',
+      20: 'Lv20です。航空軸のサポートとして十分な水準です。Lv30への投資は主力（DVA・ルシウス）の育成が終わってからで問題ありません。',
+      30: 'EWが上限に到達しました。航空軸のサポートとして最大限機能しています。',
+    },
+    synergy: '航空軸を使う場合のみ価値が出る支援役です。DVA・モリソンの後衛火力を支える役割なので、航空軸を使わない場合は優先度が下がります。',
+    warning: 'UR昇格には長い準備期間が必要です（かけら収集の前倒し推奨）。航空軸を使わない場合は昇格を見送り、他の英雄へリソースを回しましょう。',
+    priority: 'C',
+  },
+  venom: {
+    role: 'UR サブアタッカー（ロケラン）',
+    s6note: 'UR昇格可能なロケラン英雄です。Corrosion（腐食DoT）スタックで継続ダメージを与えます。テスラ・フィオナが育つまでの繋ぎとして機能します。',
+    ewAdvice: {
+      0:  'テスラ・フィオナの育成が最優先です。ベノムへの投資はそれらが一定水準に育った後に検討しましょう。',
+      10: 'Lv10です。ロケラン軸の繋ぎとして活躍します。テスラ・フィオナのEW育成を優先しましょう。',
+      20: 'Lv20です。Corrosionスタックが最大5まで積み重なり、継続ダメージが安定します。',
+      30: 'EWが上限に到達しました。ロケラン軸のサブ火力として十分な戦力です。テスラ・フィオナが揃った場合は優先度を下げて問題ありません。',
+    },
+    synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。Corrosionスタック（最大5、+35%追加ダメージ）で継続的に削れます。',
+    warning: 'UR昇格直後は星0からの再育成になります。既にテスラ・フィオナが十分に育っている場合、ベノムの昇格優先度は高くありません。',
+    priority: 'C',
+  },
+  violet: {
+    role: 'UR セカンドタンク（戦車）',
+    s6note: 'UR昇格可能な戦車英雄です。モンスター系PvEでの被ダメ軽減が持ち味ですが、実際の編成で使う予定があるかが昇格価値を左右します。',
+    ewAdvice: {
+      0:  'ウィリアムズ・キンバリーの育成が最優先です。ヴィオラへの投資は編成で実際に使う予定がある場合のみ検討しましょう。',
+      10: 'Lv10です。前衛代替として機能します。主力（ウィリアムズ・キンバリー）の育成を優先しましょう。',
+      20: 'Lv20です。セカンドタンクとして安定した耐久力があります。',
+      30: 'EWが上限に到達しました。',
+    },
+    synergy: 'ウィリアムズ・マーフィが揃っている場合、ヴィオラは編成に入らないことが多い控え要員です。モンスター系PvEで実際に使う場合のみ育成価値があります。',
+    warning: 'UR昇格は「実際に編成で使うか」を見極めてから行いましょう。ウィリアムズ＋マーフィの前衛2枚体制が完成している場合、昇格かけらは他の英雄に回す方が効率的です（packsify）。',
+    priority: 'D',
+  },
+  brats: {
+    role: 'UR サブアタッカー（ロケラン）',
+    s6note: 'SSRからUR昇格可能なロケラン火力役です。盾を無視して後衛を攻撃する特性があり、テスラ・フィオナが育つまでの繋ぎとして機能します。',
+    ewAdvice: {
+      0:  'テスラ・フィオナの育成が最優先です。ブラッツへの投資はそれらが一定水準に育った後に検討しましょう。',
+      10: 'Lv10です。ロケラン軸の繋ぎとして活躍します。テスラ・フィオナのEW育成を優先しましょう。',
+      20: 'Lv20です。後衛攻撃の特性が安定して機能します。',
+      30: 'EWが上限に到達しました。ロケラン軸のサブ火力として十分な戦力です。テスラ・フィオナが揃った場合は優先度を下げて問題ありません。',
+    },
+    synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。盾無視・後衛攻撃の特性で、相手の後衛アタッカーを直接狙えます。',
+    warning: 'UR昇格直後は星0からの再育成になります。専用武装は実装されていないため、純粋にステータスとスキルのみで評価しましょう。',
+    priority: 'C',
   },
 };
 
@@ -521,6 +575,13 @@ const REASON_LABELS = {
     immediate: "即戦力UP",
     future: "長期向き",
     promoted_ur: "昇格UR"
+  },
+  synergy: {
+    front2: "守りが安定する",
+    mono_type: "兵種バフ維持",
+    awaken_combo: "覚醒で火力倍増",
+    meta_combo: "鉄板の組み合わせ",
+    carry_support: "主力を後押し",
   }
 };
 
@@ -551,7 +612,12 @@ const REASON_BADGE_STYLE = {
   lv30: "future",   // MAX育成 → 紫（将来への大投資）
   immediate: "good",
   future: "future",
-  promoted_ur: "neutral"
+  promoted_ur: "neutral",
+  front2: "good",
+  mono_type: "good",
+  awaken_combo: "future",
+  meta_combo: "future",
+  carry_support: "accent",
 };
 
 const IMPACT_BADGE_STYLE = {
@@ -565,6 +631,7 @@ const IMPACT_BADGE_STYLE = {
 };
 
 const REASON_BADGE_PRIORITY = [
+  "synergy",
   "policy",
   "efficiency",
   "timing"
@@ -1320,10 +1387,8 @@ function showTab(id, el) {
     document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); 
     $id('tab-'+id).classList.add('active'); 
     if(el) el.classList.add('active'); 
-    let footer = $id('footer-bar');
     let ref = document.getElementById('ref-panel');
     if(ref) ref.style.display = (id === 'guide') ? 'block' : 'none';
-    if(footer) footer.style.display = 'none';
 }
 
 
@@ -2370,14 +2435,14 @@ function checkAwakeningResourceWarning() {
 
     // キムに全投入してDVA/テスラが未着手
     if (kimTier.star >= 1 && dvaP === 0 && teslaP === 0) {
-        warns.push('⚠️ <b>シャード集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備えシャードを分散確保することを推奨します。');
+        warns.push('⚠️ <b>かけら集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備えかけらを分散確保することを推奨します。');
     } else if (kimTier.star >= 1 && dvaP === 0) {
-        warns.push('💡 DVAの覚醒（Week3解放）にシャード130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
+        warns.push('💡 DVAの覚醒（Week3解放）にかけら130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
     }
 
     // DVA済みでテスラ未着手
     if (dvaTier.star >= 1 && teslaP === 0) {
-        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるならシャードを確保しておきましょう。');
+        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるならかけらを確保しておきましょう。');
     }
 
     if (!warns.length) return '';
@@ -2410,8 +2475,9 @@ function __buildAwakeningAdvice(heroId, ewLv) {
 }
 
 function __aiBuildReasonCodes(meta){
-  const { hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture } = meta || {};
+  const { hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture, roster } = meta || {};
   const codes = [];
+  const synergyCodes = [];
   if(hero && context){
     const sameMain = hero.t === context.currentCombatType;
     const sameInvest = hero.t === context.investmentType;
@@ -2436,7 +2502,29 @@ function __aiBuildReasonCodes(meta){
     else if((Number(scoreCost)||0) >= top * 0.98) codes.push('immediate');
   }
   if(hero && hero.ur) codes.push('promoted_ur');
-  return __aiSelectReasonCodes(codes, 2);
+
+  // 編成シナジー由来の理由（前衛体制・兵種統一・覚醒コンボ・コミュニティ推奨編成）
+  if(hero && Array.isArray(roster)){
+    const frontCount = roster.filter(x => x && x.r === 'wall').length;
+    const sameType = roster.filter(x => x && x.t === hero.t);
+    if(hero.r === 'wall' && frontCount >= 2) synergyCodes.push('front2');
+    if(sameType.length >= 4) synergyCodes.push('mono_type');
+    if(context && context.awakeningCtx){
+      const aw = context.awakeningCtx;
+      if((hero.id === 'kimberly' || hero.id === 'dva') && aw.kimDvaCombo) synergyCodes.push('awaken_combo');
+      if(hero.id === 'tesla' && aw.teslaFiona) synergyCodes.push('awaken_combo');
+    }
+    if(context && context.mainArmyIds){
+      const ids = context.mainArmyIds;
+      if(ids.has('kimberly') && ids.has('dva') && ids.has('schuyler') && ['kimberly','dva','schuyler'].includes(hero.id)) synergyCodes.push('meta_combo');
+    }
+    const profile = __aiGetProfile(hero.id);
+    if(profile.role === 'support' || profile.role === 'front_tank') synergyCodes.push('carry_support');
+  }
+
+  // シナジー由来コードを優先的に1つ混ぜる（情報の重複を避けるため最大1つ）
+  const finalCodes = synergyCodes.length ? [synergyCodes[0], ...codes] : codes;
+  return __aiSelectReasonCodes(finalCodes, 2);
 }
 
 function detectArmyWeaknessFromDetail(detail){
@@ -3030,7 +3118,7 @@ function calculateUpgradeEfficiencyFull(roster){
             scoreCost, scoreCoverage, scoreFuture
         });
         const safeHintLabel = __aiDisplaySafeLabel(hero, ms, context, growthType, scoreCost, scoreCoverage, scoreFuture);
-        const reasonCodes = __aiBuildReasonCodes({ hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture });
+        const reasonCodes = __aiBuildReasonCodes({ hero, ms, roleKey, context, scoreCost, scoreCoverage, scoreFuture, roster });
 
         const reinforceMain = 30 * (sameMain ? 1 : 0) + 20 * (inMainArmy ? 1 : 0.4) + 20 * (((weakness1 === 'defense' || weakness2 === 'defense') && roleKey === 'wall') || ((weakness1 === 'attack' || weakness2 === 'attack') && roleKey === 'atk') ? 1 : 0.45) + 15 * (ms.target === 20 ? 1 : (ms.target === 10 ? 0.8 : 0.55)) + 10 * ((sameMain && context.mainTeamMaturity !== 'high') ? 1 : 0.5) + 5 * (sameMain ? 1 : 0.2);
         const reinforceCoverage = 30 * ((__aiCounterMap(context.currentCombatType)[hero.t]) || 0.5) + 25 * (profile.core ? 1 : 0.25) + 20 * Math.min(1.12, synergy * formationSynergy) + 15 * (!sameMain ? 1 : 0.45) + 10 * (ms.target <= 20 ? 1 : 0.55);
@@ -3169,12 +3257,6 @@ function updateSummaryBar(result, effData){
         return getWeaknessBadge(w);
     };
 
-    const army1 = result.weightedScores ? (result.weightedScores.army1 || 0) : 0;
-    const army2 = result.weightedScores ? (result.weightedScores.army2 || 0) : 0;
-    const army3 = result.weightedScores ? (result.weightedScores.army3 || 0) : 0;
-
-    const powerLine = `📊 軍別戦力：🥇${army1}  🥈${army2}  🥉${army3}`;
-
     if(!top){
         el.innerHTML = `
             <div class="summary-grid">
@@ -3182,7 +3264,6 @@ function updateSummaryBar(result, effData){
                     <div class="summary-title">1軍の状態</div>
                     <div class="summary-main">${needText(weak1)}</div>
                     <div class="summary-sub">（育成優先ランキングが出ない状態です）</div>
-                    <div class="summary-sub" style="margin-top:6px;">${powerLine}</div>
                 </div>
             </div>`;
         return;
@@ -3196,6 +3277,8 @@ function updateSummaryBar(result, effData){
     else if(top.strength === "low") badge = "まず様子見";
 
     const roleLabel = (top.roleKey === "atk") ? "火力" : (top.roleKey === "wall") ? "耐久" : "サポート";
+    const reasonBadges = Array.isArray(top.reasonCodes) ? __aiSelectReasonCodes(top.reasonCodes, 2).map(reasonCodeBadge).join('') : '';
+    const summaryText = __buildRecommendationSummary(top);
 
     el.innerHTML = `
         <div class="summary-grid">
@@ -3206,8 +3289,8 @@ function updateSummaryBar(result, effData){
                   <span style="font-size:var(--fs-xs);background:#eff6ff;color:#1d4ed8;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${roleLabel}強化</span>
                   <span style="font-size:var(--fs-xs);background:#f0fdf4;color:#15803d;border-radius:5px;padding:2px 7px;font-weight:900;white-space:nowrap;">${badge}</span>
                 </div>
-                <div class="summary-sub">目標 EW Lv${top.to}　／　1軍：${needText(weak1)}</div>
-                <div class="summary-sub" style="margin-top:4px;">${powerLine}</div>
+                <div class="summary-sub">目標 EW Lv${top.to}${summaryText ? '：' + escapeHtml(summaryText) : ''}</div>
+                ${reasonBadges ? `<div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap;">${reasonBadges}</div>` : ''}
             </div>
         </div>`;
 }
@@ -3607,7 +3690,8 @@ if(effData.normal.length > 0){
 // 覚醒ランキング 3軸評価（コミュニティメタ反映版）
 // 軸1: 即効性 - 今すぐ戦力になるか
 // 軸2: コスパ - シャード1個あたりの戦力上昇
-// 軸3: シナジー - 現在の編成との相乗効果
+// 軸3: 将来性 - 長期的な戦力増加の大きさ（powerGain）
+// ※ シナジー（編成との相乗効果）は別途カード内の「🤝 ○○あり」表示で提示
 // ===============================================================
 
 // ===============================================================
@@ -3814,24 +3898,20 @@ function renderAwakenRanking(awakenResults) {
             style="width:34px;height:34px;vertical-align:-2px;margin-right:3px;"
             alt=""> ×${sc.shardCost}`;
 
-        // 3軸バー（直感的な絵文字+ドット形式）
+        // 3軸バー（直感的な絵文字+ドット形式、10段階表示）
         const bar = (val, color, label, icon) => {
-            const dots = [1,2,3,4,5].map(d =>
-                `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;
-                 background:${d <= Math.round(val/2) ? color : '#e2e8f0'};
+            const dots = [1,2,3,4,5,6,7,8,9,10].map(d =>
+                `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;
+                 background:${d <= Math.round(val) ? color : '#e2e8f0'};
                  flex-shrink:0;"></span>`
             ).join('');
             const levelLabel = val >= 9 ? '最高' : val >= 7 ? '高い' : val >= 5 ? '普通' : '低め';
             return `<div class="ucard-bar-row">
               <span class="ucard-bar-label">${icon} ${label}</span>
-              <div style="display:flex;gap:3px;align-items:center;">${dots}</div>
-              <span class="ucard-bar-val" style="color:${color};font-size:var(--fs-xxs);">${levelLabel}</span>
+              <div style="display:flex;gap:2px;align-items:center;flex-shrink:0;">${dots}</div>
+              <span class="ucard-bar-val" style="color:${color};font-size:var(--fs-xxs);">${Math.round(val)}/10 ${levelLabel}</span>
             </div>`;
         };
-
-        // 総合優先度ラベル
-        const priorityLabel = sc.total >= 7.5 ? '🔥 最優先' : sc.total >= 6 ? '⚡ 優先' : '📌 後回しOK';
-        const priorityColor = sc.total >= 7.5 ? '#ef4444' : sc.total >= 6 ? '#f97316' : '#94a3b8';
 
         html += `
         <div class="ucard ${isBest?'ucard--best':'ucard--awaken'}">
@@ -3846,7 +3926,6 @@ function renderAwakenRanking(awakenResults) {
               <div class="ucard-header">
                 <span class="ucard-name">${name}</span>
                 <span class="awaken-ms-badge">目標 ${sc.goalLabel}</span>
-                <span class="ucard-priority" style="color:${priorityColor};">${priorityLabel}</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:3px;">
                 <!-- かけら行 -->
@@ -4098,6 +4177,7 @@ function updateHeroAdvicePanel(heroId, ewLv) {
     const roleEl   = document.getElementById('hero-advice-role');
     const ewEl     = document.getElementById('hero-advice-ew');
     const synEl    = document.getElementById('hero-advice-synergy');
+    const warnEl   = document.getElementById('hero-advice-warning');
     if (!panel) return;
 
     const adv = (typeof HERO_SLOT_ADVICE !== 'undefined') ? HERO_SLOT_ADVICE[heroId] : null;
@@ -4127,6 +4207,12 @@ function updateHeroAdvicePanel(heroId, ewLv) {
     // 編成での役割・シナジー
     synEl.innerHTML = adv.synergy ? `<b>編成での役割</b><br>${adv.synergy}` : '';
     synEl.style.display = adv.synergy ? 'block' : 'none';
+
+    // 注意事項（任意）
+    if (warnEl) {
+        warnEl.innerHTML = adv.warning ? `<b>注意</b><br>${adv.warning}` : '';
+        warnEl.style.display = adv.warning ? 'block' : 'none';
+    }
 }
 
 function openAwakeningSection(heroId, ewLv) {

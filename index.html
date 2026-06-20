@@ -38,7 +38,7 @@
         </div>
 
         <div id="summary-panel" class="panel summary-panel">
-            <div class="panel-title" style="color:#0ea5e9;">🥇 最優先育成</div>
+            <div class="panel-title" style="color:#0ea5e9;">最優先育成</div>
             <div id="summary-bar" class="suggestion-box">
                 10人以上配置すると、最優先育成サマリーが表示されます。
             </div>
@@ -51,9 +51,9 @@
         </div>
 
         <div class="panel slot-panel">
-            <div class="panel-title" style="color:#16a34a;">🧩 編成（タップで編集）</div>
+            <div class="panel-title" style="color:#16a34a;">編成（タップで編集）</div>
             <div class="suggestion-box" style="margin-bottom:10px;">
-                キャラ枠をタップしてキャラと武装Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映。
+                キャラ枠をタップしてキャラと武装Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映されます。
             </div>
 
             <div class="slot-pref-row">
@@ -109,14 +109,14 @@
 
         <!-- 推奨編成テンプレート（育成アドバイスの直下） -->
         <div id="preset-panel" class="panel" style="border-left:3px solid #f59e0b;display:none;">
-          <div class="panel-title" style="color:#d97706;">📋 推奨編成テンプレート</div>
+          <div class="panel-title" style="color:#d97706;">推奨編成テンプレート</div>
           <div style="font-size:var(--fs-sm);color:#475569;margin-bottom:8px;">コミュニティ検証済みの編成をワンタップで反映（packsify/allclash参照）</div>
           <div id="preset-list" style="display:flex;flex-direction:column;gap:6px;"></div>
         </div>
 
         <div id="army-guide-panel" class="panel" style="border-left:3px solid #6366f1;margin-top:14px;display:none;">
           <div class="panel-collapse-header" onclick="togglePanel('army-guide-body','army-guide-icon')">
-            <div class="panel-title" style="color:#4f46e5;margin:0;">🎯 部隊強化の指針</div>
+            <div class="panel-title" style="color:#4f46e5;margin:0;">部隊強化の指針</div>
             <span id="army-guide-icon" class="panel-collapse-icon open">▼</span>
           </div>
           <div id="army-guide-body" class="panel-collapsible open">
@@ -126,20 +126,20 @@
 
         <div id="power-transition" class="panel" style="border-left:3px solid #f59e0b; margin-top: 14px;">
           <div class="panel-collapse-header" onclick="toggleTransitionPanel()">
-            <div class="panel-title" style="color:#f59e0b;margin:0;">🗺️ 次の部隊の編成方針</div>
+            <div class="panel-title" style="color:#f59e0b;margin:0;">次の部隊の編成方針</div>
             <span id="trans-icon" class="panel-collapse-icon open">▼</span>
           </div>
           <div id="power-transition-body" class="suggestion-box panel-collapsible open" style="margin-top:10px;"></div>
         </div>
 
         <div id="eff-panel" class="panel route-panel">
-            <div class="panel-title" style="color:#c026d3;">🔧 専用武装 育成優先ランキング</div>
+            <div class="panel-title" style="color:#c026d3;">専用武装 育成優先ランキング</div>
             <div id="eff-result" class="suggestion-box">正確なコストと編成診断に基づき、最も効果的な強化先を提案します。</div>
         </div>
 
         <div id="awaken-rank-panel" class="panel route-panel" style="display:none;">
             <div class="panel-collapse-header" onclick="togglePanel('awaken-rank-body','awaken-rank-icon')">
-              <div class="panel-title" style="color:#ef4444;margin:0;">👑 英雄覚醒 優先ランキング</div>
+              <div class="panel-title" style="color:#ef4444;margin:0;">英雄覚醒 優先ランキング</div>
               <span id="awaken-rank-icon" class="panel-collapse-icon open">▼</span>
             </div>
             <!-- F2P向け覚醒シャード情報（折りたたみ） -->
@@ -161,7 +161,7 @@
         
 
         <div id="ai-suggestion-panel" class="panel ai-panel" style="display:none;">
-            <div class="panel-title" style="color:#1d4ed8;">🤖 AI編成アドバイス</div>
+            <div class="panel-title" style="color:#1d4ed8;">AI編成アドバイス</div>
             <div id="ai-result" class="suggestion-box">キャラを10人以上配置すると、自動的に全軍の最適化と診断が始まります。</div>
         </div>
         
@@ -176,7 +176,7 @@
 
     <div id="tab-guide" class="tab-content">
     <div class="panel" style="border-left:3px solid #0ea5e9;">
-        <div class="panel-title" style="color:#0ea5e9;">📘 このツールの使い方</div>
+        <div class="panel-title" style="color:#0ea5e9;">このツールの使い方</div>
         <div class="suggestion-box">
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🧩 ステップ1：編成を入力する</div>
@@ -235,7 +235,7 @@
     </div>
 
     <div id="ref-panel" class="panel" style="border-left:3px solid #22c55e; display:block;">
-        <div class="panel-title" style="color:#16a34a;">🔗 情報収集・参考サイト</div>
+        <div class="panel-title" style="color:#16a34a;">情報収集・参考サイト</div>
         <div class="suggestion-box" style="font-size:var(--fs-lg);">
             <div style="margin-bottom:8px;">
                 <a href="https://game8.jp/lastwar-survival" target="_blank" rel="noopener noreferrer" style="font-weight:900; color:#2563eb; text-decoration:none;">Game8（ラストウォー攻略）</a><br>
@@ -253,11 +253,6 @@
     </div>
 </div>
     </div>
-
-<div id="footer-bar" class="footer" style="display:none;">
-    <div style="font-size:var(--fs-xl); font-weight:900; color:#b91c1c;">今より <span id="growth-rate" style="font-size:1.4rem;">1.00</span> 倍!</div>
-    <div class="meta-tag">必要: <span style="color:#b45309;">UR<span id="ft-ur">0</span></span> <span style="color:#b91c1c;">MR<span id="ft-mr">0</span></span></div>
-</div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
@@ -308,6 +303,8 @@
         <div id="hero-advice-ew" class="hero-advice-ew-box"></div>
         <!-- シナジー -->
         <div id="hero-advice-synergy" class="hero-advice-syn-box"></div>
+        <!-- 注意事項（任意） -->
+        <div id="hero-advice-warning" class="hero-advice-warn-box" style="display:none;"></div>
       </div>
 
       <!-- 覚醒セクション（覚醒対応英雄のみ表示） -->
