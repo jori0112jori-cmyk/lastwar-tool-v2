@@ -51,9 +51,9 @@
         </div>
 
         <div class="panel slot-panel">
-            <div class="panel-title" style="color:#16a34a;">編成（タップで編集）</div>
+            <div class="panel-title" style="color:#16a34a;">編成（キャラ枠タップで編集）</div>
             <div class="suggestion-box" style="margin-bottom:10px;">
-                キャラ枠をタップしてキャラと武装Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映されます。
+                武装Lv,覚醒Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映。
             </div>
 
             <div class="slot-pref-row">
@@ -148,9 +148,11 @@
                 📌 F2P・無課金向け かけら入手方法 <span style="color:#b45309;font-size:var(--fs-xxs);">▼ タップで展開</span>
               </summary>
               <div style="background:#fffbeb;border:1px solid #fde68a;border-top:none;border-radius:0 0 8px 8px;padding:8px 10px;font-size:var(--fs-xs);color:#78350f;line-height:1.7;">
-                🔑 <b>専用かけら×50</b>（解放用）: 英雄演習（最大10個）<br>
-                💎 <b>汎用かけら</b>: 世界遠征（Week2/4/6）が主要入手源<br>
-                ⚠️ <b>覚醒バトルパスは廃止</b>済み。かけらは完全F2P入手のみ<br>
+                💡 覚醒解放には<b>武装Lv.20</b>と<b>専用覚醒かけら50個</b>が必要です<br>
+                <hr style="border:none;border-top:1px dashed #fde68a;margin:6px 0;">
+                🛠️ <b>武装かけら</b>（武装Lvを上げる用・覚醒かけらとは別資源）: ガチャ・闇市商店・遠征交換所などが主要入手源。Lv20到達まで概算1,130個前後<br>
+                🔑 <b>専用覚醒かけら×50</b>（覚醒「解放」用）: 英雄演習（最大10個）<br>
+                💎 <b>汎用覚醒かけら</b>（覚醒「強化」用・解放には使えません）: 世界遠征（Week2/4/6）が主要入手源<br>
                 🎯 <b>F2P原則</b>: 1シーズンに1英雄集中。キム→DVA→テスラの順
               </div>
             </details>
@@ -182,10 +184,19 @@
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🧩 ステップ1：編成を入力する</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>「部隊編成」タブで第1〜第3軍（各5枠）と控え（10枠）のタイルをタップ。</li>
-            <li>各スロットでキャラと専用武装Lv（0〜30）を設定します。</li>
+            <li>各スロットでキャラと武装Lv（0〜30）を設定します。</li>
             <li>覚醒対象英雄（キンバリー・DVA・テスラ）は覚醒★数も設定可能です。</li>
             <li><b>10人以上</b>配置すると、育成アドバイスと各ランキングが自動更新されます。</li>
             <li>控えにも英雄を設定すると、昇格候補や兵種方針の精度が上がります。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">⚔️ 属性相性の基本ルール</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li>戦車・航空機・ロケランは「3すくみ」の関係です。<br>戦車はロケランに強く航空機に弱い／航空機は戦車に強くロケランに弱い／ロケランは航空機に強く戦車に弱い。</li>
+            <li>有利属性で攻撃すると<b>与ダメージが増え、受けるダメージが減る</b>補正がかかります（検証ではおよそ20%前後の差と言われています）。拮抗した戦力同士ではこの差が勝敗を分けます。</li>
+            <li>さらに、同じ兵種の英雄を<b>5人揃える</b>と部隊全体の攻撃力・防御力・HPが+20%されます（兵種統一バフ）。</li>
+            <li>この2つが重なるため、有利属性の単色編成と不利属性の単色編成がぶつかると、合計で40%以上の性能差が生まれることになります。これが「混成編成（レインボー）」を避けて単色編成を目指すべき理由です。</li>
+            <li>ただし覚醒キム＋覚醒DVAの4+1混成編成のように、兵種統一バフを犠牲にしても覚醒効果で総合火力が上回るケースもあります（推奨編成テンプレート参照）。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">📋 推奨編成テンプレート</div>
@@ -220,7 +231,7 @@
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">👑 S6覚醒システム（スロット編集内）</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>覚醒対象英雄のスロットを編集すると覚醒★選択UIが表示されます。</li>
-            <li>★0-1解放が最低条件（専用かけら×50）、★3-0が最重要マイルストーンです。</li>
+            <li>★0-1解放が最低条件（専用覚醒かけら×50）、★3到達が最重要マイルストーンです。</li>
             <li>「EW強化 vs 覚醒 優先度」パネルで今どちらを優先すべきか確認できます。</li>
           </ul>
 

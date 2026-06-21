@@ -12,7 +12,7 @@ const HERO_SLOT_ADVICE = {
       0:  'まずEW Lv10を目指しましょう。Lv1〜9は戦力の伸びが小さいため、一気にLv10まで上げるのがおすすめです。',
       1:  'Lv1〜9は戦力の伸びが小さい段階です。早めにLv10を目指しましょう。',
       10: 'Lv10に到達しました。次の節目はLv20です。Lv20で覚醒の前提条件を満たすため、最優先で進めましょう。',
-      20: 'Lv20に到達し、覚醒の前提条件を満たしました。専用かけら×50で★0-1を解放すると基礎ステータスが+20%になります。まず覚醒解放を優先し、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でも問題ありません。',
+      20: 'Lv20に到達し、覚醒の前提条件を満たしました。専用覚醒かけら×50で★0-1を解放すると基礎ステータスが+20%になります。まず覚醒解放を優先し、その後★1→★3を目指しましょう。Lv30への投資は覚醒★3到達後でも問題ありません。',
       30: 'EWが上限に到達しました。残りは覚醒強化のみです。★1（決意状態の自動発動）→★3（エネルギー増幅2スタックの先行獲得）の順で進めると最大火力に到達します。★3が最重要のマイルストーンです。',
     },
     synergy: '基本形はウィリアムズ＋マーフィの前衛2枚でキムを守る編成です。マーシャルをサポートに加えると全体火力がさらに上がります。覚醒後はDVAとのコンボで「AoE＋単体バースト」の構成が完成します。',
@@ -24,7 +24,7 @@ const HERO_SLOT_ADVICE = {
     ewAdvice: {
       0:  'まずEW Lv10を目指しましょう。DVAは航空英雄のため、戦車軸メインの編成なら焦らずキム優先で進めて問題ありません。',
       10: 'Lv10に到達しました。次の節目はLv20（覚醒の前提条件）です。キムのEW20が終わったら、次はDVAのLv20を目標にしましょう。',
-      20: 'Lv20に到達し、覚醒解放が可能になりました。キムが覚醒済みなら専用かけら×50での解放を推奨します。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
+      20: 'Lv20に到達し、覚醒解放が可能になりました。キムが覚醒済みなら専用覚醒かけら×50での解放を推奨します。航空英雄が多い編成ほど「エースの矜持」スタックが積みやすくなります。',
       30: 'EWが上限に到達しました。覚醒★1（攻撃速度スタック強化）→★3（追撃と追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
     },
     synergy: '覚醒キムと組む4体+1体の混成編成（兵種バフ+15%）が最大効率の構成です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担になります。航空軸を組む場合はルシウス＋モリソン＋スカイラーと合わせると航空5体バフ+20%も狙えます。',
@@ -764,8 +764,8 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 // star=1以上 → '★N-T'
 function awStarLabel(at) {
   if (!at || at.star < 0) return '未覚醒';
+  if (at.tier === 0) return `★${at.star}（到達）`;
   if (at.tier === 5) return `★${at.star + 1}（到達）`;
-  if (at.star === 0) return at.tier >= 1 ? `★0-${at.tier}` : '★0-1解放済み';
   return `★${at.star}-${at.tier}`;
 }
 // 推奨マイルストーンのコメント付きラベル
@@ -816,18 +816,21 @@ function getAwakeningScoreBonus(heroId, awTierStr) {
 // 次のティアへのコスト
 function awNextTierCost(awTierStr) {
   const at = parseAwTier(awTierStr);
-  // 未覚醒 → ★0-1（名前付きかけら×50）
-  if (at.star < 0) return { cost:50, named:true, nextStar:0, nextTier:1 };
-  // ★4-5 = MAX
-  if (at.star >= 4 && at.tier >= 5) return null;
+  // 未覚醒 → ★0（到達）：無料
+  if (at.star < 0) return { cost:0, named:false, nextStar:0, nextTier:0 };
+  // ★5（到達）= MAX
+  if (at.star >= 5) return null;
   if (at.tier < 5) {
-    // 同じ★の次ティアへ（★0-1のみ名前付き、それ以外は汎用）
-    const named = (at.star === 0 && at.tier === 0); // ★0-0→★0-1は該当しないが念のため
-    return { cost: AW_SHARD_PER_TIER[at.star], named: false, nextStar: at.star, nextTier: at.tier + 1 };
+    // 同じ★の次ティアへ（★0（到達）→★0-1のみ専用覚醒かけら、それ以外は汎用）
+    const named = (at.star === 0 && at.tier === 0);
+    const nt = at.tier + 1;
+    // tier=5に達した場合は次の★（到達）と同値なので正規化
+    if (nt === 5) return { cost: named ? 50 : AW_SHARD_PER_TIER[at.star], named, nextStar: at.star + 1, nextTier: 0 };
+    return { cost: named ? 50 : AW_SHARD_PER_TIER[at.star], named, nextStar: at.star, nextTier: nt };
   }
-  // 次の★-1へ
+  // 次の★（到達）へ：無料（このパスはtier=5の旧データが直接渡された場合のみ通る）
   const nextStar = at.star + 1;
-  return { cost: AW_SHARD_PER_TIER[nextStar], named: false, nextStar, nextTier: 1 };
+  return { cost: 0, named: false, nextStar, nextTier: 0 };
 }
 
 function escapeHtml(str){
@@ -1302,7 +1305,7 @@ function updateTransitionRecommendationUI(){
         現在地点：キム${awStarLabel(kimAw)}・DVA${awStarLabel(dvaAw)}
       </div>
       <div style="font-size:var(--fs-xxs);color:#92400e;margin-bottom:6px;line-height:1.6;">
-        最低ライン：キム★0-1＋DVA★0-1（両者覚醒解放済み）<br>理想ライン：キム★3-0＋DVA★3-0
+        最低ライン：キム★0-1＋DVA★0-1（両者覚醒解放済み）<br>理想ライン：キム★3（到達）＋DVA★3（到達）
       </div>
       <div style="font-size:var(--fs-xxs);color:#475569;border-top:1px solid #fde68a;padding-top:6px;line-height:1.6;">
         構成例：ウィリアムズ＋マーフィ（前衛2体）＋キム＋DVA＋マーシャル
@@ -2421,7 +2424,7 @@ function checkAwakeningResourceWarning() {
     const dvaTier  = parseAwTier(loadAwTier('dva'));
     const teslaTier= parseAwTier(loadAwTier('tesla'));
 
-    // 各英雄の覚醒進行度（0=未着手, 1=★0解放, 2=★0-5, 3=★1以上）
+    // 各英雄の覚醒進行度（0=未着手, 1=未使用, 2=★0台（0-1〜0-5）, 3=★1以上）
     const progress = (at) => {
         if (at.star < 0) return 0;
         if (at.star === 0 && at.tier === 0) return 1;
@@ -2458,8 +2461,8 @@ function __buildAwakeningAdvice(heroId, ewLv) {
   if (!aw || !aw.milestones) return '';
   const awTierStr = (typeof loadAwTier !== 'undefined') ? loadAwTier(heroId) : 'none';
   const at = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : {star:0,tier:0};
-  // MAX（★5-5）
-  if (at.star >= 4 && at.tier >= 5) return ''; // MAX
+  // MAX（★5（到達）= star:5,tier:0）
+  if (at.star >= 5) return ''; // MAX
   const check = (typeof checkAwakeningEligible !== 'undefined')
     ? checkAwakeningEligible(heroId, ewLv, 5)
     : { eligible: (ewLv >= (aw.ewMinRequired||20)), reason: 'EW Lv'+aw.ewMinRequired+'以上が必要' };
@@ -2467,12 +2470,12 @@ function __buildAwakeningAdvice(heroId, ewLv) {
     return '💡 覚醒条件：' + check.reason;
   }
   if (at.star < 0) {
-    return '👑 覚醒できます！専用かけら×50で★0-1を習得（基礎ステ+20%）';
+    return '👑 覚醒できます！専用覚醒かけら×50で★0-1に解放（基礎ステ+20%）';
   }
   const next = (typeof awNextTierCost !== 'undefined') ? awNextTierCost(awTierStr) : null;
   if (!next) return '';
   const bonus = (aw.starBonuses || {})[next.nextStar] || '';
-  const tierLabel = next.nextTier > 0 ? '★'+next.nextStar+'-'+next.nextTier : '★'+next.nextStar+'解放';
+  const tierLabel = '★'+next.nextStar+'-'+next.nextTier;
   return '👑 次：' + tierLabel + '（覚醒かけら：' + next.cost + '）' + (bonus ? ' → ' + bonus.substring(0,20)+'...' : '');
 }
 
@@ -3164,7 +3167,7 @@ function calculateUpgradeEfficiencyFull(roster){
             if (hero.wp < (aw.ewMinRequired || 20)) return; // 前提未達はスキップ
             const awTierStr = loadAwTier(hero.id);
             const at = parseAwTier(awTierStr);
-            if (at.star >= 4 && at.tier >= 5) return; // 覚醒MAX
+            if (at.star >= 5) return; // 覚醒MAX
             const next = awNextTierCost(awTierStr);
             if (!next) return;
 
@@ -3619,7 +3622,7 @@ function generateAiSuggestion() {
     // ✅ 3軍総合最適化結果カードは表示しない（入力UI=slotタイルを主役にする）
     $id('ai-result').innerHTML = `
       <div style="font-size:var(--fs-lg); color:#475569; line-height:1.6;">
-        上の <b>編成（タップで編集）</b> がそのまま評価画面です。<br>
+        上の <b>編成（キャラ枠タップで編集）</b> がそのまま評価画面です。<br>
         最適化案を反映したい場合は、下のボタンで <b>自動反映</b> できます。
       </div>
       <button class="apply-btn" onclick="applyMultiArmy()">この最強編成を自動反映する</button>
@@ -3738,6 +3741,7 @@ function calcRemainingShards(awTierStr, targetTierStr) {
   const to  = parseAwTier(targetTierStr);
   if (at.star < 0) return null; // 未覚醒は専用かけら固定なのでここでは計算しない
   if (to.star < 0) return 0;
+  if (at.star > to.star || (at.star === to.star && at.tier >= to.tier)) return 0; // 既に目標到達済み
 
   let total = 0;
 
@@ -3824,8 +3828,9 @@ function calcAwakenScore(heroId, awTierStr, roster) {
   }
   // 「現在★X-Y → 目標★N まであとN枚」の表示用文字列
   const atNow = parseAwTier(awTierStr);
-  const nowLabel = atNow.star < 0 ? '未覚醒' : '★' + atNow.star + '-' + atNow.tier;
-  const goalLabel = ms.toLabel || (ms.to === '1-0' ? '★1' : ms.to === '3-0' ? '★3' : ms.to === '5-0' ? '★5MAX' : '★'+ms.to);
+  const nowLabel = awStarLabel(atNow);
+  const goalAt = parseAwTier(ms.to);
+  const goalLabel = ms.toLabel || (goalAt.tier === 5 ? `★${goalAt.star + 1}${goalAt.star === 4 ? 'MAX' : ''}` : '★' + ms.to);
   const shardDisp = remainingNamed
     ? `${nowLabel} → ${goalLabel}（専用かけら×${remainingShards}）`
     : `${nowLabel} → ${goalLabel}（あと${remainingShards}枚）`;
@@ -4265,15 +4270,14 @@ function renderAwTierUI(awTierStr, aw) {
 
     const at = (typeof parseAwTier !== 'undefined') ? parseAwTier(awTierStr) : { star:-1, tier:0 };
     const currentStar = at.star;  // -1=未覚醒, 0〜4=★0〜4
-    const currentTier = at.tier;  // 1〜5
+    const currentTier = at.tier;  // 0〜5（0=到達直後、1〜4=進行中、5=次の★に到達）
 
     // 表示ルール：
-    //   未覚醒 = "none"
-    //   ★0     = 解放のみ（専用かけら×50、tier=0扱い）
-    //   ★0-1〜★0-5 = ★0の5ティア（各20シャード）→ ★0-5完了で「★1」到達
-    //   ★1-1〜★1-5 → ★2到達、以降同様
-    //   内部 star=N, tier=T → 表示「★N-T」そのまま
-    //   ただし tier=0 は「★N 解放済み」(ティア未進行)
+    //   未覚醒 = "none"（star=-1）
+    //   ★N-0 = ★Nに到達した直後（ティア未進行）→「★N（到達）」と表示
+    //   ★0-1〜★0-4 = ★0の中で投資進行中（専用覚醒かけら×50で0-1着地、以降汎用20個ずつ）
+    //   ★N-5 = 次の★(N+1)に到達 →「★(N+1)（到達）」と表示（★N-0と同値）
+    //   内部 star=N, tier=T(1〜4) → 表示「★N-T」そのまま
 
     function displayLabel(star, tier) {
         if (star < 0) return '未覚醒';
@@ -4402,11 +4406,11 @@ function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
     let awGain = 0, awCost = 0, awLabel = '';
 
     if (at.star < 0) {
-        // 未覚醒 → ★0-1: 専用かけら×50、スコア×1.20
+        // 未覚醒 → ★0-1解放: 専用覚醒かけら×50、スコア×1.20
         if (ewLv >= (aw.ewMinRequired || 20)) {
             awGain = Math.round(BASE_PTS * (1.20 - 1.0));
-            awCost = 50; // 専用かけら（換算値：1個≒15強化石相当とする）
-            awLabel = '覚醒★0-1（専用かけら×50）';
+            awCost = 50; // 専用覚醒かけら（換算値：1個≒15強化石相当とする）
+            awLabel = '覚醒★0-1（専用覚醒かけら×50）';
         }
     } else {
         const next = (typeof awNextTierCost !== 'undefined') ? awNextTierCost(awTierStr) : null;
@@ -4499,7 +4503,8 @@ function setAwTier(star, tier) {
     const heroId = (document.getElementById('slot-modal-hero') || {}).value;
     const aw = (typeof AWAKENING_HEROES !== 'undefined') ? AWAKENING_HEROES[heroId] : null;
     let s = star, t = tier;
-    if (s > 4) { s = 4; t = 5; }
+    if (s > 5) { s = 5; t = 0; }
+    if (s === 5) t = 0; // ★5はMAX、tierは常に0
     const tierStr = (s < 0) ? 'none' : (s + '-' + t);
     __slotModalState.awTier = tierStr;
     renderAwTierUI(tierStr, aw);
@@ -4507,24 +4512,23 @@ function setAwTier(star, tier) {
     try { updateEwVsAwakenPanel(heroId, __slotModalState.lv, tierStr, aw); } catch(e) {}
 }
 
-// +/- ボタンで現在地点から1ティアずつ前後させる（tier=0の「到達」中間状態は経由しない）
+// +/- ボタンで現在地点から1ティアずつ前後させる（tier=0は「到達直後」、1〜4は進行中、5は次の★に到達=N+1-0と同値）
 function stepAwTier(direction) {
     const cur = (typeof parseAwTier !== 'undefined') ? parseAwTier(__slotModalState.awTier) : { star:-1, tier:0 };
     let s = cur.star, t = cur.tier;
-    if (t === 0 && s >= 0) t = 1; // 到達状態は便宜上tier1扱いで処理開始
 
     if (direction > 0) {
         // 進める
-        if (s < 0) { s = 0; t = 1; }
-        else if (t >= 5) { s = s + 1; t = 1; }
+        if (s < 0) { s = 0; t = 0; }
+        else if (s >= 5) { /* 既にMAX */ }
+        else if (t >= 4) { s = s + 1; t = 0; } // ★N-4の次は★(N+1)（到達）へ直行（tier=5を経由しない）
         else { t = t + 1; }
-        if (s > 4) { s = 4; t = 5; }
     } else {
         // 戻す
         if (s < 0) return; // 既に未覚醒
-        if (t <= 1) {
+        if (t === 0) {
             if (s === 0) { s = -1; t = 0; } // 未覚醒に戻る
-            else { s = s - 1; t = 5; }
+            else { s = s - 1; t = 4; }
         } else {
             t = t - 1;
         }
