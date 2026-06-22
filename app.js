@@ -3870,14 +3870,16 @@ function getNextMilestone_aw(heroId, awTierStr) {
   const milestones = (AWAKENING_HEROES[heroId] || {}).milestones;
   if (!milestones) return null;
   const at = parseAwTier(awTierStr);
-  const currentStar = at.star; // -1=未覚醒, 0〜4=★0〜4
+  // {star:N, tier:5} は {star:N+1, tier:0}（次の★に到達した状態）と同値。
+  // starMin/starMax の範囲判定は「到達した★そのもの」を基準にするため、ここで正規化する。
+  const currentStar = (at.star >= 0 && at.tier === 5) ? at.star + 1 : at.star; // -1=未覚醒, 0〜5=★0〜5
 
   for (const ms of milestones) {
     if (currentStar >= ms.starMin && currentStar <= ms.starMax) {
       // 目標に既に到達しているか確認
       const toAt = parseAwTier(ms.to);
       if (currentStar > toAt.star) continue;          // 既に超えている
-      if (currentStar === toAt.star && at.tier >= toAt.tier) continue; // 同★で到達済み
+      if (currentStar === toAt.star && at.tier >= toAt.tier && at.tier !== 5) continue; // 同★で到達済み（tier=5は正規化済みなので除外）
       return ms;
     }
   }
