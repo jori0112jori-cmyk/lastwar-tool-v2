@@ -375,14 +375,19 @@ const HERO_ROLE_PROFILE = {
   brats:{ role:'sub_dps', lane:'back', core:false, promotedUr:true }
 };
 
-const HERO_LONGTERM_VALUE = {
-  kimberly:1.00, dva:1.00, fiona:0.96,
-  lucius:0.88, stetmann:0.86, morrison:0.85,
-  tesla:0.84, mcgregor:0.83, williams:0.80,
-  schuyler:0.79, adam:0.76, marshall:0.74,
-  murphy:0.72, carlie:0.70, swift:0.68,
-  scarlett:0.72, mason:0.64, venom:0.62, brats:0.62, sarah:0.58, violet:0.46
-};
+// HERO_LONGTERM_VALUE: data.js の HERO_AI_PROFILE[id].longterm を正本として自動生成。
+// 値を直接ここに書かないこと（二重管理によるズレの原因になるため）。
+// 新ヒーロー追加時は HERO_AI_PROFILE 側の longterm を設定すれば自動的に反映される。
+const HERO_LONGTERM_VALUE = (() => {
+  const out = {};
+  if (typeof HERO_AI_PROFILE === 'object') {
+    for (const id in HERO_AI_PROFILE) {
+      const v = HERO_AI_PROFILE[id] && HERO_AI_PROFILE[id].longterm;
+      if (Number.isFinite(v)) out[id] = v;
+    }
+  }
+  return out;
+})();
 
 const HERO_EVAL_META = {
   // tank
@@ -420,13 +425,15 @@ const HERO_PAIR_SYNERGY = {
     lucius:   { base: 1.05, lv10: 1.06, lv20: 1.08, lv30: 1.10 },
     morrison: { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.07 },
     schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
-    murphy:   { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 4+1想定
+    murphy:   { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 }, // 4+1想定
+    marshall: { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 汎用支援（marshall→dvaの対称）
   },
   lucius: {
     dva:      { base: 1.05, lv10: 1.06, lv20: 1.08, lv30: 1.10 },
     schuyler: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
     morrison: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
-    murphy:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // 4+1想定
+    murphy:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }, // 4+1想定
+    carlie:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // 前衛2枚目（航空）
   },
   morrison: {
     dva:      { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.07 },
@@ -435,7 +442,11 @@ const HERO_PAIR_SYNERGY = {
   },
   schuyler: {
     lucius:   { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
-    dva:      { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+    dva:      { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    morrison: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // morrison→schuylerの対称
+  },
+  carlie: {
+    lucius:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // lucius→carlieの対称
   },
 
   // Tank core
@@ -448,12 +459,16 @@ const HERO_PAIR_SYNERGY = {
   marshall: {
     kimberly: { base: 1.04, lv10: 1.06, lv20: 1.08, lv30: 1.09 },
     stetmann: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
-    dva:      { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 汎用支援
+    dva:      { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 }, // 汎用支援
+    murphy:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }, // murphy→marshallの対称
+    williams: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // williams→marshallの対称
   },
   murphy: {
     williams: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
     kimberly: { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.06 },
-    marshall: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+    marshall: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    dva:      { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 }, // dva→murphyの対称（4+1想定）
+    lucius:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // lucius→murphyの対称（4+1想定）
   },
   williams: {
     murphy:   { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
@@ -480,6 +495,17 @@ const HERO_PAIR_SYNERGY = {
     mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
     venom:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
     brats:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+  },
+  swift: {
+    adam:     { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // adam→swiftの対称
+  },
+  venom: {
+    adam:     { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 }, // adam→venomの対称
+    fiona:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // fiona→venomの対称
+  },
+  brats: {
+    adam:     { base: 1.02, lv10: 1.03, lv20: 1.05, lv30: 1.06 }, // adam→bratsの対称
+    fiona:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // fiona→bratsの対称
   },
   tesla: {
     fiona:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
@@ -750,6 +776,102 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 // ★0-1だけ専用かけら50（named:true で区別）
 
 // ====================================================
+// 📋 新ヒーロー追加ガイド
+// ====================================================
+// 新しいヒーローを追加するときは、以下の定数に登録が必要です。
+// 登録漏れがあると評価ロジックがフォールバック値で動き、想定外の優先度になることがあります。
+//
+// 【必須】登録し忘れるとエラーまたは不自然なスコアになる:
+//   - data.js: HEROES（基本データ：名前・兵種・役割・優先度ベース値）
+//   - data.js: HERO_AI_PROFILE（スコア評価パラメータ：immediate/longterm/cost10-30/coverage/future等）
+//   - app.js : HERO_SLOT_ADVICE（スロット詳細のアドバイス文：role/ewAdvice/synergy/priority）
+//   - app.js : HERO_ROLE_PROFILE（役割プロファイル：role/lane/core）
+//   - app.js : HERO_EVAL_META（マイルストーン適合度：milestone10Fit）
+//   - app.js : HERO_WEAPON_TAGS（武装タグ：効果分類の配列）
+//
+// 【任意】無くてもクラッシュしないが、登録すると評価精度が上がる:
+//   - app.js : META_TIER（環境ティア。未登録は中立扱い）
+//   - app.js : HERO_PAIR_SYNERGY（ペアシナジー。未登録は1.0倍=効果なし）
+//     ⚠️ 双方向に書く必要がある（A→Bを書いたらB→Aも書く）。片方だけだと
+//        一方のヒーローのスコア計算にしか反映されない。
+//
+// 【自動生成・直接編集しない】
+//   - app.js : HERO_LONGTERM_VALUE は HERO_AI_PROFILE.longterm から自動生成される。
+//     長期評価を変えたい場合は HERO_AI_PROFILE 側を編集すること。
+//
+// 追加・編集後は validateHeroData() をブラウザのコンソールで実行すると、
+// 欠落や非対称を一覧表示できます。
+function validateHeroData() {
+  const heroIds = Object.keys(HEROES).filter(id => id !== 'empty');
+  const issues = { missing: [], asymmetric: [] };
+
+  const requiredTables = [
+    ['HERO_AI_PROFILE', typeof HERO_AI_PROFILE !== 'undefined' ? HERO_AI_PROFILE : null],
+    ['HERO_SLOT_ADVICE', typeof HERO_SLOT_ADVICE !== 'undefined' ? HERO_SLOT_ADVICE : null],
+    ['HERO_ROLE_PROFILE', typeof HERO_ROLE_PROFILE !== 'undefined' ? HERO_ROLE_PROFILE : null],
+    ['HERO_EVAL_META', typeof HERO_EVAL_META !== 'undefined' ? HERO_EVAL_META : null],
+    ['HERO_WEAPON_TAGS', typeof HERO_WEAPON_TAGS !== 'undefined' ? HERO_WEAPON_TAGS : null],
+  ];
+  const optionalTables = [
+    ['META_TIER', typeof META_TIER !== 'undefined' ? META_TIER : null],
+    ['HERO_PAIR_SYNERGY', typeof HERO_PAIR_SYNERGY !== 'undefined' ? HERO_PAIR_SYNERGY : null],
+  ];
+
+  for (const [name, table] of requiredTables) {
+    if (!table) { issues.missing.push(`${name}: 定数自体が見つかりません`); continue; }
+    const missingIds = heroIds.filter(id => !(id in table));
+    if (missingIds.length) issues.missing.push(`${name}（必須）: ${missingIds.join(', ')}`);
+  }
+  for (const [name, table] of optionalTables) {
+    if (!table) continue;
+    const missingIds = heroIds.filter(id => !(id in table));
+    if (missingIds.length) issues.missing.push(`${name}（任意・未登録は中立扱い）: ${missingIds.join(', ')}`);
+  }
+
+  // HERO_PAIR_SYNERGY の双方向対称性チェック
+  if (typeof HERO_PAIR_SYNERGY === 'object') {
+    for (const h1 in HERO_PAIR_SYNERGY) {
+      const partners = HERO_PAIR_SYNERGY[h1];
+      for (const h2 in partners) {
+        const back = HERO_PAIR_SYNERGY[h2];
+        if (!back || !(h1 in back)) {
+          issues.asymmetric.push(`${h1}→${h2} はあるが ${h2}→${h1} が無い`);
+        }
+      }
+    }
+  }
+
+  const hasIssues = issues.missing.length || issues.asymmetric.length;
+  if (!hasIssues) {
+    console.log('✅ validateHeroData: 問題は見つかりませんでした');
+  } else {
+    console.log('⚠️ validateHeroData: 以下の登録漏れ・非対称が見つかりました');
+    if (issues.missing.length) {
+      console.log('--- 登録漏れ ---');
+      issues.missing.forEach(m => console.log('  ' + m));
+    }
+    if (issues.asymmetric.length) {
+      console.log('--- HERO_PAIR_SYNERGY 非対称 ---');
+      issues.asymmetric.forEach(m => console.log('  ' + m));
+    }
+  }
+
+  // 覚醒対象ヒーロー一覧（増えていないかの目安。S6時点ではkimberly/dva/teslaの3人固定）
+  if (typeof AWAKENING_HEROES === 'object') {
+    const awIds = Object.keys(AWAKENING_HEROES);
+    console.log(`覚醒対象ヒーロー（${awIds.length}人）: ${awIds.join(', ')}`);
+    const hardcodedTrio = ['kimberly', 'dva', 'tesla'];
+    const extra = awIds.filter(id => !hardcodedTrio.includes(id));
+    if (extra.length) {
+      console.log(`⚠️ kimberly/dva/tesla以外の覚醒対象が見つかりました: ${extra.join(', ')}`);
+      console.log('   app.js の awakeningCtx 生成部分（generateAiSuggestion内）のガイドコメントを参照し、固有効果の追記が必要か確認してください。');
+    }
+  }
+
+  return issues;
+}
+
+// ====================================================
 // S6 英雄覚醒データ（統合版）
 // AWAKENING_HEROES と AWAKENING_HEROES を1つに統合
 // ====================================================
@@ -828,9 +950,10 @@ function awNextTierCost(awTierStr) {
     if (nt === 5) return { cost: named ? 50 : AW_SHARD_PER_TIER[at.star], named, nextStar: at.star + 1, nextTier: 0 };
     return { cost: named ? 50 : AW_SHARD_PER_TIER[at.star], named, nextStar: at.star, nextTier: nt };
   }
-  // 次の★（到達）へ：無料（このパスはtier=5の旧データが直接渡された場合のみ通る）
+  // tier=5（旧データ。★(star+1)到達と同値）から呼ばれた場合は、次の★の最初のティアへ
   const nextStar = at.star + 1;
-  return { cost: 0, named: false, nextStar, nextTier: 0 };
+  if (nextStar >= 5) return null; // 次が★5（MAX）を超える
+  return { cost: AW_SHARD_PER_TIER[nextStar], named: false, nextStar, nextTier: 1 };
 }
 
 function escapeHtml(str){
@@ -1495,7 +1618,7 @@ function effCardHtml(rank, item, opts){
   safeItem.name = safeItem.name || safeItem.n;
 
   const lvLine = safeItem.isAwakeningItem
-    ? `<span class="eff-lv" style="color:#ef4444;font-weight:900;">👑 覚醒 ${safeItem.awTierStr==='none'?'未覚醒':'★'+safeItem.awTierStr} → ★${safeItem.nextTierStr}</span>`
+    ? `<span class="eff-lv" style="color:#ef4444;font-weight:900;">👑 覚醒 ${safeItem.awTierStr==='none'?'未覚醒':awStarLabel(parseAwTier(safeItem.awTierStr))} → ${safeItem.nextTierLabel || ('★'+safeItem.nextTierStr)}</span>`
     : (safeItem.from !== undefined && safeItem.to !== undefined)
       ? `<span class="eff-lv">(Lv${safeItem.from}→${safeItem.to})</span>`
       : '';
@@ -2475,7 +2598,7 @@ function __buildAwakeningAdvice(heroId, ewLv) {
   const next = (typeof awNextTierCost !== 'undefined') ? awNextTierCost(awTierStr) : null;
   if (!next) return '';
   const bonus = (aw.starBonuses || {})[next.nextStar] || '';
-  const tierLabel = '★'+next.nextStar+'-'+next.nextTier;
+  const tierLabel = awStarLabel({ star: next.nextStar, tier: next.nextTier });
   return '👑 次：' + tierLabel + '（覚醒かけら：' + next.cost + '）' + (bonus ? ' → ' + bonus.substring(0,20)+'...' : '');
 }
 
@@ -2686,6 +2809,18 @@ function __aiBuildContext(roster, base){
   const mainTeamMaturity = (mainSquadProgress >= 0.78 || main.avgWp >= 20 || main.count20 >= 4 || main.count30 >= 1) ? 'high' : ((mainSquadProgress >= 0.55 || main.avgWp >= 12 || main.count10 >= 3) ? 'mid' : 'low');
   const mainArmyIds = new Set(army1.map(h=>h.id));
   // S6覚醒状況をコンテキストに追加
+  // ⚠️ シーズン拡張ガイド：覚醒対象ヒーローはS6時点でkimberly/dva/teslaの3人に固定でハードコードされている。
+  // S7以降で AWAKENING_HEROES に新しい覚醒対象を追加しても、ここには自動で乗らない。
+  // 新ヒーローの専用コンボ・固有効果を追加する場合は、このブロックに kimAt/dvaAt/teslaAt と同じ
+  // パターンで取得処理を追加し、戻り値オブジェクトにも追加する。
+  // 同様のハードコードは下記にも分散している（grep "==='kimberly'" 等で検索すると一覧できる）：
+  //   - L1337付近: 編成診断の覚醒考慮ロジック
+  //   - L2119付近: テスラのDoTスタック上限計算（固有スキル効果）
+  //   - L2628, L2980付近: awaken_combo シナジーコード判定（kimDvaCombo/teslaFiona）
+  //   - L2879, L3038付近: 個別ヒーローのEW投資補正
+  //   - L3901付近: スロットモーダルのシナジー説明文生成
+  // これらは「各ヒーロー固有の覚醒スキル効果」を表現するための特化処理であり、完全な汎用化はせず、
+  // 新ヒーロー追加時にそのヒーロー専用の分岐を追記する運用を想定している。
   const awakeningCtx = (() => {
     if (typeof loadAwTier === 'undefined' || typeof parseAwTier === 'undefined') return {};
     const kimAt  = parseAwTier(loadAwTier('kimberly'));
@@ -3196,7 +3331,8 @@ function calculateUpgradeEfficiencyFull(roster){
                 from: hero.wp,
                 to: hero.wp, // EW変化なし
                 awTierStr,
-                nextTierStr,
+                nextTierStr, // getAwakeningScoreBonus等の内部キー用（生の'star-tier'形式、表示には使わない）
+                nextTierLabel: awStarLabel({ star: next.nextStar, tier: next.nextTier }), // 表示用ラベル
                 nextShardCost: next.cost,
                 nextShardNamed: next.named,
                 isAwakeningItem: true,
@@ -3894,9 +4030,6 @@ function renderAwakenRanking(awakenResults) {
         const aw     = AWAKENING_HEROES[item.id];
         const name   = heroNames[item.id] || item.name;
         const heroImg = `img/${item.id}.webp`;
-        // マイルストーン表示（curTier/nxtTierは不使用になったが互換のため残す）
-        const curTier = item.awTierStr === 'none' ? '未覚醒' : '★' + item.awTierStr;
-        const nxtTier = sc.toStr ? ('★' + sc.toStr) : '';
 
         // コスト表示
         const shardLabel = sc.named
@@ -4422,7 +4555,8 @@ function updateEwVsAwakenPanel(heroId, ewLv, awTierStr, aw) {
             // 専用かけら→強化石換算（1かけら≒15強化石）、汎用かけら→1かけら≒10強化石
             const convRate = next.named ? 15 : 10;
             awCost = next.cost * convRate;
-            awLabel = `覚醒${nextTierStr}（${next.named ? '専用' : '汎用'}かけら×${next.cost}）`;
+            const nextTierLabel = awStarLabel({ star: next.nextStar, tier: next.nextTier });
+            awLabel = `覚醒${nextTierLabel}（${next.named ? '専用' : '汎用'}かけら×${next.cost}）`;
         }
     }
 

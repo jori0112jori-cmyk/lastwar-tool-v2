@@ -53,6 +53,18 @@ const HERO_AI_PROFILE = {
   violet:{ immediate:0.98, longterm:0.46, cost10:1.02, cost20:0.98, cost30:0.86, coverage:0.99, future:0.82, mainTypeBonus:1.00, promotedUrPenalty:0.82 }
 };
 
+// ====================================================
+// 📋 覚醒対象ヒーロー追加ガイド（シーズンが進むと増える想定）
+// ====================================================
+// このオブジェクト自体の構造（skillName/ewMinRequired/scoreBonus/tierBonuses/milestones）は
+// ヒーローIDに依存しない汎用構造なので、新しい覚醒対象ヒーローのデータはここに追加するだけでよい。
+//
+// ただし、覚醒システムの「土台」（★Lv判定・かけらコスト計算・UI表示）は自動で新ヒーローに対応するが、
+// kimberly/dva/tesla の3人固有の特殊効果・コンボ（例：キム+DVA同時覚醒ボーナス、テスラのDoTスタック
+// 上限計算など）は app.js 側にヒーローID直指定でハードコードされている。新ヒーローに同種の固有効果が
+// あるなら、app.js 内で kimberly/dva/tesla を検索し、該当箇所に分岐を追記する必要がある。
+// 目印として app.js の awakeningCtx 生成部分（generateAiSuggestion 内）にガイドコメントがあるので、
+// まずそこを参照すること。
 const AWAKENING_HEROES = {
   kimberly: {
     skillName: '燃ゆる決意',
