@@ -2,9 +2,18 @@
 // data.js - 英雄データ・覚醒データ・推奨編成テンプレート
 // ==========================================
 
+// 📐 評価軸の前提（重要）
+// このツールの英雄評価（pr値、HERO_AI_PROFILE等）はPvP・編成シナジー中心で設計されている。
+// ゾンビ討伐やボス戦などPvE特化の火力評価は意図的に重視していない。
+// そのため、PvE評価が高い英雄（例：メイソンの対ゾンビ特大ダメージ）でも、
+// 編成シナジー・兵種相性・覚醒システムとの組み合わせを基準に優先度が決まる。
+// 海外コミュニティのtier list等と比較する際は、この評価軸の違いを踏まえること。
+// 例：メイソンはPvEダメージで高評価される記事が多いが、専用武装が未実装でPvP編成での
+//     シナジーも薄いため、このツールではUR昇格組と同列（pr低め）の扱いにしている。
+
 const HEROES = {
     empty: {n:"未設定", t:"none", r:"none", ur:false, pr:0},
-    kimberly: {n:"キンバリー", t:"tank", r:"atk", ur:false, pr:100, carry:true}, dva: {n:"DVA", t:"air", r:"atk", ur:false, pr:100, carry:true}, tesla: {n:"テスラ", t:"mis", r:"atk", ur:false, pr:100, carry:true}, murphy: {n:"マーフィ", t:"tank", r:"wall", ur:false, pr:90}, lucius: {n:"ルシウス", t:"air", r:"wall", ur:false, pr:90}, mcgregor: {n:"マクレガー", t:"mis", r:"wall", ur:false, pr:90}, stetmann: {n:"ステッドマン", t:"tank", r:"atk", ur:false, pr:80}, schuyler: {n:"スカイラー", t:"air", r:"atk", ur:false, pr:80}, fiona: {n:"フィオナ", t:"mis", r:"atk", ur:false, pr:80}, morrison: {n:"モリソン", t:"air", r:"atk", ur:false, pr:75}, swift: {n:"スウィフト", t:"mis", r:"atk", ur:false, pr:75}, mason: {n:"メイソン", t:"tank", r:"atk", ur:true, pr:70}, sarah: {n:"サラ", t:"air", r:"sup", ur:true, pr:70}, venom: {n:"ベノム", t:"mis", r:"atk", ur:true, pr:70}, brats: {n:"ブラッツ", t:"mis", r:"atk", ur:true, pr:70}, williams: {n:"ウィリアムズ", t:"tank", r:"wall", ur:false, pr:60}, carlie: {n:"カーリー", t:"air", r:"wall", ur:false, pr:60}, adam: {n:"アダム", t:"mis", r:"wall", ur:false, pr:60}, scarlett: {n:"スカーレット", t:"tank", r:"wall", ur:true, pr:55}, violet: {n:"ヴィオラ", t:"tank", r:"wall", ur:true, pr:55}, marshall: {n:"マーシャル", t:"tank", r:"sup", ur:false, pr:50}
+    kimberly: {n:"キンバリー", t:"tank", r:"atk", ur:false, pr:100, carry:true}, dva: {n:"DVA", t:"air", r:"atk", ur:false, pr:100, carry:true}, tesla: {n:"テスラ", t:"mis", r:"atk", ur:false, pr:100, carry:true}, murphy: {n:"マーフィ", t:"tank", r:"wall", ur:false, pr:90}, lucius: {n:"ルシウス", t:"air", r:"wall", ur:false, pr:90}, mcgregor: {n:"マクレガー", t:"mis", r:"wall", ur:false, pr:90}, stetmann: {n:"ステッドマン", t:"tank", r:"atk", ur:false, pr:80}, schuyler: {n:"スカイラー", t:"air", r:"atk", ur:false, pr:80}, fiona: {n:"フィオナ", t:"mis", r:"atk", ur:false, pr:80}, morrison: {n:"モリソン", t:"air", r:"atk", ur:false, pr:75}, swift: {n:"スウィフト", t:"mis", r:"atk", ur:false, pr:75}, mason: {n:"メイソン", t:"tank", r:"atk", ur:true, pr:70}, sarah: {n:"サラ", t:"air", r:"sup", ur:true, pr:70}, venom: {n:"ベノム", t:"mis", r:"atk", ur:true, pr:70}, brats: {n:"ブラッツ", t:"mis", r:"atk", ur:true, pr:70}, williams: {n:"ウィリアムズ", t:"tank", r:"wall", ur:false, pr:90}, carlie: {n:"カーリー", t:"air", r:"wall", ur:false, pr:60}, adam: {n:"アダム", t:"mis", r:"wall", ur:false, pr:60}, scarlett: {n:"スカーレット", t:"tank", r:"wall", ur:true, pr:55}, violet: {n:"ヴィオラ", t:"tank", r:"wall", ur:true, pr:55}, marshall: {n:"マーシャル", t:"tank", r:"sup", ur:false, pr:90}
 };
 
 const FORMATION_SYNERGY = {
@@ -27,30 +36,33 @@ const FORMATION_SYNERGY = {
 };
 
 const HERO_AI_PROFILE = {
-  kimberly:{ immediate:1.10, longterm:1.08, cost10:1.03, cost20:1.06, cost30:1.06, coverage:1.05, future:1.12, mainTypeBonus:1.06, promotedUrPenalty:1.00 }, // S6: 覚醒「燃ゆる決意」で長期評価大幅UP
-  dva:{ immediate:1.08, longterm:1.06, cost10:1.03, cost20:1.08, cost30:1.02, coverage:1.04, future:1.10, mainTypeBonus:1.05, promotedUrPenalty:1.00 }, // S6: 覚醒「エーススター」でEW20が主要節目に
-  fiona:{ immediate:1.06, longterm:0.96, cost10:1.03, cost20:1.05, cost30:1.03, coverage:1.02, future:1.07, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
-  lucius:{ immediate:1.07, longterm:0.88, cost10:1.05, cost20:1.08, cost30:0.98, coverage:1.07, future:1.05, mainTypeBonus:1.05, promotedUrPenalty:1.00 },
+  kimberly:{ immediate:1.10, longterm:1.08, cost10:1.03, cost20:1.06, cost30:1.06, coverage:1.05, future:1.12, mainTypeBonus:1.06, promotedUrPenalty:1.00, skillPower:1.08 }, // S6: 覚醒「燃ゆる決意」で長期評価大幅UP
+  dva:{ immediate:1.08, longterm:1.06, cost10:1.03, cost20:1.08, cost30:1.02, coverage:1.04, future:1.10, mainTypeBonus:1.05, promotedUrPenalty:1.00, skillPower:1.06 }, // S6: 覚醒「エーススター」でEW20が主要節目に
+  fiona:{ immediate:1.06, longterm:0.96, cost10:1.03, cost20:1.05, cost30:1.03, coverage:1.02, future:1.07, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:1.03 },
+  lucius:{ immediate:1.07, longterm:0.88, cost10:1.05, cost20:1.08, cost30:0.98, coverage:1.07, future:1.05, mainTypeBonus:1.05, promotedUrPenalty:1.00, skillPower:1.08 },
   // ウィリアムズ: チーム全体ダメージ軽減でPvP/ラリー必須（packsify/allclash）
-  williams:{ immediate:1.08, longterm:1.00, cost10:1.05, cost20:1.08, cost30:1.00, coverage:1.08, future:1.05, mainTypeBonus:1.05, promotedUrPenalty:1.00 },
-  stetmann:{ immediate:1.04, longterm:0.86, cost10:1.02, cost20:1.05, cost30:0.97, coverage:1.03, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
-  morrison:{ immediate:1.03, longterm:0.85, cost10:1.01, cost20:1.04, cost30:0.97, coverage:1.02, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
-  tesla:{ immediate:1.03, longterm:0.92, cost10:1.03, cost20:1.05, cost30:1.00, coverage:1.03, future:1.06, mainTypeBonus:1.03, promotedUrPenalty:1.00 }, // S6: 覚醒「電磁共鳴」DoTがロケラン軸で強力
-  mcgregor:{ immediate:1.03, longterm:0.83, cost10:1.03, cost20:1.05, cost30:0.98, coverage:1.04, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
+  williams:{ immediate:1.08, longterm:1.00, cost10:1.05, cost20:1.08, cost30:1.00, coverage:1.08, future:1.05, mainTypeBonus:1.05, promotedUrPenalty:1.00, skillPower:1.06 },
+  stetmann:{ immediate:1.04, longterm:0.86, cost10:1.02, cost20:1.05, cost30:0.97, coverage:1.03, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:1.0 },
+  morrison:{ immediate:1.03, longterm:0.85, cost10:1.01, cost20:1.04, cost30:0.97, coverage:1.02, future:1.02, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:1.03 },
+  tesla:{ immediate:1.03, longterm:0.92, cost10:1.03, cost20:1.05, cost30:1.00, coverage:1.03, future:1.06, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:1.05 }, // S6: 覚醒「電磁共鳴」DoTがロケラン軸で強力
+  // マクレガー: ロケラン軸唯一の前衛候補で構造的に必須（pr高）だが、タウントは自分が
+  // 集中攻撃を受けるリスクを伴い、アダムより耐久が低いとの指摘も多い → skillPowerは標準以下
+  mcgregor:{ immediate:1.03, longterm:0.83, cost10:1.03, cost20:1.05, cost30:0.98, coverage:1.04, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:0.97 },
   // スカイラー: 推奨PvP編成に含まれる重要CCロール（packsify "Williams+Kim+DVA+Schuyler+Murphy"）
-  schuyler:{ immediate:1.05, longterm:0.88, cost10:1.04, cost20:1.06, cost30:0.98, coverage:1.06, future:1.03, mainTypeBonus:1.04, promotedUrPenalty:1.00 },
-  adam:{ immediate:1.03, longterm:0.76, cost10:1.03, cost20:1.04, cost30:0.96, coverage:1.05, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00 },
-  marshall:{ immediate:1.02, longterm:0.74, cost10:1.05, cost20:1.03, cost30:0.88, coverage:1.05, future:0.98, mainTypeBonus:1.01, promotedUrPenalty:1.00 },
-  murphy:{ immediate:1.03, longterm:0.72, cost10:1.05, cost20:1.03, cost30:0.94, coverage:1.05, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00 },
-  carlie:{ immediate:1.01, longterm:0.70, cost10:1.02, cost20:1.02, cost30:0.94, coverage:1.02, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00 },
-  swift:{ immediate:1.01, longterm:0.68, cost10:1.03, cost20:1.02, cost30:0.94, coverage:1.01, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00 },
+  // ただしスタンは確率発動・タイミング依存という評価が多く、確定効果ではない → skillPowerは標準
+  schuyler:{ immediate:1.05, longterm:0.88, cost10:1.04, cost20:1.06, cost30:0.98, coverage:1.06, future:1.03, mainTypeBonus:1.04, promotedUrPenalty:1.00, skillPower:1.0 },
+  adam:{ immediate:1.03, longterm:0.76, cost10:1.03, cost20:1.04, cost30:0.96, coverage:1.05, future:1.01, mainTypeBonus:1.03, promotedUrPenalty:1.00, skillPower:1.04 },
+  marshall:{ immediate:1.02, longterm:0.74, cost10:1.05, cost20:1.03, cost30:0.88, coverage:1.05, future:0.98, mainTypeBonus:1.01, promotedUrPenalty:1.00, skillPower:1.02 },
+  murphy:{ immediate:1.03, longterm:0.72, cost10:1.05, cost20:1.03, cost30:0.94, coverage:1.05, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00, skillPower:1.05 },
+  carlie:{ immediate:1.01, longterm:0.70, cost10:1.02, cost20:1.02, cost30:0.94, coverage:1.02, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00, skillPower:1.02 },
+  swift:{ immediate:1.01, longterm:0.68, cost10:1.03, cost20:1.02, cost30:0.94, coverage:1.01, future:0.97, mainTypeBonus:1.01, promotedUrPenalty:1.00, skillPower:0.99 },
   // UR英雄: SSRフル育成が中途半端なURを上回れる（packsify） → ペナルティ緩和
-  scarlett:{ immediate:1.05, longterm:0.72, cost10:1.04, cost20:1.01, cost30:0.90, coverage:1.04, future:0.90, mainTypeBonus:1.02, promotedUrPenalty:0.94 },
-  mason:{ immediate:1.06, longterm:0.64, cost10:1.04, cost20:1.02, cost30:0.90, coverage:1.03, future:0.88, mainTypeBonus:1.02, promotedUrPenalty:0.93 },
-  venom:{ immediate:1.02, longterm:0.62, cost10:1.04, cost20:1.01, cost30:0.89, coverage:1.02, future:0.87, mainTypeBonus:1.02, promotedUrPenalty:0.87 },
-  brats:{ immediate:1.02, longterm:0.62, cost10:1.04, cost20:1.01, cost30:0.89, coverage:1.02, future:0.87, mainTypeBonus:1.02, promotedUrPenalty:0.87 },
-  sarah:{ immediate:1.01, longterm:0.58, cost10:1.03, cost20:1.00, cost30:0.88, coverage:1.02, future:0.85, mainTypeBonus:1.01, promotedUrPenalty:0.85 },
-  violet:{ immediate:0.98, longterm:0.46, cost10:1.02, cost20:0.98, cost30:0.86, coverage:0.99, future:0.82, mainTypeBonus:1.00, promotedUrPenalty:0.82 }
+  scarlett:{ immediate:1.05, longterm:0.72, cost10:1.04, cost20:1.01, cost30:0.90, coverage:1.04, future:0.90, mainTypeBonus:1.02, promotedUrPenalty:0.94, skillPower:1.0 },
+  mason:{ immediate:1.06, longterm:0.64, cost10:1.04, cost20:1.02, cost30:0.90, coverage:1.03, future:0.88, mainTypeBonus:1.02, promotedUrPenalty:0.93, skillPower:1.0 },
+  venom:{ immediate:1.02, longterm:0.62, cost10:1.04, cost20:1.01, cost30:0.89, coverage:1.02, future:0.87, mainTypeBonus:1.02, promotedUrPenalty:0.87, skillPower:1.0 },
+  brats:{ immediate:1.02, longterm:0.62, cost10:1.04, cost20:1.01, cost30:0.89, coverage:1.02, future:0.87, mainTypeBonus:1.02, promotedUrPenalty:0.87, skillPower:1.0 },
+  sarah:{ immediate:1.01, longterm:0.58, cost10:1.03, cost20:1.00, cost30:0.88, coverage:1.02, future:0.85, mainTypeBonus:1.01, promotedUrPenalty:0.85, skillPower:1.0 },
+  violet:{ immediate:0.98, longterm:0.46, cost10:1.02, cost20:0.98, cost30:0.86, coverage:0.99, future:0.82, mainTypeBonus:1.00, promotedUrPenalty:0.82, skillPower:0.97 }
 };
 
 // ====================================================

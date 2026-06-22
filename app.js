@@ -56,7 +56,7 @@ const HERO_SLOT_ADVICE = {
   },
   murphy: {
     role: '前衛タンク（戦車）',
-    s6note: '戦車軸の前衛2枚目です。EWコスパはやや低めですが、ウィリアムズと組んで前衛2枚体制を維持することが重要な役割です。',
+    s6note: '戦車軸の前衛2枚目です。ダメージ軽減スキルはスタックで確実に積み重なるタイプで、PvE・PvPどちらでも安定して機能する信頼性の高い前衛です。EWコスパ自体は控えめですが、ウィリアムズと組んで前衛2枚体制を維持することが重要な役割です。',
     ewAdvice: {
       0:  '前衛2枚目として大切な役割です。まずLv10を目指しましょう。ウィリアムズの育成が優先ですが、マーフィも並行して上げると安定感が増します。',
       10: 'Lv10に到達しました。戦力の伸びはゆるやかですが、前衛として確実に機能しています。余裕があればLv20を目指しましょう。',
@@ -116,14 +116,14 @@ const HERO_SLOT_ADVICE = {
   },
   schuyler: {
     role: 'コントロール（航空）',
-    s6note: 'CC（行動妨害）が得意な航空英雄です。EW10で十分機能するため投資コスパが良好です。packsify推奨のキム+DVA混成型にも採用される重要なロールです。',
+    s6note: 'CC（行動妨害）が得意な航空英雄です。スタン効果は確率発動・タイミング依存のため過信は禁物ですが、決まれば戦況を大きく変えます。EW10で基本機能は十分なので、過剰投資は避けて他の主力育成を優先しましょう。',
     ewAdvice: {
-      0:  'まずLv10を目指しましょう。スカイラーはEW10で十分なCCが発揮できます。',
+      0:  'まずLv10を目指しましょう。スカイラーはEW10で基本的なCCが発揮できます。',
       10: 'Lv10に到達しました。スカイラーはこのレベルで十分機能します。他の主力英雄（キム・ウィリアムズ・DVA）の育成を優先しましょう。',
-      20: 'Lv20に到達しました。十分な水準で、CC効果がさらに安定します。',
-      30: 'EWが上限に到達しました。CCキャラとして最大限機能しています。',
+      20: 'Lv20に到達しました。十分な水準で、CC効果の発動率がさらに安定します。',
+      30: 'EWが上限に到達しました。CCキャラとして最大限機能していますが、スタンはあくまで確率要素である点は変わりません。',
     },
-    synergy: 'ルシウスとのコンボが強力です。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺しながらキムのAoEが炸裂します。',
+    synergy: 'ルシウスとのコンボが強力です。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺できればキムのAoEが炸裂しますが、スタンが決まらない場面も想定して編成を組みましょう。',
     priority: 'B',
   },
   carlie: {
@@ -152,14 +152,14 @@ const HERO_SLOT_ADVICE = {
   },
   mcgregor: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の主力前衛です。アダムと前衛2枚体制を組むことでロケラン5体軸が完成します。',
+    s6note: 'ロケラン軸の前衛候補は実質アダムとマクレガーの2人のみで、編成上は必須級の存在です。タウントで敵の攻撃を引き受けますが、アダムと比べると耐久面はやや見劣りするため、集中攻撃を受けて落ちやすい点には注意が必要です。',
     ewAdvice: {
       0:  'ロケラン軸の前衛として重要な役割です。まずLv10を目指しましょう。フィオナ・テスラの育成が先決ですが並行して上げましょう。',
       10: 'Lv10に到達しました。ロケラン前衛として機能し始めます。次のLv20を目指しましょう。',
       20: 'Lv20に到達し、ロケラン前衛として十分な水準になりました。Lv30よりフィオナ・テスラのEW強化を優先しましょう。',
-      30: 'EWが上限に到達しました。アダムとの前衛2枚体制で最大の耐久力です。テスラDoTのスタック上限引き上げにも貢献しています。',
+      30: 'EWが上限に到達しました。アダムとの前衛2枚体制で耐久力が補われます。テスラDoTのスタック上限引き上げにも貢献しています。',
     },
-    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当です。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。',
+    synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当です。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。タウントで自身が集中攻撃を受けやすいため、耐久面はアダム側で補う意識を持ちましょう。',
     priority: 'A',
   },
   swift: {
@@ -176,14 +176,14 @@ const HERO_SLOT_ADVICE = {
   },
   adam: {
     role: '前衛タンク（ロケラン）',
-    s6note: 'ロケラン軸の前衛2枚目です。マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
+    s6note: 'ロケラン軸の前衛2枚目です。攻撃を受けるたびに確実にカウンターが発動する信頼性の高いスキルで、マクレガーと組んで前衛を固めます。テスラDoTのスタック上限引き上げにも貢献します。',
     ewAdvice: {
       0:  'ロケラン軸の前衛2枚目として重要な役割です。まずLv10を目指しましょう。マクレガーと同時並行で育てるのが理想です。',
       10: 'Lv10に到達しました。ロケラン前衛2枚目として機能します。テスラのDoTスタック上限は「ロケラン英雄数×3」のため、アダムがいることでスタック上限も上がります。',
       20: 'Lv20に到達し、前衛2枚目として十分な水準になりました。フィオナ・テスラの育成が先のため、ここからはゆっくり進めて問題ありません。',
       30: 'EWが上限に到達しました。マクレガーとの前衛2枚体制で最大の安定感です。',
     },
-    synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
+    synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。カウンターが確実に発動するため、タウントで攻撃を引き受けがちなマクレガーの耐久を補う形で機能します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
     priority: 'B',
   },
   mason: {
@@ -352,7 +352,7 @@ const META_SHIFT_STAGE = {
 const HERO_ROLE_PROFILE = {
   kimberly:{ role:'main_dps', lane:'back', core:true },
   murphy:{ role:'front_tank', lane:'front', core:true },
-  williams:{ role:'front_tank', lane:'front', core:false },
+  williams:{ role:'front_tank', lane:'front', core:true },
   marshall:{ role:'support', lane:'back', core:true },
   stetmann:{ role:'sub_dps', lane:'back', core:true },
   mason:{ role:'sub_dps', lane:'back', core:false, promotedUr:true },
@@ -548,6 +548,11 @@ const ROUTE_WEIGHT_PRESET = {
 // ===============================
 // ⭐ 専用武装タグ（簡易判定用）
 // ===============================
+// ⚠️ 現状このオブジェクトはコード内のどこからも参照されていない（未使用データ）。
+// スキル効果の分類（dot/shield/cc_stun等）に加え、UR昇格組には pve_value・early_pvp_hold
+// 等のモード適性タグも一部存在する。将来PvE/PvP適性をスコアに反映したくなった場合の
+// 土台として残してあるが、現状は評価軸（育成コスパ中心）に組み込む方針にしていない。
+// 削除はせず、参考データとして保持。
 const HERO_WEAPON_TAGS = {
   murphy: ['shield_like_protect','frontline_protect','low_hp_protect','team_guard','damage_mitigation'],
   kimberly: ['single_burst','energy_damage','stack_scaling','skill_multi_hit','aoe_bonus_30'],
@@ -783,7 +788,13 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 //
 // 【必須】登録し忘れるとエラーまたは不自然なスコアになる:
 //   - data.js: HEROES（基本データ：名前・兵種・役割・優先度ベース値）
-//   - data.js: HERO_AI_PROFILE（スコア評価パラメータ：immediate/longterm/cost10-30/coverage/future等）
+//   - data.js: HERO_AI_PROFILE（スコア評価パラメータ：immediate/longterm/cost10-30/coverage/future/skillPower等）
+//     ※ skillPower はスキル単体の質（戦況を変える効果の確実性）を表す。未来性(future)には乗算されない。
+//        ⚠️ HERO_WEAPON_TAGS のタグ名だけで判断しないこと（過去にCCタグ＝高評価と誤判定した経緯あり）。
+//        実際のスキル文章・コミュニティ評価を確認し、「確定/常時発動」（AoE・スタック型DoT・
+//        確実なダメージ軽減等）は高め、「確率発動・タイミング依存・リスク同伴」（確率CC、
+//        タウントで自分が落ちる等）は標準〜低めに設定する。pr値（編成内の構造的重要度）とは
+//        別軸なので、必須前衛だがスキル単体は中堅、という評価が両立してよい。
 //   - app.js : HERO_SLOT_ADVICE（スロット詳細のアドバイス文：role/ewAdvice/synergy/priority）
 //   - app.js : HERO_ROLE_PROFILE（役割プロファイル：role/lane/core）
 //   - app.js : HERO_EVAL_META（マイルストーン適合度：milestone10Fit）
@@ -2696,7 +2707,8 @@ function __aiGetAiProfile(heroId){
         coverage:1.0,
         future:1.0,
         mainTypeBonus:1.0,
-        promotedUrPenalty:1.0
+        promotedUrPenalty:1.0,
+        skillPower:1.0
       };
 }
 function __aiCounterMap(type){
@@ -2882,6 +2894,11 @@ function __aiHeroBias(heroId, route='overall', context=null){
   else if(p.role === 'front_tank') mult *= 1.02;
   else if(p.role === 'control') mult *= 1.03;
   else if(p.role === 'support') mult *= 0.98;
+  // スキル単体の強度（確定CC・AoE・特殊効果等）。将来性（future）には乗せない。
+  // 「育成すれば伸びる」のではなく「今のスキル内容自体が強い」ことの評価なので、
+  // 即時性(cost)と編成価値(coverage)・無指定時の総合評価にのみ反映する。
+  const skillPowerMult = ai.skillPower || 1.0;
+  if(route !== 'future') mult *= skillPowerMult;
   const meta = META_TIER[heroId] || {};
   if(meta.ew === 'SSS') mult *= 1.10;
   else if(meta.ew === 'SS') mult *= 1.06;
