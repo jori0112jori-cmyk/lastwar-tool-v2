@@ -2054,6 +2054,8 @@ function updateSquad(s) {
     }
     
     if(s!==4) analyzeSquad(s, counts);
+    // 💾 編成変更を保存（キャラ選択・武装Lv変更のたびに呼ぶ。リロード時の復元に必須）
+    saveAllData();
     // 💡 リアルタイム更新
     scheduleAi();
 }
@@ -4149,6 +4151,30 @@ function applyMultiArmy() {
 }
 
 
+
+// 編成・戦力値・現在のメタ環境を localStorage に保存する。
+// index.html の onchange="saveAllData()"（戦力値入力欄）から呼ばれる他、
+// キャラ選択・武装Lv変更・メタ切り替え時にも呼べるよう、updateSquad / updateAllSquads
+// からも呼び出す（呼び出し漏れがあると、リロード時に編成が元に戻るバグになる）。
+function saveAllData() {
+  try {
+    const d = {};
+    for (let s = 1; s <= 4; s++) {
+      for (let p = 1; p <= (s === 4 ? 10 : 5); p++) {
+        const hEl = $id(`h-${s}-${p}`), wEl = $id(`w-${s}-${p}`);
+        if (hEl) d[`h-${s}-${p}`] = hEl.value;
+        if (wEl) d[`w-${s}-${p}`] = wEl.value;
+      }
+    }
+    const metaEl = $id('current-meta');
+    if (metaEl) d['current-meta'] = metaEl.value;
+    const powTank = $id('pow-tank'), powAir = $id('pow-air'), powMis = $id('pow-mis');
+    if (powTank) d['pow-tank'] = powTank.value;
+    if (powAir) d['pow-air'] = powAir.value;
+    if (powMis) d['pow-mis'] = powMis.value;
+    localStorage.setItem('lw_sim_v24_final', JSON.stringify(d));
+  } catch (e) { /* localStorage不可時は無視（保存できないだけで動作は継続） */ }
+}
 
 function loadAllData() {
   let sv = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final'); 
