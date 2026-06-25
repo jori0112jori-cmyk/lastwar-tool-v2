@@ -969,8 +969,22 @@ function copyForAi() {
                 setTimeout(() => { toast.style.display = 'none'; }, 6000);
             }
         };
-        // ポップアップブロック対策：window.openはクリックイベントの同期的な流れの中で呼ぶ
-        const aiWindow = window.open(info.url, '_blank');
+        // モバイル（特にAndroid Chrome）では window.open より <a target="_blank"> のクリックの方が
+        // アプリ起動インテント（App Links）と相性が良く、無反応になりにくい。
+        let opened = false;
+        try {
+            const a = document.createElement('a');
+            a.href = info.url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            opened = true;
+        } catch(e) {
+            // フォールバック：従来のwindow.open
+            opened = !!window.open(info.url, '_blank');
+        }
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(doToast).catch(() => {
                 // クリップボードAPIが使えない場合のフォールバック
@@ -989,11 +1003,11 @@ function copyForAi() {
             try { document.execCommand('copy'); doToast(); } catch(e) {}
             document.body.removeChild(ta);
         }
-        if (!aiWindow) {
-            // ポップアップブロックされた場合
+        if (!opened) {
+            // 開けなかった場合
             const toast = $id('copy-claude-toast');
             if (toast) {
-                toast.innerHTML = `⚠️ ポップアップがブロックされました。コピーは完了しているので、${info.label} を手動で開いて貼り付けてください。`;
+                toast.innerHTML = `⚠️ ${info.label}を開けませんでした。コピーは完了しているので、手動でアプリ／サイトを開いて貼り付けてください。`;
                 toast.style.display = 'block';
                 toast.style.background = '#fef3c7';
                 toast.style.borderColor = '#fde68a';
