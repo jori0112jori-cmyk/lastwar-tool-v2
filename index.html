@@ -52,6 +52,15 @@
 
         <div class="panel slot-panel">
             <div class="panel-title" style="color:#16a34a;">編成（キャラ枠タップで編集）</div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+                <select id="ai-provider-select" onchange="saveAiProvider()" style="font-size:var(--fs-xs);padding:4px 6px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;">
+                    <option value="claude">🟠 Claude</option>
+                    <option value="gemini">🔵 Gemini</option>
+                    <option value="chatgpt">🟢 ChatGPT</option>
+                </select>
+                <button id="ai-consult-btn" onclick="copyForAi()" style="font-size:var(--fs-xs);padding:4px 10px;border-radius:8px;border:1px solid #16a34a;background:#f0fdf4;color:#16a34a;font-weight:700;white-space:nowrap;cursor:pointer;">🟠 Claudeに相談</button>
+            </div>
+            <div id="copy-claude-toast" style="display:none;margin-bottom:8px;padding:6px 10px;background:#dbeafe;border:1px solid #93c5fd;border-radius:8px;font-size:var(--fs-xs);color:#1e40af;font-weight:700;">✅ コピーしました＆新しいタブを開きました。新しい会話に貼り付け（長押し→貼り付け／Ctrl+V）て相談できます。</div>
             <div class="suggestion-box" style="margin-bottom:10px;">
                 武装Lv,覚醒Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映。
             </div>

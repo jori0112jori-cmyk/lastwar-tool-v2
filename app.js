@@ -883,6 +883,129 @@ function validateHeroData() {
 }
 
 // ====================================================
+// 📋 Claude.ai相談用：編成データをテキスト化してコピー
+// ====================================================
+function buildAiReportText() {
+    const squadNames = { 1:'1軍', 2:'2軍', 3:'3軍', 4:'控え' };
+    const roleNames = { atk:'アタッカー', wall:'前衛タンク', sup:'サポート', none:'未設定' };
+    const typeNames = { tank:'戦車', air:'航空', mis:'ロケラン', none:'-' };
+    const metaNames = { tank:'戦車環境', air:'航空環境', mis:'ロケラン環境' };
+
+    let lines = [];
+    lines.push('【Last War: Survival S6 編成データ】');
+    const currentMeta = ($id('current-meta') || {}).value || 'mis';
+    lines.push(`現在のメタ環境設定：${metaNames[currentMeta] || currentMeta}`);
+    lines.push('');
+
+    for (let s = 1; s <= 4; s++) {
+        const slotCount = (s === 4) ? 10 : 5;
+        let squadLines = [];
+        for (let p = 1; p <= slotCount; p++) {
+            const sel = $id(`h-${s}-${p}`);
+            const wpEl = $id(`w-${s}-${p}`);
+            if (!sel || !wpEl) continue;
+            const id = sel.value;
+            if (id === 'empty') continue;
+            const h = HEROES[id];
+            if (!h) continue;
+            const wp = parseInt(wpEl.value) || 0;
+            let line = `  ${h.n}（${typeNames[h.t]}/${roleNames[h.r]}${h.ur ? '・UR' : ''}）武装Lv${wp}`;
+            if (typeof AWAKENING_HEROES !== 'undefined' && AWAKENING_HEROES[id]) {
+                const awTierStr = loadAwTier(id);
+                const at = parseAwTier(awTierStr);
+                if (at.star >= 0) line += `・覚醒${awStarLabel(at)}`;
+            }
+            squadLines.push(line);
+        }
+        if (squadLines.length) {
+            lines.push(`■ ${squadNames[s]}`);
+            lines.push(...squadLines);
+            lines.push('');
+        }
+    }
+
+    lines.push('---');
+    lines.push('上記は「Last War: Survival」というスマホゲームのS6（Shadow Rainforest）における自分の編成データです。');
+    lines.push('武装Lv・覚醒状況を踏まえて、育成の優先順位や編成の強化ポイントについてアドバイスをください。');
+    return lines.join('\n');
+}
+
+// AI選択：localStorageへの保存・読み込み
+const AI_PROVIDERS = {
+    claude:  { label: 'Claude',  url: 'https://claude.ai/new',          icon: '🟠' },
+    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵' },
+    chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/',           icon: '🟢' },
+};
+function loadAiProvider() {
+    try {
+        const v = localStorage.getItem('ai_provider');
+        return (v && AI_PROVIDERS[v]) ? v : 'claude';
+    } catch(e) { return 'claude'; }
+}
+function saveAiProvider() {
+    try {
+        const sel = $id('ai-provider-select');
+        if (sel) localStorage.setItem('ai_provider', sel.value);
+        updateAiConsultButton();
+    } catch(e) {}
+}
+function updateAiConsultButton() {
+    const provider = loadAiProvider();
+    const info = AI_PROVIDERS[provider] || AI_PROVIDERS.claude;
+    const btn = $id('ai-consult-btn');
+    if (btn) btn.textContent = `${info.icon} ${info.label}に相談`;
+    const sel = $id('ai-provider-select');
+    if (sel) sel.value = provider;
+}
+function copyForAi() {
+    try {
+        const provider = loadAiProvider();
+        const info = AI_PROVIDERS[provider] || AI_PROVIDERS.claude;
+        const text = buildAiReportText();
+        const doToast = () => {
+            const toast = $id('copy-claude-toast');
+            if (toast) {
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 6000);
+            }
+        };
+        // ポップアップブロック対策：window.openはクリックイベントの同期的な流れの中で呼ぶ
+        const aiWindow = window.open(info.url, '_blank');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(doToast).catch(() => {
+                // クリップボードAPIが使えない場合のフォールバック
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); doToast(); } catch(e) {}
+                document.body.removeChild(ta);
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); doToast(); } catch(e) {}
+            document.body.removeChild(ta);
+        }
+        if (!aiWindow) {
+            // ポップアップブロックされた場合
+            const toast = $id('copy-claude-toast');
+            if (toast) {
+                toast.innerHTML = `⚠️ ポップアップがブロックされました。コピーは完了しているので、${info.label} を手動で開いて貼り付けてください。`;
+                toast.style.display = 'block';
+                toast.style.background = '#fef3c7';
+                toast.style.borderColor = '#fde68a';
+                toast.style.color = '#92400e';
+            }
+        }
+    } catch(e) {
+        console.error('copyForAi failed:', e);
+    }
+}
+
+// ====================================================
 // S6 英雄覚醒データ（統合版）
 // AWAKENING_HEROES と AWAKENING_HEROES を1つに統合
 // ====================================================
@@ -1487,6 +1610,7 @@ window.onload = function() {
     initSquadHTML();
     try { renderPresetPanel(); } catch(e) {} 
 loadAllData();
+try { updateAiConsultButton(); } catch(e) {}
 
 // ===== オンボーディング =====
 function showOnboardIfNeeded() {
@@ -2054,8 +2178,6 @@ function updateSquad(s) {
     }
     
     if(s!==4) analyzeSquad(s, counts);
-    // 💾 編成変更を保存（キャラ選択・武装Lv変更のたびに呼ぶ。リロード時の復元に必須）
-    saveAllData();
     // 💡 リアルタイム更新
     scheduleAi();
 }
@@ -4151,30 +4273,6 @@ function applyMultiArmy() {
 }
 
 
-
-// 編成・戦力値・現在のメタ環境を localStorage に保存する。
-// index.html の onchange="saveAllData()"（戦力値入力欄）から呼ばれる他、
-// キャラ選択・武装Lv変更・メタ切り替え時にも呼べるよう、updateSquad / updateAllSquads
-// からも呼び出す（呼び出し漏れがあると、リロード時に編成が元に戻るバグになる）。
-function saveAllData() {
-  try {
-    const d = {};
-    for (let s = 1; s <= 4; s++) {
-      for (let p = 1; p <= (s === 4 ? 10 : 5); p++) {
-        const hEl = $id(`h-${s}-${p}`), wEl = $id(`w-${s}-${p}`);
-        if (hEl) d[`h-${s}-${p}`] = hEl.value;
-        if (wEl) d[`w-${s}-${p}`] = wEl.value;
-      }
-    }
-    const metaEl = $id('current-meta');
-    if (metaEl) d['current-meta'] = metaEl.value;
-    const powTank = $id('pow-tank'), powAir = $id('pow-air'), powMis = $id('pow-mis');
-    if (powTank) d['pow-tank'] = powTank.value;
-    if (powAir) d['pow-air'] = powAir.value;
-    if (powMis) d['pow-mis'] = powMis.value;
-    localStorage.setItem('lw_sim_v24_final', JSON.stringify(d));
-  } catch (e) { /* localStorage不可時は無視（保存できないだけで動作は継続） */ }
-}
 
 function loadAllData() {
   let sv = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final'); 
