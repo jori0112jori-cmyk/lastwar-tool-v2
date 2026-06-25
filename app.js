@@ -932,9 +932,12 @@ function buildAiReportText() {
 
 // AI選択：localStorageへの保存・読み込み
 const AI_PROVIDERS = {
-    claude:  { label: 'Claude',  url: 'https://claude.ai/new',          icon: '🟠' },
-    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵' },
-    chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/',           icon: '🟢' },
+    claude:  { label: 'Claude',  url: 'https://claude.ai/new',          icon: '🟠', autoOpen: true },
+    // GeminiはAndroid Chromeのアプリ起動判定（App Links/Gemini in Chrome機能との競合）により
+    // 新しいタブが開いた直後に閉じてしまう不安定な挙動が確認されたため、自動遷移をしない。
+    // 代わりにURL自体をクリップボードにコピーし、手動でアドレスバーに貼り付けてもらう。
+    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵', autoOpen: false },
+    chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/',           icon: '🟢', autoOpen: true },
 };
 function loadAiProvider() {
     try {
@@ -962,13 +965,51 @@ function copyForAi() {
         const provider = loadAiProvider();
         const info = AI_PROVIDERS[provider] || AI_PROVIDERS.claude;
         const text = buildAiReportText();
-        const doToast = () => {
+        const doToast = (msg, isWarn) => {
             const toast = $id('copy-claude-toast');
             if (toast) {
+                if (msg) toast.innerHTML = msg;
                 toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 6000);
+                if (isWarn) {
+                    toast.style.background = '#fef3c7';
+                    toast.style.borderColor = '#fde68a';
+                    toast.style.color = '#92400e';
+                } else {
+                    toast.style.background = '#dbeafe';
+                    toast.style.borderColor = '#93c5fd';
+                    toast.style.color = '#1e40af';
+                }
+                setTimeout(() => { toast.style.display = 'none'; }, 8000);
             }
         };
+        const copyText = (str, onDone) => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(str).then(onDone).catch(() => {
+                    const ta = document.createElement('textarea');
+                    ta.value = str;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try { document.execCommand('copy'); onDone(); } catch(e) {}
+                    document.body.removeChild(ta);
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = str;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); onDone(); } catch(e) {}
+                document.body.removeChild(ta);
+            }
+        };
+
+        if (!info.autoOpen) {
+            // 自動遷移が不安定なAI（Gemini等）：URLを案内表示し、編成データだけコピーする
+            copyText(text, () => {
+                doToast(`✅ コピーしました。${info.label}のアプリまたは下のURLを開いて貼り付けてください。<br><span style="word-break:break-all;font-weight:400;">${info.url}</span>`, true);
+            });
+            return;
+        }
+
         // モバイル（特にAndroid Chrome）では window.open より <a target="_blank"> のクリックの方が
         // アプリ起動インテント（App Links）と相性が良く、無反応になりにくい。
         let opened = false;
@@ -982,38 +1023,15 @@ function copyForAi() {
             document.body.removeChild(a);
             opened = true;
         } catch(e) {
-            // フォールバック：従来のwindow.open
             opened = !!window.open(info.url, '_blank');
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(doToast).catch(() => {
-                // クリップボードAPIが使えない場合のフォールバック
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                document.body.appendChild(ta);
-                ta.select();
-                try { document.execCommand('copy'); doToast(); } catch(e) {}
-                document.body.removeChild(ta);
-            });
-        } else {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            try { document.execCommand('copy'); doToast(); } catch(e) {}
-            document.body.removeChild(ta);
-        }
-        if (!opened) {
-            // 開けなかった場合
-            const toast = $id('copy-claude-toast');
-            if (toast) {
-                toast.innerHTML = `⚠️ ${info.label}を開けませんでした。コピーは完了しているので、手動でアプリ／サイトを開いて貼り付けてください。`;
-                toast.style.display = 'block';
-                toast.style.background = '#fef3c7';
-                toast.style.borderColor = '#fde68a';
-                toast.style.color = '#92400e';
+        copyText(text, () => {
+            if (opened) {
+                doToast(`✅ コピーしました＆${info.label}を開きました。新しい会話に貼り付け（長押し→貼り付け／Ctrl+V）て相談できます。`, false);
+            } else {
+                doToast(`⚠️ ${info.label}を開けませんでした。コピーは完了しているので、手動でアプリ／サイトを開いて貼り付けてください。`, true);
             }
-        }
+        });
     } catch(e) {
         console.error('copyForAi failed:', e);
     }
