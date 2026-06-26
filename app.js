@@ -788,7 +788,14 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 //
 // 【必須】登録し忘れるとエラーまたは不自然なスコアになる:
 //   - data.js: HEROES（基本データ：名前・兵種・役割・優先度ベース値）
-//   - data.js: HERO_AI_PROFILE（スコア評価パラメータ：immediate/longterm/cost10-30/coverage/future/skillPower等）
+//   - data.js: HERO_AI_PROFILE（スコア評価パラメータ：immediate/longterm/cost10-30/coverage/future/
+//     skillPower/durability等）
+//     ※ skillPower・durability は { lv0, lv10, lv20, lv30 } のLv帯別オブジェクト形式で書くこと
+//        （固定の数値だけで書かない）。武装Lvに応じて__aiGetSkillPower/__aiGetDurabilityが線形補間
+//        で実効値を取得する。武装Lvが低くても素の質が高いヒーロー（ウィリアムズの素の耐久）、
+//        特定Lvが分水嶺になるヒーロー（マーフィのLv20 Mitigation解放、DVAのLv10/30二段階の伸び）等、
+//        Lv依存度の違いを表現できる。前衛(wall)役はdurability、それ以外(atk/sup)はskillPowerが
+//        評価に使われる。武装未実装のヒーロー（UR昇格組）は全Lv帯で同じ値（依存なし）にする。
 //     ※ skillPower はスキル単体の質（戦況を変える効果の確実性）を表す。未来性(future)には乗算されない。
 //        ⚠️ HERO_WEAPON_TAGS のタグ名だけで判断しないこと（過去にCCタグ＝高評価と誤判定した経緯あり）。
 //        実際のスキル文章・コミュニティ評価を確認し、「確定/常時発動」（AoE・スタック型DoT・
@@ -837,6 +844,24 @@ function validateHeroData() {
     if (!table) continue;
     const missingIds = heroIds.filter(id => !(id in table));
     if (missingIds.length) issues.missing.push(`${name}（任意・未登録は中立扱い）: ${missingIds.join(', ')}`);
+  }
+
+  // skillPower/durability が Lv帯別オブジェクト（{lv0,lv10,lv20,lv30}）形式になっているか確認。
+  // 数値の固定値で書かれている場合、武装Lv依存度が反映されず評価ロジックの精度が落ちる。
+  if (typeof HERO_AI_PROFILE === 'object') {
+    const lvBandKeys = ['skillPower', 'durability'];
+    const badFormat = [];
+    for (const id of heroIds) {
+      const prof = HERO_AI_PROFILE[id];
+      if (!prof) continue;
+      for (const key of lvBandKeys) {
+        const v = prof[key];
+        if (v !== undefined && (typeof v !== 'object' || !('lv0' in v) || !('lv30' in v))) {
+          badFormat.push(`${id}.${key}`);
+        }
+      }
+    }
+    if (badFormat.length) issues.missing.push(`HERO_AI_PROFILE（Lv帯別オブジェクト形式ではない）: ${badFormat.join(', ')}`);
   }
 
   // HERO_PAIR_SYNERGY の双方向対称性チェック
@@ -897,6 +922,7 @@ function buildAiReportText() {
     lines.push(`現在のメタ環境設定：${metaNames[currentMeta] || currentMeta}`);
     lines.push('');
 
+    let fullRoster = [];
     for (let s = 1; s <= 4; s++) {
         const slotCount = (s === 4) ? 10 : 5;
         let squadLines = [];
@@ -916,17 +942,52 @@ function buildAiReportText() {
                 if (at.star >= 0) line += `・覚醒${awStarLabel(at)}`;
             }
             squadLines.push(line);
+            fullRoster.push({ id, s, p, wp, t:h.t, r:h.r, ur:h.ur, name:h.n, pr:h.pr });
         }
         if (squadLines.length) {
             lines.push(`■ ${squadNames[s]}`);
             lines.push(...squadLines);
+            // 1〜3軍は達成率も付記（ツールの計算結果）
+            if (s <= 3) {
+                try {
+                    const prog = computeDisplayedArmyProgress(s);
+                    if (prog && prog.pct !== undefined) {
+                        lines.push(`  → 達成率: ${prog.pct}%（主力兵種: ${typeNames[prog.mainType] || '-'}、兵種バフ+${Math.round((prog.buffRate||0)*100)}%）`);
+                    }
+                } catch(e) {}
+            }
             lines.push('');
         }
     }
 
+    // ツールの計算済み結果：育成優先ランキング上位（10人以上配置時のみ算出可能）
+    if (fullRoster.length >= 10) {
+        try {
+            const full = calculateUpgradeEfficiencyFull(fullRoster);
+            if (full && full.normal && full.normal.length) {
+                lines.push('【ツールの計算結果：専用武装 育成優先ランキング（上位5件）】');
+                full.normal.slice(0, 5).forEach((item, i) => {
+                    lines.push(`  ${i+1}. ${item.name}（Lv${item.from}→${item.to}、必要かけら${item.cost}個）`);
+                });
+                lines.push('');
+            }
+            if (full && full.reinforceList && full.reinforceList.length) {
+                lines.push('【ツールの計算結果：補強候補ランキング（上位3件）】');
+                full.reinforceList.slice(0, 3).forEach((item, i) => {
+                    lines.push(`  ${i+1}. ${item.name}`);
+                });
+                lines.push('');
+            }
+        } catch(e) {}
+    } else {
+        lines.push('※ 配置英雄が10人未満のため、育成優先ランキング等は未算出です。');
+        lines.push('');
+    }
+
     lines.push('---');
-    lines.push('上記は「Last War: Survival」というスマホゲームのS6（Shadow Rainforest）における自分の編成データです。');
-    lines.push('武装Lv・覚醒状況を踏まえて、育成の優先順位や編成の強化ポイントについてアドバイスをください。');
+    lines.push('上記は「Last War: Survival」というスマホゲームのS6（Shadow Rainforest）における自分の編成データと、');
+    lines.push('育成シミュレーターが算出した計算結果です。これらを踏まえて、育成の優先順位や編成の強化ポイントに');
+    lines.push('ついて一緒に相談しながら進めたいです。');
     return lines.join('\n');
 }
 
@@ -2357,6 +2418,17 @@ function evaluateSquadRealCombat(squadMembers) {
             if (m.r === 'atk') penalty = charScore * 0.40;
             else if (m.r === 'wall') penalty = m.wp >= 20 ? charScore * 0.15 : charScore * 0.30;
             else penalty = charScore * 0.25;
+            // 4+1混成（他兵種を1人だけ混ぜる）の評価補正：
+            // wall役は個別の耐久力（durability、武装Lvに応じて線形補間）、atk/sup役はスキルの質
+            // （skillPower、同様に武装Lvで補間）で混成ペナルティを緩和する。例：航空編成に
+            // マーフィ(戦車wall)を混ぜた場合、5体ボーナスは失うが、マーフィの武装Lvが上がるほど
+            // （特にLv20のMitigation解放以降）ペナルティが和らぐ。ウィリアムズのように素の耐久が
+            // 高いヒーローはLv0でも一定の緩和がかかる。
+            const qualityStat = (m.r === 'wall')
+                ? __aiGetDurability(m.id, m.wp)
+                : __aiGetSkillPower(m.id, m.wp);
+            const mitigation = Math.max(0, Math.min(0.45, ((qualityStat || 1.0) - 1.0) * 3));
+            penalty *= (1 - mitigation);
             charScore -= penalty;
         } else {
             charScore += charScore * 0.10;
@@ -2371,7 +2443,10 @@ function evaluateSquadRealCombat(squadMembers) {
     });
 
     let currentMeta = ($id('current-meta')||{}).value || '';
-    // メタ一致ボーナス：実際は相手依存のため控えめに+7%
+    // 育成方針の一貫性ボーナス：ユーザーが選択した「現在のメタ（注力兵種）」と実際の編成の
+    // 主力兵種が一致しているかのタイブレーカー。三すくみのダメージ補正（ゲーム内では20%）の
+    // 代用ではない——そちらは別途 TYPE_COUNTER_WEIGHT（補強候補ランキング用）で扱っている。
+    // ここはあくまで「方針通りに育成が進んでいるか」を軽く優先するための+7%。
     let metaMult = (mainType === currentMeta) ? 1.07 : 1.0;
 
     // S6覚醒混成ボーナス
@@ -2864,8 +2939,39 @@ function __aiGetAiProfile(heroId){
         future:1.0,
         mainTypeBonus:1.0,
         promotedUrPenalty:1.0,
-        skillPower:1.0
+        skillPower:{ lv0:1.0, lv10:1.0, lv20:1.0, lv30:1.0 },
+        durability:{ lv0:1.0, lv10:1.0, lv20:1.0, lv30:1.0 }
       };
+}
+// Lv帯別オブジェクト（{lv0,lv10,lv20,lv30}）から、武装Lv(wp)に応じて線形補間で実効値を取得する汎用関数。
+// 武装Lvが低くても素の質が高いヒーロー、特定Lvが分水嶺になるヒーロー等、Lv依存度の違いを反映する。
+function __aiInterpolateLvBand(statObj, wp){
+  if (!statObj || typeof statObj !== 'object') return (typeof statObj === 'number') ? statObj : 1.0;
+  const lv = Math.max(0, Math.min(30, wp || 0));
+  if (lv <= 10) {
+    const t = lv / 10;
+    return statObj.lv0 + (statObj.lv10 - statObj.lv0) * t;
+  } else if (lv <= 20) {
+    const t = (lv - 10) / 10;
+    return statObj.lv10 + (statObj.lv20 - statObj.lv10) * t;
+  } else {
+    const t = (lv - 20) / 10;
+    return statObj.lv20 + (statObj.lv30 - statObj.lv20) * t;
+  }
+}
+// 武装Lv(wp)に応じて、HERO_AI_PROFILE.durability（{lv0,lv10,lv20,lv30}）から実効値を取得する。
+// 例：武装Lvが低くても素の耐久力が高いヒーロー（ウィリアムズ）、武装Lv20が分水嶺になるヒーロー
+// （マーフィのMitigation解放）等、Lv依存度の違いを反映する。
+function __aiGetDurability(heroId, wp){
+  const ai = __aiGetAiProfile(heroId);
+  return __aiInterpolateLvBand(ai.durability, wp);
+}
+// 武装Lv(wp)に応じて、HERO_AI_PROFILE.skillPower（{lv0,lv10,lv20,lv30}）から実効値を取得する。
+// 例：DVAはLv10とLv30で2段階の質的変化、武装解放だけで質的変化が起きるヒーロー（スカイラーの
+// 確定スタン）等、Lv依存度の違いを反映する。
+function __aiGetSkillPower(heroId, wp){
+  const ai = __aiGetAiProfile(heroId);
+  return __aiInterpolateLvBand(ai.skillPower, wp);
 }
 function __aiCounterMap(type){
   return (typeof TYPE_COUNTER_WEIGHT === 'object' && TYPE_COUNTER_WEIGHT[type])
@@ -3040,7 +3146,7 @@ function __aiTypePolicyMult(type, context, route='overall'){
   }
   return Math.max(0.85, Math.min(1.20, mult));
 }
-function __aiHeroBias(heroId, route='overall', context=null){
+function __aiHeroBias(heroId, route='overall', context=null, wp=undefined){
   const p = __aiGetProfile(heroId);
   const evalMeta = __aiGetEvalMeta(heroId);
   const ai = __aiGetAiProfile(heroId);
@@ -3053,7 +3159,8 @@ function __aiHeroBias(heroId, route='overall', context=null){
   // スキル単体の強度（確定CC・AoE・特殊効果等）。将来性（future）には乗せない。
   // 「育成すれば伸びる」のではなく「今のスキル内容自体が強い」ことの評価なので、
   // 即時性(cost)と編成価値(coverage)・無指定時の総合評価にのみ反映する。
-  const skillPowerMult = ai.skillPower || 1.0;
+  // wpが渡されていれば武装Lv帯別の実効値を使う（DVAのLv10/30二段階の伸び等を反映）。
+  const skillPowerMult = (wp !== undefined) ? __aiGetSkillPower(heroId, wp) : __aiInterpolateLvBand(ai.skillPower, 20);
   if(route !== 'future') mult *= skillPowerMult;
   const meta = META_TIER[heroId] || {};
   if(meta.ew === 'SSS') mult *= 1.10;
@@ -3385,7 +3492,7 @@ function calculateUpgradeEfficiencyFull(roster){
             simulated[index].simulating = false;
             let gain = calcMultiArmyTotalScore(newResult.assignment) - baseScore;
             if(gain <= 0) gain = Math.max(1, Math.round(__aiGetLongterm(hero.id) * 18 - 6));
-            gain = Math.round(gain * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiSynergyBias(hero, roster, ewTarget));
+            gain = Math.round(gain * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context, hero.wp) * __aiSynergyBias(hero, roster, ewTarget));
             if(gain > 0){
               unlockResults.push({ id:hero.id, name:hero.name, type:hero.t, gain, roleKey, roleBadge, from:0, to:ewTarget, growthType:{ level:2, axis:'atk', label:'長期投資向き', strong:false }, reasonCodes: __aiSelectReasonCodes(['future', hero.ur ? 'promoted_ur' : '', ewTarget>=30 ? 'lv30' : 'mid_cost', (context && context.investmentType===hero.t && context.shiftStage==='seed') ? __aiTypedPolicyCode('seed', hero.t) : ((context && context.investmentType===hero.t && (context.shiftStage==='shift'||context.shiftStage==='full_shift')) ? __aiTypedPolicyCode('shift', hero.t) : 'hold')], 2), costTierLabel:__aiCostTierLabel(0, ewTarget), safeHintLabel:'' });
             }
@@ -3420,9 +3527,9 @@ function calculateUpgradeEfficiencyFull(roster){
         const mainTypeBonus = (sameMain ? (aiProfile.mainTypeBonus || 1.0) : 1.0);
         const sharedSynergy = synergy * formationSynergy * matchupBias * tankBranchBias * milestone10EvalFit;
 
-        const scoreCost = basePerCost * __aiTypePolicyMult(hero.t, context, 'cost') * __aiHeroBias(hero.id, 'cost', context) * __aiMilestoneBias(hero.id, ms.target, 'cost') * sharedSynergy * (sameMain ? 1.08 : 0.96) * (inMainArmy ? 1.06 : 1.00) * mainTypeBonus;
-        const scoreCoverage = basePerCost * __aiTypePolicyMult(hero.t, context, 'coverage') * __aiHeroBias(hero.id, 'coverage', context) * __aiMilestoneBias(hero.id, ms.target, 'coverage') * sharedSynergy * (sameMain ? 0.96 : 1.06) * (sameInvest ? 1.04 : 1.00) * mainTypeBonus;
-        const scoreFuture = basePerCost * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context) * __aiMilestoneBias(hero.id, ms.target, 'future') * sharedSynergy * (sameInvest ? 1.10 : 0.96) * mainTypeBonus;
+        const scoreCost = basePerCost * __aiTypePolicyMult(hero.t, context, 'cost') * __aiHeroBias(hero.id, 'cost', context, hero.wp) * __aiMilestoneBias(hero.id, ms.target, 'cost') * sharedSynergy * (sameMain ? 1.08 : 0.96) * (inMainArmy ? 1.06 : 1.00) * mainTypeBonus;
+        const scoreCoverage = basePerCost * __aiTypePolicyMult(hero.t, context, 'coverage') * __aiHeroBias(hero.id, 'coverage', context, hero.wp) * __aiMilestoneBias(hero.id, ms.target, 'coverage') * sharedSynergy * (sameMain ? 0.96 : 1.06) * (sameInvest ? 1.04 : 1.00) * mainTypeBonus;
+        const scoreFuture = basePerCost * __aiTypePolicyMult(hero.t, context, 'future') * __aiHeroBias(hero.id, 'future', context, hero.wp) * __aiMilestoneBias(hero.id, ms.target, 'future') * sharedSynergy * (sameInvest ? 1.10 : 0.96) * mainTypeBonus;
         const efficiency = (scoreCost * weights.cost) + (scoreCoverage * weights.coverage) + (scoreFuture * weights.future);
 
         const weaknesses = [weakness1, weakness2, weakness3].filter(Boolean);
