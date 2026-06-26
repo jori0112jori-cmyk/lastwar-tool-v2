@@ -2014,6 +2014,36 @@ function __collectCurrentRosterIds() {
   return ids;
 }
 
+// 現在のロスターの「英雄ID → 最大武装Lv」のMapを取得する。同じ英雄が複数スロットに
+// いる場合は最大値を採用する（控えと本軍で重複する運用等を想定）。
+// 推奨編成テンプレートが「もう卒業済みか」を判定するために使う。
+function __collectCurrentRosterWpMap() {
+  const map = new Map();
+  for (let s = 1; s <= 4; s++) {
+    const slotCount = (s === 4) ? 10 : 5;
+    for (let p = 1; p <= slotCount; p++) {
+      const hEl = $id(`h-${s}-${p}`);
+      const wEl = $id(`w-${s}-${p}`);
+      if (!hEl || !hEl.value || hEl.value === 'empty') continue;
+      const wp = parseInt((wEl||{}).value) || 0;
+      const prev = map.get(hEl.value) || 0;
+      if (wp > prev) map.set(hEl.value, wp);
+    }
+  }
+  return map;
+}
+
+function loadPresetSortMode() {
+  try {
+    const v = localStorage.getItem('preset_sort_mode');
+    return (v === 'recommend') ? 'recommend' : 'fit';
+  } catch(e) { return 'fit'; }
+}
+function setPresetSortMode(mode) {
+  try { localStorage.setItem('preset_sort_mode', mode); } catch(e) {}
+  renderPresetPanel();
+}
+
 function renderPresetPanel() {
   const panel = document.getElementById('preset-panel');
   const list  = document.getElementById('preset-list');
@@ -2025,16 +2055,77 @@ function renderPresetPanel() {
   const SC = { f2p:'#059669', low:'#2563eb', mid:'#7c3aed' };
 
   const ownedIds = __collectCurrentRosterIds();
+  const wpMap = __collectCurrentRosterWpMap();
+  const sortMode = loadPresetSortMode();
+
+  // テンプレートの英雄アイコングリッドを生成する共通関数（通常カード・卒業済みセクション両方で使う）
+  function renderHeroIconGrid(squad) {
+    const heroCard = m => {
+      const h = HEROES[m.id]||{};
+      const isOwned = ownedIds.has(m.id);
+      const ringColor = isOwned ? '#10b981' : '#cbd5e1';
+      const ringStyle = isOwned
+        ? 'border:4px solid '+ringColor+';box-shadow:0 0 0 3px rgba(16,185,129,0.35), 0 2px 6px rgba(16,185,129,0.4);'
+        : 'border:4px solid '+ringColor+';opacity:0.55;';
+      return '<div class="preset-hero-col">'
+        +'<div class="preset-hero-icon" style="'+ringStyle+'border-radius:10px;">'
+        +'<img src="img/'+m.id+'.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">'
+        +'</div>'
+        +'<span class="preset-hero-name">'+(h.n||m.id)+'</span>'
+        +'<span class="preset-hero-ew">目標EW'+m.wp+'</span>'
+        +(m.note ? '<span class="preset-hero-note">'+m.note+'</span>' : '')
+        +'</div>';
+    };
+    // スマホ(<640px): 3+2のグリッド配置（編成スロットと同じ見た目）
+    // タブレット・PC(>=640px): 5列固定グリッド
+    const isMobile = window.innerWidth < 640;
+    if (isMobile) {
+      const cards = squad.map(heroCard);
+      return '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,70px));justify-content:center;gap:8px 58px;">'
+        + '<div style="grid-column:1;grid-row:1;justify-self:end;transform:translateX(60px);">'+cards[0]+'</div>'
+        + '<div style="grid-column:3;grid-row:1;justify-self:start;transform:translateX(-60px);">'+cards[1]+'</div>'
+        + '<div style="grid-column:1;grid-row:2;justify-self:start;">'+cards[2]+'</div>'
+        + '<div style="grid-column:2;grid-row:2;justify-self:center;">'+cards[3]+'</div>'
+        + '<div style="grid-column:3;grid-row:2;justify-self:end;">'+cards[4]+'</div>'
+        + '</div>';
+    }
+    return '<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;gap:10px 6px;">'+squad.map(heroCard).join('')+'</div>';
+  }
 
   // 移行しやすさ = テンプレートのメンバーのうち、現在のロスターに既にいる人数
-  const presetsWithFit = FORMATION_PRESETS.map(p => {
+  // 卒業済み = テンプレートの全メンバーについて、現在の武装Lvが目標以上になっている
+  //（その兵種について「もうこのテンプレートの段階は通過済み」という意味）
+  // ⚠️ >=を使うこと。目標武装Lv=0のヒーロー（マーシャル等、EW0で機能する設計）がいる場合、
+  // 厳密な > だと current(0) > target(0) が常にfalseになり、永久に卒業判定されない不具合があった。
+  const allPresetsWithFit = FORMATION_PRESETS.map((p, idx) => {
     const ownedCount = p.squad.filter(m => ownedIds.has(m.id)).length;
-    return { p, ownedCount, totalCount: p.squad.length };
+    const isGraduated = ownedCount === p.squad.length
+      && p.squad.every(m => (wpMap.get(m.id) || 0) >= m.wp);
+    return { p, ownedCount, totalCount: p.squad.length, originalIndex: idx, isGraduated };
   });
-  // 所持数が多い（移行しやすい）順に並び替え。同数なら元の順序を維持。
-  presetsWithFit.sort((a, b) => b.ownedCount - a.ownedCount);
+  const presetsWithFit = allPresetsWithFit.filter(x => !x.isGraduated);
+  const graduatedPresets = allPresetsWithFit.filter(x => x.isGraduated);
+  if (sortMode === 'fit') {
+    // 所持数が多い（移行しやすい）順に並び替え。同数なら元の順序を維持。
+    presetsWithFit.sort((a, b) => b.ownedCount - a.ownedCount || a.originalIndex - b.originalIndex);
+  } else {
+    // 推奨順：FORMATION_PRESETSの元の並び（コミュニティ評価・課金度合いの低い順等）を維持
+    presetsWithFit.sort((a, b) => a.originalIndex - b.originalIndex);
+  }
 
-  list.innerHTML = presetsWithFit.map(({p, ownedCount, totalCount}) => {
+  // ソート切り替えボタン
+  const sortToggleHtml = `
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <button onclick="setPresetSortMode('fit')" style="flex:1;font-size:var(--fs-xs);padding:7px 8px;border-radius:8px;border:1px solid ${sortMode==='fit'?'#2563eb':'#cbd5e1'};background:${sortMode==='fit'?'#2563eb':'#fff'};color:${sortMode==='fit'?'#fff':'#475569'};font-weight:900;cursor:pointer;">🔄 今の編成に近い順</button>
+      <button onclick="setPresetSortMode('recommend')" style="flex:1;font-size:var(--fs-xs);padding:7px 8px;border-radius:8px;border:1px solid ${sortMode==='recommend'?'#2563eb':'#cbd5e1'};background:${sortMode==='recommend'?'#2563eb':'#fff'};color:${sortMode==='recommend'?'#fff':'#475569'};font-weight:900;cursor:pointer;">⭐ コミュニティ推奨順</button>
+    </div>
+    <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:8px;">
+      ${sortMode === 'fit'
+        ? '💡 今の手持ちで反映しやすい編成を優先表示しています。'
+        : '💡 課金度合い・編成の完成度を基準にしたおすすめ順です。今の手持ちと離れていても、目指す形として参考にしてください。'}
+    </div>`;
+
+  list.innerHTML = sortToggleHtml + presetsWithFit.map(({p, ownedCount, totalCount}) => {
     const fitLabel = ownedCount === totalCount
       ? '✅ 全員所持'
       : ownedCount === 0
@@ -2056,7 +2147,7 @@ function renderPresetPanel() {
         </div>
         <span id="${iconId}" class="panel-collapse-icon${ownedCount > 0 ? ' open' : ''}" style="padding-top:2px;">▼</span>
       </div>
-      <div id="${bodyId}" class="panel-collapsible${ownedCount > 0 ? ' open' : ''}" style="margin-top:8px;">
+      <div id="${bodyId}" class="panel-collapsible preset-tall${ownedCount > 0 ? ' open' : ''}" style="margin-top:8px;">
       <!-- ボタン行 -->
       <div style="display:flex;gap:3px;justify-content:flex-end;margin-bottom:8px;">
         <button onclick="applyPreset('${p.id}',1)" style="font-size:var(--fs-xs);background:#2563eb;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-weight:900;cursor:pointer;min-height:36px;">1軍</button>
@@ -2069,39 +2160,43 @@ function renderPresetPanel() {
       ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
       <!-- 英雄アイコン：前衛2体（上段）＋後衛3体（下段） -->
       <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
-      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;">枠の色：<span style="color:#059669;font-weight:900;">緑=所持済み</span>　<span style="color:#94a3b8;font-weight:900;">グレー=未所持</span></div>
-      ${(()=>{
-        const heroCard = m => {
-          const h = HEROES[m.id]||{};
-          const isOwned = ownedIds.has(m.id);
-          const ringColor = isOwned ? '#059669' : '#cbd5e1';
-          return '<div class="preset-hero-col">'
-            +'<div class="preset-hero-icon" style="border:2px solid '+ringColor+';border-radius:10px;">'
-            +'<img src="img/'+m.id+'.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">'
-            +'</div>'
-            +'<span class="preset-hero-name">'+(h.n||m.id)+'</span>'
-            +'<span class="preset-hero-ew">目標EW'+m.wp+'</span>'
-            +(m.note ? '<span class="preset-hero-note">'+m.note+'</span>' : '')
-            +'</div>';
-        };
-        const front = p.squad.filter(m => (HEROES[m.id]||{}).r === 'wall');
-        const back  = p.squad.filter(m => (HEROES[m.id]||{}).r !== 'wall');
-        // スマホ(<640px): 編成スロットと同じグリッド配置（上2・下3）
-        // タブレット・PC: 横一列
-        const isMobile = window.innerWidth < 640;
-        if (!isMobile) {
-          return '<div style="display:flex;gap:10px;flex-wrap:wrap;">'+p.squad.map(heroCard).join('')+'</div>';
-        }
-        // スマホ: 5体を編成スロットと同じ grid で配置
-        const cards = p.squad.map(heroCard);
-        // 編成スロットと同じ gap:8px 58px + translateX で中央寄せ
-        return '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,70px));justify-content:center;gap:8px 58px;">'          + '<div style="grid-column:1;grid-row:1;justify-self:end;transform:translateX(60px);">'+cards[0]+'</div>'          + '<div style="grid-column:3;grid-row:1;justify-self:start;transform:translateX(-60px);">'+cards[1]+'</div>'          + '<div style="grid-column:1;grid-row:2;justify-self:start;">'+cards[2]+'</div>'          + '<div style="grid-column:2;grid-row:2;justify-self:center;">'+cards[3]+'</div>'          + '<div style="grid-column:3;grid-row:2;justify-self:end;">'+cards[4]+'</div>'          + '</div>';
-      })()}
+      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;">枠の色：<span style="color:#10b981;font-weight:900;">✨太い緑枠＋発光=所持済み</span>　<span style="color:#94a3b8;font-weight:900;">グレー枠＋薄い表示=未所持</span></div>
+      ${renderHeroIconGrid(p.squad)}
       <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
       </div>
     </div>
   `;
-  }).join('');
+  }).join('') + (graduatedPresets.length ? `
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;padding:12px;margin-top:4px;">
+      <div class="panel-collapse-header" onclick="togglePanel('preset-graduated-body','preset-graduated-icon')">
+        <div style="font-size:var(--fs-sm);font-weight:900;color:#64748b;">🎓 卒業済みテンプレート（${graduatedPresets.length}件）</div>
+        <span id="preset-graduated-icon" class="panel-collapse-icon">▼</span>
+      </div>
+      <div id="preset-graduated-body" class="panel-collapsible preset-tall" style="margin-top:8px;">
+        <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-bottom:8px;">手持ちが目標武装Lvを上回り、達成済みのテンプレートです。必要であれば反映できます。</div>
+        ${graduatedPresets.map(({p}) => {
+          const gBodyId = `preset-graduated-card-body-${p.id}`;
+          const gIconId = `preset-graduated-card-icon-${p.id}`;
+          return `
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-top:8px;">
+            <div class="panel-collapse-header" onclick="togglePanel('${gBodyId}','${gIconId}')" style="align-items:flex-start;">
+              <span style="font-size:var(--fs-sm);color:#475569;font-weight:700;">✅ ${p.name}</span>
+              <span id="${gIconId}" class="panel-collapse-icon" style="padding-top:2px;">▼</span>
+            </div>
+            <div id="${gBodyId}" class="panel-collapsible preset-tall" style="margin-top:8px;">
+              <div style="display:flex;gap:3px;justify-content:flex-end;margin-bottom:8px;">
+                <button onclick="applyPreset('${p.id}',1)" style="font-size:var(--fs-xxs);background:#2563eb;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-weight:900;cursor:pointer;">1軍</button>
+                <button onclick="applyPreset('${p.id}',2)" style="font-size:var(--fs-xxs);background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-weight:900;cursor:pointer;">2軍</button>
+                <button onclick="applyPreset('${p.id}',3)" style="font-size:var(--fs-xxs);background:#059669;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-weight:900;cursor:pointer;">3軍</button>
+              </div>
+              ${renderHeroIconGrid(p.squad)}
+            </div>
+          </div>
+        `;
+        }).join('')}
+      </div>
+    </div>
+  ` : '');
 }
 
 function applyPreset(presetId, squadNum) {
@@ -4038,6 +4133,12 @@ function generateAiSuggestion() {
         };
 
         
+        // ⚠️ 注意：このdetailedDiagと、別の場所にあるdetectArmyWeaknessFromDetail（スコア比率ベース）は
+        // 評価軸が異なる2つの弱点判定ロジック。両方とも同じDOM要素（slot-eval-1/2/3）を更新するため、
+        // 実行順序によって表示が変わりうる（generateAiSuggestion実行時はこちらが最終的に反映される）。
+        // 新しい判定条件を追加する際は、もう一方のロジックとの整合性も確認すること。
+        // 過去の教訓：前衛1人のケースで両者が矛盾した判定を出していた（武装Lv差だけでは
+        // 「前衛の人数が少ない」という構造的弱点を検出できなかったため）。
         const detailedDiag = (armyArr, fallbackWeak) => {
             const list = (armyArr || []).filter(h => h && h.id && h.id !== 'empty' && !h.ur);
             const avg = (arr) => arr.length ? (arr.reduce((a,x)=>a + (parseInt(x.wp)||0), 0) / arr.length) : 0;
@@ -4051,11 +4152,14 @@ function generateAiSuggestion() {
             let key = fallbackWeak || 'balance';
             let level = '中';
 
-            // 役割の欠損は最優先で「大」
+            // 役割の欠損・不足は最優先で判定（武装Lv差だけでは検出できない構造的弱点）
             if(wall.length === 0){
                 key = 'defense'; level = '大';
             }else if(atk.length === 0){
                 key = 'attack'; level = '大';
+            }else if(wall.length === 1){
+                // 前衛1人は「武装Lvが高くても崩れやすい」構造的弱点。武装Lv差の判定より優先する。
+                key = 'defense'; level = '中';
             }else{
                 const diff = avgAtk - avgWall; // +なら盾が遅れてる（耐久不足）
                 if(diff >= 6){
@@ -5431,6 +5535,7 @@ function restorePanelStates() {
     'power-transition-body': 'trans-icon',
     'awaken-rank-body':      'awaken-rank-icon',
     'preset-body':           'preset-icon',
+    'preset-graduated-body': 'preset-graduated-icon',
   };
   Object.entries(iconMap).forEach(([id, iconId]) => {
     try {

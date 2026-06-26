@@ -1431,6 +1431,16 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .panel-collapsible.open {
   max-height: 2000px; opacity: 1;
 }
+/* 推奨編成テンプレートのリストは、カードがすべて展開されると2000pxを大きく超えるため
+   （5枚×各カード500px超）、専用に大きな上限を設定する。これがないと、リスト末尾にある
+   「卒業済みテンプレート」セクションがmax-heightでクリップされ、見出しだけ見えても
+   実質的に画面に出てこない（高さが0扱いの領域に押し込まれる）現象が起きる。 */
+.panel-collapsible.preset-tall {
+  max-height: 0;
+}
+.panel-collapsible.preset-tall.open {
+  max-height: 20000px;
+}
 
 /* ===== 英雄フィルターボタン ===== */
 .hero-filter-btn {
@@ -1537,16 +1547,16 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 
 /* ===== 推奨編成テンプレート 英雄アイコン ===== */
-.preset-hero-col  { display:flex; flex-direction:column; align-items:center; gap:3px; width:72px; }
+.preset-hero-col  { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:72px; }
 .preset-hero-icon { width:64px; height:64px; border-radius:12px; overflow:hidden; background:#0b1220; border:2px solid #e2e8f0; flex-shrink:0; }
-.preset-hero-name { font-size:var(--fs-xs); font-weight:900; color:#111827; text-align:center; line-height:1.2; word-break:normal; overflow-wrap:break-word; width:100%; }
+.preset-hero-name { font-size:var(--fs-xs); font-weight:900; color:#111827; text-align:center; line-height:1.2; white-space:nowrap; }
 .preset-hero-ew   { font-size:var(--fs-xs); color:#2563eb; font-weight:700; text-align:center; }
 .preset-hero-note { font-size:var(--fs-xxs); color:#374151; text-align:center; line-height:1.3; }
 
 /* タブレット以上 */
 @media (min-width: 640px) {
   /* タブレット: テンプレートアイコンは変更なし（PCサイズに準じる） */
-  .preset-hero-col  { width: 80px; }
+  .preset-hero-col  { min-width: 80px; }
   .preset-hero-icon { width: 72px !important; height: 72px !important; border-radius: 14px; }
   .preset-hero-name { font-size: var(--fs-sm) !important; }
   .preset-hero-ew   { font-size: var(--fs-sm) !important; }
@@ -1554,7 +1564,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 }
 /* PC */
 @media (min-width: 1024px) {
-  .preset-hero-col  { width: 96px; }
+  .preset-hero-col  { min-width: 96px; }
   .preset-hero-icon { width: 88px !important; height: 88px !important; border-radius: 16px; }
   .preset-hero-name { font-size: var(--fs-md) !important; }
   .preset-hero-ew   { font-size: var(--fs-md) !important; }
