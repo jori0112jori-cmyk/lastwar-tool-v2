@@ -2123,6 +2123,7 @@ function applyPreset(presetId, squadNum) {
   try { renderSlots(); } catch(e) {}
   try { updateAllSquads(); } catch(e) {}
   try { scheduleAi(); } catch(e) {}
+  try { saveAllData(); } catch(e) {}
   showToast('✅ 「'+preset.name+'」を'+sLabel+'に反映（他軍の重複は移動）');
 }
 
@@ -4408,10 +4409,40 @@ function applyMultiArmy() {
     }
 
     updateAllSquads();
+    try { saveAllData(); } catch(e) {}
     showToast("🔄 最強の編成を反映しました！");
 }
 
 
+
+// 編成データ（キャラ選択・武装Lv・メタ設定等）をlocalStorageに保存する。
+// loadAllData() が読み込むフィールドと完全に対になっている必要がある。
+// スロット編集の反映時など、編成データが変わるタイミングで必ず呼ぶこと。
+function saveAllData() {
+  try {
+    let d = {};
+    for (let s = 1; s <= 4; s++) {
+      for (let p = 1; p <= (s === 4 ? 10 : 5); p++) {
+        const hEl = $id(`h-${s}-${p}`);
+        const wEl = $id(`w-${s}-${p}`);
+        if (hEl) d[`h-${s}-${p}`] = hEl.value;
+        if (wEl) d[`w-${s}-${p}`] = wEl.value;
+      }
+    }
+    const metaEl = $id('current-meta');
+    if (metaEl) d['current-meta'] = metaEl.value;
+    const powTank = $id('pow-tank');
+    const powAir = $id('pow-air');
+    const powMis = $id('pow-mis');
+    if (powTank) d['pow-tank'] = powTank.value;
+    if (powAir) d['pow-air'] = powAir.value;
+    if (powMis) d['pow-mis'] = powMis.value;
+
+    localStorage.setItem('lw_sim_v24_final', JSON.stringify(d));
+  } catch(e) {
+    console.error('saveAllData failed:', e);
+  }
+}
 
 function loadAllData() {
   let sv = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final'); 
@@ -5031,6 +5062,7 @@ function slotModalApply(){
     try { renderSlots(); } catch(e) {}
     closeSlotModal();
     try { updateAllSquads(); } catch(e) {}
+    try { saveAllData(); } catch(e) {}
 }
 
 // updateAllSquads の後にタイルも更新する

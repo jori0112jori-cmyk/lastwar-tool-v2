@@ -24,7 +24,7 @@
         
 <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom: 12px; gap: 6px;">
             <span style="font-size:var(--fs-lg); font-weight: 900; color: #475569;">🌍 現在のメタ:</span>
-            <select id="current-meta" class="select-lv-blue" onchange="updateAllSquads()">
+            <select id="current-meta" class="select-lv-blue" onchange="updateAllSquads(); saveAllData();">
                 <option value="tank">🚜 戦車環境</option>
                 <option value="air">✈️ 航空環境</option>
                 <option value="mis" selected>🚀 ロケラン環境</option>
