@@ -339,6 +339,18 @@
         <div id="hero-advice-synergy" class="hero-advice-syn-box"></div>
         <!-- 注意事項（任意） -->
         <div id="hero-advice-warning" class="hero-advice-warn-box" style="display:none;"></div>
+        <!-- 出張性能（前衛タンクのみ。他兵種編成への混成適性） -->
+        <div id="hero-advice-loan" style="display:none;margin-top:8px;background:#f0fdf9;border:1px solid #99f6e4;border-radius:8px;padding:8px 10px;"></div>
+        <!-- 海外コミュニティの評価（クリックで展開） -->
+        <div id="hero-advice-global-wrap" style="display:none;margin-top:8px;">
+          <div class="panel-collapse-header" onclick="togglePanel('hero-advice-global-body','hero-advice-global-icon')" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:7px 10px;">
+            <span style="font-size:var(--fs-sm);font-weight:900;color:#1d4ed8;">🌍 海外コミュニティの評価を見る</span>
+            <span id="hero-advice-global-icon" class="panel-collapse-icon" style="font-size:var(--fs-md);">▼</span>
+          </div>
+          <div id="hero-advice-global-body" class="panel-collapsible preset-tall" style="margin-top:6px;">
+            <div id="hero-advice-global-text" style="font-size:var(--fs-xs);color:#334155;line-height:1.6;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px;"></div>
+          </div>
+        </div>
       </div>
 
       <!-- 覚醒セクション（覚醒対応英雄のみ表示） -->

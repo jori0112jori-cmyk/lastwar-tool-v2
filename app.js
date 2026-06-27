@@ -16,6 +16,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。残りは覚醒強化のみです。★1（決意状態の自動発動）→★3（エネルギー増幅2スタックの先行獲得）の順で進めると最大火力に到達します。★3が最重要のマイルストーンです。',
     },
     synergy: '基本形はウィリアムズ＋マーフィの前衛2枚でキムを守る編成です。マーシャルをサポートに加えると全体火力がさらに上がります。覚醒後はDVAとのコンボで「AoE＋単体バースト」の構成が完成します。',
+    globalReview: '「最強のAoEダメージ要員」「1人だけ最大強化するなら最も安全な投資先」という評価が複数ソースで一致（Wardawgg/Handbook等）。',
     priority: 'SSS',
   },
   dva: {
@@ -28,6 +29,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。覚醒★1（攻撃速度スタック強化）→★3（追撃と追加攻撃力）の順で進めましょう。航空英雄2体以上の編成で真価を発揮します。',
     },
     synergy: '覚醒キムと組む4体+1体の混成編成（兵種バフ+15%）が最大効率の構成です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破する役割分担になります。航空軸を組む場合はルシウス＋モリソン＋スカイラーと合わせると航空5体バフ+20%も狙えます。',
+    globalReview: '「信じられないダメージ」「自分が見てきた中で今最強のダメージディーラー」という最大級の評価（allclash）。安く早期に入手できる点も評価。',
     priority: 'SSS',
   },
   tesla: {
@@ -40,6 +42,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化します。★3で反射回数+1（8回）、★5でさらに+1（9回）になります。フィオナとのコンボが最大火力の鍵です。',
     },
     synergy: 'フィオナとのDoTコンボが核になります。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力を発揮します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    globalReview: '「ロケラン編成においてエネルギーダメージの代表格」という評価（Handbook）。複数編成にまたがって使える点も高評価。',
     priority: 'SS',
   },
   williams: {
@@ -52,6 +55,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。前衛として最大限機能しており、戦車軸の盾として申し分ない強さです。',
     },
     synergy: 'キンバリーとは必ずセットで編成します。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持しましょう。マーシャルをサポートに加えると完成形です。',
+    globalReview: '「最高クラスの防御タンク」。チーム全体のダメージ軽減能力がPvP・拠点防衛・連盟戦で必須級と評価（Wardawgg）。',
     priority: 'S',
   },
   murphy: {
@@ -64,6 +68,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。前衛2枚目として最大限機能しています。',
     },
     synergy: 'ウィリアムズと2枚前衛を組むことで戦車5体バフ+20%が安定して入ります。この2枚でキムを守るのが戦車軸の基本形です。',
+    globalReview: '「無料で手に入るUR、しかもどの段階でも通用する」とF2P最良の評価（Wardawgg）。出張先（他兵種編成）でも個別の質の高さが評価される。',
     priority: 'B',
   },
   marshall: {
@@ -76,6 +81,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。サポートとして最大限の効果を発揮しています。',
     },
     synergy: 'どの兵種軸でも使える万能サポートです。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
+    globalReview: '「唯一のURサポート、文字通り代わりがいない」という強い評価（Wardawgg）。4体統一+マーシャルの「4+1編成」が成立する根拠とされている。',
     priority: 'A',
   },
   stetmann: {
@@ -88,6 +94,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。戦車軸の2番手として最大戦力です。',
     },
     synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力です。純戦車編成で最も安定したダメージを出せます。',
+    globalReview: '「キンバリーとのコンビがPvPの定番」という高評価と、「PvPではS級だがPvE・連盟戦ではかなり弱くなる」という慎重な評価が併存（Wardawgg/ManaBuy）。',
     priority: 'A',
   },
   lucius: {
@@ -100,6 +107,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。航空軸の前衛として最強の状態です。DVAとの連携で航空軸の最強形を維持できます。',
     },
     synergy: '航空軸の必須前衛として、DVA・モリソン・スカイラーと組む航空5体軸の安定役を担います。ルシウスの高耐久がDVAの高火力を支えます。',
+    globalReview: '「専用武装解放後はゲーム最強のタンクとも言われる」評価（allclash）。航空編成の前衛筆頭。',
     priority: 'SS',
   },
   morrison: {
@@ -112,6 +120,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。航空軸のサブ火力として最大戦力です。',
     },
     synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力です。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
+    globalReview: 'ソースによってSS〜A級と評価に幅があり、「航空編成に組み込んだ時の評価が高い」という編成依存のコメントが多い（Wardawgg）。',
     priority: 'A',
   },
   schuyler: {
@@ -124,6 +133,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。CCキャラとして最大限機能していますが、スタンはあくまで確率要素である点は変わりません。',
     },
     synergy: 'ルシウスとのコンボが強力です。また「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つです。相手の前衛を封殺できればキムのAoEが炸裂しますが、スタンが決まらない場面も想定して編成を組みましょう。',
+    globalReview: '「スタン・麻痺で敵の編成を崩す」と評価される一方、スタンの発生自体は確率要素という指摘も（LDShop武器ティアリスト）。',
     priority: 'B',
   },
   carlie: {
@@ -136,6 +146,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。ルシウスとの前衛2枚体制で航空軸の耐久力が最大化されています。',
     },
     synergy: 'ルシウスと前衛2枚を組むことで、DVA・モリソン・スカイラーの後衛火力陣を安定して守れます。ルシウス単体より2枚前衛の方が耐久面で優れる構成です。',
+    globalReview: '「かつては最上位だった、専用武装Lv30の効果は素晴らしかった。だが環境が変わり、マーフィに取って代わられた」という評価（LDShop武器ティアリスト）。',
     priority: 'A',
   },
   fiona: {
@@ -148,6 +159,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。テスラ・マクレガー・アダムと組むロケラン5体軸の最強形です。継続ダメージ（DoT）でどんな相手も削れます。',
     },
     synergy: 'テスラ覚醒との相性が抜群です。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
+    globalReview: '「ロケラン編成最高のダメージ要員」という評価（Handbook）。',
     priority: 'SS',
   },
   mcgregor: {
@@ -160,6 +172,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。アダムとの前衛2枚体制で耐久力が補われます。テスラDoTのスタック上限引き上げにも貢献しています。',
     },
     synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当です。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定して入ります。タウントで自身が集中攻撃を受けやすいため、耐久面はアダム側で補う意識を持ちましょう。',
+    globalReview: '「タウントは諸刃の剣、味方を守れる時もあれば、自分が落ちる引き金にもなる」という評価（Wardawgg）。それでもロケラン編成の前衛として必須級という意見が多い。',
     priority: 'A',
   },
   swift: {
@@ -172,6 +185,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。',
     },
     synergy: 'フィオナ・テスラ不在時のロケランサブ候補です。テスラDoTのスタック上限は「ロケラン英雄数×3」のため、スウィフトを入れるとスタック上限が上がります。',
+    globalReview: '「専用武装でロケラン編成が大きく強化された、さらに伸びている」という評価（LDShop武器ティアリスト）。最近は航空編成に実験的に組み込む動きも報告されている。',
     priority: 'B',
   },
   adam: {
@@ -184,6 +198,7 @@ const HERO_SLOT_ADVICE = {
       30: 'EWが上限に到達しました。マクレガーとの前衛2枚体制で最大の安定感です。',
     },
     synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。カウンターが確実に発動するため、タウントで攻撃を引き受けがちなマクレガーの耐久を補う形で機能します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
+    globalReview: '「前衛が受けるダメージを軽減する、ロケラン編成の前衛として欠かせない」という評価（LDShop）。',
     priority: 'B',
   },
   mason: {
@@ -197,6 +212,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'キンバリー不在・育成前の戦車アタッカー候補です。ウィリアムズ＋マーフィ＋マーシャルとの戦車軸編成で使いましょう。',
     warning: 'UR昇格直後の3星URは5星SSR時より弱くなります（ウォール・オブ・オナーの恩恵がリセットされるため）。昇格は計画的に、できればかけらを確保して即5星まで上げられるタイミングで行いましょう（Reddit報告）。',
+    globalReview: '「SSRからUR昇格できる最良のタンク」「ゾンビ討伐で他のどの英雄よりダメージが出る」という評価。ただしこれは対モンスター（PvE）文脈が中心（Pocket Gamer）。',
     priority: 'C',
   },
   scarlett: {
@@ -210,6 +226,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '戦車前衛の代替候補です。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ＋マーフィの前衛2枚体制が理想です。',
     warning: 'UR昇格直後は星0からの再育成になります（昇格でティアがリセットされ、スキルメダルは返却）。長期で戦車軸を使う予定がある場合のみ、かけらを事前に確保してから昇格しましょう。',
+    globalReview: '「ひどい」「スキルの一つはゾンビ専用」「HPも攻撃力も低い」という否定的なコメントが見られる（allclashコメント欄）。',
     priority: 'D',
   },
   sarah: {
@@ -223,6 +240,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '航空軸を使う場合のみ価値が出る支援役です。DVA・モリソンの後衛火力を支える役割なので、航空軸を使わない場合は優先度が下がります。',
     warning: 'UR昇格には長い準備期間が必要です（かけら収集の前倒し推奨）。航空軸を使わない場合は昇格を見送り、他の英雄へリソースを回しましょう。',
+    globalReview: '「サポートスキルは悪くなく、航空編成の選択肢として使える」という無難な評価（Pocket Gamer）。',
     priority: 'C',
   },
   venom: {
@@ -236,6 +254,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。Corrosionスタック（最大5、+35%追加ダメージ）で継続的に削れます。',
     warning: 'UR昇格直後は星0からの再育成になります。既にテスラ・フィオナが十分に育っている場合、ベノムの昇格優先度は高くありません。',
+    globalReview: '「時間をかけてじわじわ削るタイプ、初動のダメージは低め」という評価（Wardawgg）。フィオナ・テスラには見劣りするとされる。',
     priority: 'C',
   },
   violet: {
@@ -249,6 +268,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'ウィリアムズ・マーフィが揃っている場合、ヴィオラは編成に入らないことが多い控え要員です。モンスター系PvEで実際に使う場合のみ育成価値があります。',
     warning: 'UR昇格は「実際に編成で使うか」を見極めてから行いましょう。ウィリアムズ＋マーフィの前衛2枚体制が完成している場合、昇格かけらは他の英雄に回す方が効率的です（packsify）。',
+    globalReview: '「毒スキルで一定のダメージを出せる、もっと良い選択肢が手に入るまでの前衛として悪くない」という評価（Pocket Gamer）。',
     priority: 'D',
   },
   brats: {
@@ -262,6 +282,7 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。盾無視・後衛攻撃の特性で、相手の後衛アタッカーを直接狙えます。',
     warning: 'UR昇格直後は星0からの再育成になります。専用武装は実装されていないため、純粋にステータスとスキルのみで評価しましょう。',
+    globalReview: '海外コミュニティでの言及が少なく、評価情報は限定的。',
     priority: 'C',
   },
 };
@@ -4855,6 +4876,65 @@ function updateHeroAdvicePanel(heroId, ewLv) {
         warnEl.innerHTML = adv.warning ? `<b>注意</b><br>${adv.warning}` : '';
         warnEl.style.display = adv.warning ? 'block' : 'none';
     }
+
+    // 出張性能（混成編成への適性）：HERO_AI_PROFILEのLv帯別指標が全Lv帯1.00固定でない
+    // （=出張時の個別差が設計されている）ヒーローだけに表示する。
+    // wall役（前衛タンク）はdurability、atk/sup役（アタッカー・サポート）はskillPowerを使う。
+    // 両方とも「兵種統一ボーナスを失っても、このヒーロー自身の質の高さでどれだけ補えるか」を
+    // 同じ尺度（evaluateSquadRealCombatの混成ペナルティ緩和ロジックと同じ式）で表している。
+    const loanEl = document.getElementById('hero-advice-loan');
+    if (loanEl) {
+        const ai = (typeof __aiGetAiProfile === 'function') ? __aiGetAiProfile(heroId) : null;
+        const isWallRole = hero.r === 'wall';
+        const statObj = ai ? (isWallRole ? ai.durability : ai.skillPower) : null;
+        const hasLoanProfile = statObj && typeof statObj === 'object'
+            && (statObj.lv0 !== 1.0 || statObj.lv10 !== 1.0 || statObj.lv20 !== 1.0 || statObj.lv30 !== 1.0);
+        // 現在の武装Lvでの実効値が、未育成時点（lv0）の値からまだ伸びていない場合は、
+        // 出張性能の参考にならないため非表示にする（武装Lv不足時にミスリードな情報を出さないため）。
+        const statNow = hasLoanProfile
+            ? (isWallRole
+                ? (typeof __aiGetDurability === 'function' ? __aiGetDurability(heroId, ewLv) : 1.0)
+                : (typeof __aiGetSkillPower === 'function' ? __aiGetSkillPower(heroId, ewLv) : 1.0))
+            : 1.0;
+        // 「出張可能」（1.05）未満（=標準的・不向き）は、わざわざ表示する価値が薄いため非表示にする。
+        // 武装Lv不足で値が伸びていない場合も同様に1.05未満になるため、自然にカバーされる。
+        const hasReachedThreshold = hasLoanProfile && statNow >= 1.05;
+        if (hasLoanProfile && hasReachedThreshold) {
+            let tier, tierColor;
+            if (statNow >= 1.15) { tier = '出張に強い'; tierColor = '#059669'; }
+            else { tier = '出張可能'; tierColor = '#2563eb'; }
+            const statLabel = isWallRole ? '耐久指数' : 'スキル質指数';
+            const roleNote = isWallRole
+                ? '前衛タンクとして他兵種の編成に据える場合'
+                : (hero.r === 'atk' ? 'アタッカーとして他兵種の編成に据える場合' : 'サポートとして他兵種の編成に据える場合');
+            loanEl.innerHTML = `
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                    <span style="font-size:var(--fs-sm);font-weight:900;color:#0f766e;">🧳 出張性能（他兵種編成に混ぜた場合）</span>
+                </div>
+                <div style="font-size:var(--fs-xs);color:#334155;line-height:1.6;">
+                    現在の武装Lv${ewLv}での評価：<span style="font-weight:900;color:${tierColor};">${tier}</span>
+                    （${statLabel} ${statNow.toFixed(2)}）<br>
+                    本来の兵種統一ボーナス（+20%）を捨てて${roleNote}、このヒーロー自身の質が高いほど
+                    ペナルティが和らぎます。武装Lvを上げるほど出張性能も上がります。
+                </div>
+            `;
+            loanEl.style.display = 'block';
+        } else {
+            loanEl.style.display = 'none';
+        }
+    }
+
+    // 海外コミュニティの評価（クリックで展開、HERO_SLOT_ADVICE.globalReviewが存在する場合のみ表示）
+    const globalWrap = document.getElementById('hero-advice-global-wrap');
+    const globalText = document.getElementById('hero-advice-global-text');
+    if (globalWrap && globalText) {
+        if (adv.globalReview) {
+            globalText.textContent = adv.globalReview;
+            globalWrap.style.display = 'block';
+        } else {
+            globalWrap.style.display = 'none';
+        }
+    }
 }
 
 function openAwakeningSection(heroId, ewLv) {
@@ -5209,6 +5289,9 @@ function slotModalSet(v){
         const id = (document.getElementById('slot-modal-hero')||{}).value;
         if(id) {
             openAwakeningSection(id, __slotModalState.lv);
+            // 武装Lv変更時にEW Lvアドバイス・出張性能等のアドバイスパネルも更新する
+            // （以前はヒーロー選択時の初期値のまま固定されており、スライダー操作が反映されなかった）
+            try { updateHeroAdvicePanel(id, __slotModalState.lv); } catch(e) {}
             const aw = AWAKENING_HEROES && AWAKENING_HEROES[id];
             if (aw && __slotModalState.lv < (aw.ewMinRequired||20)) {
                 __slotModalState.awTier = 'none';
