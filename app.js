@@ -1399,7 +1399,8 @@ function collectArmyMembersForProgress(armyNo){
       t: h.t,
       r: h.r,
       ur: h.ur,
-      wp: normalizeWpInputFixed(wpEl.value)
+      wp: normalizeWpInputFixed(wpEl.value),
+      p   // カードDOM特定用のスロット番号（視覚マーキングで使用）
     });
   }
   return members;
@@ -1637,8 +1638,8 @@ function updateTransitionRecommendationUI(){
   }
   // 控えの英雄もプール
   for(let p=1; p<=10; p++){
-    const hidEl = $id(`h-bench-${p}`);
-    const wpEl  = $id(`w-bench-${p}`);
+    const hidEl = $id(`h-4-${p}`);
+    const wpEl  = $id(`w-4-${p}`);
     if(!hidEl||!wpEl) continue;
     const id = hidEl.value;
     if(!id||id==='empty') continue;
@@ -2332,8 +2333,8 @@ function applyPreset(presetId, squadNum) {
     }
   }
   for (let pp = 1; pp <= 10; pp++) {
-    const id = (document.getElementById('h-bench-'+pp)||{}).value;
-    const wp = parseInt((document.getElementById('w-bench-'+pp)||{}).value)||0;
+    const id = (document.getElementById('h-4-'+pp)||{}).value;
+    const wp = parseInt((document.getElementById('w-4-'+pp)||{}).value)||0;
     if (id && presetIds.has(id) && !(id in wpMap)) wpMap[id] = wp;
   }
 
@@ -2351,10 +2352,10 @@ function applyPreset(presetId, squadNum) {
   }
   // 控えからも除去
   for (let pp = 1; pp <= 10; pp++) {
-    const hEl = document.getElementById('h-bench-'+pp);
+    const hEl = document.getElementById('h-4-'+pp);
     if (hEl && presetIds.has(hEl.value)) {
       hEl.value = 'empty';
-      const wEl = document.getElementById('w-bench-'+pp);
+      const wEl = document.getElementById('w-4-'+pp);
       if (wEl) wEl.value = 0;
     }
   }
@@ -4086,11 +4087,9 @@ function getColor(percent, base){
 // 🎯 部隊強化指針（部隊間の投資バランスアドバイス）
 // 「1軍が十分育ったら2軍へ」という段階的投資の指針
 // ===============================
+// 「部隊強化の指針」パネルは削除済み。ここで計算していたボトルネック・控え昇格候補の情報は、
+// テキストパネルの代わりに編成カード自体への視覚マーキング（枠線＋アイコンバッジ）として表示する。
 function updateArmyGuide() {
-  const panel  = document.getElementById('army-guide-panel');
-  const result = document.getElementById('army-guide-result');
-  if (!panel || !result) return;
-
   // 全軍のスコアと進行度を取得
   const armies = [1, 2, 3].map(s => {
     const prog = computeDisplayedArmyProgress(s);
@@ -4099,28 +4098,22 @@ function updateArmyGuide() {
     const weakest = members.length
       ? members.slice().sort((a, b) => a.wp - b.wp)[0]
       : null;
-    // 平均EW Lv
-    const avgWp = members.length
-      ? Math.round(members.reduce((sum, m) => sum + m.wp, 0) / members.length)
-      : 0;
-    return { s, prog, members, weakest, avgWp, filled: members.length };
+    return { s, prog, members, weakest, filled: members.length };
   });
 
-  // 10人未満なら非表示
+  // 10人未満ならマーキング不要（クリアだけ行う）
   const totalFilled = armies.reduce((sum, a) => sum + a.filled, 0);
   if (totalFilled < 10) {
-    panel.style.display = 'none';
+    __applyArmyGuideCardMarks([], []);
     return;
   }
-  panel.style.display = 'block';
 
-  // 控えから昇格候補を検出
+  // 控えから昇格候補を検出（各軍の最弱メンバーより明確に強い控えがいるか）
   const benchCandidates = [];
   for (let p = 1; p <= 10; p++) {
-    const id  = ($id(`h-bench-${p}`) || {}).value;
-    const wp  = parseInt(($id(`w-bench-${p}`) || {}).value) || 0;
+    const id  = ($id(`h-4-${p}`) || {}).value;
+    const wp  = parseInt(($id(`w-4-${p}`) || {}).value) || 0;
     if (!id || id === 'empty' || !HEROES[id]) continue;
-    // 各軍の最弱メンバーより強い場合に候補
     armies.forEach(army => {
       if (!army.weakest) return;
       if (wp > army.weakest.wp + 5) {
@@ -4141,91 +4134,44 @@ function updateArmyGuide() {
   });
   const topBench = Object.values(bestBench).sort((a, b) => b.gain - a.gain).slice(0, 3);
 
-  // 部隊間の投資フェーズを判定
-  // 基準：1軍戦力70%以上→2軍投資開始、85%以上→3軍も投資
-  const p1 = armies[0].prog.pct;
-  const p2 = armies[1].prog.pct;
-  const p3 = armies[2].prog.pct;
+  __applyArmyGuideCardMarks(armies, topBench);
+}
 
-  let phaseMsg = '';
-  let phaseColor = '#4f46e5';
-  let nextTarget = '';
+// 「部隊強化の指針」の情報（ボトルネック・控え昇格候補）を、テキストパネルではなく
+// 編成カード自体に視覚マーキング（枠線＋アイコンバッジ）として反映する。
+// 1〜3軍の全カードのマークをまず一旦クリアしてから、最新の判定結果を再適用する。
+function __applyArmyGuideCardMarks(armies, topBench){
+    try {
+        // 既存マークを全クリア（1〜4軍・控え全スロット）
+        // ※実際に表示されているのはslot-tile（renderSlots）。interactive-card（squad-container）は
+        //   非表示パネル内のレガシーDOMのため対象外。
+        for (let s = 1; s <= 4; s++) {
+            const slotCount = (s === 4) ? 10 : 5;
+            for (let p = 1; p <= slotCount; p++) {
+                const tile = $id(`slot-tile-${s}-${p}`);
+                if (tile) tile.classList.remove('card-bottleneck', 'card-promote-candidate');
+            }
+        }
 
-  // F2P目標基準（100%超えあり）
-  // 80%以上 = EW20前後の現実的な「十分育った」水準
-  // 100%超 = EW20を超えてEW30方向への追加投資中
-  if (p1 >= 80 && p2 >= 65) {
-    phaseMsg = '🥇 1軍・2軍ともに充実。3軍の底上げ、またはEW30への追加投資を検討しましょう';
-    phaseColor = '#059669';
-    nextTarget = '3軍';
-  } else if (p1 >= 80) {
-    phaseMsg = '🥈 1軍がF2P目標水準に到達。2軍の強化を始めるタイミングです';
-    phaseColor = '#2563eb';
-    nextTarget = '2軍';
-  } else if (p1 >= 60) {
-    phaseMsg = '🥇 1軍があと一歩。EW20を目標に育成を続けましょう（80%到達で2軍投資開始の目安）';
-    phaseColor = '#d97706';
-    nextTarget = '1軍';
-  } else {
-    phaseMsg = '🥇 まずは1軍を優先。キム・ウィリアムズのEW20が最初の大きな節目です';
-    phaseColor = '#dc2626';
-    nextTarget = '1軍';
-  }
+        // ボトルネック（各軍の最弱メンバー）に枠線
+        (armies || []).forEach(army => {
+            if (!army.weakest || army.filled < 3) return;
+            const p = army.weakest.p;
+            if (!p) return;
+            const tile = $id(`slot-tile-${army.s}-${p}`);
+            if (tile) tile.classList.add('card-bottleneck');
+        });
 
-  const hName = id => (HEROES[id] || {}).n || id;
-
-  // 各軍のボトルネック（最弱メンバー）
-  // 次の節目EW Lvを計算
-  const nextMilestone = wp => wp < 10 ? 10 : wp < 20 ? 20 : wp < 30 ? 30 : null;
-
-  const bottleneckHtml = armies.map(army => {
-    if (!army.weakest || army.filled < 3) return '';
-    const colorMap = { 1:'#10b981', 2:'#3b82f6', 3:'#8b5cf6' };
-    const c = colorMap[army.s];
-    const next = nextMilestone(army.weakest.wp);
-    const nextStr = next ? ` → 次の節目はLv${next}` : ' → EW MAX';
-    return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f1f5f9;">
-      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:28px;">${army.s}軍</span>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;flex-wrap:wrap;">
-          <div style="width:24px;height:24px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
-            <img src="img/${army.weakest.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
-          </div>
-          <span style="font-size:var(--fs-xs);font-weight:900;color:#374151;">${hName(army.weakest.id)}</span>
-          <span style="font-size:var(--fs-xxs);color:#f97316;font-weight:700;">⚠️ EW Lv${army.weakest.wp}${nextStr}</span>
-        </div>
-        <div style="background:#f1f5f9;border-radius:3px;height:4px;">
-          <div style="background:${c};width:${army.prog.pct}%;height:100%;border-radius:3px;"></div>
-        </div>
-      </div>
-      <span style="font-size:var(--fs-xs);font-weight:900;color:${c};width:36px;text-align:right;">${army.prog.pct}%</span>
-    </div>`;
-  }).join('');
-
-  // 控えから昇格候補HTML
-  const benchHtml = topBench.length > 0
-    ? `<div style="margin-top:8px;padding:8px 10px;background:#f5f3ff;border-radius:8px;border:1px solid #ddd6fe;">
-        <div style="font-size:var(--fs-xs);font-weight:900;color:#6d28d9;margin-bottom:5px;">⬆️ 控えから昇格候補</div>
-        ${topBench.map(c => `
-          <div style="display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);margin-bottom:3px;">
-            <div style="width:22px;height:22px;border-radius:5px;overflow:hidden;background:#0b1220;flex-shrink:0;">
-              <img src="img/${c.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
-            </div>
-            <span style="font-weight:900;color:#374151;">${hName(c.id)}</span>
-            <span style="color:#475569;">EW${c.wp}</span>
-            <span style="color:#7c3aed;font-weight:700;">→ ${c.squad}軍</span>
-            <span style="font-size:var(--fs-xxs);color:#475569;">（${hName(c.weakestId)} EW${c.weakestWp}と入替候補）</span>
-          </div>`).join('')}
-      </div>`
-    : '';
-
-  result.innerHTML = `
-    <div style="font-size:var(--fs-sm);font-weight:900;color:${phaseColor};margin-bottom:8px;padding:6px 8px;background:${phaseColor}12;border-radius:7px;">${phaseMsg}</div>
-    <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（${(()=>{ const __pt=(typeof loadPlayerType==='function')?loadPlayerType():'f2p'; const __rt=(typeof ROLE_TARGET_PRESET==='object'&&ROLE_TARGET_PRESET[__pt])?ROLE_TARGET_PRESET[__pt]:{atk:20,wall:20,sup:10}; return `アタッカー/タンク: Lv${__rt.atk}・サポート: Lv${__rt.sup}`; })()}）への平均到達度</div>
-    <div style="font-size:var(--fs-xs);font-weight:900;color:#374151;margin-bottom:4px;">📊 各部隊の戦力と育成ボトルネック</div>
-    ${bottleneckHtml}
-    ${benchHtml}
-  `;
+        // 控えから昇格候補：配置先の最弱メンバー（入替対象）に枠線
+        (topBench || []).forEach(c => {
+            const targetArmy = (armies || []).find(a => a.s === c.squad);
+            if (!targetArmy || !targetArmy.weakest) return;
+            const p = targetArmy.weakest.p;
+            if (!p) return;
+            const tile = $id(`slot-tile-${c.squad}-${p}`);
+            if (tile) tile.classList.add('card-promote-candidate');
+        });
+    } catch(e) {}
 }
 
 function renderProgress(percent, baseColor){
@@ -4919,7 +4865,7 @@ function renderSlots(){
 
             if(isEmpty){
                 html += `
-                <div class="slot-tile slot-empty" onclick="openSlotModal(${cfg.s},${p});">
+                <div class="slot-tile slot-empty" id="slot-tile-${cfg.s}-${p}" onclick="openSlotModal(${cfg.s},${p});">
                     <div class="slot-avatar">
                         <div class="slot-fallback" style="display:flex;">+</div>
                     </div>
@@ -4942,7 +4888,7 @@ function renderSlots(){
                     awBadge = `<div class="awaken-badge-star">${tierLabel}</div>`;
                 }
                 html += `
-                <div class="slot-tile${isAwakened ? ' is-awakened' : ''}" onclick="openSlotModal(${cfg.s},${p});">
+                <div class="slot-tile${isAwakened ? ' is-awakened' : ''}" id="slot-tile-${cfg.s}-${p}" onclick="openSlotModal(${cfg.s},${p});">
                     <div class="slot-avatar">
                         <img src="${getHeroImagePath(id)}" alt="${h.n}" onerror="this.style.display='none'; this.parentNode.querySelector('.slot-fallback').style.display='flex';">
                         <div class="slot-fallback" style="display:none;">${shortName}</div>
@@ -5492,10 +5438,14 @@ function slotModalApply(){
 }
 
 // updateAllSquads の後にタイルも更新する
+// ⚠️ renderSlots()はslot-tileのinnerHTMLを完全に再構築するため、
+//   元の処理内で適用したボトルネック等のマーキング（class/badge）が消えてしまう。
+//   そのためrenderSlots()の後に再度マーキングを適用し直す。
 const __origUpdateAllSquads = updateAllSquads;
 updateAllSquads = function(){
     __origUpdateAllSquads();
     try { renderSlots(); } catch(e) {}
+    try { updateArmyGuide(); } catch(e) {}
 };
 
 function exportAsImage() { showToast("📸 生成中..."); html2canvas($id('squad-container')).then(c => { let l = document.createElement('a'); l.download = `配置_${Date.now()}.png`; l.href = c.toDataURL(); l.click(); showToast("✨ 保存完了"); }); }
@@ -5767,7 +5717,6 @@ function togglePanel(bodyId, iconId) {
 }
 function restorePanelStates() {
   const iconMap = {
-    'army-guide-body':       'army-guide-icon',
     'power-transition-body': 'trans-icon',
     'awaken-rank-body':      'awaken-rank-icon',
     'preset-body':           'preset-icon',
