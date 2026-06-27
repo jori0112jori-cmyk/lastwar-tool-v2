@@ -581,10 +581,77 @@ const TYPE_COUNTER_WEIGHT = {
   none:{ tank:0.50, air:0.50, mis:0.50 }
 };
 
-const ROUTE_WEIGHT_PRESET = {
-  overall:{ cost:0.45, coverage:0.30, future:0.25 },
-  safe:{ cost:0.60, coverage:0.25, future:0.15 }
+// プレイヤータイプ（無課金・微課金・重課金）別の重み付けプリセット。
+// cost   = コスパ（強化値÷コスト）をどれだけ重視するか
+// coverage = 編成の弱点対策をどれだけ重視するか
+// future = 将来性・最大火力をどれだけ重視するか（コストは度外視しがち）
+// 無課金ほどcostを高く、重課金ほどfutureを高くする設計。
+// プレイヤータイプ別の「コストペナルティ指数」(cost^X の X)。
+// 指数が小さいほど高コスト項目への割り負けが緩くなり、コストを気にしない重課金プレイヤー向けになる。
+// 無課金は従来通りの0.52（コスパ重視）、重課金は0.20まで下げて高コスト・高威力の投資を上位表示しやすくする。
+// ※ROUTE_WEIGHT_PRESETのcost/coverage/future重みは「3スコアの混ぜ方」の調整であり、
+//   こちらはスコアの土台（basePerCost）そのもののコスト感度を変える、より根本的な調整。
+const COST_PENALTY_EXP_PRESET = {
+  f2p:   0.52,  // 無課金：コストの影響を強く受ける（コスパ重視）
+  light: 0.38,  // 微課金：中間
+  heavy: 0.20,  // 重課金：コストの影響を弱め、最大火力・将来性を重視
 };
+
+const ROUTE_WEIGHT_PRESET = {
+  f2p:    { cost:0.65, coverage:0.25, future:0.10 },  // 無課金：コスパ最優先
+  light:  { cost:0.45, coverage:0.30, future:0.25 },  // 微課金：バランス型（旧overall相当）
+  heavy:  { cost:0.20, coverage:0.20, future:0.60 },  // 重課金：将来性・最大火力重視
+  // 後方互換用（旧名）。新規コードはplayerType経由のpresetを使うこと。
+  overall:{ cost:0.45, coverage:0.30, future:0.25 },
+  safe:   { cost:0.60, coverage:0.25, future:0.15 }
+};
+
+// プレイヤータイプ別の「ロール別目標EW Lv」。達成率（部隊完成度）の基準値になる。
+// 無課金は現実的なF2P目標、重課金はフルEW（Lv30/Lv30/Lv20）を目指す前提。
+const ROLE_TARGET_PRESET = {
+  f2p:   { atk:20, wall:20, sup:10 },
+  light: { atk:25, wall:25, sup:15 },
+  heavy: { atk:30, wall:30, sup:20 },
+};
+
+const PLAYER_TYPE_LABELS = {
+  f2p:   { label: '無課金', icon: '🆓' },
+  light: { label: '微課金', icon: '💳' },
+  heavy: { label: '重課金', icon: '💎' },
+};
+
+// プレイヤータイプの保存・読み込み（localStorage、AIプロバイダ選択と同じ方式）
+function loadPlayerType() {
+    try {
+        const v = localStorage.getItem('player_type');
+        return (v && ROUTE_WEIGHT_PRESET[v] && ROLE_TARGET_PRESET[v]) ? v : 'f2p';
+    } catch(e) { return 'f2p'; }
+}
+function savePlayerType(type) {
+    try {
+        if (ROUTE_WEIGHT_PRESET[type] && ROLE_TARGET_PRESET[type]) {
+            localStorage.setItem('player_type', type);
+        }
+        updatePlayerTypeButtons();
+        // プレイヤータイプの変更は達成率・育成優先ランキング・補強候補の計算全てに影響するため、
+        // 編成評価と育成優先ランキングを再計算してUIに反映する。
+        try { updateAllSquads(); } catch(e) {}
+        try { generateAiSuggestion(); } catch(e) {}
+    } catch(e) {}
+}
+function updatePlayerTypeButtons() {
+    try {
+        const current = loadPlayerType();
+        ['f2p','light','heavy'].forEach(type => {
+            const btn = $id('player-type-btn-' + type);
+            if (!btn) return;
+            const active = (type === current);
+            btn.style.background = active ? '#2563eb' : '#fff';
+            btn.style.color = active ? '#fff' : '#475569';
+            btn.style.borderColor = active ? '#2563eb' : '#cbd5e1';
+        });
+    } catch(e) {}
+}
 
 
 // ===============================
@@ -1014,9 +1081,10 @@ function buildAiReportText() {
                 lines.push('');
             }
             if (full && full.reinforceList && full.reinforceList.length) {
-                lines.push('【ツールの計算結果：補強候補ランキング（上位3件）】');
+                lines.push('【ツールの計算結果：おすすめ育成プラン（短期・中期・長期）】');
                 full.reinforceList.slice(0, 3).forEach((item, i) => {
-                    lines.push(`  ${i+1}. ${item.name}`);
+                    const tfLabel = (item.growthType && item.growthType.label) || '';
+                    lines.push(`  ${i+1}. ${item.name}${tfLabel ? `（${tfLabel}）` : ''}`);
                 });
                 lines.push('');
             }
@@ -1031,116 +1099,6 @@ function buildAiReportText() {
     lines.push('育成シミュレーターが算出した計算結果です。これらを踏まえて、育成の優先順位や編成の強化ポイントに');
     lines.push('ついて一緒に相談しながら進めたいです。');
     return lines.join('\n');
-}
-
-// ====================================================
-// 🧪 [テスト機能] ツール内AI評価（Gemini API中継・動作確認用）
-// 現時点では既存UIには組み込まず、単独ボタンから呼び出して
-// 中継エンドポイント（/api/ai-evaluate）の動作確認のみを行う。
-// 本実装（既存AI相談機能への統合）は別途検討。
-// ====================================================
-
-// 配置済み英雄のうち、ツール内部評価(priority)と海外コミュニティ評価(globalReview)が
-// 両方存在する英雄だけを対象に、簡易的な比較テキストを組み立てる。
-function buildHeroEvalGapText(placedHeroIds) {
-    const lines = [];
-    const seen = new Set();
-    placedHeroIds.forEach(id => {
-        if (seen.has(id)) return;
-        seen.add(id);
-        const adv = HERO_SLOT_ADVICE[id];
-        if (!adv || !adv.globalReview) return;
-        const h = HEROES[id];
-        const name = h ? h.n : id;
-        lines.push(`- ${name}：ツール内部評価=${adv.priority || '不明'} ／ 海外コミュニティ評価=「${adv.globalReview}」`);
-    });
-    return lines;
-}
-
-// 現在配置されている英雄IDの一覧を取得（軍1〜4の全スロットから収集、重複除去）
-function getPlacedHeroIds() {
-    const ids = [];
-    for (let s = 1; s <= 4; s++) {
-        const slotCount = (s === 4) ? 10 : 5;
-        for (let p = 1; p <= slotCount; p++) {
-            const sel = $id(`h-${s}-${p}`);
-            if (!sel) continue;
-            const id = sel.value;
-            if (id && id !== 'empty') ids.push(id);
-        }
-    }
-    return ids;
-}
-
-// テスト用プロンプトを組み立てる：
-// 既存のbuildAiReportText()の内容 ＋ 配置済み英雄のツール内部評価/海外評価のズレ情報
-function buildTestAiEvalPrompt() {
-    const baseReport = buildAiReportText();
-    const placedIds = getPlacedHeroIds();
-    const gapLines = buildHeroEvalGapText(placedIds);
-
-    const lines = [];
-    lines.push(baseReport);
-    lines.push('');
-    lines.push('---');
-    lines.push('【参考：配置中の英雄について、ツール内部評価と海外コミュニティ評価の比較】');
-    if (gapLines.length) {
-        lines.push(...gapLines);
-        lines.push('');
-        lines.push('上記の比較を踏まえて、ツール内部評価と海外コミュニティ評価が大きくズレている英雄があれば');
-        lines.push('指摘してください。また、そのズレを考慮した上で、育成優先順位の見直しが必要かどうかも');
-        lines.push('一緒にコメントしてください。');
-    } else {
-        lines.push('（配置中の英雄について、海外コミュニティ評価データが見つかりませんでした）');
-    }
-    return lines.join('\n');
-}
-
-// テスト用ボタンから呼び出す関数：中継エンドポイントにPOSTし、結果を画面に表示する
-async function testAiEvaluate() {
-    const resultBox = $id('ai-test-result');
-    const btn = $id('ai-test-btn');
-    if (!resultBox) {
-        console.error('ai-test-result要素が見つかりません');
-        return;
-    }
-
-    const prompt = buildTestAiEvalPrompt();
-
-    resultBox.style.display = 'block';
-    resultBox.textContent = '⏳ AI評価を取得中...（Gemini API呼び出し中）';
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ 取得中...'; }
-
-    try {
-        const res = await fetch('/api/ai-evaluate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt })
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (!res.ok || !data) {
-            const errMsg = (data && data.error) ? data.error : `HTTPエラー（${res.status}）`;
-            resultBox.textContent = `❌ エラー: ${errMsg}`;
-            console.error('testAiEvaluate failed:', data);
-            return;
-        }
-
-        if (data.error) {
-            resultBox.textContent = `❌ エラー: ${data.error}`;
-            console.error('testAiEvaluate API error:', data);
-            return;
-        }
-
-        resultBox.textContent = data.text || '（応答が空でした）';
-
-    } catch (e) {
-        resultBox.textContent = `❌ 通信エラー: ${e.message || e}`;
-        console.error('testAiEvaluate exception:', e);
-    } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '🧪 AI評価テスト実行'; }
-    }
 }
 
 // AI選択：localStorageへの保存・読み込み
@@ -1473,14 +1431,15 @@ function computeDisplayedArmyProgress(armyNo){
 
   const res = evaluateSquadRealCombat(members);
 
-  // F2P現実目標：ロール別の目標EW Lv
-  // atk（アタッカー）: EW20、wall（タンク）: EW20、sup（サポート）: EW10
+  // プレイヤータイプ別の目標EW Lv（無課金=F2P現実目標、微課金/重課金はより高いLvを目標にする）
   // 各英雄を「そのロールの目標EW」と1対1比較して平均達成率を算出
-  const roleTarget = { atk:20, wall:20, sup:10 };
+  const __pt = (typeof loadPlayerType === 'function') ? loadPlayerType() : 'f2p';
+  const roleTarget = (typeof ROLE_TARGET_PRESET === 'object' && ROLE_TARGET_PRESET[__pt]) ? ROLE_TARGET_PRESET[__pt] : { atk:20, wall:20, sup:10 };
 
   let totalRate = 0;
   let count = 0;
   members.forEach(m => {
+    if (m.ur) return; // UR昇格組は目標EWの考え方が異なるため除外（__aiSquadCompletionFactorと同じ扱い）
     const target = roleTarget[m.r] || 20;
     const rate = Math.min(1.0, m.wp / Math.max(target, 1));
     totalRate += rate;
@@ -1817,7 +1776,7 @@ function updateTransitionRecommendationUI(){
   body.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
       <span style="font-size:var(--fs-md);font-weight:900;color:#374151;">${squadLabel[nextSquad]}の推奨兵種</span>
-      <span style="font-size:var(--fs-xxs);color:#475569;background:#f1f5f9;border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;">手持ち＋控えから算出・EW20基準</span>
+      <span style="font-size:var(--fs-xxs);color:#475569;background:#f1f5f9;border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;">手持ち＋控えから算出・現在の武装Lv基準</span>
     </div>
     ${mixedCard}
     ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
@@ -1858,6 +1817,7 @@ window.onload = function() {
     // （所持英雄の判定に現在のh-s-pの値を使うため）
     try { renderPresetPanel(); } catch(e) {} 
 try { updateAiConsultButton(); } catch(e) {}
+try { updatePlayerTypeButtons(); } catch(e) {}
 
 // ===== オンボーディング =====
 function showOnboardIfNeeded() {
@@ -2107,6 +2067,7 @@ function topRankCardHtml(rank, item, opts){
             <div class="rankhero-topbadge">${badge}${pinBtn}</div>
           </div>
           ${reasonBadges ? `<div class="rankhero-reasons">${reasonBadges}</div>` : ''}
+          ${(safeItem.reasonLabel ? `<div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:1px;">${escapeHtml(safeItem.reasonLabel)}</div>` : '')}
           ${summaryText ? `<div class="rankhero-summary">${escapeHtml(summaryText)}</div>` : ''}
           ${(()=>{
             const hid = safeItem.id||safeItem.key||safeItem.heroId||'';
@@ -2948,6 +2909,9 @@ function growthBadge(g){
         '長期投資向き': 'purple',
         '無理なく強化': 'bal',
         '👑 覚醒':   'purple strong',
+        '🟢 短期で着手': 'green',
+        '🔵 中期目標':   'wall',
+        '🟣 長期投資':   'purple strong',
     };
 
     if(label === '火力補強') axis = 'atk';
@@ -3791,6 +3755,24 @@ function __aiDisplaySafeLabel(hero, ms, context, reasonBadge, scoreCost, scoreCo
   return '';
 }
 
+// 部隊完成度係数：ロスター全体の「現在のプレイヤータイプの目標EWへの平均到達度」(0.0〜1.0)。
+// 達成率が低い（基礎が未完成）ほど短期コスパ重視を強め、高い（基礎完成済み）ほど
+// 将来性・長期投資を強める補正係数として使う。0.5を基準に±0.15の範囲で重みを微調整する。
+function __aiSquadCompletionFactor(roster, playerType){
+    if (!Array.isArray(roster) || !roster.length) return 0.5;
+    const rt = (typeof ROLE_TARGET_PRESET === 'object' && ROLE_TARGET_PRESET[playerType]) ? ROLE_TARGET_PRESET[playerType] : { atk:20, wall:20, sup:10 };
+    let totalRate = 0, count = 0;
+    roster.forEach(hero => {
+        if (hero.ur) return; // UR昇格組は目標EWの考え方が異なるため除外
+        const role = hero.r || 'atk';
+        const target = rt[role] || 20;
+        const rate = Math.min(1.0, (hero.wp || 0) / Math.max(target, 1));
+        totalRate += rate;
+        count++;
+    });
+    return count > 0 ? (totalRate / count) : 0.5;
+}
+
 function calculateUpgradeEfficiencyFull(roster){
     if(roster.length < 10) return {normal:[], unlock:[], weakness1:"balance", weakness2:"balance", weakness3:"balance", reinforceList:[]};
 
@@ -3803,7 +3785,21 @@ function calculateUpgradeEfficiencyFull(roster){
     let weakness3 = detectArmyWeaknessFromDetail(base.armyDetails.army3);
 
     const context = __aiBuildContext(roster, base);
-    const weights = (typeof ROUTE_WEIGHT_PRESET === 'object' && ROUTE_WEIGHT_PRESET.safe) ? ROUTE_WEIGHT_PRESET.safe : { cost:0.55, coverage:0.25, future:0.20 };
+    const playerType = (typeof loadPlayerType === 'function') ? loadPlayerType() : 'f2p';
+    const baseWeights = (typeof ROUTE_WEIGHT_PRESET === 'object' && ROUTE_WEIGHT_PRESET[playerType]) ? ROUTE_WEIGHT_PRESET[playerType] : { cost:0.65, coverage:0.25, future:0.10 };
+
+    // 部隊完成度係数：基礎が未完成（係数が低い）ほどcostを強め、基礎完成済み（係数が高い）ほどfutureを強める。
+    // 0.5を基準点として±0.15の範囲で補正し、極端な傾きにならないようにする。
+    const completionFactor = __aiSquadCompletionFactor(roster, playerType);
+    const completionAdj = (completionFactor - 0.5) * 0.3; // -0.15 ~ +0.15
+    const adjCost = Math.max(0.05, baseWeights.cost - completionAdj);
+    const adjFuture = Math.max(0.05, baseWeights.future + completionAdj);
+    const weightSum = adjCost + baseWeights.coverage + adjFuture;
+    const weights = {
+        cost: adjCost / weightSum,
+        coverage: baseWeights.coverage / weightSum,
+        future: adjFuture / weightSum
+    };
 
     let normalResults = [];
     let unlockResults = [];
@@ -3845,7 +3841,8 @@ function calculateUpgradeEfficiencyFull(roster){
         if(gain <= 0) return;
 
         const cost = ms.cost;
-        const basePerCost = gain / Math.max(1, Math.pow(cost || 1, 0.52));
+        const costExp = (typeof COST_PENALTY_EXP_PRESET === 'object' && COST_PENALTY_EXP_PRESET[playerType] != null) ? COST_PENALTY_EXP_PRESET[playerType] : 0.52;
+        const basePerCost = gain / Math.max(1, Math.pow(cost || 1, costExp));
         const sameMain = hero.t === context.currentCombatType;
         const sameInvest = hero.t === context.investmentType;
         const inMainArmy = context.mainArmyIds.has(hero.id);
@@ -3929,7 +3926,8 @@ function calculateUpgradeEfficiencyFull(roster){
             // コスト換算（専用かけら×15, 汎用かけら×10 強化石換算）
             const convRate = next.named ? 15 : 10;
             const costEquiv = next.cost * convRate;
-            const efficiency = ptGain / Math.max(1, Math.pow(costEquiv, 0.52));
+            const awCostExp = (typeof COST_PENALTY_EXP_PRESET === 'object' && COST_PENALTY_EXP_PRESET[playerType] != null) ? COST_PENALTY_EXP_PRESET[playerType] : 0.52;
+            const efficiency = ptGain / Math.max(1, Math.pow(costEquiv, awCostExp));
 
             // 重複チェック（同英雄がEWランキングにも出てる場合はawaken版を優先）
             const awItem = {
@@ -3985,6 +3983,32 @@ function calculateUpgradeEfficiencyFull(roster){
     if(mainPick) reinforceList.push(mainPick);
     if(coveragePick) reinforceList.push(coveragePick);
     if(futurePick) reinforceList.push(futurePick);
+
+    // おすすめ育成プラン（短期・中期・長期）：
+    // 「どの節目（マイルストーン）に到達する投資か」で時間軸を判定する。
+    // 武装Lvは0→10→20→30の節目で育成するため、到達先の節目そのものが実際の投資規模を表す。
+    // 到達先がLv10の節目=短期、Lv20の節目=中期、Lv30の節目または覚醒=長期。
+    // 元の「軸の種類」（主力強化／弱点対策／将来性）はreasonLabelに補足情報として残す。
+    const TIMEFRAME_META = {
+        short: { label: '🟢 短期で着手', axis: 'green' },
+        mid:   { label: '🔵 中期目標',   axis: 'wall'  },
+        long:  { label: '🟣 長期投資',   axis: 'purple' },
+    };
+    reinforceList.forEach(item => {
+        item.reasonLabel = (item.growthType && item.growthType.label) || '';
+        const toMilestone = item.to || 0;
+        if (item.isAwakeningItem) {
+            item.timeframe = 'long';
+        } else if (toMilestone >= 30) {
+            item.timeframe = 'long';   // Lv30の節目 = 長期
+        } else if (toMilestone >= 20) {
+            item.timeframe = 'mid';    // Lv20の節目 = 中期
+        } else {
+            item.timeframe = 'short';  // Lv10の節目（またはそれ以下） = 短期
+        }
+        const tfMeta = TIMEFRAME_META[item.timeframe];
+        item.growthType = { level: 2, axis: tfMeta.axis, label: tfMeta.label, strong: (item.timeframe === 'long') };
+    });
 
     return { normal: normalResults, unlock: unlockResults, awaken: awakenResults, weakness1, weakness2, weakness3, reinforceList };
 }
@@ -4197,7 +4221,7 @@ function updateArmyGuide() {
 
   result.innerHTML = `
     <div style="font-size:var(--fs-sm);font-weight:900;color:${phaseColor};margin-bottom:8px;padding:6px 8px;background:${phaseColor}12;border-radius:7px;">${phaseMsg}</div>
-    <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（アタッカー/タンク: Lv20・サポート: Lv10）への平均到達度</div>
+    <div style="font-size:var(--fs-xs);color:#475569;margin-bottom:6px;">💡 達成率 = 各英雄の目標EW（${(()=>{ const __pt=(typeof loadPlayerType==='function')?loadPlayerType():'f2p'; const __rt=(typeof ROLE_TARGET_PRESET==='object'&&ROLE_TARGET_PRESET[__pt])?ROLE_TARGET_PRESET[__pt]:{atk:20,wall:20,sup:10}; return `アタッカー/タンク: Lv${__rt.atk}・サポート: Lv${__rt.sup}`; })()}）への平均到達度</div>
     <div style="font-size:var(--fs-xs);font-weight:900;color:#374151;margin-bottom:4px;">📊 各部隊の戦力と育成ボトルネック</div>
     ${bottleneckHtml}
     ${benchHtml}
@@ -4426,8 +4450,11 @@ if(effData.normal.length > 0){
     if(effData.reinforceList && effData.reinforceList.length > 0){
         effOut += `
         <div class="best-card-box">
-            <div style="font-weight:900; color:#ea580c; margin-bottom:8px; font-size:var(--fs-lg);">
-                🛡️ 補強候補ランキング
+            <div style="font-weight:900; color:#ea580c; margin-bottom:4px; font-size:var(--fs-lg);">
+                📅 おすすめ育成プラン（短期・中期・長期）
+            </div>
+            <div style="font-size:var(--fs-xs);color:#94a3b8;margin-bottom:8px;">
+                今の編成を踏まえて、すぐ着手できるもの・中期目標・長期投資の3つを提案します。
             </div>`;
 
         effData.reinforceList.forEach((r,i)=>{

@@ -62,7 +62,6 @@
             </div>
             <div id="copy-claude-toast" style="display:none;margin-bottom:8px;padding:6px 10px;background:#dbeafe;border:1px solid #93c5fd;border-radius:8px;font-size:var(--fs-xs);color:#1e40af;font-weight:700;">✅ コピーしました＆新しいタブを開きました。新しい会話に貼り付け（長押し→貼り付け／Ctrl+V）て相談できます。</div>
 
-           
             <div class="suggestion-box" style="margin-bottom:10px;">
                 武装Lv,覚醒Lv（0〜30）を設定。変更内容は育成アドバイスやランキングに自動反映。
             </div>
@@ -150,6 +149,14 @@
 
         <div id="eff-panel" class="panel route-panel">
             <div class="panel-title" style="color:#c026d3;">専用武装 育成優先ランキング</div>
+            <div style="margin-bottom:10px;">
+                <div style="font-size:var(--fs-xs);color:#64748b;margin-bottom:5px;">課金度合いを選ぶと、達成率の目標値や育成優先ランキングのおすすめ順が変わります</div>
+                <div style="display:flex;gap:6px;">
+                    <button id="player-type-btn-f2p" onclick="savePlayerType('f2p')" style="flex:1;font-size:var(--fs-xs);padding:7px 6px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:900;cursor:pointer;">🆓 無課金</button>
+                    <button id="player-type-btn-light" onclick="savePlayerType('light')" style="flex:1;font-size:var(--fs-xs);padding:7px 6px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:900;cursor:pointer;">💳 微課金</button>
+                    <button id="player-type-btn-heavy" onclick="savePlayerType('heavy')" style="flex:1;font-size:var(--fs-xs);padding:7px 6px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#475569;font-weight:900;cursor:pointer;">💎 重課金</button>
+                </div>
+            </div>
             <div id="eff-result" class="suggestion-box">正確なコストと編成診断に基づき、最も効果的な強化先を提案します。</div>
         </div>
 
@@ -239,8 +246,9 @@
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🚀 育成優先ランキング</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li><b>課金度合い（無課金・微課金・重課金）</b>：「AI編成アドバイス」パネル上部で選択。達成率の目標EWやランキングの並び順（コスパ重視か将来性重視か）が変わります。</li>
             <li><b>専用武装ランキング</b>：次のLv目標（10/20/30）への効率順。</li>
-            <li><b>補強候補ランキング</b>：現在の編成の弱点を埋める英雄の提案。</li>
+            <li><b>おすすめ育成プラン（短期・中期・長期）</b>：今の編成を踏まえ、すぐ着手できるもの・中期目標・長期投資の3つを提案。</li>
             <li><b>英雄覚醒ランキング</b>：コスパ・即効性・戦力増加から判定し、次マイルストーンまでの必要かけら数を表示。</li>
           </ul>
 
@@ -253,7 +261,7 @@
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🤖 AIに相談</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>「編成」パネル上部のボタンから、現在の編成データとツールの計算結果（達成率・育成優先ランキング・補強候補）をまとめてコピーできます。</li>
+            <li>「編成」パネル上部のボタンから、現在の編成データとツールの計算結果（達成率・育成優先ランキング・おすすめ育成プラン）をまとめてコピーできます。</li>
             <li>プルダウンでClaude・Gemini・ChatGPTを選択できます。選択は次回も記憶されます。</li>
             <li>ボタンを押すとコピーと同時に該当AIのサイト（またはアプリ）が新しいタブで開きます。新しい会話に貼り付けて、育成の優先順位や編成について相談できます。</li>
             <li>Geminiはアプリ起動が不安定なため、自動で開く代わりにURLを案内表示します。表示されたURLを開いて貼り付けてください。</li>
