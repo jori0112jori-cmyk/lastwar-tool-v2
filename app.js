@@ -2317,7 +2317,7 @@ function renderPresetPanel() {
       ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
       <!-- 英雄アイコン：前衛2体（上段）＋後衛3体（下段） -->
       <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
-      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;">枠の色：<span style="color:#94a3b8;font-weight:900;">グレー薄＝未所持</span>　<span style="color:#64748b;font-weight:900;">グレー濃＝所持・最低未達</span>　<span style="color:#2563eb;font-weight:900;">青＝最低達成</span>　<span style="color:#d97706;font-weight:900;">✨オレンジ＋発光＝理想達成</span></div>
+      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;"><span style="white-space:nowrap;">枠の色：</span><span style="color:#94a3b8;font-weight:900;white-space:nowrap;">グレー薄＝未所持</span><span style="color:#64748b;font-weight:900;white-space:nowrap;">グレー濃＝所持・最低未達</span><span style="color:#2563eb;font-weight:900;white-space:nowrap;">青＝最低達成</span><span style="color:#d97706;font-weight:900;white-space:nowrap;">✨オレンジ＋発光＝理想達成</span></div>
       ${renderHeroIconGrid(p.squad)}
       <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
       </div>
