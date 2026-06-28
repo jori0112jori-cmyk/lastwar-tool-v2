@@ -223,7 +223,7 @@ const HERO_SLOT_ADVICE = {
     ewAdvice: {
       0:  'キンバリーのEW育成が最優先です。メイソンへの投資はキムEW20完成後に検討しましょう。',
       10: 'キンバリーが育っていない場合の暫定アタッカーとして活躍します。キムEW20完成後はキムへ移行しましょう。',
-      20: '戦力としては十分ですが、キム覚醒★0以上になるとキムの方が強くなる場合が多くなります。',
+      20: '戦力としては十分ですが、キムが覚醒解放（★0-1以上）になるとキムの方が強くなる場合が多くなります。',
       30: 'EW上限に到達。フル育成URとして十分な戦力ですが、キム覚醒が進んだ場合はキムを優先しましょう。',
     },
     synergy: 'キンバリー不在・育成前の戦車アタッカー候補です。ウィリアムズ＋マーフィ＋マーシャルとの戦車軸編成で使いましょう。',
@@ -466,7 +466,7 @@ const HERO_PAIR_SYNERGY = {
   dva: {
     lucius:   { base: 1.05, lv10: 1.06, lv20: 1.08, lv30: 1.10 },
     morrison: { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.07 },
-    schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }, // CC封殺→単体バーストのコンボ
     murphy:   { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 }, // 4+1想定
     marshall: { base: 1.01, lv10: 1.02, lv20: 1.03, lv30: 1.04 } // 汎用支援（marshall→dvaの対称）
   },
@@ -485,7 +485,8 @@ const HERO_PAIR_SYNERGY = {
   schuyler: {
     lucius:   { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
     dva:      { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
-    morrison: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // morrison→schuylerの対称
+    morrison: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }, // morrison→schuylerの対称
+    kimberly: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // kimberly→schuylerの対称
   },
   carlie: {
     lucius:   { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // lucius→carlieの対称
@@ -496,7 +497,8 @@ const HERO_PAIR_SYNERGY = {
     marshall: { base: 1.04, lv10: 1.06, lv20: 1.08, lv30: 1.09 },
     murphy:   { base: 1.03, lv10: 1.04, lv20: 1.06, lv30: 1.06 },
     williams: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
-    stetmann: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 }
+    stetmann: { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
+    schuyler: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // CC封殺→AoE炸裂のコンボ（packsify推奨）
   },
   marshall: {
     kimberly: { base: 1.04, lv10: 1.06, lv20: 1.08, lv30: 1.09 },
@@ -551,11 +553,13 @@ const HERO_PAIR_SYNERGY = {
   },
   tesla: {
     fiona:    { base: 1.03, lv10: 1.04, lv20: 1.05, lv30: 1.06 },
-    adam:     { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 }
+    adam:     { base: 1.04, lv10: 1.05, lv20: 1.07, lv30: 1.08 },
+    mcgregor: { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // mcgregor→teslaの対称
   },
   mcgregor: {
     adam:     { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
-    fiona:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 }
+    fiona:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 },
+    tesla:    { base: 1.02, lv10: 1.03, lv20: 1.04, lv30: 1.05 } // 前衛の挑発でテスラのDoT展開を守る
   }
 };
 
@@ -1665,6 +1669,26 @@ function updateTransitionRecommendationUI(){
   const typeScore = {};
   const typeDetail = {};
 
+  // 候補メンバー（最大5人）の中にHERO_PAIR_SYNERGYで結ばれたペアがいれば、
+  // そのシナジー分をスコアに加点する。役割シナジー（コントロール役×主力アタッカー等）も
+  // この方法で自然に反映される（例：スカイラー+キムが候補に並べば自動的に加点）。
+  const __calcCandidateSynergyRate = (candidates) => {
+    const table = (typeof HERO_PAIR_SYNERGY === 'object') ? HERO_PAIR_SYNERGY : null;
+    if (!table) return 0;
+    const idSet = candidates.map(m => m.id);
+    let bonus = 0;
+    for (let i = 0; i < idSet.length; i++) {
+      for (let j = i + 1; j < idSet.length; j++) {
+        const pair = table[idSet[i]] && table[idSet[i]][idSet[j]];
+        if (pair) {
+          const mult = (typeof pair === 'number') ? pair : (pair.base || 1.0);
+          bonus += (mult - 1.0); // 1.05倍なら+0.05として加算
+        }
+      }
+    }
+    return Math.min(bonus, 0.15); // 1セットの候補内で最大+15%まで（暴走防止）
+  };
+
   ['tank','air','mis'].forEach(t => {
     const inSquad   = pool[t].filter(m => m.squad === nextSquad);
     const fromBench = benchPool[t].slice().sort((a,b)=>b.pts-a.pts);
@@ -1672,11 +1696,12 @@ function updateTransitionRecommendationUI(){
     const candidates = [...inSquad, ...fromBench, ...otherSq].sort((a,b)=>b.pts-a.pts).slice(0,5);
 
     const buffInfo = getArmyBuffInfo(candidates);
+    const synergyRate = __calcCandidateSynergyRate(candidates);
     const score = candidates.reduce((s,m)=>
-      s + (m.t===t ? Math.round(m.pts*(1+buffInfo.buffRate)) : m.pts), 0);
+      s + (m.t===t ? Math.round(m.pts*(1+buffInfo.buffRate+synergyRate)) : m.pts), 0);
 
     typeScore[t] = score;
-    typeDetail[t] = { inSquad, fromBench: fromBench.slice(0,3), candidates, buffRate:buffInfo.buffRate, buffCount:buffInfo.maxCount };
+    typeDetail[t] = { inSquad, fromBench: fromBench.slice(0,3), candidates, buffRate:buffInfo.buffRate, buffCount:buffInfo.maxCount, synergyRate };
   });
 
   const sorted = Object.entries(typeScore).sort((a,b)=>b[1]-a[1]);
@@ -1695,6 +1720,7 @@ function updateTransitionRecommendationUI(){
   // 両方覚醒済みで手持ちにいる場合、混成型ボーナスを計算
   const kimExists = [...pool.tank,...benchPool.tank].some(m=>m.id==='kimberly');
   const dvaExists = [...pool.air,...benchPool.air].some(m=>m.id==='dva');
+  const schuylerExists = [...pool.air,...benchPool.air].some(m=>m.id==='schuyler');
   const showMixedRecommend = kimAwAll && dvaAwAll && kimExists && dvaExists;
 
   const hName = id => (HEROES[id]||{}).n || id;
@@ -1725,12 +1751,14 @@ function updateTransitionRecommendationUI(){
       ? d.fromBench.map(m=>`<b>${hName(m.id)}</b>（EW${m.wp}）`).join('・')
       : 'なし';
 
-    // 覚醒メモ
-    let memo = '';
-    if(t==='tank' && kimAwAll) memo = 'キム覚醒済みのため戦車軸が強化されています';
-    if(t==='air'  && dvaAwAll) memo = 'DVA覚醒済みのため航空軸が強化されています';
-    if(t==='air'  && !dvaAwAll && kimAwAll) memo = 'DVA覚醒（Week3解放）後にさらに強化可能です';
-    if(t==='mis'  && hasTesla && teslaAw.star < 0) memo = 'テスラ覚醒（Week6解放）後にさらに強化可能です';
+    // 覚醒メモ・シナジーメモ（複数あれば結合表示）
+    const memoList = [];
+    if(t==='tank' && kimAwAll) memoList.push('キム覚醒済みのため戦車軸が強化されています');
+    if(t==='air'  && dvaAwAll) memoList.push('DVA覚醒済みのため航空軸が強化されています');
+    if(t==='air'  && !dvaAwAll && kimAwAll) memoList.push('DVA覚醒（Week3解放）後にさらに強化可能です');
+    if(t==='mis'  && hasTesla && teslaAw.star < 0) memoList.push('テスラ覚醒（Week6解放）後にさらに強化可能です');
+    if(d.synergyRate >= 0.03) memoList.push(`⚡ 候補内にシナジーの噛み合わせがあります（戦力+${Math.round(d.synergyRate*100)}%相当）`);
+    const memo = memoList.join('<br>');
 
     return `<div style="background:#fff;border:${isBest?'var(--card-border-best)':'var(--card-border)'};border-radius:var(--card-radius);padding:var(--card-padding);margin-bottom:var(--card-gap);overflow:hidden;${isBest?'box-shadow:var(--card-shadow-best);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
@@ -1738,7 +1766,10 @@ function updateTransitionRecommendationUI(){
           ${isBest?'<span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">推奨</span>':`<span style="font-size:var(--fs-xxs);color:#475569;font-weight:700;background:#f1f5f9;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">${rank}番目</span>`}
           <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">${labels[t]}軸</span>
         </div>
-        <span style="font-size:var(--fs-md);font-weight:900;color:${c};white-space:nowrap;">${pct}%</span>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+          <span style="font-size:var(--fs-xxs);color:#94a3b8;white-space:nowrap;">相対戦力</span>
+          <span style="font-size:var(--fs-md);font-weight:900;color:${c};white-space:nowrap;">${pct}%</span>
+        </div>
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:${buffColor};margin-bottom:6px;line-height:1.5;">${buffBadge}</div>
       ${actionTxt?`<div style="font-size:var(--fs-sm);color:#374151;margin-bottom:4px;line-height:1.5;">${actionTxt}</div>`:''}
@@ -1755,13 +1786,15 @@ function updateTransitionRecommendationUI(){
     <div style="background:linear-gradient(135deg,#fff7ed,#fff);border:2px solid #f59e0b;border-radius:var(--card-radius);padding:var(--card-padding);margin-bottom:var(--card-gap);box-shadow:0 2px 10px rgba(245,158,11,0.2);overflow:hidden;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap;">
         <span style="font-size:var(--fs-xxs);font-weight:900;color:#d97706;background:#fef3c7;border:1px solid #fde68a;border-radius:var(--card-radius-sm);padding:1px 6px;white-space:nowrap;">覚醒コンボ推奨</span>
-        <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">キム+DVA混成型</span>
+        <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">${schuylerExists ? 'キム+DVA+スカイラー混成型' : 'キム+DVA混成型'}</span>
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:var(--card-radius-sm);padding:2px 6px;display:inline-block;margin-bottom:6px;white-space:nowrap;">
         兵種バフ+15%（4体編成）
       </div>
       <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;line-height:1.6;">
-        AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。兵種バフは純粋5体構成（+20%）より下がりますが、覚醒効果で総合火力を上回ることが多いです（packsify推奨）。
+        ${schuylerExists
+          ? 'スカイラーのCC（行動妨害）で敵前衛を封殺し、AoE（覚醒キム）＋単体バースト（覚醒DVA）で突破する組み合わせ。現環境のPvPでよく見る最強クラスの混成編成です（packsify推奨）。'
+          : 'AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。兵種バフは純粋5体構成（+20%）より下がりますが、覚醒効果で総合火力を上回ることが多いです（packsify推奨）。'}
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:var(--card-radius-sm);padding:4px 7px;margin-bottom:6px;line-height:1.5;">
         現在地点：キム${awStarLabel(kimAw)}・DVA${awStarLabel(dvaAw)}
@@ -1770,7 +1803,7 @@ function updateTransitionRecommendationUI(){
         最低ライン：キム★0-1＋DVA★0-1（両者覚醒解放済み）<br>理想ライン：キム★3（到達）＋DVA★3（到達）
       </div>
       <div style="font-size:var(--fs-xxs);color:#475569;border-top:1px solid #fde68a;padding-top:6px;line-height:1.6;">
-        構成例：ウィリアムズ＋マーフィ（前衛2体）＋キム＋DVA＋マーシャル
+        構成例：${schuylerExists ? 'ウィリアムズ＋マーフィ（前衛2体）＋キム＋DVA＋スカイラー' : 'ウィリアムズ＋マーフィ（前衛2体）＋キム＋DVA＋マーシャル'}
       </div>
     </div>` : '';
 
@@ -1782,7 +1815,7 @@ function updateTransitionRecommendationUI(){
     ${mixedCard}
     ${sorted.map(([t],i) => typeCard(t,i+1)).join('')}
     <div style="font-size:var(--fs-xxs);color:#475569;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">
-      達成率は最もスコアが高い兵種を100%とした相対比較です。兵種バフは手持ち＋控えで実現可能な目標値を示します。
+      相対戦力は最もスコアが高い兵種を100%とした比較値です（達成率とは別の指標）。兵種バフは手持ち＋控えで実現可能な目標値を示します。
     </div>
   `;
 }
@@ -2177,16 +2210,39 @@ function renderPresetPanel() {
     const heroCard = m => {
       const h = HEROES[m.id]||{};
       const isOwned = ownedIds.has(m.id);
-      const ringColor = isOwned ? '#10b981' : '#cbd5e1';
-      const ringStyle = isOwned
-        ? 'border:4px solid '+ringColor+';box-shadow:0 0 0 3px rgba(16,185,129,0.35), 0 2px 6px rgba(16,185,129,0.4);'
-        : 'border:4px solid '+ringColor+';opacity:0.55;';
+      const currentWp = wpMap.get(m.id) || 0;
+
+      // 4段階の枠線ステータス判定：
+      // 未所持＝薄いグレー／所持・最低未達＝濃いグレー／所持・最低達成＝青／所持・理想達成＝オレンジ
+      const targetMin   = (m.wpMin != null)   ? m.wpMin   : m.wp;
+      const targetIdeal  = (m.wpIdeal != null) ? m.wpIdeal : m.wp;
+      let ringColor, ringStyle;
+      if (!isOwned) {
+        ringColor = '#cbd5e1';
+        ringStyle = 'border:4px solid '+ringColor+';opacity:0.55;';
+      } else if (targetIdeal != null && currentWp >= targetIdeal) {
+        ringColor = '#d97706'; // 理想達成：オレンジ
+        ringStyle = 'border:4px solid '+ringColor+';box-shadow:0 0 0 3px rgba(217,119,6,0.35), 0 2px 6px rgba(217,119,6,0.4);';
+      } else if (targetMin != null && currentWp >= targetMin) {
+        ringColor = '#2563eb'; // 最低達成：青
+        ringStyle = 'border:4px solid '+ringColor+';box-shadow:0 0 0 3px rgba(37,99,235,0.35), 0 2px 6px rgba(37,99,235,0.4);';
+      } else {
+        ringColor = '#64748b'; // 所持・最低未達：濃いグレー（未所持の薄いグレーと区別）
+        ringStyle = 'border:4px solid '+ringColor+';opacity:1;';
+      }
+
+      // wpMin/wpIdealがあれば「最低/理想」を縦2行・色分けで表示。旧形式（wpのみ）との後方互換も維持。
+      const ewBlock = (m.wpMin != null && m.wpIdeal != null)
+        ? (m.wpMin === m.wpIdeal
+            ? `<span class="preset-hero-ew">目標EW${m.wpMin}</span>`
+            : `<span class="preset-hero-ew-min">最低EW${m.wpMin}</span><span class="preset-hero-ew-ideal">理想EW${m.wpIdeal}</span>`)
+        : `<span class="preset-hero-ew">目標EW${m.wp}</span>`;
       return '<div class="preset-hero-col">'
         +'<div class="preset-hero-icon" style="'+ringStyle+'border-radius:10px;">'
         +'<img src="img/'+m.id+'.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">'
         +'</div>'
         +'<span class="preset-hero-name">'+(h.n||m.id)+'</span>'
-        +'<span class="preset-hero-ew">目標EW'+m.wp+'</span>'
+        +ewBlock
         +(m.note ? '<span class="preset-hero-note">'+m.note+'</span>' : '')
         +'</div>';
     };
@@ -2207,14 +2263,15 @@ function renderPresetPanel() {
   }
 
   // 移行しやすさ = テンプレートのメンバーのうち、現在のロスターに既にいる人数
-  // 卒業済み = テンプレートの全メンバーについて、現在の武装Lvが目標以上になっている
+  // 卒業済み = テンプレートの全メンバーについて、現在の武装Lvが理想目標（wpIdeal）以上になっている
   //（その兵種について「もうこのテンプレートの段階は通過済み」という意味）
   // ⚠️ >=を使うこと。目標武装Lv=0のヒーロー（マーシャル等、EW0で機能する設計）がいる場合、
   // 厳密な > だと current(0) > target(0) が常にfalseになり、永久に卒業判定されない不具合があった。
+  const __presetTargetWp = m => (m.wpIdeal != null ? m.wpIdeal : m.wp);
   const allPresetsWithFit = FORMATION_PRESETS.map((p, idx) => {
     const ownedCount = p.squad.filter(m => ownedIds.has(m.id)).length;
     const isGraduated = ownedCount === p.squad.length
-      && p.squad.every(m => (wpMap.get(m.id) || 0) >= m.wp);
+      && p.squad.every(m => (wpMap.get(m.id) || 0) >= __presetTargetWp(m));
     return { p, ownedCount, totalCount: p.squad.length, originalIndex: idx, isGraduated };
   });
   const presetsWithFit = allPresetsWithFit.filter(x => !x.isGraduated);
@@ -3574,6 +3631,9 @@ function __aiFormationSynergyBias(hero, roster, targetLv, context){
   if((__aiGetProfile(hero.id).promotedUr) && table.promotedUrBridge) mult *= table.promotedUrBridge;
   if(hasMainDps && hasSubDps && table.carryPlusSubDps) mult *= table.carryPlusSubDps;
   if(hasMainDps && hasSupport && table.carryPlusSupport) mult *= table.carryPlusSupport;
+  // コントロール役（CC）×主力アタッカーの噛み合わせ：CCで敵前衛を封殺してから主力が突破する型
+  const hasControl = __aiHasAny(roster, ['schuyler']);
+  if(hasControl && hasMainDps && table.controlPlusCarry) mult *= table.controlPlusCarry;
   if(context && hero.t === context.currentCombatType){
     mult *= (__aiGetAiProfile(hero.id).mainTypeBonus || 1.0);
   }

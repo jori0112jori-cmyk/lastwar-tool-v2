@@ -63,6 +63,9 @@ const FORMATION_SYNERGY = {
   awakenKimDvaCombo: 1.10,      // 覚醒キム + 覚醒DVA: 4+1混成の黄金コンビ
   awakenDvaMono: 1.05,          // 覚醒DVA単独 + 航空軸: エースの矜持スタック効率UP
   awakenTeslaFiona: 1.08,       // 覚醒テスラ + フィオナ: 誘導電流×DoTコンボ
+  // 現環境コミュニティ推奨シナジー（packsify等）
+  kimDvaSchuyler: 1.09,         // キム+DVA+スカイラー混成型：CC封殺からのAoE+バースト最強PvP編成
+  schuylerControl: 1.04,        // スカイラーのCCで前衛を封殺してからの突破口を作る型
 };
 
 const HERO_AI_PROFILE = {
@@ -230,75 +233,91 @@ const FORMATION_PRESETS = [
     spendLevel: 'f2p',  // f2p / low / mid
     note: 'EW Lv10でも機能する入門編成。各英雄EW20到達後に上位テンプレへ移行。',
     squad: [
-      { id:'williams',  wp:10, note:'最優先でEW20へ' },
-      { id:'murphy',    wp:10, note:'前衛2枚目・EW20へ' },
-      { id:'kimberly',  wp:20, note:'EW20で覚醒前提達成' },
-      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
-      { id:'stetmann',  wp:10, note:'サブ火力・EW20へ' },
+      { id:'williams',  wpMin:10, wpIdeal:20, note:'最優先でEW20へ' },
+      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛2枚目・EW20へ' },
+      { id:'kimberly',  wpMin:10, wpIdeal:20, note:'EW20で覚醒前提達成' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力・EW20へ' },
     ]
   },
   {
     id: 'standard_tank',
     name: '【標準】戦車メタ完成形',
-    desc: 'packsify標準メタ編成。キムEW30+覚醒★0以上が前提。マーシャルはEW0で機能（余裕があればEW10〜20も有効）。',
+    desc: 'packsify標準メタ編成。キムEW30+覚醒解放済み（★0-1以上）が前提。マーシャルはEW0で機能（余裕があればEW10〜20も有効）。',
     source: 'packsify標準',
     type: 'tank',
     spendLevel: 'low',
     note: 'キムEW20で覚醒解放後、★1到達を目指しながら運用。EW30は長期目標でOK。',
     squad: [
-      { id:'williams',  wp:20, note:'EW20が現実的節目' },
-      { id:'murphy',    wp:10, note:'前衛安定役' },
-      { id:'kimberly',  wp:30, note:'主力・覚醒優先' },
-      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
-      { id:'stetmann',  wp:20, note:'サブ火力・EW20が節目' },
+      { id:'williams',  wpMin:20, wpIdeal:30, note:'EW20が現実的節目' },
+      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛安定役' },
+      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'主力・覚醒優先' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力・EW20が節目' },
     ]
   },
   {
     id: 'kim_dva_whale',
     name: '【上位】キム+DVA混成最強型',
-    desc: 'AoE（キム覚醒）＋単体バースト（DVA覚醒）の最強PvP編成。両者EW20+覚醒★0以上が前提。',
+    desc: 'AoE（キム覚醒）＋単体バースト（DVA覚醒）の最強PvP編成（基本形）。両者EW20+覚醒解放済み（★0-1以上）が前提。スカイラーが育てばCC封殺型への移行も検討を。',
     source: 'packsify whale tier',
     type: 'mix',
     spendLevel: 'mid',
     note: 'DVA覚醒はWeek3解放。キム覚醒後にDVAへ投資。EW20で覚醒前提を満たしてから。',
     squad: [
-      { id:'williams',  wp:20, note:'前衛必須' },
-      { id:'murphy',    wp:10, note:'前衛2枚目' },
-      { id:'kimberly',  wp:30, note:'覚醒★1以上推奨' },
-      { id:'dva',       wp:20, note:'覚醒★0以上推奨' },
-      { id:'marshall',  wp:0,  note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'williams',  wpMin:20, wpIdeal:30, note:'前衛必須' },
+      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛2枚目' },
+      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒解放済み（★0-1）推奨' },
+      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒解放済み（★0-1）推奨' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
+    ]
+  },
+  {
+    id: 'kim_dva_schuyler_pvp',
+    name: '【最強PvP】キム+DVA+スカイラー混成型',
+    desc: 'スカイラーのCCで敵前衛を封殺し、AoE（キム覚醒）＋単体バースト（DVA覚醒）で突破する現環境最強クラスのPvP編成。両者覚醒解放済み（★0-1以上）が前提。',
+    source: 'packsify推奨（現環境トレンド）',
+    type: 'mix',
+    spendLevel: 'mid',
+    note: 'キム覚醒→DVA覚醒（Week3）の順で進め、スカイラーはEW10で基本機能を発揮。',
+    squad: [
+      { id:'williams',  wpMin:20, wpIdeal:30, note:'前衛必須' },
+      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒解放済み（★0-1）推奨' },
+      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒解放済み（★0-1）推奨' },
+      { id:'schuyler',  wpMin:10, wpIdeal:20, note:'CC役・敵前衛封殺' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
     ]
   },
   {
     id: 'air_standard',
     name: '【航空軸】DVA中心型',
-    desc: '航空5体バフ+20%。DVA覚醒でさらに強化。ルシウスEW20が安定の鍵。',
+    desc: '航空5体バフ+20%。DVA覚醒でさらに強化。スカイラーのCCがDVAの単体バーストを通す噛み合わせも持つ。ルシウスEW20が安定の鍵。',
     source: 'allclash推奨',
     type: 'air',
     spendLevel: 'low',
     note: '5航空を無理に組むより、コアが育ってから移行推奨（ldshop）。',
     squad: [
-      { id:'lucius',    wp:20, note:'前衛・EW20が節目' },
-      { id:'carlie',    wp:10, note:'前衛2枚目' },
-      { id:'dva',       wp:20, note:'主力・覚醒対象' },
-      { id:'morrison',  wp:10, note:'サブ火力' },
-      { id:'schuyler',  wp:10, note:'CC役' },
+      { id:'lucius',    wpMin:10, wpIdeal:20, note:'前衛・EW20が節目' },
+      { id:'carlie',    wpMin:10, wpIdeal:20, note:'前衛2枚目' },
+      { id:'dva',       wpMin:10, wpIdeal:20, note:'主力・覚醒対象' },
+      { id:'morrison',  wpMin:10, wpIdeal:20, note:'サブ火力' },
+      { id:'schuyler',  wpMin:10, wpIdeal:20, note:'CC役' },
     ]
   },
   {
     id: 'missile_dot',
     name: '【ロケラン軸】テスラDoT型',
-    desc: 'テスラ覚醒（Week6解放）+フィオナのDoTコンボ。F2Pは覚醒キム→DVA後に検討。',
+    desc: 'テスラ覚醒（Week6解放）+フィオナのDoTコンボ。マクレガーの挑発がテスラのDoT展開を守る前衛シナジーも持つ。F2Pは覚醒キム→DVA後に検討。',
     source: 'cpt-hedge推奨',
     type: 'mis',
     spendLevel: 'low',
     note: 'テスラ覚醒はWeek6解放。1シーズンに1英雄集中のF2P原則ならキム優先。',
     squad: [
-      { id:'mcgregor',  wp:10, note:'前衛タンク' },
-      { id:'adam',      wp:10, note:'前衛2枚目' },
-      { id:'fiona',     wp:20, note:'DoTコンボの核' },
-      { id:'tesla',     wp:20, note:'覚醒後に真価' },
-      { id:'swift',     wp:10, note:'サブ火力' },
+      { id:'mcgregor',  wpMin:10, wpIdeal:20, note:'前衛タンク' },
+      { id:'adam',      wpMin:10, wpIdeal:20, note:'前衛2枚目' },
+      { id:'fiona',     wpMin:10, wpIdeal:20, note:'DoTコンボの核' },
+      { id:'tesla',     wpMin:10, wpIdeal:20, note:'覚醒後に真価' },
+      { id:'swift',     wpMin:10, wpIdeal:20, note:'サブ火力' },
     ]
   },
 ];
