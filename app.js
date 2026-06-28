@@ -1231,20 +1231,6 @@ function awStarLabel(at) {
   if (at.tier === 5) return `★${at.star + 1}（到達）`;
   return `★${at.star}-${at.tier}`;
 }
-// 推奨マイルストーンのコメント付きラベル
-// 「★0-1解放済み（最低限）」「★3-0（理想）」など
-function awStarLabelWithNote(at, heroId) {
-  const label = awStarLabel(at);
-  if (!at || at.star < 0) return label;
-  const notes = {
-    kimberly: { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（自動決意発動）', 3:'（最重要★：増幅先行獲得）', 5:'（MAX）' },
-    dva:      { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（スタック効率UP）', 3:'（追撃+20%）', 5:'（MAX）' },
-    tesla:    { 0:'（覚醒解放済み・基礎ステ+20%）', 1:'（DoT本格化）', 3:'（反射+1）', 5:'（MAX）' },
-  };
-  const heroNotes = notes[heroId] || {};
-  const note = heroNotes[at.star] || '';
-  return `${label}${note}`;
-}
 
 function parseAwTier(val) {
   if (!val || val === 'none') return { star:-1, tier:0 };
@@ -2331,7 +2317,7 @@ function renderPresetPanel() {
       ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
       <!-- 英雄アイコン：前衛2体（上段）＋後衛3体（下段） -->
       <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
-      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;">枠の色：<span style="color:#10b981;font-weight:900;">✨太い緑枠＋発光=所持済み</span>　<span style="color:#94a3b8;font-weight:900;">グレー枠＋薄い表示=未所持</span></div>
+      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;">枠の色：<span style="color:#94a3b8;font-weight:900;">グレー薄＝未所持</span>　<span style="color:#64748b;font-weight:900;">グレー濃＝所持・最低未達</span>　<span style="color:#2563eb;font-weight:900;">青＝最低達成</span>　<span style="color:#d97706;font-weight:900;">✨オレンジ＋発光＝理想達成</span></div>
       ${renderHeroIconGrid(p.squad)}
       <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
       </div>
@@ -2795,8 +2781,8 @@ function evaluateSquadRealCombat(squadMembers) {
         maxCount: maxCount,
         buffRate: buffRate,
         mainType: mainType,
-        attack: Math.round(attackScore * metaMult * compMult),
-        defense: Math.round(defenseScore * metaMult * compMult),
+        attack: Math.round(attackScore * metaMult * compMult * awakeningMixBonus),
+        defense: Math.round(defenseScore * metaMult * compMult * awakeningMixBonus),
         totalPts: totalPts,
         buffedTotalPts: buffedTotalPts
     };
@@ -2910,13 +2896,18 @@ function optimizeMultiArmy(members, squadSize) {
         let combos3 = combinations(rem2, squadSize);
         combos3.forEach(combo => {
             let res = evaluateSquadRealCombat(combo);
-            if(res.score > best3Score) { 
-                best3Score = res.score; 
-                best3 = combo; 
-                maxC3 = res.maxCount; 
-                b3Details = {attack: res.attack, defense: res.defense}; 
+            const remaining3 = rem2.filter(m => !combo.some(c => c.id === m.id));
+            const flexBonus3 = __estimateRemainderFlexibility(remaining3, squadSize) * FLEXIBILITY_WEIGHT;
+            const adjustedScore3 = res.score + flexBonus3;
+            if(adjustedScore3 > best3Score) {
+                best3Score = adjustedScore3;
+                best3 = combo;
+                maxC3 = res.maxCount;
+                b3Details = {attack: res.attack, defense: res.defense};
             }
         });
+        // 比較用に補正済みのため、表示・後続計算用には実際の素点を再計算する
+        best3Score = evaluateSquadRealCombat(best3).score;
     } else { 
         let res = evaluateSquadRealCombat(rem2);
         best3 = rem2; 
@@ -3514,7 +3505,15 @@ function __aiHeroBias(heroId, route='overall', context=null, wp=undefined){
   // 「育成すれば伸びる」のではなく「今のスキル内容自体が強い」ことの評価なので、
   // 即時性(cost)と編成価値(coverage)・無指定時の総合評価にのみ反映する。
   // wpが渡されていれば武装Lv帯別の実効値を使う（DVAのLv10/30二段階の伸び等を反映）。
-  const skillPowerMult = (wp !== undefined) ? __aiGetSkillPower(heroId, wp) : __aiInterpolateLvBand(ai.skillPower, 20);
+  // ⚠️ evaluateSquadRealCombatの混成ペナルティ緩和ロジックと同じ役割分岐を適用する：
+  // 前衛タンク(front_tank)はdurability（耐久力の質）、それ以外はskillPower（スキルの質）を使う。
+  // これがないと、ルシウス等の前衛タンクの「武装Lvで耐久が大きく伸びる」という評価が、
+  // 育成優先ランキングのスコアに反映されない不整合が生じる。
+  const isFrontTankRole = (p.role === 'front_tank');
+  const qualityStatObj = isFrontTankRole ? ai.durability : ai.skillPower;
+  const skillPowerMult = (wp !== undefined)
+      ? __aiInterpolateLvBand(qualityStatObj, wp)
+      : __aiInterpolateLvBand(qualityStatObj, 20);
   if(route !== 'future') mult *= skillPowerMult;
   const meta = META_TIER[heroId] || {};
   if(meta.ew === 'SSS') mult *= 1.10;
