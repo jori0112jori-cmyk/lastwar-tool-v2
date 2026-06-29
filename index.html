@@ -16,6 +16,7 @@
     <h1>育成シミュレーター <span class="version-badge">🧩 S6対応 編成診断ツール</span></h1>
     <div class="tabs">
         <div class="tab-btn active" onclick="showTab('squad', this)">⚔️ 部隊編成</div>
+        <div class="tab-btn" onclick="showTab('heroes', this)">📖 キャラ紹介</div>
         <div class="tab-btn" onclick="showTab('guide', this)">📘 使い方</div>
     </div>
 
@@ -268,6 +269,14 @@
         </div>
     </div>
 
+<div id="tab-heroes" class="tab-content">
+  <div class="panel" style="border-left:3px solid #f59e0b;">
+    <div class="panel-title" style="color:#f59e0b;">📖 キャラ紹介</div>
+    <div id="hero-dex-filter-bar"></div>
+    <div id="hero-dex-grid"></div>
+  </div>
+</div>
+
     <div id="ref-panel" class="panel" style="border-left:3px solid #22c55e; display:block;">
         <div class="panel-title" style="color:#16a34a;">情報収集・参考サイト</div>
         <div class="suggestion-box" style="font-size:var(--fs-lg);">
@@ -299,6 +308,7 @@
         <div class="modal-head-hero-text">
           <span class="modal-head-hero-name" id="modal-head-hero-name"></span>
           <span class="modal-head-hero-catch" id="modal-head-hero-catch"></span>
+          <span class="modal-head-hero-detail-link" id="modal-head-hero-detail-link" onclick="event.stopPropagation();openHeroDexDetailFromSlot()">📖 詳細はこちら</span>
         </div>
       </div>
       <div class="t" id="modal-head-title">スロット編集</div>
@@ -348,16 +358,6 @@
         <div id="hero-advice-synergy" class="hero-advice-syn-box"></div>
         <!-- 注意事項（任意） -->
         <div id="hero-advice-warning" class="hero-advice-warn-box" style="display:none;"></div>
-        <!-- 海外コミュニティの評価（クリックで展開） -->
-        <div id="hero-advice-global-wrap" style="display:none;margin-top:8px;">
-          <div class="panel-collapse-header" onclick="togglePanel('hero-advice-global-body','hero-advice-global-icon')" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:7px 10px;">
-            <span style="font-size:var(--fs-sm);font-weight:900;color:#1d4ed8;">🌍 海外コミュニティの評価を見る</span>
-            <span id="hero-advice-global-icon" class="panel-collapse-icon" style="font-size:var(--fs-md);">▼</span>
-          </div>
-          <div id="hero-advice-global-body" class="panel-collapsible preset-tall" style="margin-top:6px;">
-            <div id="hero-advice-global-text" style="font-size:var(--fs-xs);color:#334155;line-height:1.6;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px;"></div>
-          </div>
-        </div>
       </div>
 
       <!-- 覚醒セクション（覚醒対応英雄のみ表示） -->
@@ -387,6 +387,16 @@
       <button class="btn-danger" onclick="slotModalClear()">未設定にする</button>
       <button class="btn-primary" onclick="slotModalApply()">反映</button>
     </div>
+  </div>
+</div>
+
+<div id="hero-dex-modal" class="modal-backdrop" onclick="if(event.target===this) closeHeroDexModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="t">キャラ詳細</div>
+      <button class="modal-close" onclick="closeHeroDexModal()">×</button>
+    </div>
+    <div class="modal-body" id="hero-dex-modal-body"></div>
   </div>
 </div>
 </body>

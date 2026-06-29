@@ -7,6 +7,8 @@
 const HERO_SLOT_ADVICE = {
   kimberly: {
     role: '主力アタッカー（戦車）',
+    skillNote: 'オートアタックで単体に多段ヒットし、覚醒後は最大30発の連射に化けるエネルギーダメージの単体集中砲火型。攻撃力が上がるほどヒット数の伸びも大きくなるため、武装Lvと覚醒段階の両方を上げるほど火力が跳ね上がる構造です。',
+    weaponLvNotes: { lv1: '通常攻撃の会心でエネルギー増幅を1スタック獲得（追加エネルギーダメージ+3%、最大15%）。', lv10: 'バトルスキルが16発のロケット弾に強化され、エネルギー増幅1スタックにつきロケットを追加で1発発射する。', lv20: '戦闘中、味方戦車英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「戦車専門家」を獲得する。', lv30: 'エネルギー増幅4スタック付与時、バトルスキルの各ロケットが着弾点付近の敵3体に追加エネルギーダメージ+5%を与えるパッシブを獲得する。' },
     catch: '戦車軸の絶対的エース、最優先で育てるべき英雄',
     s6note: 'S6最優先英雄。覚醒「燃ゆる決意」で最大30発の爆発火力に変化します。EW20到達後は速やかに覚醒解放へ進みましょう。',
     ewAdvice: {
@@ -18,10 +20,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '基本形はウィリアムズ＋マーフィの前衛2枚でキムを守る編成です。マーシャルを加えると全体火力がさらに上がります。覚醒後はDVAとの「AoE＋単体バースト」コンボが完成します。',
     globalReview: '「最強のAoEダメージ要員」「1人だけ最大強化するなら最も安全な投資先」という評価が複数ソースで一致（Wardawgg/Handbook等）。',
+    jpReview: 'game8では育成優先度最高評価。「超高火力のエネルギーアタッカー」「★4でバトルスキル弾数が最大16発」と性能を高評価し、初回購入特典(150円)で初日から入手できる点も含めて最優先級として扱われている。',
     priority: 'SSS',
   },
   dva: {
     role: '主力アタッカー（航空）',
+    skillNote: '開幕直後に発動するバーストスキルが持ち味で、航空編成の人数が多いほどスタックが乗って攻撃速度が上がる仕組みです。戦闘開始直後の出力が高いため、テンポの速い短期決戦ほど真価を発揮します。',
+    weaponLvNotes: { lv1: '戦闘開始時、味方航空機英雄1名につき限界突破を2スタック獲得（追加エネルギーダメージ+3%、通常攻撃ごとに1スタック減少、最大30%）。', lv10: 'バトルスキル命中後、味方航空機英雄1名につき嵐の怒りを1スタック獲得（4秒間攻撃速度+20%、最大100%）。', lv20: '戦闘中、味方航空機英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「航空機専門家」を獲得する。', lv30: '戦闘開始時に即座にバトルスキルを発動し、前衛の敵2体に大ダメージを与えつつ嵐の怒りを獲得する新規バトルスキルを獲得する。' },
     catch: '航空軸最強の一撃必殺、キム覚醒に次ぐ最優先',
     s6note: 'Week3に覚醒解放可能。キム覚醒に次ぐ第2優先です。AoE（キム）＋単体バースト（DVA）の組み合わせでラリー火力が大きく上がります。',
     ewAdvice: {
@@ -32,10 +37,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '覚醒キムと組む4体+1体の混成編成（兵種バフ+15%）が最大効率です。キムがAoEで複数体を削り、DVAが前衛エースを単体撃破します。航空軸ならルシウス＋モリソン＋スカイラーで航空5体バフ+20%も狙えます。',
     globalReview: '「信じられないダメージ」「自分が見てきた中で今最強のダメージディーラー」という最大級の評価（allclash）。安く早期に入手できる点も評価。',
+    jpReview: 'game8の育成おすすめ度は最高評価。航空機型の中で「一番強い」「航空機編成には欠かせない」とされ、専用武装の限界突破（航空機の数に応じたスタック）でさらに火力が伸びる点が評価されている。',
     priority: 'SSS',
   },
   tesla: {
     role: '主力アタッカー（ロケラン）',
+    skillNote: '通常攻撃・スキルの両方でDoT（継続ダメージ）を後衛に蓄積させ、ロケラン軸の人数に応じてスタック上限が伸びる設計です。武装Lv30の専用効果で全攻撃がDoTを拡散するようになり、後衛への圧力が継続的に高まります。',
+    weaponLvNotes: { lv1: '通常攻撃で対象に誘導電流を1スタック付与（30秒間、毎秒攻撃力×3%の継続エネルギーダメージ。上限は味方ロケラン数×3、最大15スタック）。', lv10: 'バトルスキルが敵後衛3体に大ダメージを与えつつ誘導電流を2スタック付与するように強化される。', lv20: '戦闘中、味方ロケラン英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「ロケラン専門家」を獲得する。', lv30: '通常攻撃が後衛のランダムな敵にも誘導電流を追加付与し、バトルスキルが対象のスタック数×1%の追加ダメージを与える新規バトルスキルを獲得する。' },
     catch: 'ロケラン軸の主力、フィオナに次ぐ重要な一枚',
     s6note: 'Week6に覚醒解放可能。F2Pはキム→DVAの育成後に検討しましょう。フィオナとの「誘導電流DoTコンボ」がロケラン軸の核になります。',
     ewAdvice: {
@@ -45,11 +53,14 @@ const HERO_SLOT_ADVICE = {
       30: 'EW上限に到達。覚醒★1で誘導電流DoT（攻撃力×3%/秒×30秒）が本格化。★3で反射+1（8回）、★5でさらに+1（9回）。フィオナとのコンボが最大火力の鍵です。',
     },
     synergy: 'フィオナとのDoTコンボが核です。ロケラン英雄3体以上でDoTスタック上限が9になり最大威力を発揮します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
-    globalReview: '「ロケラン編成においてエネルギーダメージの代表格」という評価（Handbook）。複数編成にまたがって使える点も高評価。',
+    globalReview: '「ロケラン編成においてエネルギーダメージの代表格」という評価（Handbook）。エネルギーダメージは高耐久な戦車編成への対抗手段として位置づけられ、whale層がキム・DVAに続く3番目の覚醔優先対象として扱っているという指摘もある（packsify、2026年再調査）。一方で「ガラスの大砲、当てれば強いが触れれば壊れる」と火力の高さと脆さを両方指摘する評価も見られる（lootbar）。',
+    jpReview: 'game8の育成おすすめ度は4つ星。「会心に左右されない安定した火力」「後衛優先攻撃で敵の火力役を素早く倒せる」と評価。専用武装の誘導電流（継続ダメージ）でロケラン軸の主力として扱われている。',
     priority: 'SS',
   },
   williams: {
     role: '前衛タンク（戦車）',
+    skillNote: '敵の前衛・後衛どちらにも干渉できる割り込み性能を持ち、味方全体の防御バフも兼ねるオールラウンド型の前衛です。専用武装で被ダメ軽減がさらに伸びるため、編成全体の耐久力を底上げする役割を担います。',
+    weaponLvNotes: { lv1: '通常攻撃2回ごとに、防御力が最も低い敵前衛に威圧（通常攻撃不可、1.3秒）を付与する。', lv10: 'バトルスキル使用後、防御力が最も高い敵後衛に威圧（4秒）を付与するパッシブを獲得する。', lv20: '戦闘中、味方戦車英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「戦車専門家」を獲得する。', lv30: '味方全体の防御力を10秒間55%増加させ、敵全体の被エネルギーダメージを4秒間12%増加させる新規バトルスキルを獲得する。' },
     catch: '彼が崩れたら全てが崩れる、不動の壁',
     s6note: 'コミュニティ評価「ゲーム最高のタンク」。チーム全体のダメージ軽減に不可欠です。EW20で十分機能するため、Lv30よりキム・DVAへの投資を優先しましょう。',
     ewAdvice: {
@@ -60,10 +71,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'キンバリーとは必ずセットで編成します。マーフィとの前衛2枚体制でキムを守り、兵種バフ+20%を維持しましょう。マーシャルを加えると完成形です。',
     globalReview: '「最高クラスの防御タンク」。チーム全体のダメージ軽減能力がPvP・拠点防衛・連盟戦で必須級と評価（Wardawgg）。',
+    jpReview: '個別の性能解説記事では「物理/エネルギー問わず全ての攻撃に強い」「対人戦とゾンビ討伐の両方で活躍」と高評価で、課金して入手することを推奨。ただし一覧表形式の育成優先度では他の戦車英雄と比べて低めの星評価がつくこともあり、評価軸（個別性能 vs 入手済み前提の優先順位）によって扱いが変わる点に注意。',
     priority: 'S',
   },
   murphy: {
     role: '前衛タンク（戦車）',
+    skillNote: '味方を守るシールド的な効果と低HP保護の被ダメ軽減を併せ持つ、安定志向の前衛です。スタック式でダメージ軽減が積み重なる仕組みのため、長期戦になるほど安定感が増します。',
+    weaponLvNotes: { lv1: '通常攻撃2回ごとに味方に遮断を1スタック付与（次の被通常攻撃ダメージ-50%、最大3スタック）。', lv10: 'バトルスキル発動時、ランダムな味方3体に遮断を1スタック付与するように強化される。', lv20: '戦闘中、味方戦車英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「戦車専門家」を獲得する。', lv30: '遮断が体力の最も低い味方に優先して付与され、被ダメージ軽減効果が75%に増加するパッシブを獲得する。' },
     catch: '誰もが最初に手にするUR、ずっと頼れる前衛',
     s6note: '戦車軸の前衛2枚目。ダメージ軽減がスタックで安定するPvE・PvP両対応の前衛です。EWコスパは控えめですが、ウィリアムズと組む前衛2枚体制の維持役として重要です。',
     ewAdvice: {
@@ -74,10 +88,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'ウィリアムズと2枚前衛を組むと戦車5体バフ+20%が安定。この2枚でキムを守るのが戦車軸の基本形です。',
     globalReview: '「無料で手に入るUR、しかもどの段階でも通用する」とF2P最良の評価（Wardawgg）。キンバリー・ウィリアムズと並ぶ戦車軸コアトリオの一員、出張先（他兵種編成）でも個別の質の高さが評価される（2026年6月再調査で評価継続を確認）。',
+    jpReview: 'game8では「戦域解放1日目からガチャに追加される優秀なタンク」「専用武装実装後は他兵種の編成にも採用されるほど汎用性が高い」と序盤〜中盤を通して高評価。無料で確実に入手できる点も含めて最初に育てるべき英雄の代表格として扱われている。',
     priority: 'S',
   },
   marshall: {
     role: 'サポート（戦車）',
+    skillNote: '攻撃力・会心率バフと集中攻撃支援を持つ、火力支援に寄った構成のサポートです。専用武装で対象マークとクールダウン短縮が付与され、特定のアタッカーをfocusすると効果が伸びやすくなります。',
+    weaponLvNotes: { lv1: '通常攻撃で自分の対称位置にいる敵へ弱点特定を1スタック付与（被会心率+1%、被会心ダメージ+2%、最大5スタック）。', lv10: 'バトルスキルで攻撃力が最も高い味方ユニットがマーシャルの攻撃目標を優先的に通常攻撃するように強化される。', lv20: '戦闘中、味方戦車英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「戦車専門家」を獲得する。', lv30: 'バトルスキルを3回発動するごとに、攻撃力が最も高い味方のバトルスキルCDをリセットし、攻撃力と会心率を3秒間10%増加させるパッシブを獲得する。' },
     catch: '唯一のURサポート、代わりがいない',
     s6note: 'EW0でも機能する優秀なサポート。唯一のURサポートとして長期的には代替不可能級の評価です。EW依存度は低いですが、優先度を大きく下げすぎないようにしましょう。',
     ewAdvice: {
@@ -88,10 +105,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'どの兵種軸でも使える万能サポートです。戦車5体軸では5枠目に入れると兵種バフ+20%を維持したまま全体攻撃力が上がります。混成型でも有効です。',
     globalReview: '「唯一のURサポート、文字通り代わりがいない」という強い評価（Wardawgg）。4体統一+マーシャルの「4+1編成」が成立する根拠とされている。バーストよりも安定性で評価され、長期戦になるほど価値が増すという指摘もある（2026年6月再調査）。',
+    jpReview: 'game8では火力/耐久バフを持つ優秀なサポーターと評価。専用武装で「弱点特定」（被会心率・被会心ダメージ増加）と味方単体のスキルCTリセットを獲得し、攻撃力の最も高い味方を支援する立ち回りが評価されている。',
     priority: 'S',
   },
   stetmann: {
     role: 'サブアタッカー（戦車）',
+    skillNote: '敵のシールドを無視して後衛にもダメージを通すエネルギー攻撃と、チャージが乗るほど火力が伸びる仕様を持ちます。専用武装でCC（行動妨害）耐性も得られ、攻撃役でありながら多少の粘りも持つタイプです。',
+    weaponLvNotes: { lv1: '通常攻撃でシールドダメージ（対象のシールドのみを削るダメージ）を与えるようになる。', lv10: '通常攻撃を行うたびにチャージを獲得し、最大スタックで敵後衛3体に追加攻撃とシールドダメージを与えるパッシブを獲得する。', lv20: '戦闘中、味方戦車英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「戦車専門家」を獲得する。', lv30: 'チャージが最大スタックに達した時、行動妨害（スタン・威圧・挑発）を1回無効化するシールドを3秒間自身に付与するパッシブを獲得する。' },
     catch: 'キムの狙撃に対し、面を焼き尽くす炎の盾',
     s6note: '戦車軸の2番手火力。キム・ウィリアムズが揃った後に育成しましょう。EW20が実用的な節目です。',
     ewAdvice: {
@@ -101,11 +121,14 @@ const HERO_SLOT_ADVICE = {
       30: 'EW上限に到達。戦車軸の2番手として最大戦力です。',
     },
     synergy: 'キンバリー・ウィリアムズ・マーフィ・マーシャルと組む戦車5体軸のサブ火力です。純戦車編成で最も安定したダメージを出せます。',
-    globalReview: '「キンバリーとのコンビがPvPの定番」という高評価と、「PvPではS級だがPvE・連盟戦ではかなり弱くなる」という慎重な評価が併存（Wardawgg/ManaBuy）。',
+    globalReview: '「キンバリーとのコンビがPvPの定番」という高評価と、「PvPではS級だがPvE・連盟戦ではかなり弱くなる」という慎重な評価が併存（Wardawgg/ManaBuy）。攻撃・支援・タンクとして柔軟に立ち回れる点を評価する声もあり（theriagames）、防御を無視した範囲ダメージとデバフが噴き出る系統と評され、前線の維持と組み合わせて運用するのが定番とされる。',
+    jpReview: 'game8の育成おすすめ度は3つ星。「超高火力のエネルギーアタッカー」「パッシブで会心率が非常に高い」としつつ、専用武装の実装がシーズンⅤとやや遅めである点が優先度に影響している。',
     priority: 'A',
   },
   lucius: {
     role: '前衛タンク（航空）',
+    skillNote: '味方全体にシールドとエネルギー耐性を付与する防御特化型で、低HPの味方を優先的に保護します。専用武装でシールドが割れた瞬間に攻撃速度が上がる効果が追加され、防御役でありながら反撃のテンポも生まれます。',
+    weaponLvNotes: { lv1: '通常攻撃2回ごとに体力が最も低い味方にシールド（3秒、自身の最大体力×3%）を付与する。', lv10: 'バトルスキルで味方全体にシールド（8秒、自身の最大体力×3%）と被エネルギーダメージ減少効果を付与するように強化される。', lv20: '戦闘中、味方航空機英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「航空機専門家」を獲得する。', lv30: '自身が付与したシールドが破壊されると、対象の通常攻撃速度が5秒間6%増加する（最大3スタック）パッシブを獲得する。' },
     catch: '航空軸の必須前衛、専用武装で最強格に',
     s6note: '航空軸の必須前衛です。高い耐久力で味方を守ります。EW20で前衛として十分機能します。',
     ewAdvice: {
@@ -116,10 +139,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '航空軸の必須前衛として、DVA・モリソン・スカイラーと組む航空5体軸の安定役を担います。ルシウスの高耐久がDVAの高火力を支えます。',
     globalReview: '「専用武装解放後はゲーム最強のタンクとも言われる」評価（allclash）。航空編成の前衛筆頭。',
+    jpReview: 'game8では「敵がエネルギーダメージの場合は追加で被ダメ減少」を持つ航空機タンクとして評価。専用武装のシールド付与と、シールド破壊後の攻撃速度上昇がアタッカーとの相性の良さとして紹介されている。',
     priority: 'SS',
   },
   morrison: {
     role: 'サブアタッカー（航空）',
+    skillNote: 'HP割合ダメージで高HP対象を削るのが得意で、対タンク・対重課金編成に強い防御低下効果も持ちます。フィニッシャー気質のスキルがあり、削りきれない相手を仕留める後押し役として機能します。',
+    weaponLvNotes: { lv1: '通常攻撃5回ごとに残り体力が最も高い敵へ壊滅弾（防御力等を無視する割合ダメージ3%）を発射する。', lv10: 'バトルスキルでも残り体力が最も高い敵に壊滅弾（割合ダメージ10%）を発射するように強化される。', lv20: '戦闘中、味方航空機英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「航空機専門家」を獲得する。', lv30: '壊滅弾命中後、5秒間対象の防御力が10%減少するパッシブを獲得する。' },
     catch: '編成が整えば輝く、航空軸の頼れる2番手',
     s6note: '航空軸のサブ火力です。DVA＋ルシウスが育ってから投資するとコスパが良好です。',
     ewAdvice: {
@@ -129,11 +155,14 @@ const HERO_SLOT_ADVICE = {
       30: 'EW上限に到達。航空軸のサブ火力として最大戦力です。',
     },
     synergy: 'ルシウス・DVA・スカイラーと組む航空5体軸のサブ火力です。DVAが単体を狙う間、モリソンが追加ダメージを補います。',
-    globalReview: 'ソースによってSS〜A級と評価に幅があり、「航空編成に組み込んだ時の評価が高い」という編成依存のコメントが多い（Wardawgg）。',
+    globalReview: 'ソースによってSS〜A級と評価に幅があり、「航空編成に組み込んだ時の評価が高い」という編成依存のコメントが多い（Wardawgg）。「敵の防御力を削りながら継続ダメージを出す」という防御破壊役としての評価も複数ソースで一致しており、DVAの単体バーストを後押しする立ち回りが評価されている（LDShop、2026年再調査）。',
+    jpReview: 'game8の育成おすすめ度は4つ星。「敵の防御力を減少させられる物理アタッカー」と評価され、専用武装の壊滅弾（防御力・被ダメ軽減・ダメージ耐性を無視する割合ダメージ）が高く評価されている。',
     priority: 'A',
   },
   schuyler: {
     role: 'コントロール（航空）',
+    skillNote: '確率発動のスタンと妨害効果で後衛を狙う型のCC役です。専用武装で確定スタンが手に入り運要素が減るため、武装Lvが上がるほど信頼性が大きく向上する典型的な「専用武装で化けるタイプ」です。',
+    weaponLvNotes: { lv1: '通常攻撃で敵に妨害（次に受けるステータスバフ無効化、2秒）を20%の確率で付与する。', lv10: 'バトルスキルが敵後衛3体に大ダメージを与え、20%の確率でスタンを、命中しなければ妨害（9秒）を付与するように強化される。', lv20: '戦闘中、味方航空機英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「航空機専門家」を獲得する。', lv30: '最初のバトルスキル発動時、必ず敵1体以上をスタンさせる新規バトルスキルを獲得する。' },
     catch: 'スタン・麻痺で敵を崩す、PvPの切り札',
     s6note: 'CC（行動妨害）が得意な航空軸のセカンドDPS。スタン効果は確率発動・タイミング依存のため過信は禁物ですが、決まれば戦況を大きく変えます。PvPでは高優先度なので、DVA・ルシウスと並行して育成しましょう。',
     ewAdvice: {
@@ -144,10 +173,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'ルシウスとのコンボが強力です。「キム+DVA+スカイラー」の混成型はpacksifyが推奨する最強PvP編成の一つ。相手の前衛を封殺できればキムのAoEが炸裂しますが、スタンが決まらない場面も想定して編成を組みましょう。',
     globalReview: '「スタン・麻痺で敵の編成を崩す」と評価される一方、スタンの発生自体は確率要素という指摘も（LDShop武器ティアリスト）。航空軸のセカンドDPS兼CC役としてA〜S級評価が複数ソースで一致しており、PvPでは高優先度とされる（2026年6月再調査）。',
+    jpReview: 'game8では「後列を攻撃できるエネルギーアタッカー」「20%の確率で敵をスタンさせられる」と評価。専用武装で確定スタンを獲得できる点が、運要素を減らす強化として紹介されている。',
     priority: 'A',
   },
   carlie: {
     role: '前衛タンク（航空）',
+    skillNote: 'エネルギーダメージへの耐性と、敵の攻撃・エネルギーダメージを低下させるデバフを両立する航空タンクです。専用武装で撃破時に追加効果が発生し、前衛として倒れた後も最後の仕事をするおまけが付きます。',
+    weaponLvNotes: { lv1: '生存中は自身の被エネルギーダメージ-44%、敵全体の通常攻撃ダメージ-12%のパッシブ効果が常時発動する（退場時に失効）。', lv10: 'バトルスキルで5秒間、敵全体のエネルギーダメージ-16.5%、後列1体の攻撃力-15%を追加で付与するように強化される。', lv20: '戦闘中、味方航空機英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「航空機専門家」を獲得する。', lv30: '退場時にペペを召喚し、敵全体の通常攻撃ダメージ-8%、後列1体への大ダメージと攻撃力-15%を付与するパッシブを獲得する。' },
     catch: '航空軸唯一の専用タンク、必須の存在',
     s6note: '航空軸の前衛2枚目です。ルシウスと組む「2枚前衛」体制で、航空5体軸の安定感が大きく上がります。',
     ewAdvice: {
@@ -157,11 +189,14 @@ const HERO_SLOT_ADVICE = {
       30: 'EW上限に到達。ルシウスとの前衛2枚体制で航空軸の耐久力が最大化されています。',
     },
     synergy: 'ルシウスと前衛2枚を組むことで、DVA・モリソン・スカイラーの後衛火力陣を安定して守れます。ルシウス単体より2枚前衛の方が耐久面で優れる構成です。',
-    globalReview: '「かつては最上位だった、専用武装Lv30の効果は素晴らしかった」という評価（LDShop武器ティアリスト）と、「マーフィに取って代わられた」という下落気味の評価が一部に見られる一方、複数の他ソースでは航空軸唯一の専用タンクとして引き続きA〜S級評価が一致しており、「航空軸を組むなら必須」という位置づけは変わっていない（2026年6月再調査）。下落トレンドの強い裏付けは見つからず、評価が分かれている状態。',
+    globalReview: '「かつては最上位だった、専用武装Lv30の効果は素晴らしかった」という評価（LDShop武器ティアリスト）と、「マーフィに取って代わられた」という下落気味の評価が一部に見られる一方、複数の他ソースでは航空軸唯一の専用タンクとして引き続きA〜S級評価が一致しており、「航空軸を組むなら必須」という位置づけは変わっていない（2026年6月再調査）。「ゲーム最高のエネルギー耐性タンク」「専用武装でさらに大幅強化」という評価もあり（Last War Handbook）、下落トレンドの強い裏付けは見つからず、評価が分かれている状態。',
+    jpReview: 'game8では「敵への与ダメ減少と自身への被ダメ減少で高耐久」と評価される航空機タンク。専用武装で被エネルギーダメージ-44%、敵全体の通常攻撃ダメージ-12%を獲得し、退場時の召喚効果も持つ点が紹介されている。',
     priority: 'A',
   },
   fiona: {
     role: '主力アタッカー（ロケラン）',
+    skillNote: '広範囲にDoTダメージを与えつつ、敵のバフを解除する効果を持つロケランのエース格です。物理ダメージ型のDoTのため、エネルギー耐性を持つ敵にも安定して通る点が強みです。',
+    weaponLvNotes: { lv1: '通常攻撃で対象に余波を1スタック付与（20秒間、毎秒攻撃力×5%の物理ダメージ、上限は味方ロケラン数の2倍、最大10スタック）。', lv10: 'バトルスキルが敵全体の強化効果を計2スタック解除するように強化される。', lv20: '戦闘中、味方ロケラン英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「ロケラン専門家」を獲得する。', lv30: '敵全体の継続ダメージ系スタックが20スタックごとに、バトルスキルで追加の強化解除を1つ得るパッシブを獲得する（最大5つ）。' },
     catch: 'ロケラン軸の絶対的エース、代わりはいない',
     s6note: 'ロケラン軸のエースです。テスラ覚醒との「誘導電流DoTコンボ」がS6最強クラスの継続ダメージを発揮します。',
     ewAdvice: {
@@ -172,10 +207,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'テスラ覚醒との相性が抜群です。フィオナのDoTをテスラの電磁共鳴が増幅します。マクレガー＋アダムの前衛2枚でロケラン5体軸を完成させましょう。',
     globalReview: '「ロケラン編成最高のダメージ要員」という評価（Handbook）。',
+    jpReview: 'game8の育成おすすめ度は2つ星（実装が遅いシーズンⅤのため）だが、性能自体は「超高火力の物理アタッカーで後衛にダメージを出しやすい」と高評価。専用武装でバフ解除（強化効果2つ解除）も持ち、マーフィ軸の対策としても言及されている。',
     priority: 'SS',
   },
   mcgregor: {
     role: '前衛タンク（ロケラン）',
+    skillNote: '敵を挑発して自分に攻撃を引き受けつつ、攻撃を受けた相手にDoT増幅のデバフ（Fury）を蓄積させます。専用武装Lv30で被ダメ軽減と2連射ぶんの攻撃が手に入りますが、それまでは耐久面でアダムに見劣りするので過信は禁物です。',
+    weaponLvNotes: { lv1: '通常攻撃で前衛のランダムな敵1体に激怒（受ける継続ダメージ+20%、攻撃力-2.5%、最大5スタック）を付与する。', lv10: 'バトルスキルで後衛優先のランダムな敵4体を挑発し、攻撃力-12%と激怒を1スタック付与するように強化される。', lv20: '戦闘中、味方ロケラン英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「ロケラン専門家」を獲得する。', lv30: 'バトルスキル使用後に鉄壁状態（被ダメージ-5%、攻撃速度-25%だが弾丸2発発射）になる新規バトルスキルを獲得する。' },
     catch: '諸刃の剣だが、ロケラン前衛に必須級',
     s6note: 'ロケラン軸の前衛候補は実質アダムとマクレガーの2人のみで、編成上は必須級の存在です。挑発で敵の攻撃を引き受ける重要な役割を担い、決まれば戦況を大きく動かせます。アダムと比べると耐久面はやや見劣りするため、集中攻撃を受けて落ちやすい点には注意が必要です。',
     ewAdvice: {
@@ -186,10 +224,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'フィオナ・テスラと組むロケラン軸の前衛担当です。アダムと前衛2枚体制を組むことでロケラン5体バフ+20%が安定します。挑発で自身が集中攻撃を受けやすいため、耐久面はアダム側で補う意識を持ちましょう。',
     globalReview: '「挑発は諸刃の剣、味方を守れる時もあれば、自分が落ちる引き金にもなる」という評価（Wardawgg）。それでもロケラン編成の前衛として必須級という意見が多い。',
+    jpReview: 'game8の育成おすすめ度は3つ星。「敵の攻撃を自身に引き付けるタンク」と評価され、専用武装で被継続ダメージ増幅の「激怒」付与と、Lv.30で被ダメ-5%＋2連射の「鉄壁」を獲得する点が紹介されている。',
     priority: 'A',
   },
   swift: {
     role: 'サブアタッカー（ロケラン）',
+    skillNote: '低HPの敵を優先して狙う処理性能と、専用武装で得られる継続ダメージ（火傷）が持ち味です。スタックするほど火力が伸びる設計のため、ロケラン軸の人数が揃っているほど仕事が増えます。',
+    weaponLvNotes: { lv1: '残り体力の割合が最も低い敵への通常攻撃で炎上（10秒間、毎秒攻撃力×10%の物理ダメージ、上限は味方ロケラン数の1倍、最大5スタック）を付与する。', lv10: 'バトルスキルでランダムな敵3体に大ダメージ＋炎上を1スタック付与し、自身の被ダメージを5%軽減するように強化される。', lv20: '戦闘中、味方ロケラン英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「ロケラン専門家」を獲得する。', lv30: 'バトルスキル発動時、炎上スタック数が最も多い敵に攻撃力×800%の追加ダメージを与えるパッシブを獲得する。' },
     catch: 'フィオナ・テスラに次ぐ第3の刺客',
     s6note: 'ロケラン軸のサブ候補です。フィオナ・テスラが育つまでの代替役で、EW10で十分なため無理に育てなくて大丈夫です。',
     ewAdvice: {
@@ -200,10 +241,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'フィオナ・テスラ不在時のロケランサブ候補です。テスラDoTのスタック上限は「ロケラン英雄数×3」のため、スウィフトを入れるとスタック上限が上がります。',
     globalReview: '「専用武装でロケラン編成が大きく強化された、さらに伸びている」という評価（LDShop武器ティアリスト）。最近は航空編成に実験的に組み込む動きも報告されている。',
+    jpReview: 'game8の育成おすすめ度は最高評価の5つ星。「超高火力の物理アタッカー」「パッシブで会心率が非常に高い」と評価され、専用武装の炎上（継続ダメージ）とスタック依存の追加ダメージが高く評価されている。',
     priority: 'B',
   },
   adam: {
     role: '前衛タンク（ロケラン）',
+    skillNote: '攻撃を受けるたびに反撃する確実なカウンター持ちの前衛です。専用武装でこの反撃効果が編成全体に広がり、味方全員が攻撃を受けるたびにダメージを返せるようになります。',
+    weaponLvNotes: { lv1: '防御反撃状態時、自身の被ダメージ減少効果が向上する（パッシブ強化）。', lv10: 'バトルスキルの防御反撃を発動した際、味方全体の反撃ダメージが6%増加するように強化される。', lv20: '戦闘中、味方ロケラン英雄全体の攻撃力、防御力、体力を7.5%増加させる特技「ロケラン専門家」を獲得する。', lv30: '味方が合計で反撃を6回行うたびに、近くの敵へ170%の追加ダメージを与え、4秒間その敵の被通常攻撃・被反撃ダメージを6%増加させるパッシブを獲得する。' },
     catch: 'ロケラン編成の生命線となる防御役',
     s6note: 'ロケラン軸の防御の要です。攻撃を受けるたびに確実にカウンターが発動する信頼性の高いスキルで、挑発で攻撃を引き受けがちなマクレガーの耐久を支える主力防御役です。テスラDoTのスタック上限引き上げにも貢献します。',
     ewAdvice: {
@@ -214,10 +258,13 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'マクレガーと前衛2枚体制を組むことでロケラン5体軸が完成します。カウンターが確実に発動するため、挑発で攻撃を引き受けがちなマクレガーの耐久を補う形で機能します。テスラのDoTスタック上限引き上げにも貢献する重要な役割を担います。',
     globalReview: '「前衛が受けるダメージを軽減する、ロケラン編成の前衛として欠かせない」という評価（LDShop）。ロケラン軸の防御の要としてA〜S級評価が複数ソースで一致しており、マクレガーと組んでテスラ・フィオナを守る役割の重要性が高く評価されている（2026年6月再調査）。',
+    jpReview: 'game8の育成おすすめ度は最高評価の5つ星。「敵の攻撃を受けると通常攻撃で反撃するタンク」と評価され、専用武装でこの防御反撃効果が味方全体に広がる点が高く評価されている。スカーレットとの組み合わせが「シーズン3以降猛威を振るう」と紹介されている。',
     priority: 'A',
   },
   mason: {
     role: 'UR アタッカー（戦車）',
+    skillNote: '対モンスター特化の追加ダメージを持つ、PvE方面で輝くSSR出身のアタッカーです。UR昇格でも専用武装は実装されないため、純粋なステータスとスキルレベルだけで評価される点が他のURと異なります。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv10: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv20: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv30: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。' },
     catch: 'キンバリーが育つまでのつなぎ役',
     s6note: 'UR英雄です。キンバリーが育つまでのつなぎアタッカーとして使えます。フル育成のSSRがUR中途半端を上回るため（packsify）、キムへの投資を優先しましょう。',
     ewAdvice: {
@@ -228,11 +275,14 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'キンバリー不在・育成前の戦車アタッカー候補です。ウィリアムズ＋マーフィ＋マーシャルとの戦車軸編成で使いましょう。',
     warning: 'UR昇格直後の3星URは5星SSR時より弱くなります（ウォール・オブ・オナーの恩恵がリセットされるため）。昇格は計画的に、できればかけらを確保して即5星まで上げられるタイミングで行いましょう（Reddit報告）。',
-    globalReview: '「SSRからUR昇格できる最良のタンク」「ゾンビ討伐で他のどの英雄よりダメージが出る」という評価。ただしこれは対モンスター（PvE）文脈が中心（Pocket Gamer）。',
+    globalReview: '「SSRからUR昇格できる最良のタンク」「ゾンビ討伐で他のどの英雄よりダメージが出る」という評価。ただしこれは対モンスター（PvE）文脈が中心（Pocket Gamer）。実際の連盟プレイヤーからは「自分の編成で一番のダメージ源で、壊滅時も最後まで生き残る」という肯定的な体験談がある一方、「上位の英雄が揃ったら乗り換えるべきで、後半までは引っ張らない方がいい」という反対意見も同じスレッドで併存しており、評価が分かれている（allclashコメント欄、2026年再調査）。',
+    jpReview: 'game8の育成おすすめ度は2つ星（UR昇格組のため専用武装なし）。「バトルスキルが超高火力な物理アタッカー」「味方後衛戦車の対モンスター与ダメUP」とされ、対モンスター方面での評価が中心。',
     priority: 'C',
   },
   scarlett: {
     role: 'UR 前衛タンク（戦車）',
+    skillNote: '前線の安定とチーム全体への軽い被ダメ軽減を持つ、低コストで運用できる前衛です。UR昇格前は機能が限られますが、昇格後は序盤のPvPで頼れる戦力に化けます。専用武装は実装されていません。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv10: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv20: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。', lv30: '専用武装は実装されていない（UR昇格組のため、スキルレベルとステータスのみで評価）。' },
     catch: 'ウィリアムズが育つまでの暫定前衛',
     s6note: 'UR英雄です。ウィリアムズが育つまでの前衛候補として使えます。ウィリアムズEW20完成後は控えへの移行を検討しましょう。',
     ewAdvice: {
@@ -243,11 +293,14 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '戦車前衛の代替候補です。ウィリアムズが揃うまでの暫定前衛として使いましょう。ウィリアムズEW20完成後はウィリアムズ＋マーフィの前衛2枚体制が理想です。',
     warning: 'UR昇格直後は星0からの再育成になります（昇格でティアがリセットされ、スキルメダルは返却）。長期で戦車軸を使う予定がある場合のみ、かけらを事前に確保してから昇格しましょう。',
-    globalReview: 'SSR時点では「ひどい」「スキルの一つはゾンビ専用」「HPも攻撃力も低い」という否定的なコメントも見られる（allclashコメント欄）が、UR昇格後は評価が一変し、同サイトの本文では「チーム全体のダメージ軽減が大幅に向上し、戦車クラス最強の一人」「最強のURヒーローの一人」とされている（2026年6月再調査）。昇格前後で評価が大きく異なる英雄なので、ウィリアムズが育つまでの暫定前衛として使うか、長期で戦車軸に残す予定があるかで評価が変わる点に注意。',
+    globalReview: 'SSR時点では「ひどい」「スキルの一つはゾンビ専用」「HPも攻撃力も低い」という否定的なコメントも見られる（allclashコメント欄）が、UR昇格後は評価が一変し、同サイトの本文では「チーム全体のダメージ軽減が大幅に向上し、戦車クラス最強の一人」「最強のURヒーローの一人」とされている（2026年6月再調査）。昇格前後で評価が大きく異なる英雄なので、ウィリアムズが育つまでの暫定前衛として使うか、長期で戦車軸に残す予定があるかで評価が変わる点に注意。「UR昇格前は最低限の投資に留め、ウィリアムズ・マーフィが整うまでの繋ぎとして使うのが定番」という運用方針が複数ガイドで一致している（lastwarsurvival.com、Medium）。',
+    jpReview: 'game8の育成おすすめ度は最高評価の5つ星。「通常攻撃の火力が高い対モンスタータンク」「アダムの防御反撃と相性が良い」と評価。別記事では無課金/微課金プレイヤーにはウィリアムズより優先して育成を勧める意見もあり、課金額次第で評価が分かれるとされている。',
     priority: 'D',
   },
   sarah: {
     role: 'UR サポート（航空）',
+    skillNote: '航空軸の後衛火力を支援する低コストサポートです。専用武装は実装されておらず、テンポ支援としての役割に限定されるため、出番は航空編成を使う場合に絞られます。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（航空軸の低コストサポートとして、スキルレベルのみで評価）。', lv10: '専用武装は実装されていない（航空軸の低コストサポートとして、スキルレベルのみで評価）。', lv20: '専用武装は実装されていない（航空軸の低コストサポートとして、スキルレベルのみで評価）。', lv30: '専用武装は実装されていない（航空軸の低コストサポートとして、スキルレベルのみで評価）。' },
     catch: '航空軸を使うなら検討したい支援役',
     s6note: 'UR昇格可能な航空サポートです。DVA・モリソンなど後衛火力陣を支援しますが、かけら収集に長い準備期間が必要です。',
     ewAdvice: {
@@ -258,11 +311,14 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: '航空軸を使う場合のみ価値が出る支援役です。DVA・モリソンの後衛火力を支える役割なので、航空軸を使わない場合は優先度が下がります。',
     warning: 'UR昇格には長い準備期間が必要です（かけら収集の前倒し推奨）。航空軸を使わない場合は昇格を見送り、他の英雄へリソースを回しましょう。',
-    globalReview: '「サポートスキルは悪くなく、航空編成の選択肢として使える」という無難な評価（Pocket Gamer）。',
+    globalReview: '「サポートスキルは悪くなく、航空編成の選択肢として使える」という無難な評価（Pocket Gamer）。「常時使うほどではないが、必要な時に投入する選択肢としては悪くない」という限定的な起用を推奨する声が複数ソースで一致している（allclash、2026年再調査）。専用武装が実装されていない（今後も未実装の可能性がある）点も合わせて言及される（allclash）。',
+    jpReview: 'game8の育成おすすめ度は最低評価の1つ星。「味方の対モンスター与ダメージを上昇させられる」とされるが、専用武装が実装されていないこともあり優先度は低めに位置づけられている。',
     priority: 'C',
   },
   venom: {
     role: 'UR サブアタッカー（ロケラン）',
+    skillNote: '継続ダメージ（毒）でロケラン軸を支援する繋ぎ役です。専用武装は実装されていないため、テスラ・フィオナが育つまでの後衛攻撃要員として位置づけるのが妥当です。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv10: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv20: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv30: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。' },
     catch: 'テスラ・フィオナが育つまでの繋ぎ役',
     s6note: 'UR昇格可能なロケラン英雄です。Corrosion（腐食DoT）スタックで継続ダメージを与えます。テスラ・フィオナが育つまでの繋ぎとして機能します。',
     ewAdvice: {
@@ -273,11 +329,14 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。Corrosionスタック（最大5、+35%追加ダメージ）で継続的に削れます。',
     warning: 'UR昇格直後は星0からの再育成になります。既にテスラ・フィオナが十分に育っている場合、ベノムの昇格優先度は高くありません。',
-    globalReview: '「時間をかけてじわじわ削るタイプ、初動のダメージは低め」という評価（Wardawgg）。フィオナ・テスラには見劣りするとされる。',
+    globalReview: '「時間をかけてじわじわ削るタイプ、初動のダメージは低め」という評価（Wardawgg）。フィオナ・テスラには見劣りするとされる。エネルギーダメージ属性のため高耐久・物理耐性編成への対抗札として一定の評価があり、入手のしやすさから中盤までのPvEでは「信頼できるサブDPS」という評価もある（theriagames）。PvPでは上位のUR勢に劣るとされ、長期的な投資対象としては優先度が低いという見方が一致している。',
+    jpReview: 'game8の育成おすすめ度は最低評価の1つ星。「高倍率の継続ダメージを与えられるアタッカー」「UR昇格英雄が多いほど与ダメが上昇」とされるが、専用武装が実装されていないため優先度は低めに位置づけられている。',
     priority: 'C',
   },
   violet: {
     role: 'UR セカンドタンク（戦車）',
+    skillNote: '対モンスターの被ダメ軽減を持つ前衛で、序盤のPvEで頼りになります。専用武装は実装されておらず、ウィリアムズ・マーフィが揃うとロール自体が薄くなりがちです。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（序盤の前衛繋ぎ役として、スキルレベルのみで評価）。', lv10: '専用武装は実装されていない（序盤の前衛繋ぎ役として、スキルレベルのみで評価）。', lv20: '専用武装は実装されていない（序盤の前衛繋ぎ役として、スキルレベルのみで評価）。', lv30: '専用武装は実装されていない（序盤の前衛繋ぎ役として、スキルレベルのみで評価）。' },
     catch: 'より良い選択肢が出るまでの代替前衛',
     s6note: 'UR昇格可能な戦車英雄です。モンスター系PvEでの被ダメ軽減が持ち味ですが、実際の編成で使う予定があるかが昇格価値を左右します。',
     ewAdvice: {
@@ -288,11 +347,14 @@ const HERO_SLOT_ADVICE = {
     },
     synergy: 'ウィリアムズ・マーフィが揃っている場合、ヴィオラは編成に入らないことが多い控え要員です。モンスター系PvEで実際に使う場合のみ育成価値があります。',
     warning: 'UR昇格は「実際に編成で使うか」を見極めてから行いましょう。ウィリアムズ＋マーフィの前衛2枚体制が完成している場合、昇格かけらは他の英雄に回す方が効率的です（packsify）。',
-    globalReview: '「毒スキルで一定のダメージを出せる、もっと良い選択肢が手に入るまでの前衛として悪くない」という評価（Pocket Gamer）。',
+    globalReview: '「毒スキルで一定のダメージを出せる、もっと良い選択肢が手に入るまでの前衛として悪くない」という評価（Pocket Gamer）。スカーレットとの比較記事では「ヴィオラは中盤までのPvEで強い」「対モンスターの被ダメ軽減はPvP無効」と評され、短期的な戦力としての評価が中心（Medium GGYPP、2026年再調査）。ウィリアムズ・マーフィが揃った後は控えに回ることが多いという指摘が複数ソースで一致している。',
+    jpReview: 'game8では「敵の攻撃を自身に引き付けるタンク」と紹介されるのみで、育成おすすめ度は最低評価の1つ星。対モンスターの被ダメ軽減はゾンビ戦限定でPvP無効という別記事の指摘もあり、優先度は低い。',
     priority: 'D',
   },
   brats: {
     role: 'UR サブアタッカー（ロケラン）',
+    skillNote: '盾を無視して後衛を直接攻撃できる特性を持つロケランの繋ぎ役です。専用武装は実装されていないため、純粋なステータスとスキルだけでテスラ・フィオナ不在時の火力を埋めます。',
+    weaponLvNotes: { lv1: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv10: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv20: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。', lv30: '専用武装は実装されていない（ロケラン軸の繋ぎ役として、スキルレベルのみで評価）。' },
     catch: 'テスラ・フィオナが育つまでの繋ぎ役',
     s6note: 'SSRからUR昇格可能なロケラン火力役です。盾を無視して後衛を攻撃する特性があり、テスラ・フィオナが育つまでの繋ぎとして機能します。',
     ewAdvice: {
@@ -304,6 +366,7 @@ const HERO_SLOT_ADVICE = {
     synergy: 'テスラ・フィオナ不在時のロケラン軸サブ火力候補です。盾無視・後衛攻撃の特性で、相手の後衛アタッカーを直接狙えます。',
     warning: 'UR昇格直後は星0からの再育成になります。専用武装は実装されていないため、純粋にステータスとスキルのみで評価しましょう。',
     globalReview: '海外コミュニティでの言及が少なく、評価情報は限定的。',
+    jpReview: '日本語コミュニティでの言及は非常に少なく、game8でも独立記事が確認できなかった。SSR/UR昇格組の中では情報量が少なく、評価が定まっていない英雄として扱われている。',
     priority: 'C',
   },
 };
@@ -1879,6 +1942,7 @@ function showTab(id, el) {
     if(el) el.classList.add('active'); 
     let ref = document.getElementById('ref-panel');
     if(ref) ref.style.display = (id === 'guide') ? 'block' : 'none';
+    if(id === 'heroes') renderHeroDex();
 }
 
 
@@ -2248,6 +2312,8 @@ function renderPresetPanel() {
     return '<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;gap:10px 6px;">'+squad.map(heroCard).join('')+'</div>';
   }
 
+
+
   // 移行しやすさ = テンプレートのメンバーのうち、現在のロスターに既にいる人数
   // 卒業済み = テンプレートの全メンバーについて、現在の武装Lvが理想目標（wpIdeal）以上になっている
   //（その兵種について「もうこのテンプレートの段階は通過済み」という意味）
@@ -2317,7 +2383,7 @@ function renderPresetPanel() {
       ${p.note ? '<div style="font-size:var(--fs-xxs);color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:4px 7px;margin-bottom:7px;">💡 '+p.note+'</div>' : ''}
       <!-- 英雄アイコン：前衛2体（上段）＋後衛3体（下段） -->
       <div style="font-size:var(--fs-xxs);color:#b45309;font-weight:700;margin-bottom:5px;">⚠️ EWは推奨目標値（現在のLvを保持して反映）</div>
-      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;"><span style="white-space:nowrap;">枠の色：</span><span style="color:#94a3b8;font-weight:900;white-space:nowrap;">グレー薄＝未所持</span><span style="color:#64748b;font-weight:900;white-space:nowrap;">グレー濃＝所持・最低未達</span><span style="color:#2563eb;font-weight:900;white-space:nowrap;">青＝最低達成</span><span style="color:#d97706;font-weight:900;white-space:nowrap;">✨オレンジ＋発光＝理想達成</span></div>
+      <div style="font-size:var(--fs-xxs);color:#64748b;margin-bottom:5px;line-height:1.6;">枠の色：<span style="color:#94a3b8;font-weight:900;">グレー薄</span>＝未所持／<span style="color:#64748b;font-weight:900;">グレー濃</span>＝所持・最低未達<br><span style="color:#2563eb;font-weight:900;">青</span>＝最低達成／<span style="color:#d97706;font-weight:900;">✨オレンジ＋発光</span>＝理想達成</div>
       ${renderHeroIconGrid(p.squad)}
       <div style="margin-top:6px;font-size:var(--fs-xxs);color:#475569;">📖 出典: ${p.source}</div>
       </div>
@@ -2354,6 +2420,232 @@ function renderPresetPanel() {
       </div>
     </div>
   ` : '');
+}
+// ===============================
+// 📖 キャラ紹介タブ（図鑑UI）
+// ===============================
+const __heroDexState = { type: 'all', role: 'all', owned: 'all' };
+
+function __heroDexFilteredIds() {
+  const ownedIds = __collectCurrentRosterIds();
+  return Object.keys(HEROES).filter(id => {
+    if (id === 'empty') return false;
+    const h = HEROES[id];
+    if (__heroDexState.type !== 'all' && h.t !== __heroDexState.type) return false;
+    if (__heroDexState.role !== 'all' && h.r !== __heroDexState.role) return false;
+    if (__heroDexState.owned === 'owned' && !ownedIds.has(id)) return false;
+    if (__heroDexState.owned === 'unowned' && ownedIds.has(id)) return false;
+    return true;
+  });
+}
+
+function __heroDexFilterChip(groupKey, value, label) {
+  const active = __heroDexState[groupKey] === value;
+  return `<div class="dex-chip${active ? ' active' : ''}" onclick="__setHeroDexFilter('${groupKey}','${value}')">${label}</div>`;
+}
+
+function __setHeroDexFilter(groupKey, value) {
+  __heroDexState[groupKey] = value;
+  renderHeroDex();
+}
+
+function renderHeroDexFilterBar() {
+  const bar = $id('hero-dex-filter-bar');
+  if (!bar) return;
+  bar.innerHTML = `
+    <div class="dex-filter-row">
+      <span class="dex-filter-label">兵種</span>
+      ${__heroDexFilterChip('type','all','すべて')}
+      ${__heroDexFilterChip('type','tank', uiIcon(TYPE_ICON.tank,'tank') + '戦車')}
+      ${__heroDexFilterChip('type','air', uiIcon(TYPE_ICON.air,'air') + '航空')}
+      ${__heroDexFilterChip('type','mis', uiIcon(TYPE_ICON.mis,'mis') + 'ロケラン')}
+    </div>
+    <div class="dex-filter-row">
+      <span class="dex-filter-label">役割</span>
+      ${__heroDexFilterChip('role','all','すべて')}
+      ${__heroDexFilterChip('role','atk', uiIcon(ROLE_ICON.atk,'atk') + '火力')}
+      ${__heroDexFilterChip('role','wall', uiIcon(ROLE_ICON.wall,'wall') + '壁')}
+      ${__heroDexFilterChip('role','sup', uiIcon(ROLE_ICON.sup,'sup') + 'サポート')}
+    </div>
+    <div class="dex-filter-row">
+      <span class="dex-filter-label">所持</span>
+      ${__heroDexFilterChip('owned','all','すべて')}
+      ${__heroDexFilterChip('owned','owned','所持済み')}
+      ${__heroDexFilterChip('owned','unowned','未所持')}
+    </div>
+  `;
+}
+
+function renderHeroDexGrid() {
+  const grid = $id('hero-dex-grid');
+  if (!grid) return;
+  const ownedIds = __collectCurrentRosterIds();
+  const wpMap = __collectCurrentRosterWpMap();
+  const ids = __heroDexFilteredIds();
+
+  if (ids.length === 0) {
+    grid.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;">条件に一致するキャラがいません</div>';
+    return;
+  }
+
+  const cards = ids.map(id => {
+    const h = HEROES[id] || {};
+    const adv = HERO_SLOT_ADVICE[id] || {};
+    const isOwned = ownedIds.has(id);
+    const wp = wpMap.get(id) || 0;
+    const awTier = isOwned ? loadAwTier(id) : 'none';
+
+    const ringStyle = isOwned
+      ? 'border:3px solid #2563eb;box-shadow:0 0 0 2px rgba(37,99,235,0.25);'
+      : 'border:3px solid #cbd5e1;opacity:0.6;';
+
+    const typeIcon = TYPE_ICON[h.t] ? `<img src="${TYPE_ICON[h.t]}" class="dex-type-icon">` : '';
+    const wpBadge = isOwned ? `<span class="dex-wp-badge">EW${wp}</span>` : `<span class="dex-wp-badge dex-wp-badge-unowned">未所持</span>`;
+    const tierCorner = __heroDexTierBadge(id) ? `<div class="dex-card-tier-corner">${__heroDexTierBadge(id)}</div>` : '';
+
+    return `<div class="dex-card" onclick="openHeroDexDetail('${id}')">
+      <div class="dex-card-icon" style="${ringStyle}">
+        <img src="img/${id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+        ${typeIcon}
+        ${tierCorner}
+      </div>
+      <span class="dex-card-name">${h.n || id}</span>
+      ${wpBadge}
+    </div>`;
+  });
+
+  grid.innerHTML = `<div class="dex-grid">${cards.join('')}</div>`;
+}
+
+function renderHeroDex() {
+  renderHeroDexFilterBar();
+  renderHeroDexGrid();
+}
+
+// --- 詳細モーダル ---
+function __heroDexDynamicSummary(id) {
+  const ownedIds = __collectCurrentRosterIds();
+  const isOwned = ownedIds.has(id);
+  if (!isOwned) {
+    return `<div class="dex-dynamic-summary dex-dynamic-unowned">まだロスターに編成されていません。スロット編集画面でこのキャラを配置すると、現在の武装Lvに応じた進捗がここに表示されます。</div>`;
+  }
+  const wpMap = __collectCurrentRosterWpMap();
+  const wp = wpMap.get(id) || 0;
+  const awTier = loadAwTier(id);
+  const meta = META_TIER[id];
+  const target = meta ? meta.ewTarget : null;
+
+  const pct = (target != null && target > 0) ? Math.min(100, Math.round((wp / target) * 100)) : (target === 0 ? 100 : null);
+  const remain = (target != null && target > wp) ? target - wp : 0;
+
+  const awData = AWAKENING_HEROES[id];
+  let awRow = '';
+  if (awData) {
+    awRow = (awTier !== 'none')
+      ? `<div class="dex-dynamic-row"><span class="dex-dynamic-label">覚醒段階</span><span class="dex-dynamic-value">★${awTier}</span></div>`
+      : `<div class="dex-dynamic-row"><span class="dex-dynamic-label">覚醒</span><span class="dex-dynamic-value">未解放</span></div>`;
+  }
+
+  const progressBar = (pct != null)
+    ? `<div class="dex-progress-track"><div class="dex-progress-fill" style="width:${pct}%;"></div></div>
+       <div class="dex-progress-caption">目標EW${target}まで${remain > 0 ? `あと${remain}` : '達成済み'}（${pct}%）</div>`
+    : '';
+
+  return `<div class="dex-dynamic-summary">
+    <div class="dex-dynamic-row"><span class="dex-dynamic-label">現在の武装Lv</span><span class="dex-dynamic-value">EW${wp}</span></div>
+    ${awRow}
+    ${progressBar}
+  </div>`;
+}
+
+function __heroDexTierBadge(id, withLabel) {
+  const meta = META_TIER[id];
+  if (!meta) return '';
+  const tierColors = { SSS:'#dc2626', SS:'#ea580c', S:'#d97706', A:'#2563eb', B:'#64748b', C:'#94a3b8', D:'#cbd5e1' };
+  const color = tierColors[meta.ew] || '#94a3b8';
+  const text = withLabel ? `Tier評価 ${meta.ew}` : meta.ew;
+  return `<span class="dex-tier-badge" style="background:${color};">${text}</span>`;
+}
+
+function __heroDexReviewCompare(id) {
+  const adv = HERO_SLOT_ADVICE[id];
+  if (!adv) return '';
+  const hasJp = !!adv.jpReview;
+  const hasGlobal = !!adv.globalReview;
+  if (!hasJp && !hasGlobal) return '';
+  return `<div class="dex-detail-section">
+    <div class="dex-detail-section-title">🗺️ コミュニティ評価の比較</div>
+    <div class="dex-review-compare">
+      <div class="dex-review-col">
+        <div class="dex-review-col-label">🇯🇵 日本</div>
+        <div class="dex-review-col-body">${hasJp ? adv.jpReview : '情報が見つかりませんでした。'}</div>
+      </div>
+      <div class="dex-review-col">
+        <div class="dex-review-col-label">🌍 海外</div>
+        <div class="dex-review-col-body">${hasGlobal ? adv.globalReview : '情報が見つかりませんでした。'}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function __heroDexWeaponLvTable(id) {
+  const adv = HERO_SLOT_ADVICE[id];
+  const lv = adv && adv.weaponLvNotes;
+  if (!lv) return '';
+  const rows = [
+    { key: 'lv1', label: 'Lv1' },
+    { key: 'lv10', label: 'Lv10' },
+    { key: 'lv20', label: 'Lv20' },
+    { key: 'lv30', label: 'Lv30' },
+  ].filter(r => lv[r.key]).map(r => `
+    <div class="dex-weaponlv-row">
+      <div class="dex-weaponlv-badge">${r.label}</div>
+      <div class="dex-weaponlv-text">${lv[r.key]}</div>
+    </div>
+  `).join('');
+  if (!rows) return '';
+  return `<div class="dex-detail-section"><div class="dex-detail-section-title">🔧 専用武装の効果（Lv帯別）</div><div class="dex-weaponlv-list">${rows}</div></div>`;
+}
+
+function __heroDexSkillNote(id) {
+  const adv = HERO_SLOT_ADVICE[id];
+  if (!adv || !adv.skillNote) return '';
+  return `<div class="dex-detail-section"><div class="dex-detail-section-title">⚔️ スキルの特徴</div><div class="dex-detail-section-body">${adv.skillNote}</div></div>`;
+}
+
+function openHeroDexDetail(id) {
+  const h = HEROES[id] || {};
+  const adv = HERO_SLOT_ADVICE[id] || {};
+  const modal = $id('hero-dex-modal');
+  if (!modal) return;
+
+  const typeNameLabel = {tank:'戦車', air:'航空', mis:'ロケラン'}[h.t] || '';
+  const roleNameLabel = {atk:'火力', wall:'壁', sup:'サポート'}[h.r] || '';
+  const typeLabel = (TYPE_ICON[h.t] ? uiIcon(TYPE_ICON[h.t], h.t) : '') + typeNameLabel;
+  const roleLabel = (ROLE_ICON[h.r] ? uiIcon(ROLE_ICON[h.r], h.r) : '') + roleNameLabel;
+
+  $id('hero-dex-modal-body').innerHTML = `
+    <div class="dex-detail-head">
+      <div class="dex-detail-icon"><img src="img/${id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0"></div>
+      <div>
+        <div class="dex-detail-name">${h.n || id}</div>
+        <div class="dex-detail-tags">${typeLabel} ${roleLabel}${__heroDexTierBadge(id, true)}</div>
+      </div>
+    </div>
+    ${META_TIER[id] ? `<div class="dex-tier-note">Tier評価は性能ベースの評価軸です。スロット編集側の「優先度」（今のロスターでの育成コスパ）とは別の指標のため、数値が一致しない場合があります。</div>` : ''}
+    ${adv.catch ? `<div class="dex-detail-catch">${adv.catch}</div>` : ''}
+    ${__heroDexDynamicSummary(id)}
+    ${__heroDexSkillNote(id)}
+    ${__heroDexWeaponLvTable(id)}
+    ${adv.warning ? `<div class="dex-detail-section dex-detail-warning"><div class="dex-detail-section-title">⚠️ 注意事項</div><div class="dex-detail-section-body">${adv.warning}</div></div>` : ''}
+    ${__heroDexReviewCompare(id)}
+  `;
+  modal.classList.add('open');
+}
+
+function closeHeroDexModal() {
+  const modal = $id('hero-dex-modal');
+  if (modal) modal.classList.remove('open');
 }
 
 function applyPreset(presetId, squadNum) {
@@ -5021,6 +5313,7 @@ function updateSlotModalHeader(heroId) {
     img.style.opacity = '1';
     img.className = `modal-head-hero-img ${hero.t || ''}`;
     nameEl.textContent = hero.n || heroId;
+    __slotModalState.currentHeroIdForDex = heroId;
 
     if (catchEl) {
         const adv = (typeof HERO_SLOT_ADVICE !== 'undefined') ? HERO_SLOT_ADVICE[heroId] : null;
@@ -5031,6 +5324,14 @@ function updateSlotModalHeader(heroId) {
 
     wrap.style.display = 'flex';
     titleEl.style.display = 'none';
+}
+
+// スロット編集モーダルから「詳細はこちら」で呼ばれる。編集中のスロット状態は維持したまま、
+// キャラ紹介の詳細モーダルを重ねて表示する（画面遷移ではなくオーバーレイ）。
+function openHeroDexDetailFromSlot() {
+    const heroId = __slotModalState.currentHeroIdForDex;
+    if (!heroId || heroId === 'empty') return;
+    openHeroDexDetail(heroId);
 }
 
 function updateHeroAdvicePanel(heroId, ewLv) {
@@ -5080,18 +5381,6 @@ function updateHeroAdvicePanel(heroId, ewLv) {
     if (warnEl) {
         warnEl.innerHTML = adv.warning ? `<b>注意</b><br>${adv.warning}` : '';
         warnEl.style.display = adv.warning ? 'block' : 'none';
-    }
-
-    // 海外コミュニティの評価（クリックで展開、HERO_SLOT_ADVICE.globalReviewが存在する場合のみ表示）
-    const globalWrap = document.getElementById('hero-advice-global-wrap');
-    const globalText = document.getElementById('hero-advice-global-text');
-    if (globalWrap && globalText) {
-        if (adv.globalReview) {
-            globalText.textContent = adv.globalReview;
-            globalWrap.style.display = 'block';
-        } else {
-            globalWrap.style.display = 'none';
-        }
     }
 }
 
