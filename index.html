@@ -393,7 +393,14 @@
 <div id="hero-dex-modal" class="modal-backdrop" onclick="if(event.target===this) closeHeroDexModal()">
   <div class="modal-card">
     <div class="modal-head">
-      <div class="t">キャラ詳細</div>
+      <div class="modal-head-hero" id="dex-modal-head-hero" style="display:none;">
+        <img id="dex-modal-head-hero-img" class="modal-head-hero-img" src="" alt="" onerror="this.style.opacity=0">
+        <div class="modal-head-hero-text">
+          <span class="modal-head-hero-name" id="dex-modal-head-hero-name"></span>
+          <span class="modal-head-hero-catch" id="dex-modal-head-hero-catch"></span>
+        </div>
+      </div>
+      <div class="t" id="dex-modal-head-title">キャラ詳細</div>
       <button class="modal-close" onclick="closeHeroDexModal()">×</button>
     </div>
     <div class="modal-body" id="hero-dex-modal-body"></div>
