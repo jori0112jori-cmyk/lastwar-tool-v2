@@ -500,19 +500,18 @@ const AW_SHARD_PER_TIER = { 0:20, 1:40, 2:70, 3:80, 4:100, 5:0 }; // star=5はMA
 //        Lv依存度の違いを表現できる。前衛(wall)役はdurability、それ以外(atk/sup)はskillPowerが
 //        評価に使われる。武装未実装のヒーロー（UR昇格組）は全Lv帯で同じ値（依存なし）にする。
 //     ※ skillPower はスキル単体の質（戦況を変える効果の確実性）を表す。未来性(future)には乗算されない。
-//        ⚠️ weaponTags のタグ名だけで判断しないこと（過去にCCタグ＝高評価と誤判定した経緯あり）。
 //        実際のスキル文章・コミュニティ評価を確認し、「確定/常時発動」（AoE・スタック型DoT・
 //        確実なダメージ軽減等）は高め、「確率発動・タイミング依存・リスク同伴」（確率CC、
 //        タウントで自分が落ちる等）は標準〜低めに設定する。priority値（編成内の構造的重要度）とは
 //        別軸なので、必須前衛だがスキル単体は中堅、という評価が両立してよい。
-//   advice: { role, s6note, ewAdvice, synergy, priority, ... }
+//   advice: { catch, s6note, ewAdvice, synergy, priority, skillNote, weaponLvNotes,
+//             globalReview, jpReview, warning? }
 //                                                … スロット詳細のアドバイス文（旧HERO_SLOT_ADVICE相当）※必須
 //   aiRole: { role, lane, core, promotedUr? }   … 役割プロファイル（旧HERO_ROLE_PROFILE相当）※必須
 //   milestone10Fit, promotedUrImmediateFit?     … マイルストーン適合度（旧HERO_EVAL_META相当）※必須
-//   weaponTags: [...]                            … 武装タグ・効果分類（旧HERO_WEAPON_TAGS相当）※必須
 //
 // 【任意】無くてもクラッシュしないが、登録すると評価精度が上がる:
-//   - HERO_DB[id].meta（環境ティア：tier/ew/ewTarget。旧META_TIER相当。未登録は中立扱い）
+//   - HERO_DB[id].meta（環境ティア：ew/ewTarget。旧META_TIER相当。未登録は中立扱い）
 //   - app.js : HERO_PAIR_SYNERGY（ペアシナジー。1人に閉じた情報ではないためHERO_DB外で維持。
 //     未登録は1.0倍=効果なし）
 //     ⚠️ 双方向に書く必要がある（A→Bを書いたらB→Aも書く）。片方だけだと
@@ -534,7 +533,6 @@ function validateHeroData() {
     ['HERO_DB[id].advice（旧HERO_SLOT_ADVICE）', id => !!HERO_DB[id].advice],
     ['HERO_DB[id].aiRole（旧HERO_ROLE_PROFILE）', id => !!HERO_DB[id].aiRole],
     ['HERO_DB[id].milestone10Fit（旧HERO_EVAL_META）', id => HERO_DB[id].milestone10Fit !== undefined],
-    ['HERO_DB[id].weaponTags（旧HERO_WEAPON_TAGS）', id => !!HERO_DB[id].weaponTags],
   ];
   const optionalFields = [
     ['HERO_DB[id].meta（旧META_TIER）', id => !!HERO_DB[id].meta],
@@ -2097,6 +2095,220 @@ function __heroDexTierBadge(id, withLabel) {
   return `<span class="dex-tier-badge" style="background:${color};">${text}</span>`;
 }
 
+// ===== スキル相性（通常スキルの効果から自動判定、表示専用） =====
+// バトルスキルで確認できる「提供効果」を持つヒーローをキュレーションしたテーブル。
+// スコア計算（__calcCandidateSynergyRate/__aiSynergyBias）には一切影響しない、表示専用の情報。
+const HERO_SKILL_PROVIDERS = {
+  mcgregor: { tags: ['taunt', 'atk_down'], reason: 'バトルスキル「揺るがぬ意志」で前衛の敵を挑発しつつ攻撃力を16.5%デバフ' },
+  violet:   { tags: ['atk_down'], reason: 'バトルスキル「有毒ガス」で前衛の敵2体の攻撃力を6%デバフ' },
+  morrison: { tags: ['def_down_stack'], reason: 'バトルスキル「徹甲射撃」で対象の防御力を最大25%までスタックデバフ' },
+  carlie:   { tags: ['enemy_energy_atk_down'], reason: 'バトルスキル「ファイアサプライズ」で敵全体の与エネルギーダメージを5秒間15%軽減' },
+  lucius:   { tags: ['ally_energy_dmg_reduction'], reason: 'バトルスキル「騎士道」で味方全体の被エネルギーダメージを5秒間19%軽減' },
+  schuyler: { tags: ['stun_chance'], reason: 'バトルスキル「大大大爆撃」で敵後衛を20%の確率で2秒間スタン' },
+  murphy:   { tags: ['ally_dmg_reduction', 'ally_temp_shield'], reason: 'パッシブで前衛の被ダメージを常時17%軽減、バトルスキルでさらに5秒間+29%（物理）軽減' },
+  williams: { tags: ['ally_temp_shield'], reason: 'バトルスキル「鋼鉄の心」で前衛2体の防御力を10秒間50%アップ' },
+  adam:     { tags: ['ally_dmg_reduction', 'counter'], reason: 'パッシブで前衛の被ダメージを常時13%軽減、バトルスキルで被弾ごとに反撃' },
+  marshall: { tags: ['ally_atk_buff'], reason: 'バトルスキル「戦術指揮」で味方全体の攻撃力を6秒間16.5%アップ（兵種問わず全員に効く）' },
+};
+
+function __heroDexDamageType(id) {
+  const auto = HERO_DB[id] && HERO_DB[id].advice && HERO_DB[id].advice.skills && HERO_DB[id].advice.skills.auto;
+  if (!auto) return null;
+  if (/エネルギーダメージ/.test(auto.effect)) return 'energy';
+  if (/物理ダメージ/.test(auto.effect)) return 'physical';
+  return null;
+}
+
+// タグ→「誰に効くか」の判定＋理由文を1箇所に集約し、提供側/受け手側どちらのページからでも
+// 同じ結果が出るようにする（以前は提供側ページでdef_down_stack/taunt/stun_chance以外のタグが
+// 素通りしていた非対称バグを解消）。
+function __heroDexTagBeneficiaries(providerId, providerName, tag) {
+  // otherId を受け取り、マッチすれば理由文を返す判定関数を返す
+  switch (tag) {
+    case 'def_down_stack':
+      return (other, otherDmgType, otherIsAttacker) =>
+        (otherDmgType === 'physical' && otherIsAttacker)
+          ? `${providerName}の防御力デバフで${other.name}の物理ダメージが伸びる` : null;
+    case 'taunt':
+    case 'stun_chance':
+      return (other, otherDmgType, otherIsAttacker, otherIsCore) =>
+        (otherIsAttacker && otherIsCore)
+          ? `${providerName}が敵の手を止めている隙に${other.name}が確殺を狙える` : null;
+    case 'atk_down':
+      return (other, otherDmgType, otherIsAttacker, otherIsCore, otherIsWall) =>
+        otherIsWall ? `${providerName}の攻撃力デバフで前衛の${other.name}が受けるダメージが軽くなる` : null;
+    case 'ally_dmg_reduction':
+    case 'ally_temp_shield':
+    case 'ally_energy_dmg_reduction':
+      return (other, otherDmgType, otherIsAttacker) =>
+        otherIsAttacker ? `${providerName}の被ダメージ軽減で前線が安定し、${other.name}が火力を出す時間が増える` : null;
+    case 'enemy_energy_atk_down':
+      return (other, otherDmgType, otherIsAttacker) =>
+        (otherIsAttacker && otherDmgType !== 'physical')
+          ? `${providerName}が敵の与エネルギーダメージを抑えるので、耐久の低い${other.name}が生き残りやすくなる` : null;
+    case 'ally_atk_buff':
+      return () => `${providerName}の攻撃力バフは兵種問わず全員に乗る`;
+    default:
+      return null;
+  }
+}
+
+function __heroDexSkillSynergy(id) {
+  const hero = HERO_DB[id];
+  if (!hero) return '';
+  const matches = [];
+
+  if (HERO_SKILL_PROVIDERS[id]) {
+    // このヒーロー自身が提供者の場合：誰に刺さるかを列挙
+    const { tags } = HERO_SKILL_PROVIDERS[id];
+    for (const otherId in HERO_DB) {
+      if (otherId === id) continue;
+      const other = HERO_DB[otherId];
+      const otherDmgType = __heroDexDamageType(otherId);
+      const otherIsAttacker = other.role === 'atk';
+      const otherIsCore = !!(other.aiRole && other.aiRole.core);
+      const otherIsWall = other.role === 'wall';
+      for (const tag of tags) {
+        const judge = __heroDexTagBeneficiaries(id, hero.name, tag);
+        if (!judge) continue;
+        const why = judge(other, otherDmgType, otherIsAttacker, otherIsCore, otherIsWall);
+        if (why) matches.push({ id: otherId, name: other.name, why });
+      }
+    }
+  } else {
+    // このヒーロー自身が受け手側の場合：どの提供者と噛み合うかを列挙
+    const dmgType = __heroDexDamageType(id);
+    const isAttacker = hero.role === 'atk';
+    const isCore = !!(hero.aiRole && hero.aiRole.core);
+    const isWall = hero.role === 'wall';
+    for (const providerId in HERO_SKILL_PROVIDERS) {
+      if (providerId === id) continue;
+      const providerHero = HERO_DB[providerId];
+      if (!providerHero) continue;
+      const { tags } = HERO_SKILL_PROVIDERS[providerId];
+      for (const tag of tags) {
+        const judge = __heroDexTagBeneficiaries(providerId, providerHero.name, tag);
+        if (!judge) continue;
+        const why = judge(hero, dmgType, isAttacker, isCore, isWall);
+        if (why) matches.push({ id: providerId, name: providerHero.name, why });
+      }
+    }
+  }
+
+  // 重複除去（同じ相手が複数条件でヒットした場合は1件にまとめる）
+  const seen = new Map();
+  matches.forEach(m => { if (!seen.has(m.id)) seen.set(m.id, m); });
+  const unique = [...seen.values()].slice(0, 5);
+  if (!unique.length) return '';
+
+  const rows = unique.map(m => `
+    <div class="dex-skillsyn-row">
+      <span class="dex-skillsyn-name">${m.name}</span>
+      <span class="dex-skillsyn-why">${m.why}</span>
+    </div>
+  `).join('');
+  return `<div class="dex-detail-section">
+    <div class="dex-detail-section-title">🔗 スキル相性のいい相手</div>
+    <div class="dex-skillsyn-list">${rows}</div>
+    <div class="dex-skillkit-note">※ 通常スキルの効果から自動判定した参考情報です。ランキングや優先度の計算には使用していません。</div>
+  </div>`;
+}
+
+// ===== 専用武装込みのコンボ（表示専用） =====
+// weaponLvNotesの記述から確認できる、専用武装レベル依存の連携効果をキュレーション。
+// レベル未到達だと発動しないため、通常スキルのコンボとは分けて表示する。
+const HERO_EW_PROVIDERS = {
+  tesla:    { tags: ['dot_stack'], reason: '専用武装Lv1で敵に「誘導電流」（継続エネルギーダメージ）を付与' },
+  fiona:    { tags: ['dot_stack'], reason: '専用武装Lv1で敵に「余波」（継続物理ダメージ）を付与' },
+  swift:    { tags: ['dot_stack'], reason: '専用武装Lv1で敵に「炎上」（継続物理ダメージ）を付与' },
+  mcgregor: { tags: ['dot_amplify'], reason: '専用武装Lv1で敵に「激怒」を付与、継続ダメージを最大+100%（5スタック）増幅' },
+  williams: { tags: ['enemy_energy_vuln'], reason: '専用武装Lv30の新バトルスキルで敵全体の被エネルギーダメージが4秒間+12%' },
+  marshall: { tags: ['cd_reset_highest_atk'], reason: '専用武装Lv30でバトルスキルを3回発動するごとに、味方最高攻撃力ユニットのバトルスキルCDをリセット' },
+};
+
+function __heroDexEwComboJudge(providerId, providerName, tag) {
+  switch (tag) {
+    case 'dot_stack':
+      return (other, otherDmgType) => {
+        if (other.id === providerId) return null;
+        const otherTags = (HERO_EW_PROVIDERS[other.id] || {}).tags || [];
+        if (otherTags.includes('dot_amplify')) return null; // 増幅側は別条件で表示するのでここでは出さない
+        if (otherTags.includes('dot_stack')) return `${providerName}と同時に継続ダメージ源を重ねられる（同編成のロケラン染めで層になる）`;
+        return null;
+      };
+    case 'dot_amplify':
+      return (other) => {
+        const otherTags = (HERO_EW_PROVIDERS[other.id] || {}).tags || [];
+        return otherTags.includes('dot_stack')
+          ? `${providerName}の継続ダメージ増幅が${other.name}の継続ダメージに乗る（専用武装Lv1同士で機能）` : null;
+      };
+    case 'enemy_energy_vuln':
+      return (other, otherDmgType) =>
+        (otherDmgType === 'energy') ? `${providerName}の専用武装Lv30で敵の被エネルギーダメージが増えるので、${other.name}の火力が伸びる` : null;
+    case 'cd_reset_highest_atk':
+      return (other, otherDmgType, otherIsCore) =>
+        otherIsCore ? `${providerName}の専用武装Lv30はバトルスキルCDリセット対象を味方最高攻撃力ユニットに向ける。${other.name}が最高攻撃力なら恩恵が大きい` : null;
+    default:
+      return null;
+  }
+}
+
+function __heroDexEwCombo(id) {
+  const hero = HERO_DB[id];
+  if (!hero) return '';
+  const matches = [];
+
+  if (HERO_EW_PROVIDERS[id]) {
+    const { tags } = HERO_EW_PROVIDERS[id];
+    for (const otherId in HERO_DB) {
+      if (otherId === id) continue;
+      const other = HERO_DB[otherId];
+      const otherWithId = Object.assign({ id: otherId }, other);
+      const otherDmgType = __heroDexDamageType(otherId);
+      const otherIsCore = !!(other.aiRole && other.aiRole.core);
+      for (const tag of tags) {
+        const judge = __heroDexEwComboJudge(id, hero.name, tag);
+        if (!judge) continue;
+        const why = judge(otherWithId, otherDmgType, otherIsCore);
+        if (why) matches.push({ id: otherId, name: other.name, why });
+      }
+    }
+  } else {
+    const dmgType = __heroDexDamageType(id);
+    const isCore = !!(hero.aiRole && hero.aiRole.core);
+    const heroWithId = Object.assign({ id }, hero);
+    for (const providerId in HERO_EW_PROVIDERS) {
+      if (providerId === id) continue;
+      const providerHero = HERO_DB[providerId];
+      if (!providerHero) continue;
+      const { tags } = HERO_EW_PROVIDERS[providerId];
+      for (const tag of tags) {
+        const judge = __heroDexEwComboJudge(providerId, providerHero.name, tag);
+        if (!judge) continue;
+        const why = judge(heroWithId, dmgType, isCore);
+        if (why) matches.push({ id: providerId, name: providerHero.name, why });
+      }
+    }
+  }
+
+  const seen = new Map();
+  matches.forEach(m => { if (!seen.has(m.id)) seen.set(m.id, m); });
+  const unique = [...seen.values()].slice(0, 5);
+  if (!unique.length) return '';
+
+  const rows = unique.map(m => `
+    <div class="dex-skillsyn-row">
+      <span class="dex-skillsyn-name">${m.name}</span>
+      <span class="dex-skillsyn-why">${m.why}</span>
+    </div>
+  `).join('');
+  return `<div class="dex-detail-section">
+    <div class="dex-detail-section-title">🔧 専用武装込みのコンボ</div>
+    <div class="dex-skillsyn-list">${rows}</div>
+    <div class="dex-skillkit-note">※ 専用武装のLv到達が前提の組み合わせです（本文中の必要Lvを参照）。ランキングや優先度の計算には使用していません。</div>
+  </div>`;
+}
+
 function __heroDexReviewCompare(id) {
   const adv = (HERO_DB[id] && HERO_DB[id].advice);
   if (!adv) return '';
@@ -2137,10 +2349,92 @@ function __heroDexWeaponLvTable(id) {
   return `<div class="dex-detail-section"><div class="dex-detail-section-title">🔧 専用武装の効果（Lv帯別）</div><div class="dex-weaponlv-list">${rows}</div></div>`;
 }
 
+// ===== 通常スキル（通常攻撃／バトルスキル／パッシブ）表示 =====
+// 特技（Super Sensing相当：★4解放でHP/ATK/DEF+20%・CD+10%）は全ヒーロー共通のため個別データ化せず、
+// セクション末尾に一括注記する。
+function __heroDexSkillKit(id) {
+  const adv = (HERO_DB[id] && HERO_DB[id].advice);
+  const kit = adv && adv.skills;
+  if (!kit) return '';
+  const rows = [
+    { key: 'auto', label: '通常攻撃', badge: '#0891b2' },
+    { key: 'battle', label: 'バトルスキル', badge: '#7c3aed' },
+    { key: 'passive', label: 'パッシブ', badge: '#059669' },
+  ].filter(r => kit[r.key] && kit[r.key].name).map(r => `
+    <div class="dex-skillkit-row">
+      <div class="dex-skillkit-head">
+        <span class="dex-skillkit-badge" style="background:${r.badge};">${r.label}</span>
+        <span class="dex-skillkit-name">${kit[r.key].name}</span>
+      </div>
+      <div class="dex-skillkit-effect">${kit[r.key].effect}</div>
+    </div>
+  `).join('');
+  if (!rows) return '';
+  // UR昇格前提のSSR英雄（メイソン/サラ/ヴェノム/ブラッツ/スカーレット/ヴィオラ）は
+  // ★4特技が「特殊戦術」（HP/ATK/DEF+10%のみ、CD短縮なし）で、UR英雄の「超絶感知」とは別物。
+  const SSR_PROMOTABLE = ['mason', 'sarah', 'venom', 'brats', 'scarlett', 'violet'];
+  const expertiseNote = SSR_PROMOTABLE.includes(id)
+    ? '※ 特技「特殊戦術」（★4解放、SSR形態）は全ヒーロー共通：HP・攻撃力・防御力+10%（UR昇格後は「超絶感知」に変化し、スキル再使用時間-10%が追加されます）'
+    : '※ 特技「超絶感知」（★4解放）は全ヒーロー共通：HP・攻撃力・防御力+20%、スキル再使用時間-10%';
+  return `<div class="dex-detail-section">
+    <div class="dex-detail-section-title">🎯 通常スキル</div>
+    <div class="dex-skillkit-list">${rows}</div>
+    <div class="dex-skillkit-note">${expertiseNote}</div>
+  </div>`;
+}
+
 function __heroDexSkillNote(id) {
   const adv = (HERO_DB[id] && HERO_DB[id].advice);
   if (!adv || !adv.skillNote) return '';
   return `<div class="dex-detail-section"><div class="dex-detail-section-title">⚔️ スキルの特徴</div><div class="dex-detail-section-body">${adv.skillNote}</div></div>`;
+}
+
+// ===== 評価スコアの可視化（HERO_DB[id].score を全ヒーロー相対のバーで表示） =====
+// 各指標を21人全体でmin-max正規化し、「このヒーローが何に強いか」を視覚的に示す。
+// スコアは内部評価用の乗数（0.4〜1.3程度）でそのままだと差がわかりにくいため、
+// 相対順位ベースの棒の長さに変換する。新規リサーチ不要、既存HERO_DB[id].scoreのみ使用。
+let __scoreChartRangesCache = null;
+function __getScoreChartRanges() {
+  if (__scoreChartRangesCache) return __scoreChartRangesCache;
+  const fields = ['immediate', 'longterm', 'coverage', 'future'];
+  const ranges = {};
+  for (const f of fields) {
+    const vals = Object.values(HERO_DB).map(h => h.score && h.score[f]).filter(v => typeof v === 'number');
+    ranges[f] = { min: Math.min(...vals), max: Math.max(...vals) };
+  }
+  const spVals = Object.values(HERO_DB).map(h => h.score && h.score.skillPower && h.score.skillPower.lv30).filter(v => typeof v === 'number');
+  const durVals = Object.values(HERO_DB).map(h => h.score && h.score.durability && h.score.durability.lv30).filter(v => typeof v === 'number');
+  ranges.skillPower30 = { min: Math.min(...spVals), max: Math.max(...spVals) };
+  ranges.durability30 = { min: Math.min(...durVals), max: Math.max(...durVals) };
+  __scoreChartRangesCache = ranges;
+  return ranges;
+}
+function __heroDexScoreChart(id) {
+  const score = HERO_DB[id] && HERO_DB[id].score;
+  if (!score) return '';
+  const ranges = __getScoreChartRanges();
+  const bars = [
+    { label: '即戦力', key: 'immediate', val: score.immediate },
+    { label: '長期価値', key: 'longterm', val: score.longterm },
+    { label: 'スキル威力', key: 'skillPower30', val: score.skillPower && score.skillPower.lv30 },
+    { label: '耐久', key: 'durability30', val: score.durability && score.durability.lv30 },
+    { label: '汎用性', key: 'coverage', val: score.coverage },
+    { label: '将来性', key: 'future', val: score.future },
+  ].filter(b => typeof b.val === 'number');
+  if (!bars.length) return '';
+  const rows = bars.map(b => {
+    const r = ranges[b.key];
+    const pct = (r && r.max > r.min) ? Math.round(((b.val - r.min) / (r.max - r.min)) * 100) : 50;
+    const clamped = Math.max(4, Math.min(100, pct));
+    return `<div class="dex-score-row">
+      <div class="dex-score-label">${b.label}</div>
+      <div class="dex-progress-track"><div class="dex-progress-fill" style="width:${clamped}%;"></div></div>
+    </div>`;
+  }).join('');
+  return `<div class="dex-detail-section">
+    <div class="dex-detail-section-title">📊 評価スコア（全21人中の相対位置）</div>
+    <div class="dex-score-chart">${rows}</div>
+  </div>`;
 }
 
 function updateHeroDexModalHeader(id) {
@@ -2194,9 +2488,12 @@ function openHeroDexDetail(id) {
     ${(HERO_DB[id] && HERO_DB[id].meta) ? `<div class="dex-tier-note">Tier評価は性能ベースの評価軸です。スロット編集側の「優先度」（今のロスターでの育成コスパ）とは別の指標のため、数値が一致しない場合があります。</div>` : ''}
     ${adv.catch ? `<div class="dex-detail-catch">${adv.catch}</div>` : ''}
     ${__heroDexDynamicSummary(id)}
+    ${__heroDexScoreChart(id)}
     ${__heroDexSkillNote(id)}
+    ${__heroDexSkillKit(id)}
+    ${__heroDexSkillSynergy(id)}
     ${__heroDexWeaponLvTable(id)}
-    ${adv.warning ? `<div class="dex-detail-section dex-detail-warning"><div class="dex-detail-section-title">⚠️ 注意事項</div><div class="dex-detail-section-body">${adv.warning}</div></div>` : ''}
+    ${__heroDexEwCombo(id)}
     ${__heroDexReviewCompare(id)}
   `;
   modal.classList.add('open');
@@ -5027,7 +5324,7 @@ function renderAwTierUI(awTierStr, aw) {
         const nextInner = starPts[(tipIdx + 1) % 10];
         return `M${cx},${cy} L${prevInner[0]},${prevInner[1]} L${tip[0]},${tip[1]} L${nextInner[0]},${nextInner[1]} Z`;
     }
-    const tipIndices = [0,2,4,6,8];
+    const tipIndices = [0,8,6,4,2];
     function renderStarSvg(filledCount, isCurrent) {
         const outline = starPts.map(p => p.join(',')).join(' ');
         let svg = `<svg width="36" height="36" viewBox="0 0 100 100">`;

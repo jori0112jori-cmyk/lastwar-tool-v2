@@ -1674,6 +1674,11 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .dex-detail-section-title { font-size:var(--fs-sm); font-weight:900; color:#0f172a; margin-bottom:4px; }
 .dex-detail-section-body { font-size:var(--fs-sm); color:#334155; line-height:1.7; }
 
+.dex-score-chart { display:flex; flex-direction:column; gap:8px; }
+.dex-score-row { display:grid; grid-template-columns:64px 1fr; align-items:center; gap:8px; }
+.dex-score-label { font-size:var(--fs-xs); font-weight:800; color:#475569; text-align:right; }
+.dex-score-row .dex-progress-track { margin-top:0; }
+
 /* スロット編集モーダルからの詳細リンク */
 .modal-head-hero-detail-link {
   font-size: var(--fs-xs); font-weight:900; color:#2563eb; cursor:pointer; margin-top:2px; display:inline-block;
@@ -1704,6 +1709,26 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   border-radius:6px; padding:2px 8px; margin-top:1px;
 }
 .dex-weaponlv-text { color:#334155; line-height:1.6; }
+
+.dex-skillkit-list { display:flex; flex-direction:column; gap:6px; }
+.dex-skillkit-row {
+  background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px;
+}
+.dex-skillkit-head { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.dex-skillkit-badge {
+  flex-shrink:0; font-size:var(--fs-xs); font-weight:900; color:#fff;
+  border-radius:6px; padding:2px 8px;
+}
+.dex-skillkit-name { font-size:var(--fs-sm); font-weight:800; color:#0f172a; }
+.dex-skillkit-effect { font-size:var(--fs-sm); color:#334155; line-height:1.6; }
+.dex-skillkit-note { font-size:10px; color:#94a3b8; line-height:1.5; margin-top:6px; }
+
+.dex-skillsyn-list { display:flex; flex-direction:column; gap:6px; margin-bottom:4px; }
+.dex-skillsyn-row {
+  background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px;
+}
+.dex-skillsyn-name { font-size:var(--fs-sm); font-weight:900; color:#0f172a; margin-right:6px; }
+.dex-skillsyn-why { font-size:var(--fs-xs); color:#475569; line-height:1.5; }
 
 /* 注意事項 */
 .dex-detail-warning .dex-detail-section-title { color:#b45309; }
