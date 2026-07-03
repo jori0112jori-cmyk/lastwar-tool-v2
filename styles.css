@@ -1575,6 +1575,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .preset-hero-ew   { font-size:var(--fs-xs); color:#2563eb; font-weight:700; text-align:center; white-space:nowrap; }
 .preset-hero-ew-min   { font-size:var(--fs-xxs); color:#2563eb; font-weight:700; text-align:center; white-space:nowrap; line-height:1.3; }
 .preset-hero-ew-ideal { font-size:var(--fs-xxs); color:#d97706; font-weight:700; text-align:center; white-space:nowrap; line-height:1.3; }
+.preset-hero-note-ew { font-size:var(--fs-xxs); color:#94a3b8; font-weight:800; text-align:center; line-height:1.2; white-space:nowrap; }
 .preset-hero-note { font-size:var(--fs-xxs); color:#374151; text-align:center; line-height:1.3; }
 
 /* タブレット以上 */
@@ -1586,6 +1587,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   .preset-hero-ew   { font-size: var(--fs-sm) !important; }
   .preset-hero-ew-min   { font-size: var(--fs-xs) !important; }
   .preset-hero-ew-ideal { font-size: var(--fs-xs) !important; }
+  .preset-hero-note-ew { font-size: var(--fs-xxs) !important; }
   .preset-hero-note { font-size: var(--fs-xs) !important; }
 }
 /* PC */
@@ -1596,6 +1598,7 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
   .preset-hero-ew   { font-size: var(--fs-md) !important; }
   .preset-hero-ew-min   { font-size: var(--fs-sm) !important; }
   .preset-hero-ew-ideal { font-size: var(--fs-sm) !important; }
+  .preset-hero-note-ew { font-size: var(--fs-xs) !important; }
   .preset-hero-note { font-size: var(--fs-sm) !important; }
 }
 

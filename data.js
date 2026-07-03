@@ -1790,11 +1790,11 @@ const FORMATION_PRESETS = [
     spendLevel: 'f2p',  // f2p / low / mid
     note: 'EW Lv10でも機能する入門編成。各英雄EW20到達後に上位テンプレへ移行。',
     squad: [
-      { id:'williams',  wpMin:10, wpIdeal:20, note:'最優先でEW20へ' },
-      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛2枚目・EW20へ' },
-      { id:'kimberly',  wpMin:10, wpIdeal:20, note:'EW20で覚醒前提達成' },
-      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
-      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力・EW20へ' },
+      { id:'williams',  wpMin:10, wpIdeal:20, note:'最優先EW20' },
+      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛2枚目' },
+      { id:'kimberly',  wpMin:10, wpIdeal:20, noteEw:20, note:'覚醒達成' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, noteEw:0, note:'機能' },
+      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力' },
     ]
   },
   {
@@ -1806,11 +1806,11 @@ const FORMATION_PRESETS = [
     spendLevel: 'low',
     note: 'キムEW20で覚醒解放後、★1到達を目指しながら運用。EW30は長期目標でOK。',
     squad: [
-      { id:'williams',  wpMin:20, wpIdeal:30, note:'EW20が現実的節目' },
-      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛安定役' },
+      { id:'williams',  wpMin:20, wpIdeal:30, noteEw:20, note:'節目' },
+      { id:'murphy',    wpMin:10, wpIdeal:30, noteEw:30, note:'軽減75%' },
       { id:'kimberly',  wpMin:20, wpIdeal:30, note:'主力・覚醒優先' },
-      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
-      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力・EW20が節目' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, noteEw:0, note:'機能' },
+      { id:'stetmann',  wpMin:10, wpIdeal:20, note:'サブ火力' },
     ]
   },
   {
@@ -1823,10 +1823,10 @@ const FORMATION_PRESETS = [
     note: 'DVA覚醒はWeek3解放。キム覚醒後にDVAへ投資。EW20で覚醒前提を満たしてから。',
     squad: [
       { id:'williams',  wpMin:20, wpIdeal:30, note:'前衛必須' },
-      { id:'murphy',    wpMin:10, wpIdeal:20, note:'前衛2枚目' },
-      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒解放済み（★0-1）推奨' },
-      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒解放済み（★0-1）推奨' },
-      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'murphy',    wpMin:10, wpIdeal:30, noteEw:30, note:'軽減75%' },
+      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒推奨' },
+      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒推奨' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, noteEw:0, note:'機能' },
     ]
   },
   {
@@ -1839,10 +1839,10 @@ const FORMATION_PRESETS = [
     note: 'キム覚醒→DVA覚醒（Week3）の順で進め、スカイラーはEW10で基本機能を発揮。',
     squad: [
       { id:'williams',  wpMin:20, wpIdeal:30, note:'前衛必須' },
-      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒解放済み（★0-1）推奨' },
-      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒解放済み（★0-1）推奨' },
-      { id:'schuyler',  wpMin:10, wpIdeal:20, note:'CC役・敵前衛封殺' },
-      { id:'marshall',  wpMin:0,  wpIdeal:10, note:'EW0で機能・余裕があれば10〜20も有効' },
+      { id:'kimberly',  wpMin:20, wpIdeal:30, note:'覚醒推奨' },
+      { id:'dva',       wpMin:10, wpIdeal:20, note:'覚醒推奨' },
+      { id:'schuyler',  wpMin:10, wpIdeal:30, noteEw:30, note:'スタン確定' },
+      { id:'marshall',  wpMin:0,  wpIdeal:10, noteEw:0, note:'機能' },
     ]
   },
   {
@@ -1876,6 +1876,53 @@ const FORMATION_PRESETS = [
       { id:'tesla',     wpMin:10, wpIdeal:20, note:'覚醒後に真価' },
       { id:'swift',     wpMin:10, wpIdeal:20, note:'サブ火力' },
     ]
+  },
+];
+
+// ===== コミュニティ推奨 育成優先順（兵種別・固定順） =====
+// ツール内の「専用武装 育成優先ランキング」はHERO_DBのスコアから毎回動的に計算するアルゴリズム順。
+// こちらはコミュニティ攻略サイト（LDShop等）が明言している固定の経験則順で、
+// 「AIの計算」と「プレイヤーの経験則」を突き合わせて見られるようにするための参考データ。
+// confidence: 'high'＝複数ソースで一致 / 'mixed'＝ソースにより順序が割れる
+const COMMUNITY_TRAINING_ORDER = [
+  {
+    type: 'tank',
+    typeLabel: '戦車軸',
+    confidence: 'high',
+    order: [
+      { id:'kimberly', reason:'最優先の主力アタッカー。専用武装Lv1でエネルギー増幅スタックが貯まり、Lv10でバトルスキルが16発のロケット弾に強化。育成するほど破壊力が伸びる設計で最初期から投資価値が最大' },
+      { id:'murphy',   reason:'パッシブ「一点死守」が素の状態から前衛全員の被ダメージ-17%。専用武装もLv30で軽減効果75%まで伸び、Season1から解放されるため長期優位' },
+      { id:'marshall', reason:'バトルスキル「戦術指揮」の攻撃力バフは兵種を問わず全員に乗る。専用武装Lv30ではバトルスキル3回ごとに味方最高攻撃力ユニットのCDをリセットする強力な後押しも加わる' },
+      { id:'stetmann', reason:'バトルスキルで敵3体に695%ダメージのサブ火力。専用武装Lv1から通常攻撃にシールド貫通効果が付き、Lv30で行動妨害を無効化するシールドも獲得' },
+      { id:'williams', reason:'素の耐久は高いが、チーム全体への貢献（味方全体防御+55%）は専用武装Lv30の新規バトルスキルで解禁。Lv20までは戦車専門家（+7.5%）止まりで、それまでは自分を守るだけの性能に留まりやすい' },
+    ],
+    source: 'LDShop Tank Squad Skills Guide',
+  },
+  {
+    type: 'air',
+    typeLabel: '航空軸',
+    confidence: 'high',
+    order: [
+      { id:'dva',      reason:'バトルスキル「鋼の嵐」で敵全体に718%ダメージ。専用武装Lv1から限界突破スタックで火力が伸び、Lv30では開幕即バトルスキル発動の新スキルも獲得する主力バースト' },
+      { id:'carlie',   reason:'素の状態から常時、自身の被エネルギーダメージ-44%・敵の通常攻撃ダメージ-12%が発動する航空唯一の壁役。専用武装Lv10で敵全体のエネルギーダメージ-16.5%も追加され、彼女がいないと後衛が火力を出す前に溶かされる' },
+      { id:'morrison', reason:'バトルスキルの防御力デバフ（最大-25%スタック）でチーム全体の火力を底上げ。専用武装Lv30で壊滅弾命中後さらに-10%が重なる。生存できて初めて効果を発揮する点に注意' },
+      { id:'lucius',   reason:'バトルスキル「騎士道」で味方全体の被エネルギーダメージ-19%。専用武装Lv10で20.89%まで伸び味方全体へのシールドも追加されるが、カーリーと並ぶ前衛のため優先度はやや下' },
+      { id:'schuyler', reason:'バトルスキルの20%確率スタンがCC要員としての基本性能。専用武装Lv30で最初のバトルスキル使用時のスタンが確定発動に変わるが、他4人が完了してから育成するのが定石' },
+    ],
+    source: 'LDShop Best Aircraft Hero Skills Guide',
+  },
+  {
+    type: 'mis',
+    typeLabel: 'ロケラン軸',
+    confidence: 'mixed',
+    order: [
+      { id:'mcgregor', reason:'バトルスキル「揺るがぬ意志」で前衛の敵を挑発。専用武装Lv1から敵に継続ダメージ+20%のデバフを付与しテスラ達のDoTを底上げする役割も持つ。前衛が5秒で落ちるとテスラが撃つ機会すら得られないため生存が最優先' },
+      { id:'tesla',    reason:'バトルスキル「電光雷轟」で後衛3体に1127%ダメージ。専用武装Lv1で誘導電流（継続エネルギーダメージ）を付与し、Lv30で効果がさらに拡張される主力バースト。前衛が安定してから火力に投資' },
+      { id:'fiona',    reason:'バトルスキル「恋は盲目」で敵全体に718%ダメージ。専用武装Lv1から余波（継続物理ダメージ）を付与し、ロケラン編成のAoEが成立するかどうかを左右する' },
+      { id:'adam',     reason:'パッシブで前衛の被ダメージ-13%、バトルスキルで防御反撃状態に。専用武装Lv30では味方の反撃が一定回数貯まるごとに追加ダメージを与える副前衛・対航空カウンターだが、マクレガーほどの緊急度はない' },
+      { id:'swift',    reason:'バトルスキルで敵3体に793%ダメージ。専用武装Lv1から炎上（継続物理ダメージ）を付与し、Lv30で炎上スタック最大の敵に800%の追加ダメージを与える仕上げ役。単体フィニッシュが必要な場面以外は優先度低め' },
+    ],
+    source: '複数ソースで中間3人（テスラ/フィオナ/アダム）の順序が割れるため要検証（両端＝マクレガー最優先／スウィフト最後、は一致）',
   },
 ];
 

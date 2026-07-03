@@ -130,6 +130,18 @@
           </div>
         </div>
 
+        <!-- コミュニティ推奨 育成優先順（兵種別・固定順） -->
+        <div id="training-order-panel" class="panel" style="border-left:3px solid #c026d3;">
+          <div class="panel-collapse-header" onclick="togglePanel('training-order-body','training-order-icon')">
+            <div class="panel-title" style="color:#c026d3;margin:0;">コミュニティ推奨 育成優先順</div>
+            <span id="training-order-icon" class="panel-collapse-icon open">▼</span>
+          </div>
+          <div id="training-order-body" class="panel-collapsible open">
+            <div style="font-size:var(--fs-sm);color:#475569;margin:8px 0;">攻略サイトが明言している兵種別の固定育成順です。上の「専用武装 育成優先ランキング」（今のロスターから毎回計算するAI順）とは別の指標として、経験則の裏付けに使ってください。</div>
+            <div id="training-order-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+        </div>
+
         <div id="power-transition" class="panel" style="border-left:3px solid #f59e0b; margin-top: 14px;">
           <div class="panel-collapse-header" onclick="toggleTransitionPanel()">
             <div class="panel-title" style="color:#f59e0b;margin:0;">次の部隊の編成方針</div>
