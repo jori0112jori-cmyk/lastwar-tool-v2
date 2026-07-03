@@ -12,6 +12,13 @@
 <body>
 <div id="toast"></div>
 
+<div id="army-jump-footer" class="army-jump-footer" aria-label="編成ジャンプ">
+    <button class="jump-btn j1" onclick="jumpToArmy(1)">🥇 1軍</button>
+    <button class="jump-btn j2" onclick="jumpToArmy(2)">🥈 2軍</button>
+    <button class="jump-btn j3" onclick="jumpToArmy(3)">🥉 3軍</button>
+    <button class="jump-btn jb" onclick="jumpToArmy(4)">🧰 控え</button>
+</div>
+
 <div class="container">
     <h1>育成シミュレーター <span class="version-badge">🧩 S6対応 編成診断ツール</span></h1>
     <div class="tabs">
@@ -43,12 +50,6 @@
             <div id="summary-bar" class="suggestion-box">
                 10人以上配置すると、最優先育成サマリーが表示されます。
             </div>
-            <div class="jump-row" aria-label="編成ジャンプ">
-                <button class="jump-btn j1" onclick="jumpToArmy(1)">🥇 1軍へ</button>
-                <button class="jump-btn j2" onclick="jumpToArmy(2)">🥈 2軍へ</button>
-                <button class="jump-btn j3" onclick="jumpToArmy(3)">🥉 3軍へ</button>
-                <button class="jump-btn jb" onclick="jumpToArmy(4)">🧰 控えへ</button>
-            </div>
         </div>
 
         <div class="panel slot-panel">
@@ -73,6 +74,8 @@
                 <span>折りたたみ時も評価（進行度）を表示</span>
               </label>
             </div>
+
+            <div id="slot-army-tabs" style="display:flex;gap:6px;margin-bottom:10px;"></div>
 
             <div class="slot-army" id="slot-army-1">
                 <div class="slot-army-head">
@@ -138,6 +141,7 @@
           </div>
           <div id="training-order-body" class="panel-collapsible open">
             <div style="font-size:var(--fs-sm);color:#475569;margin:8px 0;">攻略サイトが明言している兵種別の固定育成順です。上の「専用武装 育成優先ランキング」（今のロスターから毎回計算するAI順）とは別の指標として、経験則の裏付けに使ってください。</div>
+            <div id="training-order-tabs" style="display:flex;gap:6px;margin-bottom:10px;"></div>
             <div id="training-order-list" style="display:flex;flex-direction:column;gap:10px;"></div>
           </div>
         </div>
@@ -209,7 +213,7 @@
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🧩 ステップ1：編成を入力する</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
-            <li>「部隊編成」タブで第1〜第3軍（各5枠）と控え（10枠）のタイルをタップ。</li>
+            <li>「部隊編成」タブの「編成」パネルで、<b>1軍／2軍／3軍／控え</b>のタブを切り替えながらタイルをタップ。</li>
             <li>各スロットでキャラと武装Lv（0〜30）を設定します。</li>
             <li>覚醒対象英雄（キンバリー・DVA・テスラ）は覚醒★数も設定可能です。</li>
             <li><b>10人以上</b>配置すると、育成アドバイスと各ランキングが自動更新されます。</li>
@@ -222,14 +226,25 @@
             <li>有利属性で攻撃すると<b>与ダメージが増え、受けるダメージが減る</b>補正がかかります（検証ではおよそ20%前後の差と言われています）。拮抗した戦力同士ではこの差が勝敗を分けます。</li>
             <li>さらに、同じ兵種の英雄を<b>5人揃える</b>と部隊全体の攻撃力・防御力・HPが+20%されます（兵種統一バフ）。</li>
             <li>この2つが重なるため、有利属性の単色編成と不利属性の単色編成がぶつかると、合計で40%以上の性能差が生まれることになります。これが「混成編成（レインボー）」を避けて単色編成を目指すべき理由です。</li>
-            <li>ただし覚醒キム＋覚醒DVAの4+1混成編成のように、兵種統一バフを犠牲にしても覚醒効果で総合火力が上回るケースもあります（推奨編成テンプレート参照）。</li>
+            <li><b>【S6注記】</b>以前は「4+1ハイブリッド編成カード」で異なる兵種を1体混ぜても兵種統一バフ20%を維持できましたが、このカードはS6で撤廃されました。今は1体でも兵種を崩すと+20%→+15%に低下し、補填手段はありません。それでもDVA（航空タイプ）を戦車編成に混ぜる、マーシャル（攻撃力バフは兵種問わず全員に乗る）を編成する、といった「兵種ボーナスの5%減より本人の性能・覚醒効果が上回る」判断は現行シーズンでも有効とされています（下の「コミュニティ推奨 育成優先順」参照）。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">📋 推奨編成テンプレート</div>
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>F2P〜中課金向けの編成をワンタップで反映できます。</li>
+            <li>「今の編成に近い順」「コミュニティ推奨順」を切り替えて表示できます。</li>
+            <li>各英雄の下に「最低EW／理想EW」を表示。数値に紐づく効果がある場合は「EW◯◯で／効果」の2段表示になります。</li>
             <li>EWは現在のLvを維持したままキャラ配置のみ変更します。</li>
             <li>同じキャラが他の軍・控えにいる場合は移動扱い（重複なし）になります。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🏆 コミュニティ推奨 育成優先順</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li>攻略サイト（LDShop等）が明言している兵種別（戦車軸／航空軸／ロケラン軸）の固定育成順をタブで確認できます。</li>
+            <li>上の「専用武装 育成優先ランキング」は今のロスターから毎回計算するAI順ですが、こちらはコミュニティの経験則による固定順です。両方を見比べて裏付けにしてください。</li>
+            <li>各英雄に「🎯目標EW」（推奨編成テンプレートと連動）と「所持状況（現在のLv）」を表示します。</li>
+            <li>理由文には専用武装の効果も織り込まれています。「📖キャラ詳細を見る」ボタンでその英雄のキャラ紹介ページに直接ジャンプできます。</li>
+            <li>ロケラン軸は情報源により中間3人（テスラ／フィオナ／アダム）の順序が割れるため「⚠️ソースにより差あり」と表示されます（両端＝マクレガー最優先／スウィフト最後、は複数ソース一致）。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🎯 部隊強化の指針</div>
@@ -244,7 +259,7 @@
           <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
             <li>次に強化すべき軍を自動判定し、推奨兵種を提示します。</li>
             <li>手持ち＋控えから各兵種の上位5体を選出してスコアを算出します。</li>
-            <li>キム+DVA両覚醒時は混成型（4+1）を特別推奨として表示します。</li>
+            <li>キム+DVA両覚醒時は、兵種統一バフを一部犠牲にしてでも火力を伸ばせる混成型を特別推奨として表示します（S6では4+1カードが撤廃されているため、兵種ボーナスは20%→15%に低下する前提の表示です）。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🚀 育成優先ランキング</div>
@@ -260,6 +275,15 @@
             <li>覚醒対象英雄のスロットを編集すると覚醒★選択UIが表示されます。</li>
             <li>★0-1解放が最低条件（専用覚醒かけら×50）、★3到達が最重要マイルストーンです。</li>
             <li>「EW強化 vs 覚醒 優先度」パネルで今どちらを優先すべきか確認できます。</li>
+          </ul>
+
+          <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">📖 キャラ詳細画面（キャラ紹介タブ／スロット編集から）</div>
+          <ul style="margin:0 0 12px 16px;padding:0;line-height:1.8;font-size:var(--fs-md);">
+            <li><b>📊評価スコア</b>：即戦力・長期価値・スキル威力・耐久・汎用性・将来性を、全21人中の相対位置で棒グラフ表示します。</li>
+            <li><b>🎯通常スキル</b>：通常攻撃・バトルスキル・パッシブの効果と数値を表示します（一部の英雄は未掲載）。</li>
+            <li><b>🔗スキル相性のいい相手</b>：通常スキルの効果（挑発・デバフ・被ダメ軽減等）から自動判定した、組ませると噛み合う相手を表示します。</li>
+            <li><b>🔧専用武装込みのコンボ</b>：専用武装レベル依存の連携効果（DoT重ねがけ等）を表示します。いずれも表示専用で、ランキングや優先度の計算には使用していません。</li>
+            <li>🤝編成での役割・⚠️注意事項は、それぞれキャラ詳細・スロット編集のどちらか片方だけに表示されます（重複回避のため）。</li>
           </ul>
 
           <div style="font-weight:900;margin-bottom:6px;color:#0f172a;font-size:var(--fs-lg);">🤖 AIに相談</div>

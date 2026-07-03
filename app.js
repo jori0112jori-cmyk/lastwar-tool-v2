@@ -1473,6 +1473,8 @@ function showTab(id, el) {
     let ref = document.getElementById('ref-panel');
     if(ref) ref.style.display = (id === 'guide') ? 'block' : 'none';
     if(id === 'heroes') renderHeroDex();
+    let jumpFooter = document.getElementById('army-jump-footer');
+    if(jumpFooter) jumpFooter.style.display = (id === 'squad') ? 'flex' : 'none';
 }
 
 
@@ -1771,77 +1773,88 @@ function setPresetSortMode(mode) {
   renderPresetPanel();
 }
 
-// コミュニティ推奨育成順パネル（静的データ、ロスター状態に依存しないため一度描画すればOK）
-// 育成優先順パネルの各ヒーロー行：通常スキル＋専用武装Lv別効果の折りたたみ詳細
-function __trainingOrderSkillDetail(id) {
-  const adv = HERO_DB[id] && HERO_DB[id].advice;
-  if (!adv) return '';
-  const kit = adv.skills;
-  const lv = adv.weaponLvNotes;
-  let html = '';
-  if (kit) {
-    const rows = [
-      { key:'auto', label:'通常攻撃' },
-      { key:'battle', label:'バトルスキル' },
-      { key:'passive', label:'パッシブ' },
-    ].filter(r => kit[r.key] && kit[r.key].name).map(r => `
-      <div style="margin-bottom:4px;">
-        <span style="font-size:10px;font-weight:900;color:#0891b2;">${r.label}</span>
-        <span style="font-size:var(--fs-xs);font-weight:800;color:#0f172a;">${kit[r.key].name}</span>
-        <div style="font-size:10px;color:#64748b;line-height:1.4;">${kit[r.key].effect}</div>
-      </div>`).join('');
-    if (rows) html += `<div style="margin-bottom:6px;">${rows}</div>`;
-  }
-  if (lv) {
-    const rows = ['lv1','lv10','lv20','lv30'].filter(k => lv[k]).map(k => `
-      <div style="display:flex;gap:6px;margin-bottom:3px;">
-        <span style="flex-shrink:0;font-size:10px;font-weight:900;color:#fff;background:#7c3aed;border-radius:4px;padding:1px 5px;">${k.replace('lv','Lv')}</span>
-        <span style="font-size:10px;color:#64748b;line-height:1.4;">${lv[k]}</span>
-      </div>`).join('');
-    if (rows) html += `<div style="font-size:10px;font-weight:900;color:#7c3aed;margin-bottom:3px;">🔧 専用武装</div>${rows}`;
-  }
-  return html;
+function getTrainingOrderTab() {
+  try {
+    const v = localStorage.getItem('training_order_tab');
+    if (v && COMMUNITY_TRAINING_ORDER.some(g => g.type === v)) return v;
+  } catch(e) {}
+  return 'tank';
+}
+function setTrainingOrderTab(type) {
+  try { localStorage.setItem('training_order_tab', type); } catch(e) {}
+  renderCommunityTrainingOrder();
 }
 
 function renderCommunityTrainingOrder() {
   const list = document.getElementById('training-order-list');
+  const tabsEl = document.getElementById('training-order-tabs');
   if (!list || typeof COMMUNITY_TRAINING_ORDER === 'undefined') return;
   const CONF = {
     high:  { label: '✅ 複数ソース一致', color: '#059669' },
     mixed: { label: '⚠️ ソースにより差あり', color: '#d97706' },
   };
-  list.innerHTML = COMMUNITY_TRAINING_ORDER.map(group => {
-    const conf = CONF[group.confidence] || CONF.mixed;
-    const rows = group.order.map((entry, i) => {
-      const h = HERO_DB[entry.id] || {};
-      const detailId = `training-detail-${group.type}-${entry.id}`;
-      const detailHtml = __trainingOrderSkillDetail(entry.id);
-      return `
-        <div style="padding:6px 0;${i>0?'border-top:1px dashed #e2e8f0;':''}">
-          <div style="display:flex;gap:8px;align-items:flex-start;">
-            <div style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#c026d3;color:#fff;font-size:var(--fs-xs);font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px;">${i+1}</div>
-            <div style="flex-shrink:0;width:36px;height:36px;border-radius:8px;overflow:hidden;background:#0b1220;">
-              <img src="img/${entry.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
-            </div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:var(--fs-sm);font-weight:900;color:#0f172a;">${h.name || entry.id}</div>
-              <div style="font-size:var(--fs-xs);color:#64748b;line-height:1.5;">${entry.reason}</div>
-              ${detailHtml ? `<button onclick="const e=document.getElementById('${detailId}');const open=e.style.display!=='none';e.style.display=open?'none':'block';this.textContent=open?'▼ スキルを見る':'▲ 閉じる';" style="margin-top:4px;font-size:10px;font-weight:900;color:#7c3aed;background:none;border:none;padding:0;cursor:pointer;">▼ スキルを見る</button>` : ''}
-            </div>
-          </div>
-          ${detailHtml ? `<div id="${detailId}" style="display:none;margin:6px 0 0 66px;padding:8px;background:#faf5ff;border-radius:8px;border:1px solid #f3e8ff;">${detailHtml}</div>` : ''}
-        </div>`;
+  const activeTab = getTrainingOrderTab();
+  const wpMap = __collectCurrentRosterWpMap();
+
+  // FORMATION_PRESETSから各ヒーローの理想EW（最大値＝長期目標）を逆引きする。
+  // テンプレート側の数値を正本にすることで、両パネルの目標値がズレないようにする。
+  const idealWpByHero = {};
+  if (typeof FORMATION_PRESETS !== 'undefined') {
+    FORMATION_PRESETS.forEach(p => p.squad.forEach(m => {
+      if (m.wpIdeal == null) return;
+      idealWpByHero[m.id] = Math.max(idealWpByHero[m.id] || 0, m.wpIdeal);
+    }));
+  }
+
+  if (tabsEl) {
+    tabsEl.innerHTML = COMMUNITY_TRAINING_ORDER.map(group => {
+      const active = group.type === activeTab;
+      return `<button onclick="setTrainingOrderTab('${group.type}')" style="flex:1;font-size:var(--fs-sm);padding:8px 8px;border-radius:8px;border:1px solid ${active?'#c026d3':'#cbd5e1'};background:${active?'#c026d3':'#fff'};color:${active?'#fff':'#475569'};font-weight:900;cursor:pointer;">${group.typeLabel}</button>`;
     }).join('');
+  }
+
+  const group = COMMUNITY_TRAINING_ORDER.find(g => g.type === activeTab) || COMMUNITY_TRAINING_ORDER[0];
+  const conf = CONF[group.confidence] || CONF.mixed;
+  const rows = group.order.map((entry, i) => {
+    const h = HERO_DB[entry.id] || {};
+    const idealWp = idealWpByHero[entry.id];
+    const ownedWp = wpMap.get(entry.id);
+    const owned = wpMap.has(entry.id);
+    const statusBadge = owned
+      ? `<span style="font-size:var(--fs-xxs);font-weight:900;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:1px 6px;">✅ 所持 Lv${ownedWp}</span>`
+      : `<span style="font-size:var(--fs-xxs);font-weight:900;color:#94a3b8;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;">未所持</span>`;
+    const targetBadge = idealWp != null
+      ? `<span style="font-size:var(--fs-xxs);font-weight:900;color:#c026d3;background:#fdf4ff;border:1px solid #f3e8ff;border-radius:4px;padding:1px 6px;">🎯 目標EW${idealWp}</span>`
+      : '';
     return `
-      <div style="background:#fff;border:1px solid #e8edf5;border-radius:12px;padding:12px;">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-          <span style="font-size:var(--fs-sm);font-weight:900;color:#0f172a;">${group.typeLabel}</span>
-          <span style="font-size:var(--fs-xxs);font-weight:900;color:${conf.color};background:${conf.color}18;border:1px solid ${conf.color}44;border-radius:4px;padding:1px 5px;">${conf.label}</span>
+      <div style="padding:6px 0;${i>0?'border-top:1px dashed #e2e8f0;':''}">
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <div style="flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#c026d3;color:#fff;font-size:var(--fs-xs);font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px;">${i+1}</div>
+          <div style="flex-shrink:0;width:36px;height:36px;border-radius:8px;overflow:hidden;background:#0b1220;">
+            <img src="img/${entry.id}.webp" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0">
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:var(--fs-md);font-weight:900;color:#0f172a;">${h.name || entry.id}</span>
+              ${targetBadge}
+              ${statusBadge}
+            </div>
+            <div style="font-size:var(--fs-sm);color:#64748b;line-height:1.6;margin-top:2px;">${entry.reason}</div>
+            <button onclick="openHeroDexDetail('${entry.id}')" style="margin-top:5px;font-size:var(--fs-xs);font-weight:900;color:#7c3aed;background:none;border:none;padding:0;cursor:pointer;">📖 キャラ詳細を見る</button>
+          </div>
         </div>
-        ${rows}
-        <div style="font-size:10px;color:#94a3b8;margin-top:6px;">📖 出典：${group.source}</div>
       </div>`;
   }).join('');
+
+  list.innerHTML = `
+    <div style="background:#fff;border:1px solid #e8edf5;border-radius:12px;padding:12px;">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+        <span style="font-size:var(--fs-md);font-weight:900;color:#0f172a;">${group.typeLabel}</span>
+        <span style="font-size:var(--fs-xxs);font-weight:900;color:${conf.color};background:${conf.color}18;border:1px solid ${conf.color}44;border-radius:4px;padding:1px 5px;">${conf.label}</span>
+      </div>
+      ${rows}
+      <div style="font-size:var(--fs-xxs);color:#94a3b8;margin-top:8px;">📖 出典：${group.source}</div>
+    </div>`;
 }
 
 function renderPresetPanel() {
@@ -2648,6 +2661,7 @@ function applyPreset(presetId, squadNum) {
   try { scheduleAi(); } catch(e) {}
   try { saveAllData(); } catch(e) {}
   try { renderPresetPanel(); } catch(e) {}
+  try { renderCommunityTrainingOrder(); } catch(e) {}
   showToast('✅ 「'+preset.name+'」を'+sLabel+'に反映（他軍の重複は移動）');
 }
 
@@ -5011,6 +5025,7 @@ function applyMultiArmy() {
     updateAllSquads();
     try { saveAllData(); } catch(e) {}
     try { renderPresetPanel(); } catch(e) {}
+  try { renderCommunityTrainingOrder(); } catch(e) {}
     showToast("🔄 最強の編成を反映しました！");
 }
 
@@ -5718,6 +5733,7 @@ function slotModalApply(){
     try { updateAllSquads(); } catch(e) {}
     try { saveAllData(); } catch(e) {}
     try { renderPresetPanel(); } catch(e) {}
+  try { renderCommunityTrainingOrder(); } catch(e) {}
 }
 
 // updateAllSquads の後にタイルも更新する
@@ -5739,6 +5755,9 @@ function jumpToArmy(n){
         const firstTab = document.querySelectorAll('.tab-btn')[0];
         showTab('squad', firstTab);
     }catch(e){}
+
+    // 1軍〜控えタブを対象の軍に切り替える
+    try{ if (typeof setSlotArmyTab === 'function') setSlotArmyTab(n); }catch(e){}
 
     // 統合スロットUI（slot-army）を優先してスクロール
     const target = $id(`slot-army-${n}`) || $id("sq-body-"+n);
@@ -5909,6 +5928,41 @@ function initKeepEvalPref(){
   }
 }
 
+const SLOT_ARMY_TAB_KEY = "slot-army-tab";
+function getSlotArmyTab(){
+  try{
+    const v = localStorage.getItem(SLOT_ARMY_TAB_KEY);
+    if (v && ['1','2','3','4'].includes(v)) return Number(v);
+  }catch(e){}
+  return 1;
+}
+function setSlotArmyTab(n){
+  try{ localStorage.setItem(SLOT_ARMY_TAB_KEY, String(n)); }catch(e){}
+  renderSlotArmyTabs();
+}
+window.setSlotArmyTab = setSlotArmyTab;
+
+function renderSlotArmyTabs(){
+  const tabsEl = document.getElementById('slot-army-tabs');
+  if (!tabsEl) return;
+  const active = getSlotArmyTab();
+  const TABS = [
+    { n:1, label:'🥇 1軍' },
+    { n:2, label:'🥈 2軍' },
+    { n:3, label:'🥉 3軍' },
+    { n:4, label:'🧳 控え' },
+  ];
+  tabsEl.innerHTML = TABS.map(t => {
+    const isActive = t.n === active;
+    return `<button onclick="setSlotArmyTab(${t.n})" style="flex:1;font-size:var(--fs-xs);padding:8px 4px;border-radius:8px;border:1px solid ${isActive?'#16a34a':'#cbd5e1'};background:${isActive?'#16a34a':'#fff'};color:${isActive?'#fff':'#475569'};font-weight:900;cursor:pointer;">${t.label}</button>`;
+  }).join('');
+  for (let n = 1; n <= 4; n++) {
+    const army = document.getElementById(`slot-army-${n}`);
+    if (army) army.style.display = (n === active) ? '' : 'none';
+  }
+}
+window.renderSlotArmyTabs = renderSlotArmyTabs;
+
 function setSlotToggleState(n, isExpanded){
   const army = document.getElementById(`slot-army-${n}`);
   const btn = army ? (army.querySelector('.slot-toggle-btn') || army.querySelector('.slot-toggle')) : null;
@@ -5982,6 +6036,7 @@ function initSlotToggles(){
 
 // index.html はスクリプトが末尾なので、基本は即時でOK
 try{ initSlotToggles(); }catch(e){}
+try{ renderSlotArmyTabs(); }catch(e){}
 try{ initKeepEvalPref(); }catch(e){}
 try{ window.toggleTransitionPanel = toggleTransitionPanel; }catch(e){}
 

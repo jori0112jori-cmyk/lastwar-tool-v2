@@ -122,8 +122,14 @@
     .summary-title { font-weight:900; color:#0f172a; font-size:var(--fs-lg); }
     .summary-main { font-weight:900; color:#1d4ed8; font-size:var(--fs-lg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
     .summary-sub { font-size:var(--fs-sm); color:#374151; font-weight:700; line-height:1.4; }
-    .jump-row { display:flex; gap:8px; margin: 10px 0 14px; flex-wrap:wrap; }
-    .jump-btn { flex:1; min-width: 98px; border:none; border-radius: 12px; padding: 10px 10px; font-weight: 900; cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .army-jump-footer {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 998;
+      display: flex; gap: 6px;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+      border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+    }
+    .jump-btn { flex:1; min-width: 0; border:none; border-radius: 10px; padding: 9px 2px; font-weight: 900; font-size: var(--fs-xs); cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06); white-space:nowrap; }
     .jump-btn.j1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color:#1f2937; }
     .jump-btn.j2 { background: linear-gradient(135deg, #cbd5e1, #94a3b8); color:#0f172a; }
     .jump-btn.j3 { background: linear-gradient(135deg, #fb923c, #f97316); color:#0f172a; }
