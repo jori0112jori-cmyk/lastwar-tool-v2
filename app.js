@@ -703,7 +703,7 @@ const AI_PROVIDERS = {
     // GeminiはAndroid Chromeのアプリ起動判定（App Links/Gemini in Chrome機能との競合）により
     // 新しいタブが開いた直後に閉じてしまう不安定な挙動が確認されたため、自動遷移をしない。
     // 代わりにURL自体をクリップボードにコピーし、手動でアドレスバーに貼り付けてもらう。
-    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵', autoOpen: true },
+    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵', autoOpen: false },
     chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/',           icon: '🟢', autoOpen: true },
 };
 function loadAiProvider() {
