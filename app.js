@@ -1397,6 +1397,15 @@ window.onload = function() {
 try { updateAiConsultButton(); } catch(e) {}
 try { updatePlayerTypeButtons(); } catch(e) {}
 
+    // community-data.json は非同期取得のため、取得完了後に依存パネルを再描画する。
+    // 取得前の初回描画は data.js の内蔵データで行われるため、失敗時も画面は正常に動く。
+    applyCommunityDataOverlay().then(updated => {
+        if (!updated) return;
+        try { renderPresetPanel(); } catch(e) {}
+        try { renderCommunityTrainingOrder(); } catch(e) {}
+        try { generateAiSuggestion(); } catch(e) {}
+    });
+
 // ===== オンボーディング（HTML削除済みのため機能自体は無効） =====
 
     try { restorePanelStates(); } catch(e) {}
@@ -4860,6 +4869,58 @@ function saveAllData() {
     localStorage.setItem('lw_sim_v24_final', JSON.stringify(d));
   } catch(e) {
     console.error('saveAllData failed:', e);
+  }
+}
+
+// ====================================================
+// 🌐 コミュニティデータの外部読み込み（実験的機能）
+// ====================================================
+// data.js（ゲーム仕様・スコア計算内部値）とは別に、シーズンで変わりやすい
+// 「意見・メタ評価」系のデータ（Tier評価・アドバイス文・推奨編成テンプレート・
+// コミュニティ推奨育成優先順）を community-data.json から読み込んで上書きする。
+// この仕組みにより、data.js を触らず community-data.json を差し替えるだけで
+// 評価内容を即時反映できる（サイト全体の再ビルド・app.js/data.jsの変更は不要）。
+//
+// フォールバック必須：fetchに失敗しても data.js の値のまま動作する
+// （オフライン・community-data.json未配置・パース失敗、いずれのケースも握りつぶして
+//  何もしない＝data.jsの値がそのまま生きる）。
+async function applyCommunityDataOverlay() {
+  try {
+    const res = await fetch('./community-data.json', { cache: 'no-cache' });
+    if (!res.ok) return false;
+    const overlay = await res.json();
+
+    // ヒーロー個別のTier評価・アドバイス文を上書き
+    if (overlay.heroMeta && typeof HERO_DB === 'object') {
+      for (const id in overlay.heroMeta) {
+        if (!HERO_DB[id]) continue; // data.js側に存在しないIDは無視（安全側）
+        const src = overlay.heroMeta[id];
+        if (src.meta) HERO_DB[id].meta = src.meta;
+        if (src.priority !== undefined && HERO_DB[id].advice) HERO_DB[id].advice.priority = src.priority;
+        if (src.advice && HERO_DB[id].advice) {
+          for (const k of ['s6note', 'ewAdvice', 'synergy', 'globalReview', 'jpReview', 'warning']) {
+            if (src.advice[k] !== undefined) HERO_DB[id].advice[k] = src.advice[k];
+          }
+        }
+      }
+    }
+
+    // 推奨編成テンプレート・コミュニティ推奨育成優先順を丸ごと差し替え
+    // （constだが配列/オブジェクトの中身は書き換え可能。参照を保ったまま中身だけ更新する）
+    if (Array.isArray(overlay.formationPresets) && typeof FORMATION_PRESETS !== 'undefined') {
+      FORMATION_PRESETS.length = 0;
+      FORMATION_PRESETS.push(...overlay.formationPresets);
+    }
+    if (Array.isArray(overlay.communityTrainingOrder) && typeof COMMUNITY_TRAINING_ORDER !== 'undefined') {
+      COMMUNITY_TRAINING_ORDER.length = 0;
+      COMMUNITY_TRAINING_ORDER.push(...overlay.communityTrainingOrder);
+    }
+
+    console.log(`✅ community-data.json 読み込み完了（version: ${overlay.version || '不明'}）`);
+    return true;
+  } catch (e) {
+    console.log('ℹ️ community-data.json 読み込みなし（data.jsの内蔵データで動作します）', e);
+    return false;
   }
 }
 
