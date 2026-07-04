@@ -1399,47 +1399,6 @@ body.keep-eval-collapse .slot-army.slot-collapsed .slot-eval{ display:block !imp
 .meta-tag         { font-size:var(--fs-md); color:#4b5563; background:#f8fafc; padding:4px 10px; border-radius:12px; border:1px solid #e2e8f0; font-weight:bold; }
 .btn-md-gray      { font-size:var(--fs-md); background:#fff; color:#475569; border:1px solid #94a3b8; padding:8px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
 
-/* ===== オンボーディング ===== */
-#onboard-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(15,23,42,0.75);
-  display: flex; align-items: flex-end;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  animation: fadeInOverlay .3s ease;
-}
-@keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
-#onboard-card {
-  width: 100%; background: #fff;
-  border-radius: 20px 20px 0 0;
-  padding: 24px 20px 32px;
-  box-shadow: 0 -8px 32px rgba(0,0,0,.2);
-  animation: slideUp .3s ease;
-}
-@keyframes slideUp { from { transform:translateY(60px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-#onboard-steps { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
-.onboard-step {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px; border-radius: 10px;
-  background: #f8fafc; border: 1px solid #e2e8f0;
-}
-.onboard-step.active { background: #eff6ff; border-color: #93c5fd; }
-.onboard-step-num {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: #2563eb; color: #fff;
-  font-size: var(--fs-xs); font-weight: 900;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.onboard-step-text { font-size: var(--fs-sm); color: #374151; line-height: 1.5; }
-.onboard-step-text b { color: #1d4ed8; }
-#onboard-btn {
-  width: 100%; padding: 14px;
-  background: #2563eb; color: #fff;
-  border: none; border-radius: 12px;
-  font-size: var(--fs-lg); font-weight: 900;
-  cursor: pointer; margin-top: 4px;
-}
-
 /* ===== 折りたたみパネル ===== */
 .panel-collapse-header {
   display: flex; align-items: center; justify-content: space-between;

@@ -703,7 +703,7 @@ const AI_PROVIDERS = {
     // GeminiはAndroid Chromeのアプリ起動判定（App Links/Gemini in Chrome機能との競合）により
     // 新しいタブが開いた直後に閉じてしまう不安定な挙動が確認されたため、自動遷移をしない。
     // 代わりにURL自体をクリップボードにコピーし、手動でアドレスバーに貼り付けてもらう。
-    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵', autoOpen: false },
+    gemini:  { label: 'Gemini',  url: 'https://gemini.google.com/app',  icon: '🔵', autoOpen: true },
     chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/',           icon: '🟢', autoOpen: true },
 };
 function loadAiProvider() {
@@ -990,22 +990,6 @@ function collectArmyMembersForProgress(armyNo){
 
 
 
-function getIdealMembersForType(type){
-  // F2P現実的目標（packsify/allclash準拠）
-  // キャリー(atk): EW20 = 覚醒前提クリア・実戦十分な水準
-  // タンク(wall):  EW20 = 前衛として十分な水準
-  // サポート(sup): EW10 = マーシャル等はEW不要
-  // EW30は長期目標のため基準から外す
-  const idealType = ['tank','air','mis'].includes(type) ? type : 'tank';
-  return [
-    { id:`${idealType}-i1`, wp:20, t:idealType, r:'wall' },
-    { id:`${idealType}-i2`, wp:20, t:idealType, r:'wall' },
-    { id:`${idealType}-i3`, wp:20, t:idealType, r:'atk'  },
-    { id:`${idealType}-i4`, wp:20, t:idealType, r:'atk'  },
-    { id:`${idealType}-i5`, wp:10, t:idealType, r:'sup'  },
-  ];
-}
-
 function computeDisplayedArmyProgress(armyNo){
   const members = collectArmyMembersForProgress(armyNo);
   if(!members.length){
@@ -1092,25 +1076,6 @@ function updateSlotEvalsFromCurrentInputs(){
   }
 
   try { updateArmyGuide(); } catch(e) {}
-}
-
-const TRANSITION_TEXT_TABLE = [
-  { min: 85, label: "今すぐ移行できる！", cls: "advice-now",  color: "#ef4444" },
-  { min: 70, label: "移行の準備を始めよう",   cls: "advice-good", color: "#f59e0b" },
-  { min: 55, label: "あと少しで移行圏",           cls: "advice-soon", color: "#eab308" },
-  // ここから下は「様子見」系（CSS既存クラスに寄せる）
-  { min: 40, label: "もう少し育成してから",     cls: "advice-wait", color: "#64748b" },
-  { min: 25, label: "現在の編成を伸ばそう",           cls: "advice-wait", color: "#94a3b8" },
-  { min: 0,  label: "まだ移行は早い",         cls: "advice-wait", color: "#cbd5e1" }
-];
-
-function getTransitionAdvice(score){
-  const sc = Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 0;
-  for(const row of TRANSITION_TEXT_TABLE){
-    if(sc >= row.min) return { txt: row.label, cls: row.cls, color: row.color };
-  }
-  const last = TRANSITION_TEXT_TABLE[TRANSITION_TEXT_TABLE.length-1];
-  return { txt: last.label, cls: last.cls, color: last.color };
 }
 
 
@@ -1432,31 +1397,8 @@ window.onload = function() {
 try { updateAiConsultButton(); } catch(e) {}
 try { updatePlayerTypeButtons(); } catch(e) {}
 
-// ===== オンボーディング =====
-function showOnboardIfNeeded() {
-  try {
-    const dismissed = localStorage.getItem('lw_onboard_dismissed');
-    const hasData   = localStorage.getItem('lw_sim_v24_final') || localStorage.getItem('lw_sim_v23_final');
-    if (dismissed === '1' || hasData) return; // 既存ユーザーはスキップ
-    document.getElementById('onboard-overlay').style.display = 'flex';
-  } catch(e) {}
-}
-function closeOnboard() {
-  try {
-    const noShow = document.getElementById('onboard-no-show');
-    if (noShow && noShow.checked) {
-      localStorage.setItem('lw_onboard_dismissed', '1');
-    }
-    const el = document.getElementById('onboard-overlay');
-    if (el) {
-      el.style.opacity = '0';
-      el.style.transition = 'opacity .2s';
-      setTimeout(() => el.style.display = 'none', 200);
-    }
-  } catch(e) {}
-}
+// ===== オンボーディング（HTML削除済みのため機能自体は無効） =====
 
-    showOnboardIfNeeded();
     try { restorePanelStates(); } catch(e) {}
     try { renderSlots(); } catch(e) {}
    
@@ -1508,12 +1450,6 @@ function typeIcon(t){ return uiIcon(TYPE_ICON[t], t); }
 function roleIcon(r){ return uiIcon(ROLE_ICON[r], r); }
 
 /* 育成ランキング表示用：兵種アイコン - キャラ名 - 役割アイコン */
-function effTitleLine(rank, item){
-  const t = item.type || item.t;
-  const r = item.roleKey || item.r;
-  return `<div class="eff-title-line">${typeIcon(t)}<b>${rank}. ${item.name}</b>${roleIcon(r)}</div>`;
-}
-
 // ===============================
 // 育成ランキング：カード用CSSを強制注入（styles.css をいじっても効かない問題対策）
 // ===============================
@@ -1562,57 +1498,6 @@ function effTitleLine(rank, item){
     document.head.appendChild(st);
   }catch(e){}
 })();
-
-function effCardHtml(rank, item, opts){
-  opts = opts || {};
-  const isBest = !!opts.isBest;
-  const isTop = !!opts.isTop;
-  const mode = opts.mode || 'normal'; // normal | unlock
-
-  const safeItem = Object.assign({}, item || {});
-  // フォールバック（データ差分吸収）
-  safeItem.type = safeItem.type || safeItem.t;
-  safeItem.roleKey = safeItem.roleKey || safeItem.r;
-  safeItem.name = safeItem.name || safeItem.n;
-
-  const lvLine = safeItem.isAwakeningItem
-    ? `<span class="eff-lv" style="color:#ef4444;font-weight:900;">👑 覚醒 ${safeItem.awTierStr==='none'?'未覚醒':awStarLabel(parseAwTier(safeItem.awTierStr))} → ${safeItem.nextTierLabel || ('★'+safeItem.nextTierStr)}</span>`
-    : (safeItem.from !== undefined && safeItem.to !== undefined)
-      ? `<span class="eff-lv">(Lv${safeItem.from}→${safeItem.to})</span>`
-      : '';
-
-  const badge = (mode === 'normal' && safeItem.growthType) ? growthBadge(safeItem.growthType) : (opts.rightBadge || '');
-
-  let sub = '';
-  if(mode === 'unlock'){
-    const unlockLv = (safeItem.to !== undefined) ? ` <span class="eff-lv">(Lv${safeItem.from||0}→${safeItem.to})</span>` : '';
-    sub = `<div class="eff-sub"><span class="eff-subline">解放時${unlockLv}</span></div>`;
-  }else{
-    const costPart = safeItem.isAwakeningItem
-      ? `<span class="gear-cost"><span class="sep">必要：</span>${safeItem.nextShardNamed ? '🔑専用' : '<img src="img/kakusei.webp" style="width:30px;height:30px;vertical-align:middle;">'} <span class="gear-num">×${safeItem.nextShardCost}</span></span>`
-      : (safeItem.cost !== undefined && safeItem.cost !== null)
-        ? `<span class="gear-cost"><span class="sep">必要：</span><img src="${SHARD_ICON_SRC}" alt="gear"> <span class="gear-num">${safeItem.cost}</span></span>`
-        : '';
-    sub = `<div class="eff-sub"><span class="eff-subline">${costPart || ''}</span></div>`;
-  }
-
-  return `
-    <div class="eff-card ${isTop?'eff-card-top':''} ${isBest?'eff-card-best':''}">
-      <div class="eff-row">
-        <div class="eff-left">
-          ${effTitleLine(rank, safeItem)}
-          ${isBest ? '<span class="eff-best">👑 最優先</span>' : ''}
-          ${lvLine}
-        </div>
-        <div class="eff-right">
-          ${badge}
-          ${sub}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
 
 function reinfCardHtml(rank, item){
   const safeItem = Object.assign({}, item || {});
@@ -3368,44 +3253,6 @@ function __buildRecommendationSummary(item){
 // ===============================
 // S6 覚醒リソース配分警告
 // ===============================
-function checkAwakeningResourceWarning() {
-    if (typeof AWAKENING_HEROES === 'undefined' || typeof loadAwTier === 'undefined') return '';
-
-    const kimTier  = parseAwTier(loadAwTier('kimberly'));
-    const dvaTier  = parseAwTier(loadAwTier('dva'));
-    const teslaTier= parseAwTier(loadAwTier('tesla'));
-
-    // 各英雄の覚醒進行度（0=未着手, 1=未使用, 2=★0台（0-1〜0-5）, 3=★1以上）
-    const progress = (at) => {
-        if (at.star < 0) return 0;
-        if (at.star === 0 && at.tier === 0) return 1;
-        if (at.star === 0) return 2;
-        return 3;
-    };
-
-    const kimP   = progress(kimTier);
-    const dvaP   = progress(dvaTier);
-    const teslaP = progress(teslaTier);
-
-    const warns = [];
-
-    // キムに全投入してDVA/テスラが未着手
-    if (kimTier.star >= 1 && dvaP === 0 && teslaP === 0) {
-        warns.push('⚠️ <b>かけら集中注意：</b> キムの覚醒が進んでいますがDVA・テスラが未着手です。Week3(DVA)・Week5(テスラ)に備えかけらを分散確保することを推奨します。');
-    } else if (kimTier.star >= 1 && dvaP === 0) {
-        warns.push('💡 DVAの覚醒（Week3解放）にかけら130個が必要です。キム優先後でも確保できる見込みを確認しましょう。');
-    }
-
-    // DVA済みでテスラ未着手
-    if (dvaTier.star >= 1 && teslaP === 0) {
-        warns.push('💡 テスラ覚醒（Week5解放）：フィオナとのDoTコンボが強力です。ロケラン軸を視野に入れるならかけらを確保しておきましょう。');
-    }
-
-    if (!warns.length) return '';
-
-    return `<div class="trans-note-orange">${warns.join('<br>')}</div>`;
-}
-
 function __buildAwakeningAdvice(heroId, ewLv) {
   if (typeof AWAKENING_HEROES === 'undefined') return '';
   const aw = AWAKENING_HEROES[heroId];
@@ -4374,16 +4221,6 @@ function updateSummaryBar(result, effData){
         </div>`;
 }
 
-function getPriorityLabel(p, minPercent){
-    return "";
-}
-
-function getColor(percent, base){
-    if(percent < 40) return "#ef4444";
-    if(percent < 60) return "#f59e0b";
-    return base;
-}
-
 // ===============================
 // 🎯 部隊強化指針（部隊間の投資バランスアドバイス）
 // 「1軍が十分育ったら2軍へ」という段階的投資の指針
@@ -4473,40 +4310,6 @@ function __applyArmyGuideCardMarks(armies, topBench){
             if (tile) tile.classList.add('card-promote-candidate');
         });
     } catch(e) {}
-}
-
-function renderProgress(percent, baseColor){
-    const color = getColor(percent, baseColor);
-    return `
-    <div class="progress-wrap">
-        <div class="progress-bar">
-            <div class="progress-fill" style="width:${percent}%; background:${color};"></div>
-        </div>
-        <div class="progress-label">
-            進行度 <span class="progress-label-value" style="color:${color};">${percent}%</span>
-        </div>
-    </div>`;
-}
-
-function armyCard(title, content, baseColor, roleTag, progressPercent, minPercent, buffCount) {
-    let buffText = "";
-    if (buffCount === 5) buffText = `<span class="buff-pill buff-pill-5">🏆20%バフ</span>`;
-    else if (buffCount === 4) buffText = `<span class="buff-pill buff-pill-4">🚜15%バフ</span>`;
-    else if (buffCount === 3) buffText = `<span class="buff-pill buff-pill-3">⚠️5%バフ</span>`;
-
-    return `
-    <div class="army-card" style="border-left-color:${baseColor};">
-        <div class="army-card-title">
-            ${title} ${buffText} ${getPriorityLabel(progressPercent, minPercent)}
-        </div>
-        ${renderProgress(progressPercent, baseColor)}
-        <div class="army-card-role">
-            ${roleTag}
-        </div>
-        <div class="army-card-body">
-            ${content}
-        </div>
-    </div>`;
 }
 
 function generateAiSuggestion() {
@@ -5797,98 +5600,6 @@ function getWeaknessBadge(w){
     return `<span class="weak-badge ${cls}">${getRoleBadge(role)}<span class="t">${txt}</span></span>`;
 }
 
-
-
-// 🛠️ 装備強化優先度（役割ごと2装備 / 編成へは影響しない）
-// ===============================
-
-// 役割ごとの「見る装備」2つ（安全運用：編成最適化には一切反映しない）
-// === ★上げ判定（UR/MRレシピの誤爆防止：費用対効果の簡易モデル） ===
-// ※ゲーム内の正確な必要数はサーバー/仕様で変わり得るため、ここは「無・微課金向けの意思決定用ヒューリスティック」。
-// 　必要数/重みはいつでも調整できるよう定数化している。// 無・微課金の「重さ」：MRの方が入手難と仮定（必要ならここを調整）
-// ★の段階ごとの「伸び」を大雑把に表現（高★ほど価値が高い想定）
-// 役割×装備の重要度（同一役割内の相対）
-// 比較UIの状態
-
-function recipeCostWeight(targetStar){
-  const c = GEAR_RECIPE_COST_BY_TARGET_STAR[targetStar] || { mr:0, ur:0 };
-  const w = (c.mr||0)*GEAR_RECIPE_WEIGHT.mr + (c.ur||0)*GEAR_RECIPE_WEIGHT.ur;
-  // 0割り防止（低★の微コストを少しだけ効かせる）
-  return Math.max(0.35, w);
-}
-
-function computeUpgradeCandidate(hero, gearKey, currentStar, role){
-  const cur = Math.max(0, Math.min(5, parseInt(currentStar)||0));
-  if(cur >= 5) return null;
-
-  const targetStar = cur + 1;
-  const lv = Math.max(0, Math.min(30, parseInt(hero.wp)||0));
-  const lvW = 1 + (lv/30); // 1.0〜2.0（既存の考え方に合わせる） fileciteturn5file0L8-L12
-
-  const impMap = (GEAR_IMPORTANCE[role] || {});
-  const imp = (impMap[gearKey] !== undefined) ? impMap[gearKey] : 1.0;
-
-  const marginal = (GEAR_MARGINAL_VALUE_BY_TARGET_STAR[targetStar] || 1.0);
-  const costW = recipeCostWeight(targetStar);
-
-  const score = (marginal * imp * lvW) / costW;
-
-  const cost = (GEAR_RECIPE_COST_BY_TARGET_STAR[targetStar] || {mr:0, ur:0});
-  return {
-    heroId: hero.id,
-    heroName: hero.name || hero.id,
-    gearKey,
-    currentStar: cur,
-    targetStar,
-    wp: lv,
-    imp,
-    marginal,
-    cost,
-    score
-  };
-}
-
-function formatRecipeCost(cost){
-  const mr = cost && cost.mr ? cost.mr : 0;
-  const ur = cost && cost.ur ? cost.ur : 0;
-  const parts = [];
-  if(mr>0) parts.push(`MR×${mr}`);
-  if(ur>0) parts.push(`UR×${ur}`);
-  return parts.length ? parts.join(" + ") : "（軽）";
-}
-// 編成タブの入力（キャラ + 武装Lv）を流用して、装備タブで一覧にする
-function getRosterFromSquadsUnique(){
-  const map = new Map(); // id -> {id, wp, role, type, name}
-  for(let s=1; s<=4; s++){
-    const n = (s===4)?10:5;
-    for(let p=1; p<=n; p++){
-      const hEl = document.getElementById(`h-${s}-${p}`);
-      const wEl = document.getElementById(`w-${s}-${p}`);
-      if(!hEl || !wEl) continue;
-      const id = (hEl.value || "empty");
-      if(id==="empty") continue;
-      const h = HERO_DB[id];
-      if(!h || h.ur) continue;
-      const wpRaw = wEl.value;
-      const wp = (typeof wpRaw === "string" && (wpRaw.includes("未") || wpRaw === "-")) ? 0 : (parseInt(wpRaw)||0);
-      const prev = map.get(id);
-      if(!prev || wp > (prev.wp||0)){
-        map.set(id, { id, wp, role: h.role, type: h.type, name: h.name });
-      }
-    }
-  }
-  return Array.from(map.values());
-}
-
-
-
-
-function renderStars(n){
-  const v = Math.max(0, Math.min(5, parseInt(n)||0));
-  let s = "";
-  for(let i=0;i<5;i++) s += (i<v) ? "★" : "☆";
-  return s;
-}
 
 
 function gearStarClear(){
