@@ -802,22 +802,25 @@ function copyForAi() {
             return;
         }
 
-        // モバイル（特にAndroid Chrome）では window.open より <a target="_blank"> のクリックの方が
-        // アプリ起動インテント（App Links）と相性が良く、無反応になりにくい。
-        let opened = false;
-        try {
-            const a = document.createElement('a');
-            a.href = info.url;
-            a.target = '_blank';
-            a.rel = 'noopener';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            opened = true;
-        } catch(e) {
-            opened = !!window.open(info.url, '_blank');
-        }
+        // 【重要】コピーを必ず先に実行してから、タブを開く。
+        // 逆順（タブを先に開く）だと、モバイルではタブが開いた瞬間に元のページのフォーカスが外れ、
+        // navigator.clipboard.writeText() がフォーカス喪失で失敗しやすい（Clipboard APIの仕様上、
+        // 実行時にドキュメントがフォーカスされている必要があるため）。これがモバイルで
+        // 「コピーできていないことが多い」という不具合の主因だった。
         copyText(text, () => {
+            let opened = false;
+            try {
+                const a = document.createElement('a');
+                a.href = info.url;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                opened = true;
+            } catch(e) {
+                opened = !!window.open(info.url, '_blank');
+            }
             if (opened) {
                 doToast(`✅ コピーしました＆${info.label}を開きました。新しい会話に貼り付け（長押し→貼り付け／Ctrl+V）て相談できます。`, false);
             } else {
