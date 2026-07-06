@@ -582,7 +582,27 @@ function validateHeroData() {
     }
   }
 
-  const hasIssues = issues.missing.length || issues.asymmetric.length;
+  // 【矛盾検知】コミュニティ推奨育成優先順（COMMUNITY_TRAINING_ORDER）とHERO_DB[id].score.longtermの
+  // 順位が食い違っていないか確認する。community-data.jsonの優先順位テキストを更新しても、
+  // data.js側のscore（AIランキングの実際の計算に使う内部値）は連動して変わらないため、
+  // 「表示上の推奨順」と「実際のAI計算結果」がズレたまま気づかれない事故を防ぐためのチェック。
+  // 見つかったら、score.longterm/future/cost30をCOMMUNITY_TRAINING_ORDERの順に合わせて手動調整すること
+  // （2026-07-04のマーフィ/ウィリアムズ逆転事例を参照）。
+  const priorityMismatch = [];
+  if (typeof COMMUNITY_TRAINING_ORDER !== 'undefined') {
+    for (const group of COMMUNITY_TRAINING_ORDER) {
+      const order = group.order.map(e => e.id).filter(id => HERO_DB[id] && HERO_DB[id].score);
+      for (let i = 0; i < order.length - 1; i++) {
+        const a = order[i], b = order[i + 1];
+        const la = HERO_DB[a].score.longterm, lb = HERO_DB[b].score.longterm;
+        if (la < lb) {
+          priorityMismatch.push(`【${group.typeLabel}】${a}(longterm:${la}) が ${b}(longterm:${lb}) より下位のはずなのに score.longterm が逆転`);
+        }
+      }
+    }
+  }
+
+  const hasIssues = issues.missing.length || issues.asymmetric.length || priorityMismatch.length;
   if (!hasIssues) {
     console.log('✅ validateHeroData: 問題は見つかりませんでした');
   } else {
@@ -594,6 +614,10 @@ function validateHeroData() {
     if (issues.asymmetric.length) {
       console.log('--- HERO_PAIR_SYNERGY 非対称 ---');
       issues.asymmetric.forEach(m => console.log('  ' + m));
+    }
+    if (priorityMismatch.length) {
+      console.log('--- コミュニティ推奨順 vs score.longterm の矛盾 ---');
+      priorityMismatch.forEach(m => console.log('  ' + m));
     }
   }
 
@@ -609,6 +633,7 @@ function validateHeroData() {
     }
   }
 
+  issues.priorityMismatch = priorityMismatch;
   return issues;
 }
 
