@@ -771,6 +771,18 @@ function loadAiProvider() {
         return (v && AI_PROVIDERS[v]) ? v : 'claude';
     } catch(e) { return 'claude'; }
 }
+// PC（Windows Chrome/Brave等）でもnavigator.shareが使える場合があるが、その場合の共有一覧には
+// 通常Claude/ChatGPT/Geminiのデスクトップアプリが登録されておらず、共有ダイアログを出すより
+// 従来の「コピー＋タブオープン」の方が確実に使える。そのため、Web Share APIは
+// モバイル端末（スマホ・タブレット）に限定して使う。判定はUser-Agent文字列による簡易チェック。
+function __isMobileDevice() {
+    try {
+        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    } catch(e) { return false; }
+}
+function __canUseShareApi() {
+    return !!navigator.share && __isMobileDevice();
+}
 function saveAiProvider() {
     try {
         const sel = $id('ai-provider-select');
@@ -783,11 +795,11 @@ function updateAiConsultButton() {
     const info = AI_PROVIDERS[provider] || AI_PROVIDERS.claude;
     const btn = $id('ai-consult-btn');
     const sel = $id('ai-provider-select');
-    // Web Share API対応端末（主にモバイル）では、共有シート自体がClaude/ChatGPT/Gemini等を
+    // Web Share API対応かつモバイル端末では、共有シート自体がClaude/ChatGPT/Gemini等を
     // 全て選べるので、事前のプロバイダ選択は不要になる。選択UIを隠し、ボタンも
-    // 特定サービス名を出さない汎用表記にする。非対応環境（主にPC・タブレット）では
+    // 特定サービス名を出さない汎用表記にする。それ以外（PC等）では
     // 従来通り選択式のまま表示する（フォールバック時にどのURLを開くか決める必要があるため）。
-    if (navigator.share) {
+    if (__canUseShareApi()) {
         if (sel) sel.style.display = 'none';
         if (btn) btn.textContent = '🚀 AIに相談（共有）';
     } else {
@@ -819,13 +831,16 @@ function copyForAi() {
             }
         };
 
-        // 【優先】Web Share API（navigator.share）が使える端末（主にモバイル）では、
+        // 【優先】Web Share APIが使えて、かつモバイル端末（スマホ・タブレット）の場合は、
         // OSネイティブの共有シートを直接呼び出す。ユーザーがClaude/ChatGPT/Gemini等の
         // アプリを選ぶだけでテキストが渡り、「コピー→アプリを開く→貼り付け」の3手順が
         // 「共有→アプリを選ぶ」の1手順に短縮される（Claude/ChatGPTアプリ等はAndroid/iOSの
-        // 共有ターゲットとして対応済み）。デスクトップ等、対応していない環境では
-        // 従来のコピー＋タブオープン方式にフォールバックする。
-        if (navigator.share) {
+        // 共有ターゲットとして対応済み）。
+        // 【重要】PC（Windows Chrome/Brave等）でもnavigator.share自体は使えることが多いが、
+        // その場合の共有一覧にはClaude/ChatGPT/Gemini等のデスクトップアプリが登録されて
+        // いないことがほとんどで、共有ダイアログを出すより素直にコピー＋タブオープンする方が
+        // 確実に使える。そのためWeb Share APIはモバイル端末に限定して使用する。
+        if (__canUseShareApi()) {
             navigator.share({ title: 'Last War: Survival 編成データ', text })
                 .then(() => {
                     doToast('✅ 共有しました。AIアプリ側で貼り付け済みの内容を確認・送信してください。', false);
