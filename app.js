@@ -1394,12 +1394,12 @@ function updateTransitionRecommendationUI(){
         <span style="font-size:var(--fs-md);font-weight:900;color:#111827;white-space:nowrap;">${schuylerExists ? 'キム+DVA+スカイラー混成型' : 'キム+DVA混成型'}</span>
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:var(--card-radius-sm);padding:2px 6px;display:inline-block;margin-bottom:6px;white-space:nowrap;">
-        兵種バフ+15%（4体編成）
+        ${schuylerExists ? '兵種バフ+10%（3体編成）' : '兵種バフ+15%（4体編成）'}
       </div>
       <div style="font-size:var(--fs-sm);color:#374151;margin-bottom:6px;line-height:1.6;">
         ${schuylerExists
-          ? 'スカイラーのCC（行動妨害）で敵前衛を封殺し、AoE（覚醒キム）＋単体バースト（覚醒DVA）で突破する組み合わせ。現環境のPvPでよく見る最強クラスの混成編成です（packsify推奨）。'
-          : 'AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。兵種バフは純粋5体構成（+20%）より下がりますが、覚醒効果で総合火力を上回ることが多いです（packsify推奨）。'}
+          ? 'スカイラーのCC（行動妨害）で敵前衛を封殺し、AoE（覚醒キム）＋単体バースト（覚醒DVA）で突破する組み合わせ。ウィリアムズ・マーフィ・キムの戦車3体＋DVA・スカイラーの航空2体という構成のため兵種バフは+10%に下がりますが、現環境のPvPでよく見る最強クラスの混成編成です（packsify推奨）。'
+          : 'AoE（覚醒キム）＋単体バースト（覚醒DVA）の組み合わせ。ウィリアムズ・マーフィ・キム・マーシャルの戦車4体＋DVAの航空1体という構成で兵種バフ+15%を維持しつつ、覚醒効果で総合火力を上回ることが多いです（packsify推奨）。'}
       </div>
       <div style="font-size:var(--fs-xxs);font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:var(--card-radius-sm);padding:4px 7px;margin-bottom:6px;line-height:1.5;">
         現在地点：キム${awStarLabel(kimAw)}・DVA${awStarLabel(dvaAw)}
