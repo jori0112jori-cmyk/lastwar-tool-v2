@@ -808,6 +808,35 @@ function copyForAi() {
                 setTimeout(() => { toast.style.display = 'none'; }, 8000);
             }
         };
+
+        // 【優先】Web Share API（navigator.share）が使える端末（主にモバイル）では、
+        // OSネイティブの共有シートを直接呼び出す。ユーザーがClaude/ChatGPT/Gemini等の
+        // アプリを選ぶだけでテキストが渡り、「コピー→アプリを開く→貼り付け」の3手順が
+        // 「共有→アプリを選ぶ」の1手順に短縮される（Claude/ChatGPTアプリ等はAndroid/iOSの
+        // 共有ターゲットとして対応済み）。デスクトップ等、対応していない環境では
+        // 従来のコピー＋タブオープン方式にフォールバックする。
+        if (navigator.share) {
+            navigator.share({ title: 'Last War: Survival 編成データ', text })
+                .then(() => {
+                    doToast('✅ 共有しました。AIアプリ側で貼り付け済みの内容を確認・送信してください。', false);
+                })
+                .catch((err) => {
+                    // ユーザーによるキャンセル（AbortError）は失敗として扱わず、何もしない
+                    if (err && err.name === 'AbortError') return;
+                    doToast('⚠️ 共有に失敗しました。下のコピー方式をお試しください。', true);
+                    copyForAiFallback(info, text, doToast);
+                });
+            return;
+        }
+
+        copyForAiFallback(info, text, doToast);
+    } catch(e) {
+        console.error('copyForAi failed:', e);
+    }
+}
+
+function copyForAiFallback(info, text, doToast) {
+    try {
         const copyText = (str, onDone) => {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(str).then(onDone).catch(() => {
@@ -862,7 +891,7 @@ function copyForAi() {
             }
         });
     } catch(e) {
-        console.error('copyForAi failed:', e);
+        console.error('copyForAiFallback failed:', e);
     }
 }
 
