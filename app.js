@@ -782,9 +782,19 @@ function updateAiConsultButton() {
     const provider = loadAiProvider();
     const info = AI_PROVIDERS[provider] || AI_PROVIDERS.claude;
     const btn = $id('ai-consult-btn');
-    if (btn) btn.textContent = `${info.icon} ${info.label}に相談`;
     const sel = $id('ai-provider-select');
-    if (sel) sel.value = provider;
+    // Web Share API対応端末（主にモバイル）では、共有シート自体がClaude/ChatGPT/Gemini等を
+    // 全て選べるので、事前のプロバイダ選択は不要になる。選択UIを隠し、ボタンも
+    // 特定サービス名を出さない汎用表記にする。非対応環境（主にPC・タブレット）では
+    // 従来通り選択式のまま表示する（フォールバック時にどのURLを開くか決める必要があるため）。
+    if (navigator.share) {
+        if (sel) sel.style.display = 'none';
+        if (btn) btn.textContent = '🚀 AIに相談（共有）';
+    } else {
+        if (sel) sel.style.display = '';
+        if (btn) btn.textContent = `${info.icon} ${info.label}に相談`;
+        if (sel) sel.value = provider;
+    }
 }
 function copyForAi() {
     try {
