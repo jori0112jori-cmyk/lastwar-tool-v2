@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-04b",
+  "version": "2026-07-04f",
   "heroMeta": {
     "kimberly": {
       "priority": "SSS",
@@ -83,7 +83,7 @@
       }
     },
     "lucius": {
-      "priority": "SS",
+      "priority": "A",
       "meta": {
         "ew": "SSS",
         "ewTarget": 30
@@ -103,7 +103,7 @@
       }
     },
     "mcgregor": {
-      "priority": "A",
+      "priority": "SS",
       "meta": {
         "ew": "S",
         "ewTarget": 20
@@ -291,7 +291,7 @@
       }
     },
     "williams": {
-      "priority": "S",
+      "priority": "A",
       "meta": {
         "ew": "S",
         "ewTarget": 20
@@ -311,7 +311,7 @@
       }
     },
     "carlie": {
-      "priority": "A",
+      "priority": "SS",
       "meta": {
         "ew": "A",
         "ewTarget": 10

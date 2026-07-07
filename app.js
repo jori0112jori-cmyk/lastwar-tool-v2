@@ -602,7 +602,36 @@ function validateHeroData() {
     }
   }
 
-  const hasIssues = issues.missing.length || issues.asymmetric.length || priorityMismatch.length;
+  // 【矛盾検知②】advice.priority（SSS/SS/S/A/B/C/D、21人全員に設定済み）とscore.longtermの
+  // 食い違いを兵種グループ内で確認する。COMMUNITY_TRAINING_ORDER（15人分・確度high/mixed明記）より
+  // 対象は広いが、文字グレード自体は粗い指標なので「参考」扱いとし、上のチェックとは別枠で表示する。
+  // 同じ文字グレード内の順序は問わず、グレードを跨いだ逆転（例：A評価なのにSS評価より数値が高い）だけを拾う。
+  const PRIORITY_RANK = { SSS: 6, SS: 5, S: 4, A: 3, B: 2, C: 1, D: 0 };
+  const priorityLabelMismatch = [];
+  {
+    const byType = {};
+    for (const id of heroIds) {
+      const h = HERO_DB[id];
+      const p = h.advice && h.advice.priority;
+      if (!h.score || p === undefined || !(p in PRIORITY_RANK)) continue;
+      (byType[h.type] = byType[h.type] || []).push({ id, rank: PRIORITY_RANK[p], label: p, longterm: h.score.longterm });
+    }
+    for (const type in byType) {
+      const list = byType[type];
+      for (let i = 0; i < list.length; i++) {
+        for (let j = 0; j < list.length; j++) {
+          if (i === j) continue;
+          const a = list[i], b = list[j];
+          // aの方が文字グレードが上なのに、longtermがbより低い（＝逆転）場合のみ記録
+          if (a.rank > b.rank && a.longterm < b.longterm) {
+            priorityLabelMismatch.push(`【${type}】${a.id}(${a.label}, longterm:${a.longterm}) が ${b.id}(${b.label}, longterm:${b.longterm}) より下回っている`);
+          }
+        }
+      }
+    }
+  }
+
+  const hasIssues = issues.missing.length || issues.asymmetric.length || priorityMismatch.length || priorityLabelMismatch.length;
   if (!hasIssues) {
     console.log('✅ validateHeroData: 問題は見つかりませんでした');
   } else {
@@ -616,8 +645,12 @@ function validateHeroData() {
       issues.asymmetric.forEach(m => console.log('  ' + m));
     }
     if (priorityMismatch.length) {
-      console.log('--- コミュニティ推奨順 vs score.longterm の矛盾 ---');
+      console.log('--- コミュニティ推奨順（確度high/mixed明記） vs score.longterm の矛盾 ---');
       priorityMismatch.forEach(m => console.log('  ' + m));
+    }
+    if (priorityLabelMismatch.length) {
+      console.log('--- 【参考】advice.priorityラベル vs score.longterm の矛盾（21人対象・文字グレードは粗い指標のため参考情報） ---');
+      priorityLabelMismatch.forEach(m => console.log('  ' + m));
     }
   }
 
@@ -634,6 +667,7 @@ function validateHeroData() {
   }
 
   issues.priorityMismatch = priorityMismatch;
+  issues.priorityLabelMismatch = priorityLabelMismatch;
   return issues;
 }
 
